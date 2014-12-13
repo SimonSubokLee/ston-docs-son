@@ -1,125 +1,170 @@
 ﻿.. _intro:
 
-1장. STON 엣지 서버 (Edge Server)
+Chapter 1. STON Edge Server
 **********************************
 
 .. toctree::
    :maxdepth: 2
 
 
-서비스 설계의 원칙
+Principles for Designing Successful Service
 ===================
-서비스의 성공은 가용성, 속도, 확장성에 달려있다. “확장성 웹 아키텍처와 분산 시스템 설계”를 쓴 Kate Matsudaira도 이 세 가지 원칙을 강조한다.
+Successful service incorporates availability, speed, and scalability. Kate Matsudaira who wrote an article 
+“Scalable Web Architecture and Distributed Systems” also emphasizes these three principles.
 
-**가용성 (availability)**
+**Availability**
 
-서비스는 항상 가능해야 한다. 장애시 90%의 고객은 경쟁사로 이동한다.   완벽한 시스템은 없지만, 장애시 복구는 신속해야 한다. 
+A service must be always available. 90% of users move onto other competing services when there is a service failure. 
+Although flawless system may not possible, recovery of system failure has to be swift.
 
-**속도 (speed)**
+**Speed**
 
-비즈니스에서 시간은 금이다. 느린 응답시간은 매출 감소다. 응답시간이 0.1초 지연되면 매출 1%가 감소한다.  Amazon.com의 고객 47%는 웹페이지가 2초 안에 열리기를 원한다.
+Time correlates to revenue in business, and low latency leads to drop in sales. 
+Every 0.1 second of latency causes 1% decreased revenue. 
+47% of Amazon.com customers want to see loaded website on their screen in 2 seconds.
 
-**확장성 (scalability)**
+**Scalability**
 
-고객이 만명이든 백만명이든 서비스는 원활해야 한다. 크기를 키우고 유지하는 노력, 스토리지 확장 용이성, 트랜잭션 처리 여력도 확장성이다. 관리의 확장성도 빠질 수 없다. 진단, 문제 이해, 업데이트와 변경이 쉬워야 한다.
+Regardless of the number of users, a service has to be reliable. Scaling up and maintaining the service, 
+ease of storage expansion and transaction processing capacity are included in Scalability. 
+Manageability that concerns with ease of diagnosing, understanding problems and ease of making updates or 
+modification is also an important factor.
 
-모든 원칙은 최소의 비용으로 지킬수록 효율적이다. 비용은 돈 뿐만이 아니라 시간, 노력, 훈련 등도 포함한다. 
+Principles with the least required resources are evaluated as the most efficient ones. 
+Resources include time, effort, trainings as well as money.
 
-성공적인 서비스는 **성장** 한다. 더 많은 고객과 더 많은 컨텐츠를 감당해야 한다. 성장하면 할수록 원칙들은 더 지키기 어렵다. 어떻게 하면 이 원칙들을 쉽게 최소비용으로 지킬 수 있을까?
+A successful service grows up and it has to be able to deal with more users and contents. 
+As it grows more, principles are getting difficult to abide. 
+Then, how these principles could be kept easily with the least expense?
 
 
-서비스의 성장
+The Expansion of Service
 ===============
 
-테스트나 파일럿 서비스는 한두대의 서버로 시작한다. 서비스가 조금씩 성장한다. 서버 수는 야금야금 늘어난다. 컨텐츠 갱신은 한 대씩 꼼꼼하게 해야 한다. 손발이 고생할 뿐, 아직까지는 관리에 큰 무리가 없다. 
+Usually test or pilot service starts with a couple of servers. 
+As the service grows up a little, the number of servers also increases accordingly. 
+Contents renewal is meticulously carried out on one server at a time. 
+It might be a laborious task, but managing the system is not a big deal at this point.
 
-서비스가 성장하기 시작한다. 고객이 늘고, 쌓을 데이터가 점점 커진다. 서버들을 일일이 관리하는 것도 어려워진다. 데이터를 한 곳에 모을 고비용의 스토리지를 도입한다 (NAS, SAN, DAS 등). 고비용이지만 신뢰할 수 있을 것 같다. 컨텐츠 갱신이 쉬워졌다. 스토리지에 올린 컨텐츠는 서버들이 자동으로 가져 간다.
+The service begins to expand with more users and more data to accumulate. 
+From this point, managing each server one by one is getting more difficult. 
+Hence, high cost storage for collecting data in one system is introduced(NAS, SAN, DAS, etc). 
+High priced, but reliable storages make contents renewal easier because servers automatically acquire updated contents from the storage.
 
-서비스가 가파르게 성장한다. 서버 대수를 늘렸더니 스토리지의 전송 부하가 커졌다. 더 빠른 스토리지는 굉장히 고비용이다. 도입이 망설여 진다. 투자할 가치가 있을까.
+Now let’s see when the service is exploding. 
+Increased number of servers requires more data from storage and causes data transfer overload on the storage. 
+In order to resolve the data transfer overload issue, extremely expensive storage that can support higher bandwidth is considered. 
+However, investing excessive budget on the storage will be questioned.
 
-동기화 (synchronization) 솔루션을 검토한다. 서버에 데이터 전체를 준비시킬 수는 없다.스토리지에서 컨텐츠를 선별해야 한다. 정확하게 제어하려면 관리 기술이 필수다. 서버 몇 대의 동기화 관리는 쉽다. 그러나 서버와 파일 수가 늘어날 수록 힘들어진다. 갈수록 나빠진다. 커질수록 느려지고 어렵고 불안정하다. 
+Another solution candidate is synchronization. 
+Preparing entire data for the server is impractical so the storage needs to sort out contents. 
+Management technique is essential to achieve precise contents control. 
+Synchronization among a few servers might be simple, but the more servers and files to sync with, the harder synchronization will be. 
+As the system expands, synchronization becomes slower, harder and unstable.
 
-컨텐츠는 계속 변화한다. 추가하고 삭제할 파일이 많아질 수록 동기화 시간은 길어진다. 서비스 규모가 커질 수록, 동기화 관리 시스템도 필연적으로 커지고 복잡해진다. 관리 시스템의 장애는 곧 전체 장애를 일으킨다.
+Contents are constantly changing. Synchronization takes more time when there are more files to add or delete. 
+Likewise, a bigger scale service inevitably has complicated synchronization managing system. 
+Failure of the managing system leads to the total service failure.
 
-컨텐츠를 빠르고 유연하게 전송할 수 있는 쉬운 방법이 필요하다. 
+A simple method that can deliver contents to the server in a quick and flexible way is necessary for the extensive service.
 
 
 
-서비스 확장성과 전송
+The Scalability of Service and Data Transfer
 =====================
 
-계층화 (layering) 로 서비스를 모델링 하면 다음 그림과 같이 두 계층으로 나눌수 있다.
+A service can be classified into application and storage layers shown as the below figure.
 
 .. figure:: img/intro_2layers.png
    :align: center
       
-중심에 데이터를 관리하는 스토리지 (storage) 계층이 있다. 그 위에는 서비스 로직이 구현된 어플리케이션 (application) 계층이 있다. 어플리케이션 계층은 소규모 고객용 컨텐츠 전송도 처리할 수 있다. 초기에는 스토리지와 어플리케이션 계층만으로 서비스를 구성할 수 있다.
+The storage layer supervises data at the core. 
+The application layer is on top of the storage layer and the service logic is implemented in the layer. 
+Contents transfer for small scale customers can be processed in this application layer. 
+The storage layer and application layer can construct a decent early stage service.
 
 .. figure:: img/intro_graph_1.png
    :align: center
 
-서비스가 성장하면서 처리비용은 변화한다. 초기에는 로직 개발이, 성장기에는 고객증가와 함께 데이터 관리가 가장 많은 비용을 차지한다. 
-서비스가 발전할 수록 가장 큰 고민은 **컨텐츠 전송** 이다. 폭발하는 대역폭을 어떻게 해결할 것인가? **컨텐츠 전송** 은 서비스 증설 (Scale-out)의 큰 과제이다.
+As the service expands, use of budget is changing. In the early stage, logic development consumes huge portion of budget. 
+On the contrary, in the growing period, data management consumes the most of budget as the number of user increases. 
+Contents transfer is a main concern when the service arrives at puberty. 
+How can the exploding bandwidth be covered? Contents transfer is the biggest obstacle in the aspect of service scale-out.
 
-엣지 (edge) : 전송 계층
+The Edge : Transfer layer
 ==========================
 
 .. figure:: img/intro_3layers.png
    :align: center
    
-서비스가 성장할 수록, 전송에 대한 부담은 기하급수적으로 커진다. 쇼핑몰의 컨텐츠 개수는 많게는 수십 억 개에 이른다. 
-동영상 서비스의 컨텐츠는 TB에 이른지 오래다. 서비스의 증설에는 *컨텐츠 전송의 확장성 (scalibility)* 을 반드시 고려해야 한다. 
+Contents transfer becomes an enormous burden when the service grows up. 
+Dozens of billions of shopping mall contents and video service contents already have been reached to TB long ago. 
+The scalability of contents transfer must be considered in order to expand the service.
 
-엣지(edge)는 서비스의 가장 바깥, 최전방을 가리킨다. 엣지에서 고객은 속도와 가용성을 체험한다. 고객이 요청하는 컨텐츠는 무슨 일이 있어도 ‘반드시’ 전송해야 한다. 고객이 보는 화면에서 깨진 이미지, 심지어 접속불능은 매우 치명적이다. 엣지에서 컨텐츠 전송을 처리하면 어플리케이션과 스토리지의 전송부담은 줄어든다.
+The edge indicates the surface layer of the service where users experience speed and availability of the service. 
+Contents requested by users 'must' be transferred at any cost. 
+Broken images or unavailable webpage on the user's screen fatally damages reputation of the service. 
+Contents transfer burden at the application layer and the storage layer will be reduced if the edge layer can transfer contents.
 
-엣지의 확장이 쉽고 효율적이면 다른 고비용 계층을 증설할 필요가 없다. 스토리지와 어플리케이션의 증설은 고비용의 비효율적 선택이다. 
+Efficient and easily expandable edge layer eliminates the necessity of expanding other high cost layers. 
+On the other hand, expanding storage layer and application layer is an inappropriate solution of high cost with low efficiency.
 
-그렇다면 STON 엣지 서버는 어떻게 컨텐츠 전송을 쉽고 빠르게 바꿀까?
+Then, how can STON edge server promote contents transfer faster and easier?
 
 
 
 
-엣지 서버의 동작 방식: 캐시(cache)
+How Edge server works : Cache
 =========================================
 
 .. figure:: img/intro_cache1.png
    :align: center
 
-전송의 규모는 고객의 수와 컨텐츠 크기에 따라 커진다. 얼마나 많은 고객이 어떤 컨텐츠를 요청하는지는 엣지에서 가장 빨리 알 수 있다. 
-엣지로부터 Bottom-up의 처리흐름이 효율적이다. 따라서 엣지 서버는 고객의 요청에 따라 On-demand 로 동작하는 **캐시(cache)** 전송방식을 채택하였다. 관리 시스템도 필요없다. 구체적인 동작은 다음과 같다.
+The scale of data transfer is proportional to the number of users and the size of contents. 
+At the edge layer the service can detect the number of users and particular contents they are requesting. 
+Effective process flow will be bottom-up style from the edge layer. 
+Therefore, the edge server adopted On-demand cache transfer method that responses to user's requests. 
+In addition, management system won't be necessary. Detailed operation procedure is described in the below figure.
 
 .. figure:: img/intro_cache2.png
    :align: center
    
-엣지 서버는 첫번째 컨텐츠 전송 요청을 받았을 때,
-원본 계층으로부터 컨텐츠를 가져와 고객에게 전송한다. 
-이 컨텐츠를 엣지 서버 자신에게도 저장한다. 
-두번째 요청 및 그 이후부터는 저장했던 컨텐츠를 고객에게 즉시 전송한다. 저장된 컨텐츠는 미리 설정된 TTL (Time-To-Live) 시간만큼 유효하다.
+When the edge server is requested to transfer contents for the first time, 
+it obtains contents from the storage layer first, then transfer them to the user. 
+The transferred contents are also saved in the edge server for the next use. 
+From the second request for the contents, the edge server immediately retrieves saved contents and transfers them to customers. 
+The saved contents are only valid for the pre-set TTL(Time-To-Live) period.
 
-엣지 서버는 이러한 방식으로 상당한 양의 컨텐츠 전송을 처리할 수 있다. 어플리케이션과 스토리지의 증설을 최소화하면서 빠른 대용량 전송을 처리한다. 성장하는 서비스라면 반드시 엣지를 고려해야 한다.
+The edge server can process quite large amount of contents transfer in this way. 
+This method enables to transfer massive data quickly with minimal expansion of the application and the storage layer. 
+Therefore, any expandable services should consider the edge server.
 
-STON 엣지 서버는 무제약/무조건을 지향하는 소프트웨어다. 어떤 하드웨어에 설치되든 최대 성능을 발휘하도록 설계되었다.
-
-
-**CPU:** Many-Core에 최적화되었다. Throughput은 코어개수에 비례한다.
-
-**Memory:** Memory가 많을수록 빠르게 처리한다. Disk I/O를 절감한다.
-
-**Disk:** I/O 를 균등 분산한다. 더 많은 데이터를 caching한다.
-
-**NIC:** 4Gbps NIC Bonding 또는 10Gbps NIC의 Bandwidth를 보장한다.
+The STON edge server is the software that aims for unrestricted and unconditional environment. 
+The server is designed to provide maximum performance on any types of hardware platform.
 
 
-STON 엣지 서버는 **강력한 라이브 모니터링/로그** 를 지원한다. 초 단위의 실시간 통계로 지금 당장 서비스 상태가 어떤지 확인할 수 있다. JSON, XML, SNMP 등의 여러 범용포맷으로 실시간 숫자를 제공한다. 
+**CPU:** Optimized for Many-Core. Throughput is proportional to the number of CPU cores.
 
-STON은 관리자를 위한 **쉬운 설정** 을 제공한다. STON의 설계이념은 관리자를 위한 엣지 서버다. Web Management 페이지를 통해 직관적인 설정방법을 제공한다. 디테일한 설정을 원할 경우, 단 두 개의 XML 설정 파일로 쉽게 할 수 있다. 
+**Memory:** Process gets faster with large Memory and saves Disk I/O.
+
+**Disk:** Evenly distributed I/O for caching more data.
+
+**NIC:** Guarantee bandwidth of either 4Gbps NIC Bonding or 10Gbps NIC.
 
 
-엣지 서버의 효과
+The STON edge server supports a powerful live monitoring and logging. 
+Administrator can check the current service status in real-time with statistics result updated by every second. 
+The server supports universal formats like JSON, XML, SNMP to provide service statistics.
+
+The STON also provides simple setup for administrators because its design idea is to offer an edge server for administrators. 
+Web Management page provides an intuitive setting. Detailed server setting can be configured by editing only two XML files.
+
+
+Effects of the Edge Server
 ======================
-엣지 서버의 효과는 다음과 같다.
+The followings are the effects of the edge server.
 
-#. 쉽고 편리한 서비스 가속 
+#. Easy and convenient service acceleration.
 #. 서비스 원본을 외부로부터 보호 (Origin Shielding)
 #. 서비스가 핵심적인 역할을 수행할 수 있도록 보조
 
