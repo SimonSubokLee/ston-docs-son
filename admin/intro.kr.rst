@@ -165,67 +165,66 @@ Effects of the Edge Server
 The followings are the effects of the edge server.
 
 #. Easy and convenient service acceleration.
-#. 서비스 원본을 외부로부터 보호 (Origin Shielding)
-#. 서비스가 핵심적인 역할을 수행할 수 있도록 보조
+#. Shields the service origin from external access(Origin Shielding).
+#. Supports the service to play a fundamental role.
 
-엣지 서버의 효과는 다음 적용사례를 중심으로도 확인할 수 있다.
+Advantages of adopting the edge server are listed on the following application examples.
 
 
-Game
+Games
 ----------------------------
 
-전통적으로 게임 서비스는 엄청나게 많은 대역폭을 필요로 한다. 
-"대작" 게임부터 간단한 캐주얼 게임까지 범주도 매우 다양하다. 
-특히 스마트폰 게임의 폭발적 성장과 전파속도는 서비스 형태를 더욱 다양하게 만들었다.
+Traditionally game services requires excessive bandwidth. 
+In addition, there are various categories in the game service from "Masterpiece games" to casual games. 
+Especially explosive growth in smartphone games and proliferation thereof, diversified the game service form.
 
 .. figure:: img/icons_game.png
    :align: center
 
-- **높은 대역폭 출력**
+- **High Bandwidth Throughput**
   
-  단일 서버로 높은 대역폭을 얻는 전통적인 방법은 1Gbps NIC를 본딩(Bonding)하는 것이다. 
-  이를 통해 4Gbps 대역폭까지 얻을 수 있다. 
-  최근 10Gbps NIC도 시장에 많이 보급되는 추세이다.
+  A universal method to acquire high bandwidth with a single server is bonding 1Gbps NIC(Network Interface Controller). 
+  As a result of bonding, up to 4Gbps can be achieved. 
+  In the recent market, 10Gbps NICs have been come into wide use.
 
-  ``STON`` 4Gbps NIC Bonding과 10Gbps NIC에서도 최대 대역폭을 보장한다.
+  ``STON`` guarantees full bandwidth for both 4Gbps NIC Bonding and 10Gbps NIC.
   
-- **사용자 대역폭 보장**
+- **Gauranteed User Bandwidth**
 
-  모든 사용자는 게임을 빨리 다운로드 받고 싶어한다. 
-  광랜 사용자는 100Mbps의 속도가 얻어지지 않는다면 항의 전화를 걸 것이다. 
-  모두들 빨리 게임을 시작하고 싶어한다. 
-  서버는 물리적으로 대역폭이 꽉 차지 않는 이상 사용자마다의 최대 속도를 균일하게 보장해야 한다. 
+  Every user wants to download games as fast as possible. 
+  Users who adopted fiber optic lan might complain for the service if they get less than 100Mbps. 
+  Once a user decide to play a game, he or she wants to play it right away. 
+  As long as a server has a remaining physical bandwidth, it has to uniformly gaurantee maximum speed to every single user. 
   
-  ``STON`` 모든 사용자에게 최대 속도로 전송하는 것을 보장한다.
+  ``STON`` guarantees maximum transmitting speed to all users. 
   
-- **대용량 파일 처리**
+- **Processing Massive Volume File**
 
-  설치파일이 4GB정도 하는 게임은 이제 대형게임으로도 분류되지도 않는다. 
-  수십 GB는 되어야 "대작"이라는 단어를 달 수 있는 세상이다. 
-  파일이 너무 크면 서버 메모리에 모두 Caching 할 수 없다. 
-  최악의 상황은 파일의 크기가 너무 커서 사용자마다 다운로드 받는 위치가 제각각인 상황이다.
+  Nowadays most games have very large volume of installation files and there are so many of them to fill a single DVD disk. 
+  Most "masterpiece games" consist of Dozens of GB installation files. 
+  Howerver, if the file size is too large to cache in the server memory, critical service failure is anticipated. 
+  The worst case is when all users are requesting different parts of a massive volume file to the server.
   
-  ``STON`` Caching 파일크기 제한이 없다. 
-  Memory와 Disk의 적절한 Swap을 통해 언제나 고성능을 보장한다.
+  ``STON`` supports unlimited caching file size. 
+  The Ston edge server always guarantees powerful performance by properly swapping between memory and disk.
     
-- **Range 요청처리**
+- **Processing Range Request**
 
-  전송 파일이 대형화되는 추세에 따라 Grid Delivery기법의 P2P솔루션도 많이 사용되고 있다. 
-  이런 솔루션의 특징은 파일을 잘게 조각 내어 주고 받기 때문에 서버에 엄청나게 많은 
-  HTTP Range요청을 보낸다. 
-  10GB파일을 만 명의 클라이언트가 서로 다른 Range로 요청하는 상황도 가능하다. 
-  어느 부분을 요청하더라도 서비스는 즉시 가능해야한다. 
-  하지만 원본서버에서는 반드시 원래 파일의 크기만큼만 데이터가 전송되어야 한다.
+  As files to transfer are getting heavier, P2P solution based on the grid delivery method is widely being used. 
+  The P2P solution shreds a single file into small pieces to send or receive, therefore it requests enormous HTTP range to the server. 
+  Theoretically, ten thousands of clients could request different ranges from a 10GB file. 
+  Regardless of requested range from clients, the service has to be prompt. 
+  On the other hand, transferred data size from the server cannot exceed the original file size.
   
-  ``STON`` Range요청에 최적화된 파일 시스템이 탑재되었다. 
-  또한 멀티 다운로드를 통해 빠른 응답성을 보장한다.
-  원본서버로부터 1Bytes라도 불필요한 다운로드는 하지않는다.
+  ``STON`` is loaded with the file system that is optimized for range request. 
+  In addition, The Ston edge server guarantees fast response with multi download.
+  It will not waste a single byte transmission from the origin server. 
 
 
-쇼핑몰
+Online Shopping Malls
 ----------------------------
 
-쇼핑몰은 사이트 접근이 고객의 매출과 직결된다. 
+In case of an online shopping mall, accessibility of the website is directly connected to the total sales. 
 이제 전통적인 PC환경 뿐만 아니라 모바일쇼핑이 당연해졌다. 
 쇼핑환경이 다양해 지는 것 뿐만 아니라 무한히 늘어나는 
 파일을 관리하지 못한다면 서비스는 곤경에 처한다.
