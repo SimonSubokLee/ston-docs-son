@@ -225,9 +225,8 @@ Online Shopping Malls
 ----------------------------
 
 In case of an online shopping mall, accessibility of the website is directly connected to the total sales. 
-이제 전통적인 PC환경 뿐만 아니라 모바일쇼핑이 당연해졌다. 
-쇼핑환경이 다양해 지는 것 뿐만 아니라 무한히 늘어나는 
-파일을 관리하지 못한다면 서비스는 곤경에 처한다.
+Mobile shopping using smartphones became a general trend instead of traditional PC based online shopping. 
+A service will be facing a dead end if it cannot manage various shopping environments and infinitely growing number of files. 
 
 .. figure:: img/icons_shopping.png
    :align: center
