@@ -259,31 +259,29 @@ A service will be facing a dead end if it cannot manage various shopping environ
   
   ``STON`` guarantees swift response by real time file indexing. 
   부드러운 파일교체를 통해 원본 종속성 없이 반응성을 극대화할 수 있다. 
-  모든 HTTP 응답(First byte 응답, 트랜잭션 완료)에 대해 로그와 통계수치를 제공하여 
-  성능저하 여부를 실시간으로 검출할 수 있다.
+  Log and statistics are supported for all HTTP responses(First byte response, complete transaction) for detecting any performance degradation in real time.
   
-- **페이지 TTL**
+- **Page TTL**
 
-  대다수의 사용자의 이동 경로는 메인 페이지 -> 대형 카테고리 페이지 -> 소형 카테고리 -> 상세 페이지 순이다. 
-  페이지마다 노출 빈도가 다를 뿐만 아니라 갱신 주기도 달라야 한다. 
-  스마트한 페이지 Caching & 갱신 방법이 필요하다.
+  Most users start from main page and move on to the upper category page, then to the lower category page, and finally to the detail product page. 
+  Each page has different exposure frequencies, as well as refreshing cycles. 
+  Hence, smart page caching and refresh technique are needed.
   
-  ``STON`` URL마다 별도의 TTL을 부여할 수 있다. 
-  또한 Purge, Expire, ExpireAfter, HardPurge 등 상황에 맞는 다양한 방식의 갱신 방법을 제공한다.
+  ``STON`` can allocate separate TTL to independent URL. 
+  In addition, the STON edge server provides various suitable refreshing methods such as Purge, Expire, ExpireAfter, and HardPurge.
   
   
 
-미디어
+Media
 ----------------------------
 
-미디어 전용 프로토콜은 점차 설 자리를 잃어가고 있다. 
-HTTP, MP4의 간단하지만 강력한 조합은 점차 세력을 넓혀가고 있다. 
-모바일의 가변적인 연결상태를 고려 한다면 HTTP 기반의 Streaming방식이 전송 표준이 될 것이다.
+Exclusive protocols for media is losing their strength while simple, but powerful combination of HTTP and MP4 is gaining influence. 
+Streaming based on HTTP protocol will come to the fore if variable connection status of mobile devices are considered.
 
 .. figure:: img/icons_media.png
    :align: center
 
-- **미디어 인식**
+- **Perception of Media**
 
   더 이상 파일을 Chunk로 인식해서는 안된다. 
   미디어 파일을 정확히 인식할 수 있어야만 대역폭 절감과 함께 다양한 부가기능을 연동할 수 있다. 
