@@ -174,9 +174,9 @@ Advantages of adopting the edge server are listed on the following application e
 Games
 ----------------------------
 
-Traditionally game services requires excessive bandwidth. 
+Traditionally game services require excessive bandwidth. 
 In addition, there are various categories in the game service from "Masterpiece games" to casual games. 
-Especially explosive growth in smartphone games and proliferation thereof, diversified the game service form.
+Especially explosive growth in smartphone games and proliferation thereof diversified the game service form.
 
 .. figure:: img/icons_game.png
    :align: center
@@ -189,12 +189,12 @@ Especially explosive growth in smartphone games and proliferation thereof, diver
 
   ``STON`` guarantees full bandwidth for both 4Gbps NIC Bonding and 10Gbps NIC.
   
-- **Gauranteed User Bandwidth**
+- **Guaranteed User Bandwidth**
 
   Every user wants to download games as fast as possible. 
-  Users who adopted fiber optic lan might complain for the service if they get less than 100Mbps. 
-  Once a user decide to play a game, he or she wants to play it right away. 
-  As long as a server has a remaining physical bandwidth, it has to uniformly gaurantee maximum speed to every single user. 
+  Users who adopted fiber optic LAN might complain for the service if they get less than 100Mbps. 
+  Once a user decides to play a game, he or she wants to play it right away. 
+  As long as a server has a remaining physical bandwidth, it has to uniformly guarantee maximum speed to every single user. 
   
   ``STON`` guarantees maximum transmitting speed to all users. 
   
@@ -206,7 +206,7 @@ Especially explosive growth in smartphone games and proliferation thereof, diver
   The worst case is when all users are requesting different parts of a massive volume file to the server.
   
   ``STON`` supports unlimited caching file size. 
-  The Ston edge server always guarantees powerful performance by properly swapping between memory and disk.
+  The STON edge server always guarantees powerful performance by properly swapping between memory and disk.
     
 - **Processing Range Request**
 
@@ -217,7 +217,7 @@ Especially explosive growth in smartphone games and proliferation thereof, diver
   On the other hand, transferred data size from the server cannot exceed the original file size.
   
   ``STON`` is loaded with the file system that is optimized for range request. 
-  In addition, The Ston edge server guarantees fast response with multi download.
+  In addition, The STON edge server guarantees fast response with multi download.
   It will not waste a single byte transmission from the origin server. 
 
 
@@ -233,7 +233,7 @@ A service will be facing a dead end if it cannot manage various shopping environ
 
 - **Zillions of Tiny Files**
 
-  In order to keep billions of files that are infinitely increasing, an exensive storage is needed. 
+  In order to keep billions of files that are infinitely increasing, an expensive storage is needed. 
   However, the Edge server takes count of economic feasibility so this solution is not preferred. 
   There could be a service that consists of a billion of 1KB files, and caching all of them is not possible. 
   Therefore, a method that minimizes load of origin server and keeps frequently requested files has to be developed.
@@ -243,21 +243,21 @@ A service will be facing a dead end if it cannot manage various shopping environ
 
 - **Millions of Users**
 
-  An online shopping mall can handle tremendous amount of simulteneous requests from millions of users. 
-  급작스러운 이벤트에 의해 사용자 접속이 폭발적으로 증가(=Burst)하기도 한다. 
-  Burst 시 서버는 스스로를 보호해야 하며 Burst 후에도 안정성을 유지해야 한다.
+  An online shopping mall can handle tremendous amount of simultaneous requests from millions of users. 
+  An abrupt event could cause dramatic increase of website access(Burst)
+  In case of burst condition, the server has to survive and return to stable status after the burst.
   
-  ``STON`` CPU 조정성(Scalability. 자원의 증설에 따라 솔루션의 성능이 높아지는 것)을 보장한다. 
-  탄력적인 HTTP Keep-Alive 처리와 소켓관리를 통해 Burst시에도 안정성을 보장한다.
+  ``STON`` guarantees CPU scalability (The performance of solution is proportionate to the number of resources). 
+  Flexible HTTP Keep-Alive handling and socket manage guarantees stability under the burst condition. 
   
-- **반응성**
+- **Swift Response**
 
-  쾌적한 쇼핑환경이란 페이지가 빠르게 로딩되는 것을 의미한다. 
-  사용자는 기다리지 않는다. 
-  3초 안에 로딩되지 않으면 다른 사이트로 떠난다. 
-  일반적으로 메인 페이지는 100개 내외의 파일로 이루어지며 물리적 환경을 고려하더라도 통상 1초 대에 페이지는 완벽하게 로딩되어야 한다.
+  Pleasant online shopping experiences come from fast loading web pages.
+  Users are impatient of loading signs.
+  If the page is not fully loaded in 3 seconds, users start to build up negative images on their shopping experiences and might move on to another shopping sites.
+  Generally main page is roughly made up of a hundred files, and these files have to be loaded flawlessly in one second. 
   
-  ``STON`` 실시간 파일 인덱싱을 통한 즉시 응답을 보장한다. 
+  ``STON`` guarantees swift response by real time file indexing. 
   부드러운 파일교체를 통해 원본 종속성 없이 반응성을 극대화할 수 있다. 
   모든 HTTP 응답(First byte 응답, 트랜잭션 완료)에 대해 로그와 통계수치를 제공하여 
   성능저하 여부를 실시간으로 검출할 수 있다.
