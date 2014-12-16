@@ -302,7 +302,8 @@ Streaming based on HTTP protocol will come to the fore if variable connection st
 
 - **Adjustable Bandwidth**
 
-  대부분의 영상을 끝까지 보는 사용자는 드물다. 
+  Not all users watch the whole video clip. 
+  An effective streaming method is to provide reasonable bandwidth for soomth playback.
   그러므로 재생에 무리가 없도록 필요한 만큼만 대역폭을 사용하는 것이 효율적인 전송방법이다. 
   같은 영상이더라도 360p, 480p, 720p, 1080p처럼 Bitrate를 다양하게 서비스 한다.
   
