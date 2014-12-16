@@ -276,29 +276,31 @@ Media
 ----------------------------
 
 Exclusive protocols for media is losing their strength while simple, but powerful combination of HTTP and MP4 is gaining influence. 
-Streaming based on HTTP protocol will come to the fore if variable connection status of mobile devices are considered.
+Streaming based on HTTP protocol will come to the fore if variable connection statuses of mobile devices are considered.
 
 .. figure:: img/icons_media.png
    :align: center
 
 - **Perception of Media**
 
-  더 이상 파일을 Chunk로 인식해서는 안된다. 
-  미디어 파일을 정확히 인식할 수 있어야만 대역폭 절감과 함께 다양한 부가기능을 연동할 수 있다. 
-  서버가 파일 해석을 위해서 파일의 모든 부분을 필요로 한다면 사용자는 영상재생을 포기할 것이다.
+  A media file should not be recognized as one huge chunk of file. 
+  Reducing bandwidth and linking various additional functions are only possible when the format of media file is correctly recognized. 
+  If the server requires entire file to extract file format, users will be wasting a lot of time until the server acquires entire file.
+  Most likely, users won't even wait for that.
   
-  ``STON`` MP4, MP3, M4A, FLV 포맷을 지원한다. 
+  ``STON`` supports MP4, MP3, M4A, FLV formats. 
+  As soon as the server starts downloading a media file, it preferentially caches required section for HTTP Pseudo Streaming.
   다운로드와 동시에 HTTP Pseudo Streaming을 위해 필요한 영역을 우선적으로 Caching한다.
   
-- **미디어 헤더 재배치**
+- **Reorganizing Media Header**
 
-  헤더가 뒤에 있는 파일의 경우 HTTP Pseudo Streaming이 불가능하다. 
-  이를 위해서는 전용 플레이어가 필요하지만 이는 사용자에게 짜증을 +10한다.
+  If the header is located at the end of file, HTTP Pseudo Streaming is not available.
+  An exclusive media player is required for this type of files, but installing subsidiary program is obnoxious for all users.
   
-  ``STON`` MP4파일 인코딩 후 헤더가 뒤에 붙는다면 헤더를 앞으로 옮겨주는 작업을 
-  추가적으로 수행해야 한다. STON은 자연스럽게 헤더를 앞으로 옮겨 서비스 한다.
-  
-- **대역폭 조절**
+  ``STON`` An encoded MP4 file followed by a header needs additional process to reorganize header location to the front of file structure. 
+  The STON edge server automatically relocates header to the front for smooth service.
+
+- **Adjustable Bandwidth**
 
   대부분의 영상을 끝까지 보는 사용자는 드물다. 
   그러므로 재생에 무리가 없도록 필요한 만큼만 대역폭을 사용하는 것이 효율적인 전송방법이다. 
