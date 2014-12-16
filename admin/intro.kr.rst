@@ -231,21 +231,19 @@ A service will be facing a dead end if it cannot manage various shopping environ
 .. figure:: img/icons_shopping.png
    :align: center
 
-- **무한대의 작은 파일**
-  "억! 단위를 넘어서는~", "셀 수 없이 많은~", "언제나 늘어나기만 하는~" 파일을 
-  저장하기 위해서는 고가의 Storage가 필요하다. 
-  하지만 경제성이 중요한 Edge서버에서는 그럴 수 없다. 
-  크기가 1KB인 파일이 10억 개 존재하는 서비스도 있을 수 있다. 
-  결론적으로 모든 파일을 Caching할 수 없다. 
-  원본서버의 부하를 최소화하면서도 접근 빈도가 높은 파일을 항상 유지하는 방법이 필요하다.
+- **Zillions of Tiny Files**
 
-  ``STON`` 메모리와 Disk 자원의 최대용량만큼 Caching한다. 
-  모든 파일의 접근 빈도는 실시간으로 관리되며 LRU(Least Recently Used) 에 의해 
-  오래된 파일 순으로 삭제된다.
-  
-- **많은 사용자**
+  In order to keep billions of files that are infinitely increasing, an exensive storage is needed. 
+  However, the Edge server takes count of economic feasibility so this solution is not preferred. 
+  There could be a service that consists of a billion of 1KB files, and caching all of them is not possible. 
+  Therefore, a method that minimizes load of origin server and keeps frequently requested files has to be developed.
 
-  쇼핑몰은 많은 사용자를 동시에 처리할 수 있어야 한다. 
+  ``STON`` utilizes resources of available memory and disk space for caching. 
+  Access frequency of all files are managed in real time, and by the LRU(Least Recently Used) algorithm, a file that has not been used recently is discarded first. 
+
+- **Millions of Users**
+
+  An online shopping mall can handle tremendous amount of simulteneous requests from millions of users. 
   급작스러운 이벤트에 의해 사용자 접속이 폭발적으로 증가(=Burst)하기도 한다. 
   Burst 시 서버는 스스로를 보호해야 하며 Burst 후에도 안정성을 유지해야 한다.
   
