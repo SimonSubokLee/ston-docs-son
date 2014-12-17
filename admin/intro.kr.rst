@@ -258,7 +258,7 @@ A service will be facing a dead end if it cannot manage various shopping environ
   Generally main page is roughly made up of a hundred files, and these files have to be loaded flawlessly in one second. 
   
   ``STON`` guarantees swift response by real time file indexing. 
-  부드러운 파일교체를 통해 원본 종속성 없이 반응성을 극대화할 수 있다. 
+  Also, seamless replacement of updated files on the background enhances service quality by decoupling contents from origin server.
   Log and statistics are supported for all HTTP responses(First byte response, complete transaction) for detecting any performance degradation in real time.
   
 - **Page TTL**
@@ -290,7 +290,6 @@ Streaming based on HTTP protocol will come to the fore if variable connection st
   
   ``STON`` supports MP4, MP3, M4A, FLV formats. 
   As soon as the server starts downloading a media file, it preferentially caches required section for HTTP Pseudo Streaming.
-  다운로드와 동시에 HTTP Pseudo Streaming을 위해 필요한 영역을 우선적으로 Caching한다.
   
 - **Reorganizing Media Header**
 
@@ -303,43 +302,44 @@ Streaming based on HTTP protocol will come to the fore if variable connection st
 - **Adjustable Bandwidth**
 
   Not all users watch the whole video clip. 
-  An effective streaming method is to provide reasonable bandwidth for soomth playback.
-  그러므로 재생에 무리가 없도록 필요한 만큼만 대역폭을 사용하는 것이 효율적인 전송방법이다. 
-  같은 영상이더라도 360p, 480p, 720p, 1080p처럼 Bitrate를 다양하게 서비스 한다.
+  An effective streaming method is to provide reasonable amount of bandwidth for smooth playback.
+  An identical media is served with different bitrates from 360p to 1080p.
   
-  ``STON`` Bandwidth-Throttling을 통하여 미디어 파일의 전송 대역폭을 최적화할 수 있다.
+  ``STON`` optimizes media file transfer bandwidth with Bandwidth-Throttling. 
 
-- **구간추출**
+- **Extracting Section**
 
-  미리보기/하이라이트/공유하기 등 파일 전체가 아닌 특정 구간만을 서비스하는 경우도 많다. 
-  서비스하는 모든 파일에 대해 구간을 추출하는 것은 시간과 저장공간을 지나치게 낭비한다. 
-  심지어 사용자마다 추출 구간이 다른 경우도 있다. 
-  또한 Skip기능을 구간 재생으로 구현하는 플레이어도 존재한다.
+  Some preview/highlight/share services only provide a specific portion of a video clip.
+  Extracting entire file for the service will be too much waste of process time and storage.
+  Further, every single user might request different section of a media file.
+  Some media players even implement skip function with segment playback.
   
-  ``STON`` Trimming기능을 통해 구간을 추출하여 완전한 형태의 미디어 파일로 서비스한다.
+  ``STON`` trims a media file to extract segments to serve just as a complete file.
+
   
   
-뉴스 / 커뮤니티
+News / Community
 ----------------------------
 
-아주 높은 충성도의 사용자층을 확보한 사이트는 흥미로운 점이 많다. 
-같은 관심사를 가지는 사용자들이 모이기 때문에 교류가 활발하며 페이지에 
-머무르는 시간도 매우 길다. 
-서비스 패턴이 제각각이라 서비스하기 꽤 까다롭다.
+There are several interesting points to check in the websites that has a significant number of loyal users.
+These websites attract users with a similar matter of concern so users stay on the website for very long time while vigorous communications are ongoing. 
+Service patterns of these websites vary by their subjects and it is picky to meet their service requirements. 
 
 .. figure:: img/icons_news.png
    :align: center
 
 - **304 Not Modified**
   
-  사이트 충성도가 매우 높기 때문에 이미 대부분의 파일을 사용자 로컬에 저장하고 있다. 
-  때문에 실제로 전송되는 파일보다 "변경확인" 비율이 압도적이다.
+  Since these users are very loyal to the website, most files are already cached in local storage.
+  Hence, requesting updated status of cached files is dominant than actual file transfer.
   
-  ``STON`` 자주 접근되는 파일은 항상 메모리에 상주하도록 보장한다. 
-  "변경확인" 작업은 기다림 없이 즉시 처리된다.
+  ``STON`` guarantees frequently accessed files to reside in the memory.
+  "Update check" request is processed immediately.
   
 - **Bypass**
 
+  Page always contains non cacheable area such as user specific pages, new postings and replies.
+  Even this case, usually a single domain is 
   사용자에 특화된 페이지나 새로운 글, 리플 등 페이지는 항상 Caching할 수 없는 영역을 포함한다. 
   하지만 Domain을 별도로 나누지 않고 단일 도메인을 Reverse-Proxy에 위임하는 경우가 많다.
 
