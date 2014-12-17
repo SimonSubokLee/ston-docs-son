@@ -382,18 +382,16 @@ In addition, both developing time reduction and service reliability improvement 
   ``STON`` adopts standard File I/O. 
   A dedicated server and STON is connected by Linux Kernel(VFS) in order to guarantee high performance.
   
-- **Web Server 연동**
+- **Connect to Web Server**
   
-  표준 Web 서버(Apache, Lighttpd, NginX)에 특화된 확장모듈이 설치된 경우 
-  표준 Reverse-Proxy를 도입하기 힘들 수 있다. 
-  DB/WAS와 연동되는 파일 서비스 또는 과금/결제 서비스 같은 경우 쉽게 서비스를 
-  확장하기 어렵다.
+  Standard Reverse-Proxy might not be available if any exclusive expansion module is installed on the standard web server(Apache, Lighttpd, NginX).
+  For example, a file service or a payment service that are linked with DB/WAS is hard to expand its service.
   
-  ``STON`` Apache의 DocumentRoot를 STON으로 지정하면 Apache는 STON을 물리적 디스크로 인식한다. 
-  더 설정할 것은 없다.
-  
-- **Wowza 연동**
+  ``STON`` If DocumentRoot of Apache is set to STON, Apache will perceive STON as a physical disk and nothing needs to be configured.
 
+- **Connect to Wowza**
+
+  In the media service field, Wowza is considered as a standard.
   미디어서비스에서는 Wowza가 사실상의 표준이다. 
   하지만 Wowza의 HTTP Caching기능은 사용하기 번거로울 뿐만 아니라 빈약하다. 
   또한 점차 HTTP 이외의 "전용" 프로토콜은 사라지는 추세이다.
