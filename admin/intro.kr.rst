@@ -338,52 +338,49 @@ Service patterns of these websites vary by their subjects and it is picky to mee
   
 - **Bypass**
 
-  Page always contains non cacheable area such as user specific pages, new postings and replies.
-  Even this case, usually a single domain is 
-  사용자에 특화된 페이지나 새로운 글, 리플 등 페이지는 항상 Caching할 수 없는 영역을 포함한다. 
-  하지만 Domain을 별도로 나누지 않고 단일 도메인을 Reverse-Proxy에 위임하는 경우가 많다.
+  Page always contains non-cacheable area such as user specific pages, new postings and replies.
+  Even this case, usually a single domain is delegated to Reverse-Proxy instead of separating a page into multiple domains.
 
-  ``STON`` 다양한 조건을 기반으로 바이패스 대상을 정교하게 분류한다. 
-  또한 Origin Affinity, Private 기능을 이용해 로그인 세션을 유지할 수 있다.
+  ``STON`` elaborately classifies bypass targets based on various conditions.
+  Also, the server maintains login session by using Origin Affinity and Private function.
   
-- **불안한 원본**
+- **Unstable Origin**
 
-  중, 소형 기업 또는 개인이 운영하는 사이트들은 고가의 장비나 인프라, 인력을 운영하기 어렵다. 
-  원본서버 장애 빈도가 상대적으로 높으며 이를 극복하기 위한 경제성은 매우 나쁘다.
+  Small or mid size websites and personal websites cannot afford expensive equipment, infrastructures and labor force.
+  Origin server failure is relatively frequent and economic feasibility to improve service quality is extremely low.
   
-  ``STON`` 원본서버 과부하 또는 장애를 판단하여 자동으로 배제/복구가 이루어진다. 
-  원본서버 장애 시  TTL을 자동으로 연장시켜 원본서버 의존성을 최소화한다.
+  ``STON`` detects overload or service failure to execute automatic exclusion/recovery.
+  원본서버 과부하 또는 장애를 판단하여 자동으로 배제/복구가 이루어진다. 
+  When the origin server fails, the server automatically extends TTL to decrease origin server dependency.
   
-- **이미지 가공**
+- **Image Processing**
 
-  같은 이미지를 사용자 환경에 따라 다양하게 보여줄 필요가 있다. 
-  검색 결과에서는 Thumbnail 이미지를, 뉴스 사이트에서는 "XX 뉴스" 같은 글씨를 워터마크로 표시해야한다. 
-  같은 이미지를 보여지는 형태에 따라 매번 가공하는 것은 저장공간과 시간, 인력의 낭비다.
+  An identical image sometimes needs to be displayed in different ways according to user environments.
+  Images in the search result will be displayed as thumbnails, and some websites might want their own watermark on the image.
+  Processing every image into a specific format is waste of storage, time, and effort.
   
-  ``STON`` DIMS기능을 사용하면 원본서버에 단 하나의 이미지 만으로 원하시는 형태를 
-  URL 호출만으로 생성할 수 있다.
+  ``STON`` supports DIMS function that can generate desired image format from a single image in the server by URL call.
   
   
-파일기반 서버
+File Based Server
 ----------------------------
 
-Edge는 Reverse-Proxy구조에 기반한다. 
-Reverse-Proxy의 핵심 개념은 원격서버에 있는 파일을 로컬에 복제/갱신/관리하는 것이다.
-이미 검증된 STON을 서비스 서버와 연동할 수 있다면 
-Storage중앙 집중화 및 동기화 이슈를 제거할 수 있다. 
-뿐만 아니라 개발시간 단축과 서비스 신뢰도 향상의 두마리 토끼를 모두 잡을 수 있다.
+The Edge server builds on the Reverse-Proxy structure. 
+Fundamental concept of Reverse-Proxy is to copy/modify/manage files from the remote server to the local storage.
+If qualified STON can interwork with a service server, storage centralization and synchronization issue can be resolved.
+In addition, both developing time reduction and service reliability improvement can be attained.
 
 .. figure:: img/icons_file.png
    :align: center
 
-- **File I/O 지원**
+- **File I/O Support**
 
-  전용 프로토콜이 필요하다면 해당 모듈에 종속적인 서버가 되어 버린다. 
-  힘들게 연동했다 하더라도 성능이 떨어지면 무용지물이다. 
-  모듈과 서버 사이의 중간 단계는 최소화되어야 한다.
+  If a specific protocol is required, then the server is subordinate to the module.
+  Even if the server is interworking with the module, performance degradation could spoil everything.
+  Therefore, I/O interface between module and server has to be simplified.
   
-  ``STON`` 표준 File I/O로 STON이 연동된다. 
-  전용서버와 STON사이에는 Linux Kernel(VFS)만이 존재하여 고성능을 보장한다.
+  ``STON`` adopts standard File I/O. 
+  A dedicated server and STON is connected by Linux Kernel(VFS) in order to guarantee high performance.
   
 - **Web Server 연동**
   
