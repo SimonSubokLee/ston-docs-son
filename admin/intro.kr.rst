@@ -391,12 +391,11 @@ In addition, both developing time reduction and service reliability improvement 
 
 - **Connect to Wowza**
 
-  In the media service field, Wowza is considered as a standard.
-  미디어서비스에서는 Wowza가 사실상의 표준이다. 
-  하지만 Wowza의 HTTP Caching기능은 사용하기 번거로울 뿐만 아니라 빈약하다. 
-  또한 점차 HTTP 이외의 "전용" 프로토콜은 사라지는 추세이다.
+  In the media service field, Wowza is considered as a standard. 
+  However, Http caching function of Wowza is not only inconvenient but also very limited. 
+  Also other "exclusive" protocols except HTTP is fading away from the market. 
 
-  ``STON`` 로컬 디스크로 Mount할 수 있을 뿐만 아니라 MP4헤더 변환, Trimming등 
+  ``STON`` (STON을?) 로컬 디스크로 Mount할 수 있을 뿐만 아니라 MP4헤더 변환, Trimming등 
   모든 기능을 사용할 수 있다.
 
 - **리소스 제약**
