@@ -350,7 +350,7 @@ Service patterns of these websites vary by their subjects and it is picky to mee
   Origin server failure is relatively frequent and economic feasibility to improve service quality is extremely low.
   
   ``STON`` detects overload or service failure to execute automatic exclusion/recovery.
-  원본서버 과부하 또는 장애를 판단하여 자동으로 배제/복구가 이루어진다. 
+  원본서버 과부하 또는 장애를 판단하여 자동으로 (무엇에 대한?) 배제/복구가 이루어진다. 
   When the origin server fails, the server automatically extends TTL to decrease origin server dependency.
   
 - **Image Processing**
