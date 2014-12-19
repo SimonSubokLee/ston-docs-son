@@ -398,20 +398,17 @@ In addition, both developing time reduction and service reliability improvement 
   ``STON`` (STON을?) 로컬 디스크로 Mount할 수 있을 뿐만 아니라 MP4헤더 변환, Trimming등 
   모든 기능을 사용할 수 있다.
 
-- **리소스 제약**
+- **Resource Restriction**
 
-  Back-end에 존재하는 파일을 Front-End의 사용자에게 전달하는 서버라면 항상 
-  파일 동기화가 문제된다. 
-  게임서버, SNS서버 등 전용서버의 개발 이슈는 항상 존재한다. 
-  이런 서버의 경우 중단 없이 장기간 운영 되야 하므로 
-  메모리, 디스크 사용이 엄격하게 제한되어야 한다.
+  A server that acquires files from Back-end and deliver them to front-end users has to consider file synchronization issues.
+  Dedicated servers like game servers and SNS servers had these problems during developing process.
+  These servers have to survive for very long time without stopping the service, use of memory and disk has to be strictly limited.
 
-  ``STON`` 최대 메모리, 디스크 사용량을 제한할 수 있다. 
-  또한 디스크로 Mount하여도 다른 모든 기능은 동일하게 동작하여 복합적인 서비스를 
-  최소한의 솔루션으로 구성할 수 있다.
+  ``STON`` can limit the use of memory and disk.
+  In addition, when the STON is mounted as a disk, all functions work in the same manner so complicated service can be configured with a minimal solution.
 
 
-STON은 이러한 특성들을 적극 활용하는 다음 서비스들과 함께 성장하고 있다. 
+STON is growing up with the following services that actively utilize these attributes.
 
 .. figure:: img/intro_reference.png
    :align: center
