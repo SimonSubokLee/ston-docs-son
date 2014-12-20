@@ -1,23 +1,21 @@
 ﻿.. _getting-started:
 
-2장. 시작하기
+2장. Getting Started
 ******************
 
-이장에서는 시스템 구성으로부터 설치 그리고 예제 가상호스트까지 구성해본다. 
-텍스트 편집기만 있으면 누구나 할 수 있다.
+This chapter explains how to set up an example virtual host from installation and system configuration.
+All this proccess can be done with a simple text editor.
 
-STON은 표준 Linux 서버에서 동작하도록 개발되었다. 
-개발 단계부터 HW뿐만 아니라 OS, 파일시스템 등 종속성을 가질 수 있는 요소는 최대한 배제하였다. 
-고객이 합리적인 장비를 선택할 수 있도록 돕는 것은 매우 중요하다. 
-왜냐하면 서비스의 특성과 규모에 따라 적절한 서버를 구성하는 것이 서비스의 시작이기 때문이다.
-
+STON is developed to run on the standard Linux server.
+Any hardware, OS or file system dependencies are excluded from developing stages.
+It is very important to help customers to select appropriate equipments because configuring proper server based on the nature and scale of service is the beginning of service.
 
 .. toctree::
    :maxdepth: 2
 
 .. _getting-started-serverconf:
 
-서버 구성
+Server Composition
 ====================================
 
 일반적으로 서버를 구성할 때는 CPU, 메모리, 디스크를 주로 고려한다.
