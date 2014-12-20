@@ -34,7 +34,8 @@ Especially for a service that requires a high performance like 10Gbps, each comp
 
       Multiple processing core will prove its effectiveness when more clients are accessing to the server.
 
-   4KB인 파일을 약 26만번을 전송하는 것과 1GB파일을 한번 전송하는 것은 같은 대역폭을 사용한다. 
+   In terms of bandwidth use, transferring one 4KB file for 260 thousand times or one 1GB file once takes identical bandwidth.
+   인 파일을 약 26만번을 전송하는 것과 1GB파일을 한번 전송하는 것은 같은 대역폭을 사용한다. 
    CPU선택의 가장 큰 기준은 얼마나 많은 동시접속을 처리하는가이다.
    
 
