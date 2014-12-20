@@ -15,24 +15,25 @@ It is very important to help customers to select appropriate equipments because 
 
 .. _getting-started-serverconf:
 
-Server Composition
+Server Components
 ====================================
 
-일반적으로 서버를 구성할 때는 CPU, 메모리, 디스크를 주로 고려한다.
-10Gbps급의 높은 성능를 요구하는 서비스라면 각 구성요소가 서비스 특성을 만족해야 원하는 성능을 얻을 수 있다.
+When configuring a general server, CPU, memory and storage are major components to consider.
+Especially for a service that requires a high performance like 10Gbps, each component should meet the requirement in order to reach the desired service performance.
 
 -  **CPU**
 
-   Quad 코어 이상을 권장한다. 
-   STON은 Many-Core에 대해 확장성(Scalability)를 가진다. 
-   코어가 많으면 많을수록 초당 처리량은 증가한다. 
-   단, 높은 처리량이 반드시 높은 트래픽을 의미하는 것은 아니다.
+   At least quad core processor is recommended. 
+   STON은 Many-Core에 대해 확장성(Scalability)를 가진다(STON은 multi core일수록 확장성이 증대된다??). 
+   Every additional processor core will boost processing power of the server.
+   However, high processing power does not necessarily mean high traffic.
+   단, 높은 처리량이 반드시 높은 트래픽(높은 트래픽 전송량?)을 의미하는 것은 아니다.
 
    .. figure:: img/10g_cpu.jpg
       :align: center
 
-      클라이언트가 많을수록 많은 CPU는 힘이 된다.
-    
+      Multiple processing core will prove its effectiveness when more clients are accessing to the server.
+
    4KB인 파일을 약 26만번을 전송하는 것과 1GB파일을 한번 전송하는 것은 같은 대역폭을 사용한다. 
    CPU선택의 가장 큰 기준은 얼마나 많은 동시접속을 처리하는가이다.
    
