@@ -166,7 +166,7 @@ Installation
 
 Update
 ====================================
-When the updated version is released, stonu command will update STON to the latest version. ::
+When the updated version is released, use stonu command to update STON to the latest version. ::
 
 	./stonu 2.0.1
 	
