@@ -1,6 +1,6 @@
 ﻿.. _getting-started:
 
-2장. Getting Started
+Chapter 2. Getting Started
 ******************
 
 This chapter explains how to set up an example virtual host from installation and system configuration.
@@ -24,7 +24,7 @@ Especially for a service that requires a high performance like 10Gbps, each comp
 -  **CPU**
 
    At least quad core processor is recommended. 
-   STON은 Many-Core에 대해 확장성(Scalability)를 가진다(STON은 multi core일수록 확장성이 증대된다??). 
+   Many-Core system increases the scalability of STON.
    Every additional processor core will boost processing power of the server.
    However, high processing power does not necessarily mean high traffic transmission rate.
 
@@ -53,8 +53,7 @@ Especially for a service that requires a high performance like 10Gbps, each comp
    .. figure:: img/02_disk.png
       :align: center
       
-      OS and STON always have to be configured in separate disks.
-      항상 OS와 STON은 별도의 디스크로 구성한다.
+      OS and STON always have to be installed on separate disks.
    
    Usually the STON is installed on the OS disk.
    Log is also configured on the identical disk where OS is installed.
@@ -65,7 +64,7 @@ Especially for a service that requires a high performance like 10Gbps, each comp
    로그는 서비스 상황을 실시간으로 기록하기 때문에 항상 Write부하가 발생한다.
    
    STON utilizes disks as RAID 0.
-   성능과 RAID의 상관여부(상관여부라는게 요구되는 성능에 따라 RAID를 구성할지의 여부인가요??)는 고객 서비스 특성에 따라 달라진다.
+   성능과 RAID의 상관여부(상관여부라는게 요구되는 성능에 따라 RAID를 구성할지 말지의 여부인가요??)는 고객 서비스 특성에 따라 달라진다.
    However, when file modification is not frequent and the size of content is much larger than that of physical memory, read speed can be effectively increased via RAID.
 
 
@@ -102,11 +101,11 @@ Installation
 
 		[root@localhost ~]# tar -zxf ston.2.0.0.rhel.2.6.32.x64.tar.gz
 
-3. 설치 스크립트를 실행한다. ::
+3. Run the installation script. ::
 
 		[root@localhost ~]# ./ston.2.0.0.rhel.2.6.32.x64.sh
 
-4. 설치과정은 install.log에 기록된다. 로그를 통해 설치 중 발생하는 문제를 알 수 있다. ::
+4. All installation processes are recorded in the install.log file. The log file helps tracking any possible issues during installation process. ::
 
       #DownloadURL: http://foobar.com/ston/ston.2.0.0.rhel.2.6.32.x64.tar.gz
       #DownloadTime: 13 sec
@@ -165,13 +164,13 @@ Installation
 
 .. _getting-started-update:
 
-업데이트
+Update
 ====================================
-최신버전이 배포되면 stonu명령어로 업데이트할 수 있다. ::
+When the updated version is released, stonu command will update the STON to the latest version. ::
 
 	./stonu 2.0.1
 	
-또는 :ref:`wm` 의 :ref:`wm-update` 를 통해 간편하게 업데이트를 진행할 수 있다.
+Or :ref:`wm-update` of :ref:`wm` command easily updates STON.
 
    .. figure:: img/conf_update1.png
       :align: center
@@ -179,30 +178,30 @@ Installation
 
 .. _getting-started-run:
 
-실행하기
+Run
 ====================================
 
-보통 기본경로에 STON을 설치한다. ::
+The following is the default directory where STON is usually installed at. ::
 
     /usr/local/ston/
 
-다음 파일 중 하나라도 존재하지 않거나 XML문법에 맞지 않을 경우 실행되지 않는다.
+If any of the below files is missing in the default directory or has incorrect XML syntax, STON will not run.
 
 - license.xml
 - server.xml
 - vhosts.xml
 
-최초 설치시 모든 XML파일이 존재하지 않는다. 
-배포받은 라이센스파일을 설치 경로에 복사한다.
-그리고 설치경로의 server.xml.default와 vhosts.xml.default를 복사 또는 수정하여 설정하길 바란다. 
-*.default파일은 항상 최신패키지와 함께 배포된다.
+After the initial installation, xml files might be missing from the default directory.
+In this case, copy the distributed license xml file to the directory.
+Then duplicate or rename server.xml.default and vhosts.xml.default files from the default installation directory.
+*.default files will be distributed with the latest package all the time.
 
 
 .. _getting-started-samplevhost:
 
 Hello World
 ====================================
-vhosts.xml 파일을 열어 다음과 같이 편집한다. ::
+Open vhosts.xml file and modify as below. ::
 
     <Vhosts>
         <Vhost Name="www.example.com">
@@ -215,11 +214,11 @@ vhosts.xml 파일을 열어 다음과 같이 편집한다. ::
 
 .. _getting-started-runston:
 
-STON 실행
+Run STON
 -----------------------------------------------
-1. 발급받은 license.xml을 설치 경로에 복사한다.
+1. Copy license.xml to the install directory.
 
-2. server.xml을 열어 <Storage>를 구성한다. ::
+2. Open server.xml file and configure <Storage>. ::
 
     <Server>
         <Cache>
