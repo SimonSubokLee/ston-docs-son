@@ -166,11 +166,11 @@ Installation
 
 Update
 ====================================
-When the updated version is released, stonu command will update the STON to the latest version. ::
+When the updated version is released, stonu command will update STON to the latest version. ::
 
 	./stonu 2.0.1
 	
-Or :ref:`wm-update` of :ref:`wm` command easily updates STON.
+:ref:`wm-update` option from :ref:`wm` command will also help easy update of STON.
 
    .. figure:: img/conf_update1.png
       :align: center
@@ -252,8 +252,7 @@ Checking Virtual Host
 
     192.168.0.100        www.example.com
 
-.........The following page is sucessfully displayed on the browser........
-브라우저로 www.example.com에 접근했을 때 다음 페이지가 정상적으로 서비스되면 성공입니다.
+If all settings are correctly configured, the following page will be displayed on the browser when www.example.com is accessed.
 
    .. figure:: img/helloworld3.png
       :align: center
@@ -261,18 +260,18 @@ Checking Virtual Host
 
 .. _getting-started-rrderr:
 
-WM이 느리거나 그래프가 나오지 않는 문제
+Trouble Shooting for Slow WM or Graph Displaying Error
 -----------------------------------------------
 
-설치과정 중 RRD그래프는 동적으로 다운로드 받아서 설치된다. 
-제한된 네트워크에서 STON을 설치할 경우 RRD가 제대로 설치되지 않을 수 있다. 
-이로 인해 :ref:`wm` 이 매우 느리게 동작하거나 :ref:`api-graph` 가 동작하지 않게 된다.
-다음과 같이 수정한다.
+RRD graph is dynamically downloaded and installed during installation procedure.
+Therefore, RRD may not be installed properly under the restricted network.
+In addition, :ref:`wm` may run very slowly or :ref:`api-graph` may not work at all.
+In order to fix these issues, follow the belw steps.
 
 
-**1. rrdtool 설치확인**
+**1. Checking the rrdtool Installation Status**
 
-   다음과 같이 설치여부를 확인한다. ::
+   Below procedure is to check the rrdtool installation status. ::
    
       [root@localhost ston]# yum install rrdtool
       Loaded plugins: fastestmirror, security
@@ -286,7 +285,7 @@ WM이 느리거나 그래프가 나오지 않는 문제
       Package rrdtool-1.3.8-6.el6.x86_64 already installed and latest version
       Nothing to do
       
-   다음은 Ubuntu계열의 경우이다. ::
+   Below procedure is the rrdtool installation check for Ubuntu. ::
 
       root@ubuntu:~# apt-get install rrdtool
       Reading package lists... Done
@@ -299,7 +298,7 @@ WM이 느리거나 그래프가 나오지 않는 문제
       0 upgraded, 0 newly installed, 0 to remove and 102 not upgraded.
       
       
-**2. RRD 수동설치**
+**2. RRD Manual Installation**
 
    만약 rrdtool이 yum을 이용해서 설치가 되지 않는다면, 
    OS 버전에 맞는 패키지를 `다운로드 <http://pkgs.repoforge.org/rrdtool/>`_ 후 수동으로 설치한다.   
