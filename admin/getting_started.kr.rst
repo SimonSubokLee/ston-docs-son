@@ -26,64 +26,64 @@ Especially for a service that requires a high performance like 10Gbps, each comp
    At least quad core processor is recommended. 
    STON은 Many-Core에 대해 확장성(Scalability)를 가진다(STON은 multi core일수록 확장성이 증대된다??). 
    Every additional processor core will boost processing power of the server.
-   However, high processing power does not necessarily mean high traffic.
-   단, 높은 처리량이 반드시 높은 트래픽(높은 트래픽 전송량?)을 의미하는 것은 아니다.
+   However, high processing power does not necessarily mean high traffic transmission rate.
 
    .. figure:: img/10g_cpu.jpg
       :align: center
 
       Multiple processing core will prove its effectiveness when more clients are accessing to the server.
 
-   In terms of bandwidth use, transferring one 4KB file for 260 thousand times or one 1GB file once takes identical bandwidth.
-   인 파일을 약 26만번을 전송하는 것과 1GB파일을 한번 전송하는 것은 같은 대역폭을 사용한다. 
-   CPU선택의 가장 큰 기준은 얼마나 많은 동시접속을 처리하는가이다.
+   In terms of bandwidth use, transferring a 4KB file for 260 thousand times or one time transfer of one 1GB file takes identical bandwidth.
+   The most critical criterion for selecting CPU is a processing power of simultaneous connetions.
+
+
+-  **Memory**
+
+   The STON recommends at least 4GB of system memory.
+   Frequently accessed contents should be allocated on the memory in order to increase the performance.
+   A server with lack of physical memory will inevitably accesses to the storage disk more frequently that increases burden of the disk.
+   If the I/O load of the disk is significantly high regardless of the number of served contents, installing additional memory can reduce the I/O load.
    
 
--  **메모리**
+-  **Disk**
 
-   4GB이상을 권장한다. 
-   자주 접근되는 콘텐츠를 메모리에 상주시켜야 성능이 향상되는데, 
-   물리적인 메모리가 부족하면 디스크 부하가 증가할 수 밖에 없다.
-   서비스되는 콘텐츠 개수와 상관없이 콘텐츠 크기가 커서 디스크 I/O 부하가 높다면 
-   메모리를 증설하여 부하를 낮출 수 있다.
-
-
--  **디스크**
-
-   OS를 포함하여 최소 3개 이상을 권장한다. 
-   디스크 역시 많으면 많을수록 많은 콘텐츠를 캐싱할 수 있을뿐만 아니라 I/O부하도 분산된다.
+   At least 3 disks including OS disk are recommended.
+   Just like memory, more disk gives better performance because I/O load will be dispersed and more contents could be cached.
    
    .. figure:: img/02_disk.png
       :align: center
       
+      OS and STON always have to be configured in separate disks.
       항상 OS와 STON은 별도의 디스크로 구성한다.
    
+   Usually the STON is installed on the OS disk.
+   Log is also configured on the identical disk where OS is installed.
+   Since log is recording real time service status, the disk is always suffered from write load.
+   (OS와 STON을 별도의 디스크에 구성해야 하는 이유에 대한 부연설명인가요?)
    일반적으로 OS가 설치된 디스크에 STON을 설치한다. 
    로그 역시 같은 디스크에 구성하는 것이 일반적이다. 
    로그는 서비스 상황을 실시간으로 기록하기 때문에 항상 Write부하가 발생한다.
    
-   STON은 디스크를 RAID 0처럼 사용한다. 
-   성능와 RAID의 상관여부는 고객 서비스 특성에 따라 달라진다. 
-   하지만 파일 변경이 빈번하지 않고 콘텐츠의 크기가 물리적 메모리 크기보다 
-   훨씬 큰 경우 RAID를 통한 Read속도 향상이 효과적일 수 있다.
+   STON utilizes disks as RAID 0.
+   성능과 RAID의 상관여부(상관여부라는게 요구되는 성능에 따라 RAID를 구성할지의 여부인가요??)는 고객 서비스 특성에 따라 달라진다.
+   However, when file modification is not frequent and the size of content is much larger than that of physical memory, read speed can be effectively increased via RAID.
 
 
 .. _getting-started-os:
 
-OS 구성
+OS Configuration
 ====================================
 
-가장 기본적인 형태로 설치한다. 
-표준 64bit Linux 배포판(Cent 6.2이상, Ubuntu 10.04이상) 이라면 정상동작한다. 
-패키지 의존성을 가지지 않는다.
+The standard installation is good enough.
+The STON works great with standard 64bit Linux(Cent 6.2 or higher, Ubuntu 10.04 or higher), and it does not rely on any packages.
 
 
 .. _getting-started-install:
 
-설치
+Installation
 ====================================
 
-1. 최신버전의 STON을 다운로드 받는다. ::
+1. First, download the latest version of STON. ::
 
       [root@localhost ~]# wget  http://foobar.com/ston/ston.2.0.0.rhel.2.6.32.x64.tar.gz
       --2014-06-17 13:29:14--  http://foobar.com/ston/ston.2.0.0.rhel.2.6.32.x64.tar.gz
@@ -98,7 +98,7 @@ OS 구성
       2014-06-17 13:29:15 (42.9 MB/s) - “ston.2.0.0.rhel.2.6.32.x64.tar.gz” saved [71340645/71340645]
 
 
-2. 압축을 해지한다. ::
+2. Extract downloaded package. ::
 
 		[root@localhost ~]# tar -zxf ston.2.0.0.rhel.2.6.32.x64.tar.gz
 
