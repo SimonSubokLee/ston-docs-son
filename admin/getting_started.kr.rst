@@ -192,7 +192,7 @@ If any of the below files is missing in the default directory or has incorrect X
 - vhosts.xml
 
 After the initial installation, xml files might be missing from the default directory.
-In this case, copy the distributed license xml file to the directory.
+In this case, copy the distributed license.xml file to the directory.
 Then duplicate or rename server.xml.default and vhosts.xml.default files from the default installation directory.
 *.default files will be distributed with the latest package all the time.
 
@@ -231,28 +231,28 @@ Run STON
       
 .. note::
 
-   STON은 기본적으로 디스크를 저장공간으로 사용하기 때문에 디스크가 설정되어 있지 않으면 구동되지 않는다. 
-   자세한 내용은 다음 장에서 설명한다.
+   STON uses disk as a storage, default disk has to be configured in order to run STON.
+   Setting up the disk will be reviewed in the next chapter.
 
-3. STON을 실행한다.  ::
+3. Run STON.  ::
 
       [root@localhost ~]# service ston start
 
-   STON을 중지하고 싶다면 stop 명령을 사용한다.  ::
+   In order to stop STON, use stop command.  ::
 
       [root@localhost ~]# service ston stop
 
 
 .. _getting-started-runcheck:
 
-가상호스트 동작확인
+Checking Virtual Host
 -----------------------------------------------
 
-(Windows 7 기준) C:\\Windows\\System32\\drivers\\etc\\hosts 파일에 다음과 같이
-www.example.com 도메인을 설정한다. ::
+(For Windows 7) Configure www.example.com domain in the C:\\Windows\\System32\\drivers\\etc\\hosts file as below. ::
 
     192.168.0.100        www.example.com
 
+.........The following page is sucessfully displayed on the browser........
 브라우저로 www.example.com에 접근했을 때 다음 페이지가 정상적으로 서비스되면 성공입니다.
 
    .. figure:: img/helloworld3.png
