@@ -248,7 +248,7 @@ Run STON
 Checking Virtual Host
 -----------------------------------------------
 
-(For Windows 7) Configure www.example.com domain in the C:\\Windows\\System32\\drivers\\etc\\hosts file as below. ::
+(For Windows 7) Add www.example.com domain in the C:\\Windows\\System32\\drivers\\etc\\hosts file as below. ::
 
     192.168.0.100        www.example.com
 
@@ -300,8 +300,8 @@ In order to fix these issues, follow the belw steps.
       
 **2. RRD Manual Installation**
 
-   만약 rrdtool이 yum을 이용해서 설치가 되지 않는다면, 
-   OS 버전에 맞는 패키지를 `다운로드 <http://pkgs.repoforge.org/rrdtool/>`_ 후 수동으로 설치한다.   
+   If yum fails to install rrdtool, administrator should `downlaod <http://pkgs.repoforge.org/rrdtool/>`_ 
+   proper package for installed OS version and manually proceed installation.
    
 ======================================== =================== ======= ============================
 Name                                     Last Modified       Size    Description
@@ -315,11 +315,11 @@ tcl-rrdtool-1.4.7-1.el6.rfx.x86_64.rpm	 06-Apr-2012 16:57   35K     RHEL6 and Ce
 
 .. _env-vhost-activeorigin:
 
-원본서버
+Origin Server
 ============================================
 
-가상호스트는 원본서버를 대신해 콘텐츠를 서비스하는 것이 목적이다.
-서비스 형태에 맞게 다양한 원본서버는 다양하게 접근이 가능하다. ::
+Virtual host is intended to serve contents to users on behalf of the origin server. 
+Depends on the service platform, various origin servers can be accessed by serveral ways.
 
     <Vhosts>
         <Vhost Name="www.example.com">
@@ -331,28 +331,28 @@ tcl-rrdtool-1.4.7-1.el6.rfx.x86_64.rpm	 06-Apr-2012 16:57   35K     RHEL6 and Ce
     </Vhosts>
 
 -  ``<Address>``
-   가상호스트가 콘텐츠를 복제 할 원본서버 주소.
-   개수제한은 없다.
-   주소가 2개 이상일 경우 Active/Active방식(Round-Robin)으로 선택된다. 
-   원본서버 주소 포트가 80인 경우 생략할 수 있다. 
+   The address of origin server where the virtual host duplicates contents.
+   Unlimited number of addresses can be added in the list. (무엇에 대한 개수제한이 없는지??)개수제한은 없다.
+   When there are more than 2 addresses, Active/Active method(Round-Robin) is adopted to choose an address.
+   If the origin server port is 80, it can be omitted.
 
-예를 들어 다른 포트(8080)로 서비스되는 경우 1.1.1.1:8080과 같이 포트번호를 
-명시해야 한다. 주소는 {IP|Domain}{Port}{Path}형식으로 8가지 형식이 가능하다.
+For example, if the origin server is using a different port such as 8080, then port number has to be specified as 1.1.1.1:8080.
+There are 8 different types of address based on {IP|Domain}{Port}{Path} format.
 
 ============================== ==========================
-Address                        Host헤더
+Address                        Host Header
 ============================== ==========================
-1.1.1.1	                       가상호스트명
-1.1.1.1:8080	               가상호스트명:8080       
-1.1.1.1/account/dir	           가상호스트명            
-1.1.1.1:8080/account/dir       가상호스트명:8080       
+1.1.1.1	                       Virtual host name
+1.1.1.1:8080	               Virtual host name:8080       
+1.1.1.1/account/dir	           Virtual host name            
+1.1.1.1:8080/account/dir       Virtual host name:8080       
 example.com	                   example.com             
 example.com:8080	           example.com:8080        
 example.com/account/dir	       example.com             
 example.com:8080/account/dir   example.com:8080
 ============================== ==========================
 
-:ref:`origin-httprequest` 중 Host헤더를 별도로 설정하지 않는한 표의 Host헤더를 전송한다. ::
+As long as the host header is not specified in the :ref:`origin-httprequest`, the host header from above table will be trasmitted. ::
 
     <Vhosts>
         <Vhost Name="www.example.com">
@@ -362,7 +362,7 @@ example.com:8080/account/dir   example.com:8080
         </Vhost>
     </Vhosts>
 
-예를 들어 위와같이 설정하면 원본으로 다음과 같이 요청한다. ::
+For example, the above setting will request below host header as an origin server. ::
 
    GET / HTTP/1.1
    Host: origin.com:8888
