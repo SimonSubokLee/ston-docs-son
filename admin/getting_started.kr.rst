@@ -369,16 +369,16 @@ For example, the above setting will request below host header as an origin serve
 
 .. note:
 
-   원본서버에 example.com/account/dir처럼 경로가 붙어있다면 요청된 URL은 원본서버 주소 경로 뒤에 붙는다. 
-   클라이언트가 /img.jpg를 요청하면 최종 주소는 example.com/account/dir/img.jpg가 된다.
-
+   If additional path is attached at the origin server like example.com/account/dir,
+   requested URL will also be attached at the end of origin server address.
+   For example, if a client requests /img.jpg, then the final address will be example.com/account/dir/img.jpg.
 
 .. _env-vhost-standbyorigin:
 
-보조 원본주소
+Standby Origin Server Address
 ------------------------------------------------
 
-보조 원본서버를 설정한다.::
+Configure standby origin server as belows.::
 
     <Vhosts>
         <Vhost Name="www.example.com">
@@ -393,43 +393,42 @@ For example, the above setting will request below host header as an origin serve
     
 -  ``<Address2>``
 
-   모든 ``<Address>`` 가 정상동작하고 있다면 ``<Address2>`` 는 서비스에 투입되지 않는다. 
-   Active서버에 장애가 감지되면 해당 서버를 대체하기 위해 투입되며 
-   Active서버가 복구되면 다시 Standby상태로 돌아간다. 
-   만약 Standby서버에 장애가 감지되면 해당 Standby서버가 복구되기 전까지 서비스에 투입되지 않는다.
+   If all ``<Address>`` are woking without problems, ``<Address2>`` will not run for the service.
+   However, if failure is detected to the Active server, standby server functionally substitutes failed server until all issues are recovered.
+   When the active server is recovered, the standby server returns to standby status.
+   If there is any error in the standby server, relevant standby server will not standby for service until all errors are recovered. 
 
 
 .. _api-etc-help:
 
-API 호출
+API Call
 ====================================
 
-HTTP기반의 API를 제공한다.
-API 호출권한은 :ref:`env-host` 의 영향을 받는다. 
-허가되지 않았다면 곧바로 연결을 종료한다.
+The STON provides HTTP based API.
+:ref:`env-host` authorizes API call, and if API call is unauthorized, the connection will be terminated immediately.
 
-STON버전을 확인한다. ::
+Check STON Version. ::
 
    http://127.0.0.1:10040/version
     
-같은 API를 Linux Shell에서 명령어로 수행한다. ::
+Execute the identical API version checking command on the Linux Shell. ::
 
    ./stonapi version
 
 .. note:
 
-   HTTP API는 &를 QueryString의 구분자로 인식하지만 Linux 콘솔에서는 다른 의미를 가진다. 
-   &가 들어가는 명령어를 호출하는 경우 \&로 입려하거나 반드시 괄호(" /...&... ")로 호출하는 URL을 묶어야 한다.
+   HTTP API recognizes "&" as a QueryString identifier, but Linux console takes it in a different meaning.
+   In the Linux console when calling a command with "&", administrator should use either "\&" or wrap the URL with parenthesis.
 
 
-하드웨어 정보조회
+Hardware Information Inquiry
 ====================================
 
-하드웨어 정보를 조회한다. :: 
+The following API looks over hardware information. :: 
 
    http://127.0.0.1:10040/monitoring/hwinfo
    
-결과는 JSON형식으로 제공된다. ::
+The result will be returned into JSON format as below. ::
 
    {
       "version": "1.1.9",
@@ -481,7 +480,7 @@ STON버전을 확인한다. ::
    }
 
 
-재시작/종료
+Restart/Turn Off
 ====================================
 
 명령어를 통해 STON을 재시작/종료할 수 있다. 
