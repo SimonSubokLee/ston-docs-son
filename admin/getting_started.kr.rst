@@ -480,30 +480,31 @@ The result will be returned into JSON format as below. ::
    }
 
 
-Restart/Turn Off
+Restart/Quit
 ====================================
 
-명령어를 통해 STON을 재시작/종료할 수 있다. 
-의도하지 않은 결과를 피하기 위해 웹 페이지를 통한 확인작업이 반드시 필요하도록 개발되었다. ::
+The following commands restart or quit STON. 
+In order to avoid unintended result, it provides confirmation of the comand on the web page.
+의도하지 않은 결과를 피하기 위해 웹 페이지를 통한 확인작업(재시작/종료 여부에 대한 확인작업???)이 반드시 필요하도록 개발되었다. ::
 
    http://127.0.0.1:10040/command/restart
-   http://127.0.0.1:10040/command/restart?key=JUSTDOIT       // 즉시 실행
+   http://127.0.0.1:10040/command/restart?key=JUSTDOIT       // Immediately execute the command
    http://127.0.0.1:10040/command/terminate
-   http://127.0.0.1:10040/command/terminate?key=JUSTDOIT       // 즉시 실행
+   http://127.0.0.1:10040/command/terminate?key=JUSTDOIT       // Immediately execute the command
    
 
 .. _getting-started-reset:
 
-Caching 초기화
+Caching Reset
 ====================================
 
-서비스를 중단하며 캐싱된 모든 컨텐츠를 삭제한다. 
-설정된 모든 디스크를 포맷하며 작업이 완료되면 다시 서비스를 재개한다. ::
+The following commands stop service and discard all cached contents.
+The command will format all disks and the service is resumed when disk format is completed. ::
 
    http://127.0.0.1:10040/command/cacheclear
-   http://127.0.0.1:10040/command/cacheclear?key=JUSTDOIT       // 즉시 실행
+   http://127.0.0.1:10040/command/cacheclear?key=JUSTDOIT       // Immediately execute the command
    
-콘솔에서는 다음 명령어를 통해 전체 또는 하나의 가상호스트를 초기화한다. ::
+In the console window, the following command will reset one or entire virtual host. ::
 
    ./stonapi reset
    ./stonapi reset/ston.winesoft.co.kr
