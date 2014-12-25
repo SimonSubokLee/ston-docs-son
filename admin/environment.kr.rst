@@ -1,21 +1,21 @@
 ﻿.. _env:
 
-3장. 설정구조
+Chapter 3. Configuration
 ******************
 
-이 장에서는 설정구조와 변경된 설정을 적용하는 방법에 대해 설명한다. 
-구조를 정확히 이해해야 빠르게 서버를 배치할 수 있을뿐만 아니라 장애상황을 유연하게 극복할 수 있다.
+This chapter will explain about configuration and how to apply modified settings.
+Clear understanding of configuration structure helps to arrange servers and to deal with server failing situations.
 
-설정은 크게 전역(server.xml)과 가상호스트(vhosts.xml)로 나뉜다.
+Configuration is divided into global configuration(server.xml) and virtual host configuration(vhosts.xml).
 
    .. figure:: img/conf_files.png
       :align: center
 
-      2개의 .xml파일이 전부입니다.
+      There are only 2 xml files in configuration structure.
 
-2개의 XML파일로 대부분의 서비스를 구성한다.
-여러 TXT파일에는 가상호스트별 예외조건을 설정하는데, 특정기능의 목록을 작성하는데 사용된다.
-기능설명을 위해 다음처럼 완전한 형태의 XML을 예시하는 것은 굉장히 번거롭다. ::
+Two xml files configures almost all services.
+Several txt files contain exception conditions for every virtual host, and particular function lists.
+The following is the complete form of XML example. ::
 
    <Server>
        <VHostDefault>
@@ -25,7 +25,7 @@
        </VHostDefault>
    </Server>
 
-때문에 다음과 같이 축약하여 설명한다. ::
+In this manaul, simplified form will be used when explaining functions in XML file. ::
 
    # server.xml - <Server><VHostDefault><Options>
    
@@ -34,23 +34,23 @@
 
 .. note:
    
-   라이센스(license.xml)는 설정이 아니다.
+   license.xml is not a configuration file.
    
    
 .. _api-conf-reload:
 
-설정 Reload
+Setting Reload
 ====================================
 
-설정 변경 후 관리자가 명확하게 API를 호출해야 한다.
-시스템과 성능 관련설정을 제외한 대부분의 설정은 서비스 중단없이 즉시 적용된다. ::
+After changing setting, adminstrator should precisely call API. 
+Other than system and performance related setting, most settings can be applied without suspending service. ::
 
    http://127.0.0.1:10040/conf/reload
 
-설정이 변경될 때마다 :ref:`admin-log-info` 에 변경사항이 기록된다.
+Whenever modified setting is applied, changes are recorded in :ref:`admin-log-info`.
 
 
-server.xml 전역설정
+server.xml Global Configuration
 ====================================
 
 실행파일과 같은 경로에 존재하는 server.xml이 전역설정 파일이다.
