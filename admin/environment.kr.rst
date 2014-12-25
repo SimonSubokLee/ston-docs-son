@@ -1,9 +1,9 @@
 ﻿.. _env:
 
-Chapter 3. Configuration
+Chapter 3. Configurations
 ******************
 
-This chapter will explain about configuration and how to apply modified settings.
+This chapter will explain about configuration structure and how to apply modified settings.
 Clear understanding of configuration structure helps to arrange servers and to deal with server failing situations.
 
 Configuration is divided into global configuration(server.xml) and virtual host configuration(vhosts.xml).
@@ -53,8 +53,8 @@ Whenever modified setting is applied, changes are recorded in :ref:`admin-log-in
 server.xml Global Configuration
 ====================================
 
-실행파일과 같은 경로에 존재하는 server.xml이 전역설정 파일이다.
-XML형식의 텍스트파일이다. ::
+server.xml in the execution file directory is the global configuration file. 
+It is an XML format text file. ::
 
     # server.xml
     
@@ -64,8 +64,8 @@ XML형식의 텍스트파일이다. ::
         <VHostDefault> ... </VHostDefault>
     </Server>
     
-우선 전역설정의 구조와 간단한 기능위주로 설명한다.
-:ref:`access-control` 나 :ref:`snmp` 등 전역설정에 위치하지만 덩치가 큰 기능들에 대해서는 각 주제를 다루는 장에서 설명한다. 
+This section will cover structure of global configuration and simple functions.
+:ref:`access-control` or :ref:`snmp` is located in the global configuration, but these major functions will be elaborated in respective chapters. 
 
 .. toctree::
    :maxdepth: 2
@@ -73,10 +73,10 @@ XML형식의 텍스트파일이다. ::
 
 .. _env-host:
 
-관리자 설정
+Administrator Settings
 ------------------------------------
 
-관리목적의 기능을 설정한다. ::
+Configure settings for administrator. ::
 
     # server.xml - <Server>
     
@@ -92,19 +92,21 @@ XML형식의 텍스트파일이다. ::
     </Host>
 
 -  ``<Name>``
-    서버 이름을 설정한다. 
-    이름이 입력되지 않으면 시스템 이름이 사용한다.
+    Configure the server name. 
+    If left blank, system name will be used.
     
 -  ``<Admin>``
-    관리자 정보(메일 또는 이름)를 설정한다. 
-    이 항목은 SNMP 조회목적으로만 사용된다.
+    Configure administrator's information(email address or name). 
+    This itme is only used for SNMP inquiry.
     
 -  ``<Manager>``
-    관리용도로 사용할 매니저 포트와 ACL(Access Control List)을 설정한다. 
-    ACL은 IP, IP범위, BitMask, Subnet 이상 네 가지 형식을 지원한다. 
-    접속한 세션이 Allow로 접근이 허가된 IP가 아니면 접속을 차단한다.
-    API를 호출하는 IP가 ``<Allow>`` 목록에 반드시 설정되어야 한다.
+    Configure manager port and ACL(Access Control List) for administrating purpose. 
+    ACL supports IP, IP range, BitMask, Subnet information. 
+    If the IP address of connected session is not authorized from the ``<Allow>`` list, the server will block the connection. 
+    The IP that calls API must be configured in the ``<Allow>`` list.
     
+    Based on the access condition, access authority(Role) can be configured. 
+    Any requests without authority will be responsed with **401 Unauthorized**. 
     접근조건에 따라 접근권한(Role)을 설정할 수 있다. 
     접근권한이 없는 요청에 대해서는 **401 Unauthorized** 로 응답한다. 
     ``<Allow>`` 조건에 ``Role`` 속성을 명시적으로 선언하지 않을 경우 ``<Manager>`` 의 ``Role`` 속성이 적용된다.
