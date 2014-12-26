@@ -334,8 +334,8 @@ For example, :ref:`media` function locates under the ``<Media>`` tag.
 vhosts.xml Virtual Host Settings
 ====================================
 
-실행파일과 같은 경로에 존재하는 vhosts.xml파일을 가상호스트 설정파일로 인식한다. 
-가상호스트 개수에 제한은 없다. ::
+The vhosts.xml file located in the execution file directory is recognized as a virtual host configuration file.
+There could be unlimited number of virtual hosts. ::
 
     # vhosts.xml
     
@@ -348,10 +348,10 @@ vhosts.xml Virtual Host Settings
     
 .. _env-vhost-create-destroy:
     
-생성/파괴
+Create/Remove Virtual Host
 ------------------------------------
 
-``<Vhosts>`` 하위에 ``<Vhost>`` 로 가상호스트를 설정한다. ::
+Virtual host ``<Vhost>`` can be configured under the ``<Vhosts>``. ::
 
     # vhosts.xml - <Vhosts>
     
@@ -361,28 +361,28 @@ vhosts.xml Virtual Host Settings
         </Origin>
     </Vhost>
 
--  ``<Vhost>`` 가상호스트를 설정한다.
+-  ``<Vhost>`` configures virtual host.
     
-   - ``Status (기본: Active)`` Inactive인 경우 해당 가상호스트를 서비스하지 않는다. 캐싱된 콘텐츠는 유지된다.
-   - ``Name`` 가상호스트 이름. 중복될 수 없다.
+   - ``Status (default: Active)`` Inactive value stops virtual host service. However, cached contents are kept.
+   - ``Name`` is a name of virtual host. An identical name cannot be used for different virtual hosts.
     
-가상호스를 삭제하려면 ``<Vhost>`` 를 삭제한다. 
-삭제된 가상호스트의 모든 콘텐츠는 삭제대상이 된다. 
-다시 추가해도 콘텐츠는 되살아나지 않는다.
+In order to remove a specific virtual host, delete the relavant ``<Vhost>`` tag. 
+All contents in removed virtual hosts are subject to removal. 
+Recreating removed virtual host doesn't recover deleted contents.
 
 
 .. _env-vhost-find:
     
-찾기
+Discovering Virtual Host(검색. 가상호스트를 검색할 수 있도록 하는 설정을 뜻하는거죠?)
 ------------------------------------
 
-다음은 가장 간단한 형태의 HTTP요청이다. ::
+The following is the simplest form of HTTP request. ::
 
     GET / HTTP/1.1
     Host: www.example.com
 
-일반적인 Web서버는 Host헤더로 가상호스트를 찾는다. 
-하나의 가상호스트를 여러 이름으로 서비스하고 싶다면 ``<Alias>`` 를 사용한다. ::
+General Web servers find virtual host with Host header.
+If one virtual host needs to be serviced with different names, use ``<Alias>`` option. ::
 
     # vhosts.xml - <Vhosts>
     
@@ -393,7 +393,9 @@ vhosts.xml Virtual Host Settings
 
 -  ``<Alias>``
 
-   가상호스트의 별명을 설정한다.
+   This option configures alias of the virtual host.
+   Unlimited number of alias could be created with this option.
+   Both specific domain name such as www2.example.com and 패턴표현?? are supported for alias.
    개수는 제한이 없다.
    명확한 표현(www2.example.com)과 패턴표현(*.sub.example.com)을 지원한다.
    패턴은 복잡한 정규표현식이 아닌 prefix에 * 표현을 하나만 붙일 수 있는 간단한 형식만을 지원한다.
