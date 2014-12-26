@@ -100,40 +100,38 @@ Configure settings for administrator. ::
     This itme is only used for SNMP inquiry.
     
 -  ``<Manager>``
-    Configure manager port and ACL(Access Control List) for administrating purpose. 
+    Configure manager port and ACL(Access Control List) for administrative purpose. 
     ACL supports IP, IP range, BitMask, Subnet information. 
     If the IP address of connected session is not authorized from the ``<Allow>`` list, the server will block the connection. 
     The IP that calls API must be configured in the ``<Allow>`` list.
     
-    Based on the access condition, access authority(Role) can be configured. 
-    Any requests without authority will be responsed with **401 Unauthorized**. 
-    접근조건에 따라 접근권한(Role)을 설정할 수 있다. 
-    접근권한이 없는 요청에 대해서는 **401 Unauthorized** 로 응답한다. 
-    ``<Allow>`` 조건에 ``Role`` 속성을 명시적으로 선언하지 않을 경우 ``<Manager>`` 의 ``Role`` 속성이 적용된다.
+    Based on the access condition, access authorization(Role) can be configured. 
+    Any requests without authorization will be responsed with **401 Unauthorized**. 
+    If ``Role`` properties are not clearly declared in ``<Allow>`` conditions, the ``Role`` property from ``<Manager>`` tag will be applied.
     
-    - ``Admin`` 모든 API호출이 가능하다.
-    - ``User`` :ref:`api_monitoring` , :ref:`api-graph` API만 호출할 수 있다.
-    - ``Looker`` :ref:`api-graph` API만 호출할 수 있다.
+    - ``Admin`` can call entire API.
+    - ``User`` only can call :ref:`api_monitoring` , :ref:`api-graph` API.
+    - ``Looker`` only can call :ref:`api-graph` API.
     
-    기타 다음과 같은 자잘한 관리목적의 속성을 가진다.
+    In addition, there are minor administrative properties as followings.
     
     - ``HttpMethod``
     
-      - ``ON (기본)`` :ref:`api-etc-httpmethod` 호출시 ACL을 검사한다.
+      - ``ON (default)`` :ref:`api-etc-httpmethod` checks ACL when the API is called.
       
-      - ``OFF`` :ref:`api-etc-httpmethod` 호출시 ACL을 검사하지 않는다.
+      - ``OFF`` :ref:`api-etc-httpmethod` doesn't check ACL when the API is called.
     
-    - ``UploadMultipartName`` :ref:`api-conf-upload` 의 변수명을 설정한다.
+    - ``UploadMultipartName`` configures variable names of :ref:`api-conf-upload`.
 
 
 .. _env-cache-storage:
 
-Storage 구성
+Storage Configurations
 ------------------------------------
 
-Caching된 콘텐츠를 저장할 Storage를 구성한다.
-저장공간이 충분하다면 무제한으로 Caching할 수 있다.
-Storage는 Caching서비스 설정 중 가장 중요하다. ::
+This section will configure the storage that will preserve cached contents.
+If there is enough space in the storage, all contents can be cached. 
+Storage configuration is the most important setting among caching service. ::
 
     # server.xml - <Server>
     
@@ -146,31 +144,32 @@ Storage는 Caching서비스 설정 중 가장 중요하다. ::
     </Cache>
     
 -  ``<Storage>``
-    콘텐츠를 저장할 디스크를 설정한다. 
-    하위 ``<Disk>`` 개수제한은 없다.
+    Configure the disk to store contents. 
+    The number of subordinate ``<Disk>`` is not limited.
     
-    디스크는 장애가 가장 많이 발생하는 장비이기 때문에 명확한 장애조건을 설정할 것을 권장한다.
-    ``DiskFailSec (기본: 60초)`` 동안 ``DiskFailCount (기본: 10)`` 만큼 디스크 작업이 실패하면 
-    해당 디스크는 자동으로 배제된다. 
-    배제된 디스크 상태는 "Invalid"로 명시된다. 
+    Since disks are the most problematic equipment, it is recommended to set specific fail conditions.
+    If any disk operation is repeatedly failing for ``DiskFailCount (default: 10)`` times within ``DiskFailSec (default: 60)`` seconds, then relevant disk is excluded from the service.
+    The status of excluded disk is set to "Invalid". 
     
-    모든 디스크가 배제될 수도 있는데 이 때의 동작방식은 ``OnCrash`` 속성으로 설정한다.
+    If all disks are excluded, the server will operate according to the ``OnCrash`` property.
     
-    - ``hang (기본)`` 장애 디스크를 모두 재투입한다. 
-      정상 서비스를 기대한다기 보다는 원본을 보호하려는 목적이 강하다.
+    - ``hang (default)`` option will reactivate all excluded disks. 
+      This option is more likely to protect origin server rather than running a normal service.
       
-    - ``bypass`` 모든 요청을 원본서버으로 바이패스 한다. 
-      디스크가 복구되면 즉시 STON이 서비스를 처리한다.
+    - ``bypass`` option bypasses all request to the origin server. 
+      As soon as disks are recovered, STON processes service immediately.
+      디스크가 복구되면 즉시 STON이 (어떠한 서비스를 처리하는지? 서비스를 위한 요청을 처리하는지?)서비스를 처리한다.
       
-    - ``selfkill`` STON을 종료시킨다.
+    - ``selfkill`` quits STON.
     
-각 디스크마다 최대 캐싱용량을 ``Quota (단위: GB)`` 속성으로 설정할 수 있다.
-굳이 설정하지 않더라도 항상 디스크가 꽉 차지 않도록 LRU(Least Recently Used) 알고리즘에 의해 오래된 콘텐츠를 자동으로 삭제한다.
+Maximum caching capacity for all disks can be configured with ``Quota (unit: GB)`` option.
+Even if the ``Quota`` option is not specified, LRU(Least Recently Used) algorithm automatically discards stale contents to make sure the disk is always available.
 
-Storage 구성시 가장 중요하게 고려해야 할 것은 저장할 파일개수다.
-파일이 많아질수록 I/O성능이 급격히 떨어져서 서비스 품질이 떨어진다.
-최대 파일개수를 ``<Storage>`` 의 ``FileMaxCount (기본: Disk * 200백만)`` 속성으로 설정하여 원하는 서비스 품질과 형태를 구성할 수 있다.
-5개의 Disk로 1억 개의 Contents를 Caching하고 싶다면 다음과 같이 설정한다.
+When configuring a storage, the most important thing to consider is the number of file to keep in the storage.
+As the the number of file increases, I/O performance of the disk rapidly decreases and causes poor service quality.
+The maximum number of file can be configured in the ``FileMaxCount (default: Disk * 200 million)`` of ``<Storage>`` tag in order to construct desired service and quality and structure.
+The following configuration example is caching 100 million contents with 5 disks.
+최대 파일개수를 ``<Storage>`` 의 ``FileMaxCount (기본: Disk * 200백만--> 2백만인가요??)`` 속성으로 설정하여 원하는 서비스 품질과 형태를 구성할 수 있다.
 
     # server.xml - <Server>
     
@@ -188,10 +187,11 @@ Storage 구성시 가장 중요하게 고려해야 할 것은 저장할 파일�
 
 .. _env-cache-resource:
 
-메모리 제한
+Memory Restriction
 ------------------------------------
 
-사용할 최대 메모리와 BodyRatio(파일로부터 메모리에 적재된 데이터의 비율)를 설정한다. ::
+Configure maximum available memory and BodyRatio(the ratio of loaded data on the memory to disk data). ::
+사용할 최대 메모리와 BodyRatio(파일(디스크에 저장돼있는 파일??)로부터 메모리에 적재된 데이터의 비율)를 설정한다. ::
 
     # server.xml - <Server>
     
@@ -200,22 +200,23 @@ Storage 구성시 가장 중요하게 고려해야 할 것은 저장할 파일�
         <BodyRatio>50</BodyRatio>
     </Cache>
     
--  ``<SystemMemoryRatio> (기본: 100%)``
+-  ``<SystemMemoryRatio> (default: 100%)``
 
-   시스템 메모리에서 STON이 사용할 최대 메모리를 비율로 설정한다. 
-   예를 들어 16GB장비에서 이 수치를 50(%)으로 설정하면 시스템 메모리가 8GB인 것처럼 동작한다.
-   특히 :ref:`filesystem` 등을 통해 다른 프로세스와 연동할 때 유용하다.
-   
--  ``<BodyRatio> (기본: 50%)``
+   Configure the ratio of allocated memory for STON.
+   For instance, if this property is set to 50(%) in the equipment with 16GB memory, the server runs as if it has 8GB system memory.
+   This option is especially handy when connected with other process by using :ref:`filesystem`
 
-   STON은 디스크에서 로딩된 Body 데이터를 메모리에 최대한 Caching하여 서비스 품질을 향상시킨다. 
-   서비스 형태에 따라 이 비율을 조절하여 품질을 최적화한다.
-   
+-  ``<BodyRatio> (default: 50%)``
+
+   STON improves service quality by caching as many as Body data from disk to memory.
+   This ratio can be optimized to enrich quality of service according to the service type.
+
       .. figure:: img/bodyratio1.png
          :align: center
    
-         BodyRatio를 통해 메모리비율을 설정한다.
+         Allocated system memory ratio can be configured with BodyRatio option.
          
+   In case of game downloads, the size of contents is larger than the number of file
    예를 들어 게임 다운로드처럼 파일 개수는 많지 않지만 Contents크기가 큰 서비스의 경우 File I/O 부하가 부담스럽다. 
    이런 경우 ``<BodyRatio>`` 를 높여서 보다 많은 Contents데이터가 메모리에 상주할 수 있도록 설정하면 서비스 품질을 높일 수 있다.
 
