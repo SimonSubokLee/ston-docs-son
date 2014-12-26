@@ -50,7 +50,7 @@ Other than system and performance related setting, most settings can be applied 
 Whenever modified setting is applied, changes are recorded in :ref:`admin-log-info`.
 
 
-server.xml Global Configuration
+server.xml Global Settings
 ====================================
 
 server.xml in the execution file directory is the global configuration file. 
@@ -126,10 +126,10 @@ Configure settings for administrator. ::
 
 .. _env-cache-storage:
 
-Storage Configurations
+Storage Settings
 ------------------------------------
 
-This section will configure the storage that will preserve cached contents.
+This section configures the storage that will preserve cached contents.
 If there is enough space in the storage, all contents can be cached. 
 Storage configuration is the most important setting among caching service. ::
 
@@ -216,21 +216,21 @@ Configure maximum available memory and BodyRatio(the ratio of loaded data on the
    
          Allocated system memory ratio can be configured with BodyRatio option.
          
-   In case of game downloads, the size of contents is larger than the number of file
-   예를 들어 게임 다운로드처럼 파일 개수는 많지 않지만 Contents크기가 큰 서비스의 경우 File I/O 부하가 부담스럽다. 
-   이런 경우 ``<BodyRatio>`` 를 높여서 보다 많은 Contents데이터가 메모리에 상주할 수 있도록 설정하면 서비스 품질을 높일 수 있다.
+   In case of game contents, the number of file is not many, but the size of contents is large.
+   These services usually have a significant File I/O burden.
+   Using higher value for ``<BodyRatio>`` enables more contents data to reside in the memory.
 
       .. figure:: img/bodyratio2.png
          :align: center
    
-         BodyRatio를 높이면 I/O가 감소한다.
+         I/O frequency will be decreased if BodyRatio value is increased.
 
     
     
-기타 Caching 설정
+Other Caching Settings
 ------------------------------------
 
-기타 Caching서비스의 기반동작을 설정한다. ::
+This section configures other caching service options. ::
 
     # server.xml - <Server>
     
@@ -244,19 +244,22 @@ Configure maximum available memory and BodyRatio(the ratio of loaded data on the
     </Cache>
 
 -  ``<Cleanup>``
+    The server runs the system optimization once a day.
+    Most optimization consists of disk cleanup that causes I/O load.
+    In order to prevent service quality degradation, optimization is gradually performed.
     하루에 한 번 시스템 최적화를 수행한다. 
     최적화의 대부분은 디스크정리 작업으로 I/O 부하가 발생한다.    
     서비스 품질저하를 방지하기 위해 최적화는 조금씩 점진적으로 수행된다.
 
-    - ``<Time> (기본: AM 2)`` Cleanup 수행시간을 설정한다. 오후 11시 10분을 설정하고 싶다면 23:10으로 설정한다.
+    - ``<Time> (default: AM 2)`` This option sets the cleanup execution time. 24-hour format is used, for instance, 11:10 pm is be written as 23:10.
     
-    - ``<Age> (기본: 0, 단위: 일)`` 0보다 큰 경우, 일정 기간동안 한번도 접근되지 않은 콘텐츠를 삭제한다.
-      디스크를 미리 확보하여 서비스 시간 중 디스크 부족이 발생할 확률을 줄이기 위함이다.
+    - ``<Age> (default: 0, unit: day)`` If this value is greater than 0, contents that have not been accessed during the period are discarded.
+      This option helps reducing the possibility of insufficient disk space during the service by securing available space on the disk.
 
 -  ``<Listen>``
-    모든 가상호스트가 Listen할 IP목록을 지정한다. 
-    모든 가상호스트의 기본 Listen설정인 *:80은 0.0.0.0:80을 의미한다. 
-    지정된 IP만을 열고 싶은 경우 다음과 같이 명확하게 설정한다. ::
+    Assign IP lists for all virtual hosts to Listen. 
+    The default Listen setting of *:80 for all virtual hosts stands for 0.0.0.0:80. 
+    The following is a configuration example of enabling particular IP addresses. ::
 
        # server.xml - <Server>
        
@@ -266,52 +269,52 @@ Configure maximum available memory and BodyRatio(the ratio of loaded data on the
          <Listen>127.0.0.2</Listen>
        </Cache>    
 
--  ``<ConfigHistory> (기본: 30일)``
-    STON은 설정이 변경될 때마다 모든 설정을 백업한다. 
-    압축 후 ./conf/ 에 하나의 파일로 저장된다.
-    파일명은 "날짜_시간_HASH.tgz"로 생성된다. ::
+-  ``<ConfigHistory> (default: 30 days)``
+    STON backs up all configurations when there is a change in the setting. 
+    Configuration files are compressed into one file and saved at ./conf/.
+    "date_time_HASH.tgz" naming format is used for the compressed file. ::
     
        20130910_174843_D62CA26F16FE7C66F81D215D8C52266AB70AA5C8.tgz
     
-    모든 설정이 완전히 동일하다면 같은 HASH값을 가진다.
-    :ref:`api-conf-restore` 가 호출되도 새로운 설정으로 저장된다. 
-    백업된 설정은 Cleanup시간을 기준으로 설정된 날만큼만 저장된다.
-    설정파일 저장의 날짜제한은 없다.
+    An Identical HASH value stands for identical configurations.
+    :ref:`api-conf-restore` 가 호출되도 새로운 설정으로 저장된다(restore가 호출되면 현재의 설정이 새로운 설정으로 압축돼서 저장된다는 뜻인가요??). 
+    Backup configuration file is only available for set amount of day from the time of Cleanup. 
+    Configuration file can be saved for unlimited time.
+
     
     
-    
-강제 Cleanup
+Force Cleanup
 ------------------------------------
 
-API호출로 Cleanup한다. ``<Age>`` 를 파라미터로 입력할 수 있다. ::
+Execute cleanup by calling an API. ``<Age>`` parameter can be attached. ::
 
    http://127.0.0.1:10040/command/cleanup
    http://127.0.0.1:10040/command/cleanup?age=10
    
-``<Age>`` 가 0이라면 디스크 공간이 부족하다고 판단될 때만 Cleanup을 수행한다. 
-``<Age>`` 파라미터가 0보다 크다면 해당 "일"동안 한번도 접근되지 않은 콘삭제한다.
+Cleanup is executed when there is insufficient disk space if ``<Age>`` parameter is set to 0.
+If ``<Age>`` parameter is greater than 0, contents that have not been accessed during the period are discarded.
     
     
 .. _env-vhostdefault:
     
-가상호스트 기본설정
+Virtual Host Default Setting
 ------------------------------------
 
-관리자는 각각의 가상호스트를 독립적으로 설정할 수 있다. 
-하지만 가상호스트를 생성할 때마다 동일한 설정을 반복하는 것은 매우 소모적이다.
-모든 가상호스트는 ``<VHostDefault>`` 을 상속받는다.
+Administrator can configure each virtual host with different settings.
+However, it is exhausting to repeat an identical setting for every additional virtual host.
+All virtual hosts inherite ``<VHostDefault>``.
 
    .. figure:: img/vhostdefault.png
       :align: center
    
-      단일 상속이다.
+      And this is a single inheritance.
 
-www.example.com의 경우 별도로 덮어쓰기(Overriding)한 값이 없으므로 A=1, B=2가 된다. 
-반면 img.example.com은 B=3으로 덮어쓰기했으므로 A=1, B=3이 된다. 
-관리자들은 보통 같은 서비스특성을 가지는 서비스를 한 서버에 같이 구성한다.
-그러므로 상속은 매우 효과적인 방법이다.
+In the above figure, www.example.com does not overriding any value, hence it has A=1, B=2. 
+On the contrary, img.example.com overrides value of B, therefore it has A=1, B=3.
+Administrators normally keep services that have similar service attributes in one server.
+For this reason, inheritance of the default setting is enormously effective.
 
-``<VHostDefault>`` 는 기능별로 묶인 5개의 하위 태그를 가진다. ::
+``<VHostDefault>`` consists of function-based 5 subordinate tags. ::
 
     # server.xml - <Server>
     
@@ -323,12 +326,12 @@ www.example.com의 경우 별도로 덮어쓰기(Overriding)한 값이 없으므
         <Log> ... </Log>
     </VHostDefault>
     
-예를 들어 :ref:`media` 기능은 ``<Media>`` 하위에 구성하는 식이다.
+For example, :ref:`media` function locates under the ``<Media>`` tag.
 
 
 .. _env-vhost:
 
-vhosts.xml 가상호스트 설정
+vhosts.xml Virtual Host Settings
 ====================================
 
 실행파일과 같은 경로에 존재하는 vhosts.xml파일을 가상호스트 설정파일로 인식한다. 
