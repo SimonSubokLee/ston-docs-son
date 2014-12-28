@@ -501,9 +501,8 @@ The result is returned as JSON format. ::
 Confirm Configuration
 ====================================
 
-Next step is to confirm configuration files in service.
-서비스 중인 설정파일을 확인한다. 
-txt파일들은 가상호스트(vhost)를 명확하게 지정해주어야 한다. ::
+Next step is to browse configuration files in service.
+Each txt file must clearly appoint virtual hosts(vhost). ::
 
     http://127.0.0.1:10040/conf/server.xml
     http://127.0.0.1:10040/conf/vhosts.xml
@@ -519,16 +518,16 @@ txt파일들은 가상호스트(vhost)를 명확하게 지정해주어야 한다
 
 .. _api-conf-history:
 
-설정 목록
+Configuration History
 ====================================
 
-백업된 설정목록을 열람한다. ::
+This section explains how to browse backup configuration histories. ::
 
     http://127.0.0.1:10040/conf/latest
     http://127.0.0.1:10040/conf/history
     
-결과는 JSON 형식으로 제공된다. 
-빠르게 마지막 설정상태만 확인하고 싶은 경우는 /conf/latest를 사용할 것을 권장한다. ::
+The result is also returned as JSON format. 
+In order to quickly go over the latest history, use of /conf/latest option is recommended. ::
 
     {
         "history" : 
@@ -554,21 +553,21 @@ txt파일들은 가상호스트(vhost)를 명확하게 지정해주어야 한다
         ]
     }
     
--  ``id`` 설정의 고유 아이디 (Reload할때마다 +1)
--  ``conf-date`` 설정 변경날짜
--  ``conf-time`` 설정 변경시간
--  ``type`` 설정이 반영된 형태
-   - ``loaded`` STON이 시작될 때
-   - ``modified`` 설정이 (관리자 또는 WM에 의해) 변경될 때
-   - ``uploaded`` 설정파일 API를 통해 업로드 되었을 때
-   - ``restored`` 설정파일이 API를 통해 복구되었을 때
--  ``size`` 설정파일 크기
--  ``hash`` 설정파일을 SHA-1으로 hash한 값
+-  ``id`` Unique identification number (Reload will result +1)
+-  ``conf-date`` Configuration modified date
+-  ``conf-time`` Configuration modified time
+-  ``type`` How modified setting is applied
+   - ``loaded`` When STON is loaded
+   - ``modified`` When configuration is modified (by administrator or WM)
+   - ``uploaded`` When configuration is uploaded via API
+   - ``restored`` When configuration is restored via API
+-  ``size`` Size of configuration file
+-  ``hash`` Hash value of configuration file using SHA-1 algorithm.
 
 
 .. _api-conf-restore:
 
-설정 복구
+Restore Configuration
 ====================================
 
 hash값 또는 id를 기준으로 원하는 시점의 설정으로 되돌린다. 
