@@ -468,26 +468,25 @@ This section configures a service address. ::
 Virtual Host - Exceptions (.txt)
 ---------------------------------------
 
-서비스 중 다음과 같이 예외적인 상황이 필요할 때가 있다.
+During the service, there are some cases when the following exceptions should be allowed.
 
-- 모든 POST요청은 허용하지 않지만, 특정 URL에 대한 POST요청은 허가한다.
-- 모든 GET요청은 STON이 응답하지만, 특정 IP대역에 대해서는 원본서버로 바이패스한다.
-- 특정 국가에 대해서는 전송속도를 제한한다.
+- Basically all POST requests are unallowed, but POST request from a specific URL can be allowed.
+- STON responses to all GET requests, but requests from a specific IP band can be bypssed to the origin server.
+- Transmission speed for specific countries can be limited.
 
-이와같은 예외조건은 XML에 설정하지 않는다. 
-모든 가상호스트는 독립적인 예외조건을 가진다.
-예외조건은 ./svc/가상호스트/ 디렉토리 하위에 TXT로 존재한다.
-관련 기능에 대해 설명할 때 예외조건도 함께 다룬다.
+These exceptions will not be configured in the XML. 
+All virtual hosts have independant exception settings, and the settings are saved as a TXT file under ./svc/virtualhost/ directory.
+Exceptions will be explained more with relevant functions.
 
 
-가상호스트 목록확인
+Checking Virtual Host List
 ====================================
 
-가상호스트 목록을 조회한다. ::
+The following command inquiries virtual host list. ::
 
    http://127.0.0.1:10040/monitoring/vhostslist
    
-결과는 JSON형식으로 제공된다. ::
+The result is returned as JSON format. ::
 
    {
       "version": "1.1.9",
@@ -499,9 +498,10 @@ Virtual Host - Exceptions (.txt)
 
 .. _api-conf-show:
 
-설정 확인
+Confirm Configuration
 ====================================
 
+Next step is to confirm configuration files in service.
 서비스 중인 설정파일을 확인한다. 
 txt파일들은 가상호스트(vhost)를 명확하게 지정해주어야 한다. ::
 
