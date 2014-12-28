@@ -395,26 +395,24 @@ If one virtual host needs to be serviced with different names, use ``<Alias>`` o
 
    This option configures alias of the virtual host.
    Unlimited number of alias could be created with this option.
-   Both specific domain name such as www2.example.com and 패턴표현?? are supported for alias.
-   개수는 제한이 없다.
-   명확한 표현(www2.example.com)과 패턴표현(*.sub.example.com)을 지원한다.
-   패턴은 복잡한 정규표현식이 아닌 prefix에 * 표현을 하나만 붙일 수 있는 간단한 형식만을 지원한다.
+   Both specific domain name such as www2.example.com and patterned domain name such as *.sub.example.com are supported for alias.
+   For patterned domain, simple format with an asterisk as a prefix of domain is supported.
 
 
-가상호스트 검색 순서는 다음과 같다.
+Discovering virtual host follows below procedures.
 
-1. ``<Vhost>`` 의 ``Name`` 과 일치하는가?
-2. 명시적인 ``<Alias>`` 와 일치하는가?
-3. 패턴 ``<Alias>`` 를 만족하는가?
+1. Does ``Name`` of the ``<Vhost>`` match?
+2. Does specific ``<Alias>`` match?
+3. Does patterned ``<Alias>`` match?
 
 
 .. _env-vhost-defaultvhost:    
     
-Default 가상호스트
+Default Virtual Host
 ------------------------------------
 
-요청을 처리할 가상호스트를 찾지못한 경우 선택될 가상호스트를 지정할 수 있다. 
-요청을 처리하고 싶지 않다면 설정하지 않아도 된다. ::
+In case of any virtual host is not found for the request, administrator can appoint a specific virtual host to respond.
+If default virtual host is not appointed, the request will be abandoned. ::
 
     # vhosts.xml
     
@@ -426,15 +424,15 @@ Default 가상호스트
 
 -  ``<Default>``
 
-   기본 가상호스트 이름을 설정한다. 
-   반드시 ``<Vhost>`` 의 ``Name`` 속성과 똑같은 문자열로 설정해야 한다.
+   Configure default virtual host name. 
+   반드시 ``<Vhost>`` 의 ``Name`` 속성과 똑같은 문자열(똑같은 도메인???)로 설정해야 한다.
 
 
 .. _env-vhost-listen:
     
-서비스주소
+Service Address
 ------------------------------------
-서비스 주소를 설정한다. ::
+This section configures a service address. ::
 
     # vhosts.xml - <Vhosts>
     
@@ -442,12 +440,12 @@ Default 가상호스트
         <Listen>*:80</Listen>
     </Vhost>
     
--  ``<Listen> (기본: *:80)``
+-  ``<Listen> (default: *:80)``
 
-   {IP}:{Port} 형식으로 서비스 주소를 설정한다.
-   *:80 표현은 모든 NIC로부터의 80포트로 오는 요청을 처리한다는 의미다.
-   예를 들어 특정 IP(1.1.1.1)의 90포트로 서비스하고 싶다면 다음과 같이 설정한다. ::
-   
+   {IP}:{Port} format is used for configuring service address.
+   *:80 expression means that all requests arrive to 80 port from NIC will be processed.
+   If a service should only process requests from a specific IP address(1.1.1.1) and port(90), the following setting will do. ::
+
        # vhosts.xml - <Vhosts>
        
        <Vhost Name="www.example.com">
@@ -456,7 +454,7 @@ Default 가상호스트
     
 .. note:
 
-   서비스 포트를 열지 않으려면 ``OFF`` 로 설정한다. ::
+   In order to close the service port, set the ``Listen`` tag to ``OFF``. ::
    
       # vhosts.xml - <Vhosts> 
       
@@ -467,7 +465,7 @@ Default 가상호스트
 
 .. _env-vhost-txt:
 
-가상호스트-예외조건 (.txt)
+Virtual Host - Exceptions (.txt)
 ---------------------------------------
 
 서비스 중 다음과 같이 예외적인 상황이 필요할 때가 있다.
