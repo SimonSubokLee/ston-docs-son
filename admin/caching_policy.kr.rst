@@ -1,6 +1,6 @@
 ﻿.. _caching-policy:
 
-4장. Caching 정책
+Chapter 4. Caching Policy
 ******************
 
 이 장에서는 서비스의 핵심이 되는 TTL(Time To Live)과 Caching-Key 그리고 만료정책에 대해 설명한다.
@@ -8,6 +8,11 @@
 HTTP 규격은 TTL을 설정할 수 있도록 Cache-Control을 명시하고 있다.
 하지만 이는 절대적인 것은 아니다. 
 다양한 방식의 TTL 정책과 :ref:`caching-purge` 를 통해 서비스 품질을 높일 수 있다.
+This chapter will explain TTL(Time To Live), Caching-Key and expiration policy that are fundamental to the service.
+Stored contents are only available while TTL is valid.
+Standard HTTP protocol specifies Cache-Control for setting the TTL.
+하지만 이는 절대적인 것은 아니다(무엇이 어떻게 절대적인 것이 아닌지???). 
+Various TTL policies and :ref:`caching-purge` will improve service quality.
 
 HTTP에는 콘텐츠를 구분하는 다양한 규격이 존재한다. 
 그만큼 Caching-Key도 다양하게 존재할 수 있다.
