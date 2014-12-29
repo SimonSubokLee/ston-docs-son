@@ -570,9 +570,9 @@ In order to quickly go over the latest history, use of /conf/latest option is re
 Restore Configuration
 ====================================
 
-hash값 또는 id를 기준으로 원하는 시점의 설정으로 되돌린다. 
-hash와 id가 모두 명시된 경우 hash값이 우선한다. 
-정상적으로 Rollback된 경우 200 OK, 실패한 경우 500 Internal Error로 응답한다. ::
+This section explains how to restore a configuration of the time when a hash value or an id is created.
+If both hash value and id are stated in the command, the hash value takes priority over the id.
+"200 OK" will be returned when the configuration is successfully rolled back, and "500 Internal Error" will be returned for any failures. ::
 
     http://127.0.0.1:10040/conf/restore?hash=...
     http://127.0.0.1:10040/conf/restore?id=...
@@ -580,36 +580,36 @@ hash와 id가 모두 명시된 경우 hash값이 우선한다.
 
 .. _api-conf-download:
     
-설정 다운로드
+Configuration Download
 ====================================
 
-hash값 또는 id를 기준으로 원하는 시점의 설정을 다운로드 한다. 
-Content-Type은 "application/x-compressed"로 명시된다. 
-hash와 id가 모두 명시된 경우 hash값이 우선하며, 해당 시점의 설정이 존재하지 않는 경우 
-404 NOT FOUND로 응답한다. ::
+This section explains how to download a configuration of the time when a has value or an id is created.
+The Content-Type will be specified as "application/x-compressed".
+If both has value and id are stated in the command, the hash value takes priority over the id.
+If neither stated hash value nor id is found, the command will return "404 NOT FOUND". ::
 
     http://127.0.0.1:10040/conf/download?hash=...
     http://127.0.0.1:10040/conf/download?id=...
 
 .. _api-conf-upload:
 
-설정 업로드
+Configuration Upload
 ====================================
 
-설정파일을 HTTP Post방식(Multipart 지원)으로 업로드 한다. ::
+The following command will upload configuration file using HTTP Post method (Multipart supported). ::
 
     http://127.0.0.1:10040/conf/upload
 
-다음과 같이 주소, Content-Length, Content-Type(="multipart/form-data")이 명확하게 선언되어 있어야 한다. ::
+Both Content-Length and Content-Type(="multipart/form-data") have to be clearly stated in the command as below. ::
 
     POST /conf/upload
     Content-Length: 16455
     Content-Type: multipart/form-data; boundary=......
     
-업로드가 완료되면 압축을 해지한 뒤 즉시 반영시킨다.
+As soon as upload is completed, the configuration file will be extracted and applied to the system right away.
 
-Multipart방식에서는 "confile"을 기본 이름으로 사용한다. 
-이 값은 ``<Manager>`` 의 ``UploadMultipartName`` 속성에서 설정할 수 있다. ::
+In a multipart method, "confile" is used as a default name.
+This name can be changed in the ``UploadMultipartName`` property of the ``<Manager>`` tag. ::
 
     <form enctype="multipart/form-data" action="http://127.0.0.1:10040/conf/upload" method="POST">
         <input name="confile" type="file" />
