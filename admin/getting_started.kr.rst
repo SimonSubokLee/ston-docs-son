@@ -58,13 +58,13 @@ Especially for a service that requires a high performance like 10Gbps, each comp
    Usually the STON is installed on the OS disk.
    Log is also configured on the identical disk where OS is installed.
    Since log is recording real time service status, the disk is always suffered from write load.
-   (OS와 STON을 별도의 디스크에 구성해야 하는 이유에 대한 부연설명인가요?)
+   (OS와 STON을 별도의 디스크에 구성해야 하는 이유에 대한 부연설명인가요?: 네 맞습니다.)
    일반적으로 OS가 설치된 디스크에 STON을 설치한다. 
    로그 역시 같은 디스크에 구성하는 것이 일반적이다. 
    로그는 서비스 상황을 실시간으로 기록하기 때문에 항상 Write부하가 발생한다.
    
    STON utilizes disks as RAID 0.
-   성능과 RAID의 상관여부(상관여부라는게 요구되는 성능에 따라 RAID를 구성할지 말지의 여부인가요??)는 고객 서비스 특성에 따라 달라진다.
+   성능과 RAID의 상관여부(상관여부라는게 요구되는 성능에 따라 RAID를 구성할지 말지의 여부인가요??: 네 서비스 특성에 따라 여부를 결정합니다)는 고객 서비스 특성에 따라 달라진다.
    However, when file modification is not frequent and the size of content is much larger than that of physical memory, read speed can be effectively increased via RAID.
 
 
@@ -332,7 +332,7 @@ Depends on the service platform, various origin servers can be accessed by serve
 
 -  ``<Address>``
    The address of origin server where the virtual host duplicates contents.
-   Unlimited number of addresses can be added in the list. (무엇에 대한 개수제한이 없는지??)개수제한은 없다.
+   Unlimited number of addresses can be added in the list. (무엇에 대한 개수제한이 없는지??: 원본서버 주소에 대한 개수제한입니다)개수제한은 없다.
    When there are more than 2 addresses, Active/Active method(Round-Robin) is adopted to choose an address.
    If the origin server port is 80, it can be omitted.
 
@@ -485,7 +485,7 @@ Restart/Quit
 
 The following commands restart or quit STON. 
 In order to avoid unintended result, it provides confirmation of the comand on the web page.
-의도하지 않은 결과를 피하기 위해 웹 페이지를 통한 확인작업(재시작/종료 여부에 대한 확인작업???)이 반드시 필요하도록 개발되었다. ::
+의도하지 않은 결과를 피하기 위해 웹 페이지를 통한 확인작업(재시작/종료 여부에 대한 확인작업???: 재시작/종료 명령을 내리고 그 결과를 확인할수 있음을 의미합니다)이 반드시 필요하도록 개발되었다. ::
 
    http://127.0.0.1:10040/command/restart
    http://127.0.0.1:10040/command/restart?key=JUSTDOIT       // Immediately execute the command
