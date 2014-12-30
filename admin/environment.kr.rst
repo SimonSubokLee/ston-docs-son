@@ -158,7 +158,7 @@ Storage configuration is the most important setting among caching service. ::
       
     - ``bypass`` option bypasses all request to the origin server. 
       As soon as disks are recovered, STON processes service immediately.
-      디스크가 복구되면 즉시 STON이 (어떠한 서비스를 처리하는지? 서비스를 위한 요청을 처리하는지?)서비스를 처리한다.
+      디스크가 복구되면 즉시 STON이 (어떠한 서비스를 처리하는지? 서비스를 위한 요청을 처리하는지?: 캐싱 서비스를 재개합니다)서비스를 처리한다.
       
     - ``selfkill`` quits STON.
     
@@ -169,7 +169,7 @@ When configuring a storage, the most important thing to consider is the number o
 As the the number of file increases, I/O performance of the disk rapidly decreases and causes poor service quality.
 The maximum number of file can be configured in the ``FileMaxCount (default: Disk * 200 million)`` of ``<Storage>`` tag in order to construct desired service and quality and structure.
 The following configuration example is caching 100 million contents with 5 disks.
-최대 파일개수를 ``<Storage>`` 의 ``FileMaxCount (기본: Disk * 200백만--> 2백만인가요??)`` 속성으로 설정하여 원하는 서비스 품질과 형태를 구성할 수 있다.
+최대 파일개수를 ``<Storage>`` 의 ``FileMaxCount (기본: Disk * 200백만--> 2백만인가요??:네 )`` 속성으로 설정하여 원하는 서비스 품질과 형태를 구성할 수 있다.
 
     # server.xml - <Server>
     
@@ -191,7 +191,7 @@ Memory Restriction
 ------------------------------------
 
 Configure maximum available memory and BodyRatio(the ratio of loaded data on the memory to disk data). ::
-사용할 최대 메모리와 BodyRatio(파일(디스크에 저장돼있는 파일??)로부터 메모리에 적재된 데이터의 비율)를 설정한다. ::
+사용할 최대 메모리와 BodyRatio(파일(디스크에 저장돼있는 파일??: 네)로부터 메모리에 적재된 데이터의 비율)를 설정한다. ::
 
     # server.xml - <Server>
     
@@ -373,7 +373,7 @@ Recreating removed virtual host doesn't recover deleted contents.
 
 .. _env-vhost-find:
     
-Discovering Virtual Host(검색. 가상호스트를 검색할 수 있도록 하는 설정을 뜻하는거죠?)
+Discovering Virtual Host(검색. 가상호스트를 검색할 수 있도록 하는 설정을 뜻하는거죠?: 네)
 ------------------------------------
 
 The following is the simplest form of HTTP request. ::
