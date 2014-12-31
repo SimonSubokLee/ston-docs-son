@@ -3,29 +3,25 @@
 Chapter 4. Caching Policy
 ******************
 
-이 장에서는 서비스의 핵심이 되는 TTL(Time To Live)과 Caching-Key 그리고 만료정책에 대해 설명한다.
-저장된 콘텐츠는 TTL동안 유효하다.
-HTTP 규격은 TTL을 설정할 수 있도록 Cache-Control을 명시하고 있다.
-하지만 이는 절대적인 것은 아니다. 
-다양한 방식의 TTL 정책과 :ref:`caching-purge` 를 통해 서비스 품질을 높일 수 있다.
 This chapter will explain TTL(Time To Live), Caching-Key and expiration policy that are fundamental to the service.
 Stored contents are only available while TTL is valid.
 Standard HTTP protocol specifies Cache-Control for setting the TTL.
 하지만 이는 절대적인 것은 아니다(무엇이 어떻게 절대적인 것이 아닌지???). 
 Various TTL policies and :ref:`caching-purge` will improve service quality.
 
-HTTP에는 콘텐츠를 구분하는 다양한 규격이 존재한다. 
-그만큼 Caching-Key도 다양하게 존재할 수 있다.
-콘텐츠 변경이 없을수록 원본부하를 줄일 수 있을뿐만 아니라 쉽게 확장할 수 있다.
-서비스에 최적화된 만료정책을 수립하는 다양한 방식에 대해 설명한다.
+HTTP has various standards that classify contents. 
+Also, there could be various Caching-Key as well. 
+Less frequently updating contents not only help reducing load on the origin server but also easy to scale up.
+콘텐츠 변경이 없을수록 원본부하를 줄일 수 있을뿐만 아니라 (무엇을 쉽게 확장할 수 있는지??) 쉽게 확장할 수 있다.
+In this chapter, several methods to establish optimized expiration policy for a service will be discussed.
 
-앞으로 설명되는 설정을 모든 가상호스트의 기본 설정으로 적용하고 싶다면 ``<VHostDefault>`` 하위에 설정한다.
-반대로 특정 가상호스트에만 적용하고 싶다면 <Vhost>태그 하위에 설정한다.
+In order to use upcoming configuration as a default setting for all virtual hosts, place it under the ``<VHostDefault>``.
+On the contrary, to use the configuration for the specific virtual host, place it under the <Vhost> tag.
 
-**Caching-Key**란 콘텐츠를 구분하는 고유 값이다. 
-파일시스템에서 파일들과 구분되는 고유경로(예. /usr/conf.txt)를 가지는 것과 같은 개념이다.
-흔히 Caching-Key는 URL과 혼동되기 쉽다.
-HTTP의 여러 기능에 따라 같은 URL이라고 하더라도 콘텐츠가 달라질 수 있다.
+**Caching-Key** is a unique value that distinguishes contents. 
+In a similar way, file system has a unique path for a file(eg. /usr/conf.txt).
+Occasionally people confuses Caching-Key with URL.
+However, depends on various functions in HTTP, identical URL could return different contents.
 
 
 .. toctree::
