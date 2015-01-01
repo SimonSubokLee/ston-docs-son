@@ -32,24 +32,24 @@ However, depends on various functions in HTTP, identical URL could return differ
 TTL (Time To Live)
 ====================================
 
-TTL이란 저장된 콘텐츠의 유효시간이다.
-TTL을 길게 설정하면 원본서버의 부하는 줄어들지만 변경사항이 늦게 반영된다. 
-반대로 짧게 설정하면 너주 잦은 변경확인 요청으로 원본서버 부하가 높아진다.
-운영의 묘미는 TTL을 적절히 설정하여 원본부하를 줄이는 것에 있다.
-TTL은 한번 설정되면 만료되기 전까지 바뀌지 않는다.
-새로운 TTL은 파일이 만료되었을 때 적용된다.
-관리자는 :ref:`api-cmd-purge` , :ref:`api-cmd-expire` , :ref:`api-cmd-expireafter` , :ref:`api-cmd-hardpurge` 등의 API를 사용해 TTL을 변경할 수 있다.
+TTL stands for the expiration time of saved contents.
+Longer TTL setting reduces burden of the origin server, but modifications will be applied after TTL is expired.
+On the contrary, shorter TTL setting will increase load of the origin server because of frequent requests for modification check.
+The beauty of TTL management is to find an appropriate setting for reducing origin server load.
+Once TTL is set, it will not change until TTL is expired.
+The new TTL will be applied when the old TTL for the file is expired.
+Administrator can change TTL setting by using these APIs, :ref:`api-cmd-purge` , :ref:`api-cmd-expire` , :ref:`api-cmd-expireafter` , :ref:`api-cmd-hardpurge`.
 
 
 .. _caching-policy-ttl:
 
-기본 TTL
+Default TTL
 ---------------------
 
-기본적으로 TTL은 원본서버의 응답에 따라 결정된다. 
-TTL이 만료되기 전까지 저장된 콘텐츠로 서비스 된다.
-TTL이 만료되면 원본서버로 콘텐츠 변경여부( **If-Modified-Since** 또는 **If-None-Match** )를 확인한다.
-원본서버가 **304 Not Modified** 응답을 준다면 TTL은 연장된다. ::
+TTL is set according to the response of the origin server.
+Until TTL is expired, saved contents will be serviced.
+When TTL expires, send a check request for modified contents to the origin server( **If-Modified-Since** or **If-None-Match** ).
+TTL will be extended if the origin server replies **304 Not Modified** for the request. ::
 
     # server.xml - <Server><VHostDefault><Options>
     # vhosts.xml - <Vhosts><Vhost><Options>
@@ -65,27 +65,27 @@ TTL이 만료되면 원본서버로 콘텐츠 변경여부( **If-Modified-Since*
         <OriginBusy>3</OriginBusy>
     </TTL>    
     
-``Ratio`` (0~100)를 제외한 모든 설정 단위는 초(sec) 다.
+Except ``Ratio`` (0~100), all units are in second.
 
--  ``<Res2xx> (기본: 1800초, Ratio: 20, Max=86400)``
-   원본서버가 200 OK로 응답했을 때 TTL을 설정한다.
-   콘텐츠를 처음 저장할 때 ``<Res2xx>`` 초 뒤에 콘텐츠가 만료(TTL)되도록 설정한다.
-   (TTL만료 후) 원본서버에서 변경되지 않았다면(304 Not Modified) ``Ratio`` 비율(0~100)만큼 TTL을 연장한다.
-   TTL은 최대 ``Max`` 까지 증가한다.
+-  ``<Res2xx> (default: 1800 seconds, Ratio: 20, Max=86400)``
+   If the origin server returns "200 OK", set the TTL.
+   When saving contents, expiration period is set to ``<Res2xx>`` seconds. 
+   (After TTL expired)If the origin server replies that the contents have not been changed(304 NOt Modified), TTL is extended according to the ``Ratio`` value(0~100).
+   TTL can be extended up to ``Max`` seconds.
 
--  ``<NoCache> (기본: 5초, Ratio: 0, Max=5, MaxAge=0)``
-   ``<Res2xx>`` 와 동일하나 원본서버가 no-cache로 응답하는 경우에만 적용된다. ::
-   
-      cache-control: no-cache 또는 private 또는 must-revalidate
+-  ``<NoCache> (default: 5 seconds, Ratio: 0, Max=5, MaxAge=0)``
+   This function works just like ``<Res2xx>``, but only used when the origin server replies with "no-cache". ::
+
+      cache-control: no-cache or private or must-revalidate
     
-   ``MaxAge`` 가 0보다 크다면 max-age를 줄 수 있다.
+   If ``MaxAge`` is greater than 0, max-age can be applied.
     
    .. figure:: img/nocache_maxage.png
       :align: center
 
-      Max-Age만큼 클라이언트에 Caching된다.
+      Files are cached to the client for Max-Age seconds.
 
--  ``<Res3xx> (기본: 300초)``
+-  ``<Res3xx> (default: 300 seconds)``
    원본서버가 3xx로 응답했을 때 TTL을 설정한다. 
    Redirect용도로 사용되는 경우가 많다.
 
