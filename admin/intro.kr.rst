@@ -349,8 +349,7 @@ Service patterns of these websites vary by their subjects and it is picky to mee
   Small or mid size websites and personal websites cannot afford expensive equipment, infrastructures and labor force.
   Origin server failure is relatively frequent and economic feasibility to improve service quality is extremely low.
   
-  ``STON`` detects overload or service failure to execute automatic exclusion/recovery.
-  원본서버 과부하 또는 장애를 판단하여 자동으로 (무엇에 대한?: 원본(origin server)에 대한) 배제/복구가 이루어진다. 
+  ``STON`` detects overload or service failure to execute automatic exclusion/recovery of the origin server. 
   When the origin server fails, the server automatically extends TTL to decrease origin server dependency.
   
 - **Image Processing**
@@ -395,8 +394,7 @@ In addition, both developing time reduction and service reliability improvement 
   However, Http caching function of Wowza is not only inconvenient but also very limited. 
   Also other "exclusive" protocols except HTTP is fading away from the market. 
 
-  ``STON`` (STON을?: 네 STON을 로컬 디스크로 마운트합니다) 로컬 디스크로 Mount할 수 있을 뿐만 아니라 MP4헤더 변환, Trimming등 
-  모든 기능을 사용할 수 있다.
+  ``STON`` can be mounted as a local disk. Moreover, all functions such as MP4 header convert and trimming are available.
 
 - **Resource Restriction**
 
