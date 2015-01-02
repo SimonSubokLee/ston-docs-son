@@ -86,35 +86,35 @@ Except ``Ratio`` (0~100), all units are in second.
       Files are cached to the client for Max-Age seconds.
 
 -  ``<Res3xx> (default: 300 seconds)``
-   원본서버가 3xx로 응답했을 때 TTL을 설정한다. 
-   Redirect용도로 사용되는 경우가 많다.
+   Set TTL when the origin server replies with "3xx".
+   This function is frequently used for redirect.
+   
+-  ``<Res4xx> (default: 30 seconds)``
+   Set TTL when the origin server replies with "4xx".
+   In most cases replies are **404 Not Found**.
+   
+-  ``<Res5xx> (default: 30 seconds)``
+   Set TTL when the origin server replies with "5xx".
+   This case usually comes with an internal error of the origin server.
+   
+-  ``<ConnectTimeout> (default: 3 seconds)``
+   When the origin server is unable to reach, set TTL.
+   If contents are already saved, prolong TTL for ``<ConnectTimeout>`` seconds.
+   If contents are not saved, keep the error status for ``<ConnectTimeout>`` seconds.
+   This remedy is to reduce burdens of the origin server that might be in a failed status rather than serving failed contents.
+   
+-  ``<ReceiveTimeout> (default: 3 seconds)``
+   Set TTL when the connection is successful, but data acquisition is failing.
+   This is similar to ``<ConnectTimeout>`` in its intention.
 
--  ``<Res4xx> (기본: 30초)``
-   원본서버가 4xx로 응답했을 때 TTL을 설정한다. 
-   **404 Not Found** 인 경우가 많다.
-
--  ``<Res5xx> (기본: 30초)``
-   원본서버가 5xx로 응답했을 때 TTL을 설정한다. 
-   원본서버 내부 장애상황인 경우가 많다.
-
--  ``<ConnectTimeout> (기본: 3초)``
-   원본서버로 접속하지 못하는 경우 TTL을 설정한다.
-   콘텐츠가 이미 저장되어 있다면 ``<ConnectTimeout>`` 초 만큼 TTL을 연장한다.
-   콘텐츠가 저장되어 있지 않다면 장애상황을 ``<ConnectTimeout>`` 초 만큼 저장한다.
-   이는 장애상황을 서비스한다는 의미보다는 TTL시간동안 (아마도 장애상황일) 원본서버에 부담을 주지 않기 위함이다.
-
--  ``<ReceiveTimeout> (기본: 3초)``
-   접속은 됐으나 데이터를 수신하지 못하는 경우 TTL을 설정한다.
-   ``<ConnectTimeout>`` 과 의미적 동일하다.
-
--  ``<OriginBusy> (기본: 3초)``
-   :ref:`origin-busysessioncount` 조건을 만족하면 원본서버 요청없이 만료된 콘텐츠의 TTL을 설정된 시간만큼 연장한다.
-   이는 원본서버의 부하를 가중시키지 않기 위함이다.
+-  ``<OriginBusy> (default: 3 seconds)``
+   If :ref:`origin-busysessioncount` condition is satisfied, prolong TTL of expired contents by configured amount of time without requesting to the origin server.
+   In this way, the origin server can avoid workload.
    
 .. note::
 
-   TTL 값을 0으로 설정하면 서비스 직후 곧바로 만료된다.
-   만약 모든 요청에 대해 원본서버의 응답을 주고 싶다면 바이패스할 것을 권장한다.
+   If 0 is set for TTL, contents will be expired as soon as they are serviced.
+   Bypass is recommended if the origin server needs to reply all requests.
    
 
 .. _caching-policy-customttl:
@@ -122,12 +122,12 @@ Except ``Ratio`` (0~100), all units are in second.
 Custom TTL
 ---------------------
 
-URL마다 별도로 TTL을 설정한다.
-명확한 URL 또는 패턴 URL에 매칭되는 콘텐츠마다 고정된 TTL을 설정할 수 있다.
-/svc/{가상호스트 이름}/ttl.txt 에 설정한다. ::
+This section explains how to set separate TTLs for each URL.
+Specific TTL can be set for matching contents of specified URL or patterned URL.
+Configuration is saved at /svc/{virtual host name}/ttl.txt. ::
 
     # /svc/www.example.com/ttl.txt
-    # 구분자는 콤마(,)이며 시간 단위는 초이다.
+    # An identifier is comman(,), and the unit of time is second.
     
     *.jsp, 10
     /,5
@@ -136,40 +136,40 @@ URL마다 별도로 TTL을 설정한다.
     /image/ad.jpg, 1800
     
 
-모든 페이지(html, php, jsp 등)에 별도의 TTL을 설정하기 위하여 *.html을 추가하였더라도 첫 페이지(/)에는 설정되지 않는다. 
-원본서버가 첫 페이지를 어떤 페이지(예를 들어 index.php로 default.jsp 등)로 설정하였는지 HTTP 프로토콜로는 알 수 없다. 
-그러므로 모든 페이지에 별도의 TTL을 설정하려면 반드시 /를 추가해야 한다.
+Even if you added *.html in order to set separate TTLs for all pages(html, php, jsp etc), TTL will not be set for the first page(/). 
+HTTP protocol cannot identify which page(eg. index.php, default.jsp etc) is set as the first page by the origin server.
+Therefore, in order to set the separate TTL for each page, you should add "/".
+
     
-    
-TTL 우선순위
+TTL Priority
 ---------------------
 
-적용할 TTL설정의 우선순위를 설정한다. ::
+This section explains how to decide which TTL configuration is applied first. ::
 
     # server.xml - <Server><VHostDefault><Options>
     # vhosts.xml - <Vhosts><Vhost><Options>
     
     <TTL Priority="cc_nocache, custom, cc_maxage, rescode">
-        ... (생략) ...
+        ... (skipped) ...
     </TTL>    
     
-``<TTL>`` 의 ``Priority (기본: cc_nocache, custom, cc_maxage, rescode)`` 속성으로 설정한다.
+The priority can be configured in the ``Priority (default: cc_nocache, custom, cc_maxage, rescode)`` item of ``<TTL>`` tag.
 
-- ``cc_nocache`` 원본이 Cache-Control: no-cache로 응답한 경우
+- ``cc_nocache`` When the origin server replies "Cache-Control: no-cache"
 - ``custom`` `caching-policy-customttl`
-- ``cc_maxage`` 원본이 Cache-Control에 maxage를 명시한 경우
-- ``rescode`` 원본 응답코드별 기본 TTL
+- ``cc_maxage`` When the origin server specifies maxage in Cache-Control
+- ``rescode`` Default TTL related to the response code of the origin server
 
 
-비정상 TTL 연장
+Abnormal TTL Extension
 ---------------------
 
-차라리 원본서버가 죽으면 깔끔하련만 간혹 정상적으로 응답하면서 장애상황인 경우가 있다.
-예를 들어 콘텐츠를 저장하는 Storage와의 연결을 잃거나, 뭔가 정상처리가 불가능하다고 판단하는 경우가 있을 수 있다.
-전자의 경우 4xx응답(주로 **404 Not Found** ), 후자는 5xx응답(주로 **500 Internal Error** )을 받게된다.
+When the origin server intermittently responses under the error situation, it could be much better if it just totally fails.
+For example, the server loses connection with the storage that saves contents or it might decide regular service is unavailable.
+The server will reply 4xx response(usually **404 Not Found**) for the former case, and it will reply 5xx response(usually **500 Internal Error**) for the latter case.
 
-하지만 이미 관련 콘텐츠가 저장되어 있다면, 
-원본의 응답을 믿는 것보다 TTL을 연장시켜 서비스 전체장애가 발생하지 않도록 하는편이 효과적이다. ::
+On the other hand, if related contents are already saved in the storage,
+it would be more efficient to extend TTL to keep the service running rather than relying on responses from the origin server. ::
 
     # server.xml - <Server><VHostDefault><Options>
     # vhosts.xml - <Vhosts><Vhost><Options>
@@ -179,44 +179,44 @@ TTL 우선순위
 
 -  ``<TTLExtensionBy4xx>``
 
-   -  ``OFF (기본)`` 4xx 응답으로 콘텐츠를 갱신한다.
+   -  ``OFF (default)`` Update contents with 4xx reply.
    
-   -  ``ON`` 304 not modified를 받은 것처럼 동작한다.
+   -  ``ON`` React as if it received 304 not modified as a reply.
    
-의도된 4xx응답이 아닌지 주의해야 한다.
+You should be aware of intended 4xx reponse.
        
 -  ``<TTLExtensionBy5xx>``
 
-   -  ``ON (기본)`` **304 Not Modified** 를 받은 것처럼 동작한다.
+   -  ``ON (default)`` React as if it received **304 Not Modified** as a reply.
    
-   -  ``OFF`` 5xx 응답으로 콘텐츠를 갱신한다.
+   -  ``OFF`` Update contents with 5xx reply.
 
-정상적인 서버라면 5xx로 응답하지 않는다. 
-주로 서버의 일시적인 장애로부터 콘텐츠를 무효화하여 원본부하를 가중시키지 않기 위한 용도로 사용된다.
+A normal server does not return 5xx as a reply. 
+It is used for reducing the load of origin server by invalidating contents from temperary error of the server.
     
 
 .. _caching-policy-renew:
 
-갱신정책
+Renewal Policy
 ====================================
 
-TTL이 만료된 콘텐츠의 경우 원본서버에서 갱신여부를 확인한 뒤 서비스가 이루어진다.
+TTL expired contents are serviced after checking modifications at the origin server.
 
    .. figure:: img/perf_refreshexpired.jpg
       :align: center
       
-      변경확인 후 응답
+      Reply after modification check
 
-1. TTL이 유효하다. 
-   즉시 응답한다.
+1. TTL is valid. 
+   Reply immediately.
 
-#. TTL이 만료되어 원본서버로 변경확인(If-Modified-Since)을 요청한다. 
-   변경확인이 될때까지 클라이언트에게 응답하지 않는다.
+#. TTL is expired and requests modification check(If-Modified-Since) to the origin server. 
+   Do not respond to the client until hear from the server.
    
-#. 원본서버에서 응답이 오면 TTL을 연장하거나 콘텐츠를 변경(Swap)한다. 
-   원본서버에서 확인이 되었으므로 클라이언트에게 응답한다.
+#. If the origin server replies, extend TTL or swap contents. 
+   Respond to the client since the origin server confirmed.
    
-#. 변경확인이 된 콘텐츠이므로 다음 TTL 만료시까지 즉시 응답한다.
+#. The contents that have been checked modification will be serviced immediately until the next TTL expiration period.
 
 고화질 동영상이나 게임처럼 상대적으로 반응성보다 전송속도가 중요한 서비스에서는 이런 방식이 큰 문제가 되지 않는다. 
 대용량 데이터의 경우 원본서버가 10초만에 갱신에 대한 응답을 한다고 하더라도 전송에 몇 분씩 소요되기 때문에 상대적으로 원본의 반응성이 크게 중요하지 않다. 
