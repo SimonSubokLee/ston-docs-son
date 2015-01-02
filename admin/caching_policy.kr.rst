@@ -219,28 +219,27 @@ TTL expired contents are serviced after checking modifications at the origin ser
 #. The contents that have been checked modification will be serviced immediately until the next TTL expiration period.
 
 Services that emphasize transfer speed rather than reactivity such as high quality videos or games do not care about this service method.
-If bulk data
-고화질 동영상이나 게임처럼 상대적으로 반응성보다 전송속도가 중요한 서비스에서는 이런 방식이 큰 문제가 되지 않는다. 
-대용량 데이터의 경우 원본서버가 10초만에 갱신에 대한 응답을 한다고 하더라도 전송에 몇 분씩 소요되기 때문에 상대적으로 원본의 반응성이 크게 중요하지 않다. 
-오히려 접근 빈도가 높지 않은 콘텐츠이기 때문에 반드시 갱신확인이 이루어져야 한다.
+Bulk data will not care even if the origin server takes 10 seconds to respond for the modification check request because the entire transfer time is much longer.
+Therefore, the reactivity of origin server is not as important as other services.
+These contents rather need modification check because they are not accessed frequently.
 
-하지만 쇼핑몰과 같은 경우 상황은 다르다. 
-웹 페이지는 빠르게 로딩되는 것이 무엇보다 중요하다. 
-1~2초 안에 클라이언트 화면구성이 모두 끝나야 한다.
-전송속도보다 반응속도가 더 중요하다는 말이다. 
+On the other hand, online shopping malls are different. 
+The loading speeds of webpages are important more than anything else. 
+The webpage has to be fully loaded within few seconds. 
+In this case, reactivity is more important than trasnfer speed.
 
-이때 TTL이 만료되어 원본서버에게 갱신확인을 해야 한다면 매우 큰 지연이 발생할 수 있다. 
-보통의 쇼핑몰이 수백만개의 콘텐츠를 동시에 서비스 하는 것을 감안할 때 항상 원본서버로부터 갱신확인 작업이 발생하고 있다고 생각해야 한다. 
-자칫 원본서버 장애가 발생하거나 네트워크 장애가 발생한다면 최악이다.
+Huge delay could occur when a client opens a web page at the moment TTL is expired and requesting modification check. 
+Considering the fact that usual shopping malls service millions of contents simultaneously, it would be better to check modifications all the time.
+The worst cases are when the origin server fails or network is diconnected.
 
-우리가 원하는 것은 어떠한 원본서버의 장애나 지연으로부터 캐싱된 콘텐츠가 안전하게 전송되는 것이다.
+What you want is to stably transfer cached contents regardless of any origin server error or delay.
 
    .. figure:: img/perf_refreshexpired2.jpg
       :align: center
       
-      장애가 두렵지 않다!
+      No fear of errors!
       
-이런 차이점 때문에 백그라운드 콘텐츠 갱신기능이 개발되었다. ::
+These different requirments led to the development of background contents update. ::
 
     # server.xml - <Server><VHostDefault><Options>
     # vhosts.xml - <Vhosts><Vhost><Options>
@@ -249,34 +248,34 @@ If bulk data
 
 -  ``<RefreshExpired>``
 
-   -  ``ON (기본)`` 변경확인 후 응답한다.
+   -  ``ON (default)`` Reply after modification check.
    
-   -  ``OFF`` 변경확인 응답을 기다리지 않고 응답한다.
-      새로운 콘텐츠의 다운로드가 완료되면 그때 변경(Swap)한다.
+   -  ``OFF`` Reply without the response of modification check.
+      When the new content download is completed, swap with the old content.
 
-``OFF`` 설정의 더 큰 이유는 콘텐츠가 대부분 자주 바뀌지 않기 때문이다.
+``OFF`` 설정의 더 큰 이유(OFF 설정을 기본인 ON보다 더 많이 쓴다는 뜻인가요??)는 콘텐츠가 대부분 자주 바뀌지 않기 때문이다.
 
    .. figure:: img/perf_refreshexpired5.jpg
       :align: center
       
-      변경에 민감하지 않다면 기다리지 않는다.
+      변경에 민감하지 않다면 (서버로부터 변경 확인을??)기다리지 않는다.
 
-위 그림에서 원본서버와의 갱신작업이 모두 백그라운드로 이루어지기 때문에 캐싱된 콘텐츠는 기다림없이 즉시 클라이언트에게 서비스된다. 
-원본서버가 **304 Not Modified** 로 응답한다면 TTL만 연장된다. 
-파일이 갱신되어 원본서버에서 200 OK를 응답한 경우 해당 파일이 완전히 다운로드된 후에 파일이 부드럽게 교체된다. 
-콘텐츠이 바뀌어도 이전 콘텐츠(초록색)를 다운로드 받던 사용자들은 정상적으로 다운로드가 진행된다. 
-파일 교체 이후 접근된 사용자들(겨자색)은 바뀐 파일로 서비스 된다.
-콘텐츠 갱신, 네트워크 장애, 원본서버 장애 등 어떠한 변수에도 콘텐츠 갱신은 백그라운드로 진행되기 때문에 실제 서비스에는 전혀 지연이 없다.
+In the above figure, contents update of the origin server is running on the background, so cached contents can be serviced to clients immediately.
+If the origin server replies **304 Not Modified** then simply TTL is extended.
+If the origin server replies 200 OK due to file update, the file is seamlessly replaced after the download is completed.
+Clients who were downloading previous contents(green bar) will not have any problems even if the contents have been updated. 
+Clients who access to the updated contents(yellow bar) will be serviced with new contents. 
+Contents updates are always running on the background, the service does not affected by any hiccups such as contents update, network failure and origin server error. 
 
 
-클라이언트 no-cache 요청시 TTL만료
+TTL Expiration when no-cache Requested by Clients
 ---------------------
 
-클라이언트 HTTP요청에 no-cache 설정이 하나 이상 명시된 경우 해당 콘텐츠를 즉시 만료시킬 수 있다. ::
+If there is at least one no-cache setting in the client HTTP request, related contents can be expired right away. ::
 
     GET /logo.jpg HTTP/1.1
     ...
-    cache-control: no-cache 또는 cache-control:max-age=0
+    cache-control: no-cache or cache-control:max-age=0
     pragma: no-cache
     ...
     
@@ -289,16 +288,17 @@ If bulk data
 
 -  ``<NoCacheRequestExpire>``
 
-   -  ``OFF (기본)`` 무시한다.
+   -  ``OFF (default)`` Ignores.
    
-   -  ``ON`` TTL을 즉시 만료한다.
+   -  ``ON`` Expires TTL right away.
    
-만료된 콘텐츠는 `갱신정책`_ 에 따른다.
+Expired contents abide by the `Expiration Policy`_.
 
 
-Accept-Encoding 헤더
+Accept-Encoding Header
 ====================================
 
+Even if 
 같은 URL에 대한 HTTP요청이라도 Accept-Encoding헤더의 존재 유무에 따라 다른 콘텐츠가 캐싱될 수 있다. 
 원본서버에 요청을 보내는 시점에 압축여부를 알 수 없다.
 응답을 받았다고해도 압축여부를 매번 비교할 수도 없다.
