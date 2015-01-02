@@ -218,6 +218,8 @@ TTL expired contents are serviced after checking modifications at the origin ser
    
 #. The contents that have been checked modification will be serviced immediately until the next TTL expiration period.
 
+Services that emphasize transfer speed rather than reactivity such as high quality videos or games do not care about this service method.
+If bulk data
 고화질 동영상이나 게임처럼 상대적으로 반응성보다 전송속도가 중요한 서비스에서는 이런 방식이 큰 문제가 되지 않는다. 
 대용량 데이터의 경우 원본서버가 10초만에 갱신에 대한 응답을 한다고 하더라도 전송에 몇 분씩 소요되기 때문에 상대적으로 원본의 반응성이 크게 중요하지 않다. 
 오히려 접근 빈도가 높지 않은 콘텐츠이기 때문에 반드시 갱신확인이 이루어져야 한다.
