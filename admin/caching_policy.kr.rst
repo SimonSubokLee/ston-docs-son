@@ -298,15 +298,16 @@ Expired contents abide by the `Expiration Policy`_.
 Accept-Encoding Header
 ====================================
 
-Even if 
+Even if there is a HTTP request for identical URL, the existence of Accept-Ending header affects which contents to be cached.
+At the moment sending a request to the origin server, 
 같은 URL에 대한 HTTP요청이라도 Accept-Encoding헤더의 존재 유무에 따라 다른 콘텐츠가 캐싱될 수 있다. 
-원본서버에 요청을 보내는 시점에 압축여부를 알 수 없다.
+원본서버에 요청을 보내는 시점에 (누가 무엇에 대한 압축여부를 확인하는지??)압축여부를 알 수 없다.
 응답을 받았다고해도 압축여부를 매번 비교할 수도 없다.
 
    .. figure:: img/acceptencoding.png
       :align: center
 
-      원본서버가 어떤 응답을 줄지 알 수 없다.
+      It is hard to expect the reply from the origin server.
 
 ::
 
@@ -317,24 +318,24 @@ Even if
 
 -  ``<AcceptEncoding>``
 
-   -  ``ON (기본)`` HTTP 클라이언트가 보내는 Accept-Encoding 헤더를 인식한다.
+   -  ``ON (default)`` Recognize Accept-Ending header from the HTTP client.
    
-   -  ``OFF`` HTTP 클라이언트가 보내는 Accept-Encoding 헤더를 무시한다.
+   -  ``OFF`` Ignore Accept-Ending header from the HTTP client.
     
-원본서버에서 압축을 지원하지 않거나, 압축이 필요없는 대용량 파일의 경우 ``OFF`` 로 설정하는 것이 바람직하다.
+If the origin server does not support compression or bulk file that does not require compression, it is recommended to set ``<AcceptEnding>`` to ``OFF``.
 
 
 .. _caching-policy-casesensitive:
 
-대소문자 구분
+Identifying Upper / Lower Case Letters
 ====================================
 
-원본서버의 대소문자 구분여부를 능동적으로 알 수 없다.
+(누가?? STON이??) 원본서버의 대소문자 구분여부를 능동적으로 알 수 없다.
 
    .. figure:: img/casesensitive.png
       :align: center
 
-      아마도 같은 콘텐츠이거나 404가 발생한다.
+      They might be the same contents or else 404 error will occur.
    
 ::
 
@@ -345,23 +346,23 @@ Even if
 
 -  ``<CaseSensitive>``
 
-   -  ``ON (기본)`` URL 대소문자를 구문한다. 
+   -  ``ON (default)`` Distinguishes URL upper/lower case letters. 
    
-   -  ``OFF`` URL 대소문자를 구분하지 않는다. 모두 소문자로 처리된다.
+   -  ``OFF`` Processes all URL letters to lower case letters.
 
     
 .. _caching-policy-applyquerystring:
     
-QueryString 구분
+Identifying QueryString
 ====================================
 
-QueryString에 의하여 동적으로 생성되는 콘텐츠가 아니라면 QueryString을 인식하는 것은 불필요하다. 
-아무 의미없는 Random값이나 항상 변하는 시간 값이 매번 붙는다면 원본에 엄청난 부하가 발생할 수 있다.
+Identifying the queryString is not necessary unless the contents is dynamically created by the querystring.
+If a URL contains a meaningless random value or a constantly changing time value, it will cause huge load on the origin server.
 
    .. figure:: img/querystring.png
       :align: center
 
-      동적 콘텐츠가 아니라면 같은 콘텐츠일 가능성이 높다.
+      Most likely they are identical contents unless it is not a dynamic contents.
    
 ::
 
@@ -372,26 +373,27 @@ QueryString에 의하여 동적으로 생성되는 콘텐츠가 아니라면 Que
 
 -  ``<ApplyQueryString>``
 
-   -  ``ON (기본)`` QueryString을 인식한다. 예외조건에 만족하면 QueryString이 무시된다.
+   -  ``ON (default)`` Identifies queryString. If exception condition is met, querystring will be ignored.
    
-   -  ``OFF`` QueryString을 무시한다. 예외조건에 만족하면 QueryString을 인식한다.
+   -  ``OFF`` Ignores queryString. If exception condition is met, querystring will be identified.
     
-QueryString-예외조건은 /svc/{가상호스트 이름}/querystring.txt에 설정한다. ::
+QueryString exceptions are saved at /svc/{virtual host name}/querystring.txt. ::
 
     # ./svc/www.example.com/querystring.txt
     
     /private/personal.jsp?login=ok*
     /image/ad.jpg
 
-예외조건이 ``<ApplyQueryString>`` 설정에 따라 의미가 달라짐에 주의한다. 
-명확한 URL또는 패턴(*만 허용한다)으로 설정이 가능하다.
+Depends on the ``<ApplyQueryString>`` configuration, exception will be changed.
+예외조건이 ``<ApplyQueryString>`` 설정에 따라 (예외조건의 의미?? 예외조건의 조건??)의미가 달라짐에 주의한다. 
+Distinct URL or pattern(* is only allowed) can be used in the configuration.
 
 
-Vary 헤더
+Vary Header
 ====================================
 
-Vary헤더를 인식하여 콘텐츠를 구분한다. 
-일반적으로 Vary헤더는 Cache서버의 성능을 급격히 떨어트리는 원흉이다. ::
+Contents are identified by the Vary header. 
+In most cases Vary header causes huge performance drop of cache server. ::
 
     # server.xml - <Server><VHostDefault><Options>
     # vhosts.xml - <Vhosts><Vhost><Options>
@@ -400,21 +402,21 @@ Vary헤더를 인식하여 콘텐츠를 구분한다.
     
 -  ``<VaryHeader>``
 
-   원본서버가 응답한 Vary헤더 중 지원할 헤더목록을 설정한다.
-   구분자는 콤마(,)를 사용한다.
+   Configure the header list to support among Vary headers that the origin server responded.
+   Comma(,) is used as an identifier.
 
-예를 들어 원본서버가 다음과 같이 Vary헤더를 보냈다고 하더라도 ``<VaryHeader>`` 가 설정되어 있지 않다면 무시한다. ::
+For example, even if the origin server sent the following Vary header, it will be ignored if ``<VaryHeader>`` is not configured. ::
 
     Vary: Accept-Encoding, Accept, User-Agent
 
-User-Agent를 제외한 Accept-Encoding과 Accept헤더만을 인식하도록 하려면 다음과 같이 설정한다. ::
+In order to identify Accept-Encoding and Accept header except User-Agent, set as belows. ::
 
     # server.xml - <Server><VHostDefault><Options>
     # vhosts.xml - <Vhosts><Vhost><Options>
     
     <VaryHeader>Accept-Encoding, Accept</VaryHeader>    
     
-원본서버가 보낸 모든 Vary헤더를 인식하게 하려면 다음과 같이 설정한다. ::
+In order to identify all Vary header from the origin server, set as belows. ::
 
     # server.xml - <Server><VHostDefault><Options>
     # vhosts.xml - <Vhosts><Vhost><Options>
@@ -422,11 +424,11 @@ User-Agent를 제외한 Accept-Encoding과 Accept헤더만을 인식하도록 �
     <VaryHeader>*</VaryHeader>    
 
 
-POST 요청
+POST Request
 ====================================
 
-POST 요청을 Caching하도록 설정한다. 
-POST 요청의 특성상 URL은 같지만 Body데이터가 다를 수 있다. ::
+Configure to cache POST request. 
+POST request has an identical URL with different Body data. ::
 
     # server.xml - <Server><VHostDefault><Options>
     # vhosts.xml - <Vhosts><Vhost><Options>
@@ -435,20 +437,20 @@ POST 요청의 특성상 URL은 같지만 Body데이터가 다를 수 있다. ::
 
 -  ``<PostRequest>``
 
-   -  ``OFF (기본)`` POST요청이 오면 세션을 종료한다.
+   -  ``OFF (default)`` Terminate the session when POST request is received.
    
-   -  ``ON`` POST요청을 Caching한다.
+   -  ``ON`` Cache POST request.
    
-실제로 POST요청을 처리하는 대부분의 경우는 Body데이터를 Caching-Key로 사용한다.
-``BodySensitive`` 속성과 예외조건을 통해 정교한 설정이 가능하다.
+Most POST request processing cases use Body data as a Caching-Key.
+Detailed configuration is available with ``BodySensitive`` property and exceptions.
 
 -  ``BodySensitive``
 
-    -  ``ON (기본)`` Body데이터까지 Caching-Key로 인식한다.
-       최대 길이는 ``MaxContentLength (기본: 102400 Bytes)`` 속성으로 제한한다.
-       예외조건에 만족하면 Body데이터를 무시한다.
+    -  ``ON (default)`` Identifies Body data as a Caching-Key.
+       Maximum length will be limited by ``MaxContentLength (default: 102400 Bytes)`` property.
+       If exception is met, Body data will be ignored.
     
-    -  ``OFF`` Body데이터는 무시한다. 
+    -  ``OFF`` Ignore Body data. 
        예외조건에 만족하면 Body데이터를 인식한다.
    
 POST요청 예외조건은 /svc/{가상호스트 이름}/postbody.txt에 설정한다. ::
