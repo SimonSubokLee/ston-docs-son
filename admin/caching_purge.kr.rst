@@ -1,18 +1,18 @@
 ﻿.. _caching-purge:
 
-5장. Caching 무효화
+Chapter 5. Caching Purge
 ******************
 
-이 장에서는 Caching된 콘텐츠를 무효화하는 방법에 대해 설명한다.
-업계용어로 Purge로 통칭하지만 다양한 상황과 환경으로 인해 세분화된 API가 필요하다.
+This chapter explains how to purge cahced contents.
+Due to various environments and conditions, specified APIs are required.
 
-보통 콘텐츠는 :ref:`ttl-time-to-live` 에 기반한 갱신주기를 가진다.
-하지만 명백히 콘텐츠가 변경되었고 관리자가 이를 즉시 반영하고 싶을 경우 :ref:`ttl-time-to-live` 이 만료될 때까지 기다릴 필요는 없다.
-`Purge`_ / `Expire`_ / `HardPurge`_ 등을 사용하면 즉시 콘텐츠를 무효화시킬 수 있다.
+Contents usually have a renewal period based on :ref:`ttl-time-to-live`.
+However, if contents are obviously modified and you want to apply the changes immediately, you don't have to wait until :ref:`ttl-time-to-live` is expired.
+`Purge`_ / `Expire`_ / `HardPurge`_ will immediately purge contents.
 
-무효화 API는 단순히 브라우저에 의해 호출되는 경우도 있지만 자동화되어 있는 경우가 많다.
-가령 FTP를 통한 파일 업로드가 끝나면 즉시 `Purge`_ 를 호출하는 식이다.
-관리자는 다음과 같이 몇가지 정책에 대해 설정할 수 있다. ::
+The purge API can be simply called by the browser, but mostly it is automated.
+FTP file upload, for instance, as soon as upload is completed, `Purge`_ is called right away.
+Administrator can configure a few policies as belows. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -21,7 +21,7 @@
    <RootPurgeExpire>ON</RootPurgeExpire>
    <ResCodeNoCtrlTarget>200</ResCodeNoCtrlTarget>   
 
--  ``<Purge2Expire> (기본: NONE)``
+-  ``<Purge2Expire> (default: NONE)``
 
    `Purge`_ 요청을 설정에 따라 `Expire`_ 로 처리한다.
    예를 들어 루트 디렉토리(/)를 `Purge`_ 하는 경우 의도하지 않게 많은 컨텐츠가 
