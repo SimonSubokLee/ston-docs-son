@@ -384,9 +384,9 @@ QueryString exceptions are saved at /svc/{virtual host name}/querystring.txt. ::
     /private/personal.jsp?login=ok*
     /image/ad.jpg
 
-Depends on the ``<ApplyQueryString>`` configuration, exception will be changed.
+Please be aware that the exception can work in a different way depends on the ``<ApplyQueryString>`` setting.
 예외조건이 ``<ApplyQueryString>`` 설정에 따라 (예외조건의 의미?? 예외조건의 조건??)의미가 달라짐에 주의한다. 
-Distinct URL or pattern(* is only allowed) can be used in the configuration.
+Distinctive or patterned URL(* is only allowed) can be used in the configuration.
 
 
 Vary Header
@@ -451,20 +451,21 @@ Detailed configuration is available with ``BodySensitive`` property and exceptio
        If exception is met, Body data will be ignored.
     
     -  ``OFF`` Ignore Body data. 
-       예외조건에 만족하면 Body데이터를 인식한다.
+       If exception is met, identifies Body data.
    
-POST요청 예외조건은 /svc/{가상호스트 이름}/postbody.txt에 설정한다. ::
+POST request exception is saved at /svc/{virtual host name}/postbody.txt. ::
     
     # /svc/www.example.com/postbody.txt
     
     /bigsale/*.php?nocache=*
     /goods/search.php
     
-예외조건이 ``BodySensitive`` 설정에 따라 의미가 달라짐에 주의한다. 
-명확한 URL 또는 패턴(*만 허용한다.)으로 설정이 가능하다.
+Please be aware that the exception can work in a different way depends on the ``<BodySensitive>`` setting.
+Distinctive or patterned URL(* is only allowed) can be used in the configuration.
+예외조건이 ``BodySensitive`` 설정에 따라 (예외조건의 의미?? 예외조건의 조건??)의미가 달라짐에 주의한다. 
   
 .. note::
 
-    ``MaxContentLength`` 속성을 너무 크게 설정할 경우 Caching-Key 관리에 많은 메모리가 필요하다.
-    가능한 작게 설정하는 것이 좋다.
-    
+    If ``MaxContentLength`` value is set to high, more memory will be required for managing the Caching-Key.
+    It is recommended to set it as small as possible.
+
