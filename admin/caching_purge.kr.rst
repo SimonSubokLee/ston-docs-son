@@ -23,45 +23,41 @@ Administrator can configure a few policies as belows. ::
 
 -  ``<Purge2Expire> (default: NONE)``
 
-   `Purge`_ 요청을 설정에 따라 `Expire`_ 로 처리한다.
-   예를 들어 루트 디렉토리(/)를 `Purge`_ 하는 경우 의도하지 않게 많은 컨텐츠가 
-   삭제되어 원본에 과도한 부하를 발생시킬 수 있다.
-   이런 경우 `Expire`_ 로 처리하도록 설정하면 과도한 원본부하를 방지할 수 있다.
-   
-   - ``NONE`` `Expire`_ 로 처리하지 않는다.
-   - ``ROOT`` 도메인 루트 디렉토리(/) `Purge`_ 를 `Expire`_ 로 처리한다.
-   - ``DIR`` 모든 디렉토리 `Purge`_ 를 `Expire`_ 로 처리한다.
-   - ``PATTERN`` 모든 패턴 `Purge`_ 를 `Expire`_ 로 처리한다.
-   - ``MULTIPLE`` 모든 디렉토리와 패턴 `Purge`_ 를 `Expire`_ 로 처리한다.
-   - ``ALL`` 모든 `Purge`_ 를 `Expire`_ 로 처리한다.
+   `Purge`_ request is processed with `Expire`_ depends on the configuration.
+   For example, when `Purge`_ the root directory(/), this can create excessive load on the origin server by purging large amount of contents.
+   In case like this, `Expire`_ will prevent excessive load on the origin server.
 
--  ``<RootPurgeExpire> (기본: ON)``
-   
-   루트(/) 디렉토리에 대한 의도하지 않은 `Purge`_ / `Expire`_ 는 과도한 원본서버 
-   부하를 발생시킬 수 있다. 
-   이 설정을 통하여 루트 디렉토리에 대한 `Purge`_ / `Expire`_ 를 차단할 수 있다. 
-   이 설정은 ``<Purge2Expire>`` 보다 우선한다.
-   
-   - ``ON`` `Purge`_ / `Expire`_ 를 허용한다.
-   - ``PURGE`` `Purge`_ 만 허용한다.
-   - ``EXPIRE`` `Expire`_ 만 허용한다.
-   - ``OFF`` 모든 `Purge`_ / `Expire`_ 를 금지한다.
+   - ``NONE`` Does not use `Expire`_.
+   - ``ROOT`` Uses `Expire`_ for `Purge`_ of domain root directory(/).
+   - ``DIR`` Uses `Expire`_ for `Purge`_ of all directories.
+   - ``PATTERN`` Uses `Expire`_ for pattern `Purge`_.
+   - ``MULTIPLE`` Uses `Expire`_ for directory and pattern `Purge`_.
+   - ``ALL`` Uses `Expire`_ for all `Purge`_.
 
--  ``<ResCodeNoCtrlTarget> (기본: 200)``
-
-   `Purge`_ , `Expire`_ , `HardPurge`_ , `ExpireAfter`_ 의 대상객체가 없을 때의 
-   HTTP 응답코드를 설정한다.
+-  ``<RootPurgeExpire> (default: ON)``
    
+   Unintended `Purge`_ / `Expire`_ of root directory(/) might occur excessive load on the origin server.
+   This setting can protect `Purge`_ / `Expire`_ of root directory.
+   The setting has a priority over ``<Purge2Expire>``.
+
+   - ``ON`` Allows `Purge`_ / `Expire`_.
+   - ``PURGE`` Only allows `Purge`_.
+   - ``EXPIRE`` Only allows `Expire`_.
+   - ``OFF`` Prohibits all `Purge`_ / `Expire`_.
+
+-  ``<ResCodeNoCtrlTarget> (default: 200)``
+
+   Configures the HTTP response code when target objects are missing for `Purge`_ , `Expire`_ , `HardPurge`_ , `ExpireAfter`_.
+
 
 .. warning:
 
-   명확한 URL 외에 패턴이나 디렉토리도 무효화가 가능하다.
-   하지만 작업을 수행하기 전까지 대상개수를 명확히 알 수 없다.
-   이는 자칫 관리자의 의도와 다르게 너무 많은 대상을 지정할 수 있다.
-   이는 실제로 CPU자원을 너무 많이 소모하게 되어 시스템 전체에 부담을 줄 수 있다.
-   
-   그러므로 실 서비스 중에는 명확한 URL만을 사용할 것을 강력히 권장한다.
-   패턴이나 디렉토리 표현은 서비스 OFF상태에서 관리용도로 사용하기 위함이다.
+   Other than specific URLs, pattern or directory can be purged as well.
+   However, until the command is performed, number of target item is unclear.
+   For this reason, administrator might select too many targets without intention, and it will occupy too much CPU resource and causes performance drop.
+
+   Therefore, it is strongly recommended to use a specific URL during the service.
+   Pattern or directory representation is only used as an administrative purpose when the service is not running.
 
 
 .. toctree::
