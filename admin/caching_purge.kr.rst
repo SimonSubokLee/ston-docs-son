@@ -69,17 +69,16 @@ Administrator can configure a few policies as belows. ::
 Purge
 ====================================
 
-타겟 컨텐츠를 무효화시켜 원본서버로부터 컨텐츠를 다시 다운로드 받도록 한다. 
-Purge후 최초 접근 시점에 원본서버로부터 컨텐츠를 다시 캐싱한다. 
-만약 원본서버에 장애가 발생하여 컨텐츠를 가져올 수 없다면 무효화된 컨텐츠를 다시 복원시켜 
-서비스에 장애가 없도록 처리한다. 
-이렇게 복원된 컨텐츠는 해당 시점으로부터 ConnectTimeout설정만큼 뒤에 갱신한다. ::
+Invalidates target contents to induce download the contents from the origin server.
+Contents will be cached when accessing the contents for the first time after Purge.
+If contents are not available from the origin server due to error situations, the STON retrieves invalidated contents in order to keep the service available all the time.
+Retrieved contents are renewed after the time set by ConnectTimeout. ::
 
     http://127.0.0.1:10040/command/purge?url=...
     
-타겟 컨텐츠는 URL, 디렉토리, 패턴으로 지정할 수 있을 뿐만 아니라 "|"(Vertical Bar)를 
-구분자를 사용하여 복수의 도메인에 복수의 타겟을 지정할 수 있다. 
-만약 도메인 이름이 생략되었다면 최근 사용된 도메인을 사용한다. ::
+The target contents can be designated by URL, directory, pattern.
+Multiple targets from multiple domains can also be designated by using "|"(vertical bar) identifier.
+If domain name is omitted, most recently used domain name will be used. ::
 
     http://127.0.0.1:10040/command/purge?url=http://www.site1.com/image.jpg
     http://127.0.0.1:10040/command/purge?url=www.site1.com/image.jpg
@@ -88,9 +87,9 @@ Purge후 최초 접근 시점에 원본서버로부터 컨텐츠를 다시 캐�
     http://127.0.0.1:10040/command/purge?url=www.site1.com/image1.jpg|/css/style.css|/script.js
     http://127.0.0.1:10040/command/purge?url=www.site1.com/image1.jpg|www.site2.com/page/*.html
     
-결과는 JSON형식으로 제공된다. 
-타겟 컨텐츠 개수/용량 및 처리시간(단위: ms)이 명시된다. 
-이미 Purge 된 컨텐츠는 다시 Purge되지 않는다. ::
+The result will be returned in JSON format. 
+The number of target contents, size and elapsed time(unit in millisecond) are returned.
+Purged contents cannot be purged again. ::
 
     {
         "version": "2.0.0",
@@ -99,26 +98,26 @@ Purge후 최초 접근 시점에 원본서버로부터 컨텐츠를 다시 캐�
         "result": { "Count": 24, "Size": 3747491, "Time": 12 }
     }
     
-``<Purge2Expire>`` 를 통해 특정조건의 Purge를 Expire로 동작하도록 설정할 수 있다.
-결과없는 응답에 대해서는 ``<ResCodeNoCtrlTarget>`` 로 HTTP 응답코드를 설정할 수 있다.
+``<Purge2Expire>`` can set Expire as a substitute for a specific conditioned Purge.
+``<ResCodeNoCtrlTarget>`` can be used to set the HTTP response code for the reply without a result.
 
 .. note::
    
-   원본서버가 장애로 인해 모두 배제되었다면 컨텐츠를 갱신할 수 없기 때문에 Purge가 동작하지 않는다.
-   
+   If all origin servers are excluded due to errors, Purge will not work because contents cannot be updated.
+
 
 .. _api-cmd-expire:
    
 Expire
 ====================================
 
-타겟 컨텐츠의 TTL을 즉시 만료시킨다. 
-Expire후 최초 접근 시점에 원본서버로부터 변경여부를 확인한다. 
-변경되지 않았다면 TTL연장만 있을 뿐 컨텐츠 다운로드는 발생하지 않는다. ::
+Immediately expires TTL of the targeted contents.
+Check modification from the origin server when the contents are accessed for the first time after expiration. 
+If the contents have not been modified, TTL will be prolonged without downloading the contents. ::
 
     http://127.0.0.1:10040/command/purge?url=...
     
-그 외의 모든 동작은 `Purge`_ 와 동일하다.
+Except the above functions, Expire works same as `Purge`_.
 
 
 .. _api-cmd-expireafter:
@@ -126,19 +125,19 @@ Expire후 최초 접근 시점에 원본서버로부터 변경여부를 확인�
 ExpireAfter
 ====================================
 
-타겟 컨텐츠의 TTL만료 시간을 현재(API호출시점)로부터 입력된 시간(초)만큼 뒤에 설정한다. 
-ExpireAfter로 만료시간을 앞당겨 컨텐츠를 더 빨리 갱신하거나, 
-반대로 만료시간을 늘려 원본서버 부하를 줄일 수 있다. ::
+Set the TTL expiration time of targeted contents to entered period(in second) from the moment of API call.
+ExpireAfter command can advance expiration time so the contents can be renewed earlier, 
+or reduce the load of origin server by extending expiration time. :: 
 
    http://127.0.0.1:10040/command/expireafter?sec=86400&url=...
 
-함수 호출규격은 `Purge`_ / `Expire`_ 와 유사하지만 sec파라미터(단위: 초)를 통해 
-TTL만료 시간을 지정할 수 있다. 
-sec가 생략된다면 기본 값은 1일(86400초)로 설정되며 0을 입력할 경우 실패한다. 
-결과는 `Purge`_ / `Expire`_ 와 동일하지만 원본서버 장애여부와 상관없이 동작한다. 
-결과없는 응답에 대해서는 ``<ResCodeNoCtrlTarget>`` 로 HTTP 응답코드를 설정할 수 있다.
+The function call format is similar to `Purge`_ / `Expire`_ but TTL expiration time can be set with the ``sec`` parameter(in second).
+If the ``sec`` paramter is omitted, default value of 1 day(86400 seconds) is applied, and setting it to 0 will not be allowed. 
+The result is identical to those of `Purge`_ / `Expire`_, except ExpireAfter works regardless of error of the origin server. 
+The HTTP response code for the reply without a result can be configured with the ``<ResCodeNoCtrlTarget>``
 
 .. note::
+   ExpireAfter command only set the expiration time of cached contents
    ExpireAfter는 캐싱되어있는 컨텐츠의 현재 만료시간만을 설정할 뿐 커스텀TTL이나 
    설정된 기본 TTL을 변경시키는 API가 아니다. 
    ExpireAfter 호출뒤에 캐싱된 컨텐츠들은 영향을 받지 않는다.
