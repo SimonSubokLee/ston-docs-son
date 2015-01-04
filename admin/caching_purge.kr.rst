@@ -134,18 +134,15 @@ or reduce the load of origin server by extending expiration time. ::
 The function call format is similar to `Purge`_ / `Expire`_ but TTL expiration time can be set with the ``sec`` parameter(in second).
 If the ``sec`` paramter is omitted, default value of 1 day(86400 seconds) is applied, and setting it to 0 will not be allowed. 
 The result is identical to those of `Purge`_ / `Expire`_, except ExpireAfter works regardless of error of the origin server. 
-The HTTP response code for the reply without a result can be configured with the ``<ResCodeNoCtrlTarget>``
+The HTTP response code for the reply without a result can be configured with the ``<ResCodeNoCtrlTarget>``.
 
 .. note::
-   ExpireAfter command only set the expiration time of cached contents
-   ExpireAfter는 캐싱되어있는 컨텐츠의 현재 만료시간만을 설정할 뿐 커스텀TTL이나 
-   설정된 기본 TTL을 변경시키는 API가 아니다. 
-   ExpireAfter 호출뒤에 캐싱된 컨텐츠들은 영향을 받지 않는다.
+   ExpireAfter is not an API that configures the custom TTL or default TTL, but only set the expiration time of cached contents. 
+   Contents that are cached after ExpireAfter call will not be affected.
+
    
-   
-   url파라미터를 먼저 입력하는 경우 sec파라미터가 url파라미터의 QueryString으로 인식될 수 있다. 
-   그러므로 sec파라미터가 먼저 입력되는 것이 안전하다.
-   
+   It is recommended to enter the ``sec`` parameter before the ``url`` parameter, othewise the ``sec`` parameter could be recognized as a QueryString of the ``url`` parameter.
+
    
 
 .. _api-cmd-hardpurge:
@@ -153,11 +150,10 @@ The HTTP response code for the reply without a result can be configured with the
 HardPurge
 ====================================
 
-`Purge`_ / `Expire`_ / `ExpireAfter`_ 이상의 API는 원본서버 장애상황에서도 컨텐츠가 
-사라지지 않고 정상적으로 동작한다. 
-하지만 HardPurge는 컨텐츠의 완전한 삭제를 의미한다. 
-HardPurge는 가장 강력한 삭제방법이지만 삭제한 컨텐츠는 원본서버에 장애가 발생해도 되살릴 수 없다. 
-결과없는 응답에 대해서는 ``<ResCodeNoCtrlTarget>`` 로 HTTP 응답코드를 설정할 수 있다. ::
+`Purge`_ / `Expire`_ / `ExpireAfter`_ APIs can retrieve contents when the origin server is down. 
+On the other hand, HardPurge permanently discard contents. 
+If you use HardPurge to erase contents, they cannot be serviced when the origin server is out of service. 
+The HTTP response code for the reply without a result can be configured with the ``<ResCodeNoCtrlTarget>``
 
     http://127.0.0.1:10040/command/hardpurge?url=...
 
@@ -165,21 +161,21 @@ HardPurge는 가장 강력한 삭제방법이지만 삭제한 컨텐츠는 원�
 HTTP Method
 ====================================
 
-무효화 API를 확장 HTTP Method로 호출할 수 있다. ::
+Invalidating API can be called by expanded HTTP Method. ::
 
     PURGE /sample.dat HTTP/1.1
     host: ston.winesoft.co.kr
     
-HTTP Method는 기본적으로 Manager포트와 서비스(80)포트에서 동작한다. 
-서비스포트로 요청되는 HTTP Method의 :ref:`env-host` 에서 설정한다.
+HTTP Method basically works under the Manager port and the service port(80). 
+It can be set in the :ref:`env-host` of the HTTP Method requested via the service port.
 
 
 .. _api-etc-post:
 
-POST 규격
+POST Standard
 ====================================
 
-무효화 API를 다음과 같이 POST로 호출할 수 있다. ::
+Invalidating API can be called by POST as below. ::
 
    POST /command/purge HTTP/1.1
    Content-Length: 37
