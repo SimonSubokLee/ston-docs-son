@@ -247,17 +247,16 @@ Expires condition is saved at /svc/{virtual host name}/expires.txt. ::
     
       $MIME[image/gif], 1 day 12 hours, access
       
-   Modification은 원본서버에서 보낸 Last-Modified를 기준으로 한다. 
-   다음은 모든 jpg파일에 대하여 Last-Modified로부터 30분 뒤를 
-   Expires값으로 설정하는 예제이다. ::
+   Modification is based on the Last-Modified sent from the source server. 
+   The following example shows how to set the Expires to 30 minutes for all jpg files from Last-Modified. ::
     
       *.jpg, 30min, modification
         
-   Modification의 경우 계산된 Expires값이 현재시간보다 과거의 시간일 경우 현재시간을 명시한다.
-   만약 원본서버에서 Last-Modified헤더를 제공하지 않는다면 Expires헤더를 보내지 않는다.
+   In case of Modification, if calculated Expires value is older than current time, adjust it as current time.
+   If origin server does not provide Last-Modified header, Expires header will not be sent.
 
 
-ETag 헤더
+ETag Header
 ---------------------
 
 클라이언트에게 보내는 HTTP응답에 ETag 헤더 명시여부를 설정한다. ::
