@@ -171,13 +171,12 @@ The followings are the items that affect HTTP session maintenance policy.
 Client Cache-Control
 ====================================
 
-클라이언트 Cache-Control과 관련된 설정을 다룬다.
+This section explains the configuration regarding to the client cache-control.
 
-Age 헤더
+Age Header
 ---------------------
 
-Age헤더는 캐싱된 순간부터 경과시간(초)을 의미하며 
-`RFC2616 - 13.2.3 Age Calculations <http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html#sec13.2.3>`_ 에 의하여 계산된다. ::
+Age header stands for the elapsed time(in second) from cached moment, and calculated by `RFC2616 - 13.2.3 Age Calculations <http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html#sec13.2.3>`_. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -186,15 +185,15 @@ Age헤더는 캐싱된 순간부터 경과시간(초)을 의미하며
     
 -  ``<AgeHeader>``
     
-   -  ``OFF (기본)`` Age헤더를 생략한다.
+   -  ``OFF (default)`` Omits Age header.
    
-   -  ``OFF`` Age헤더를 명시한다.
+   -  ``OFF`` Specifies Age header.
 
 
-Expires 헤더
+Expires Header
 ---------------------
 
-Expires헤더를 재설정한다. ::
+The following will refresh Expires header. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -203,12 +202,14 @@ Expires헤더를 재설정한다. ::
     
 -  ``<RefreshExpiresHeader>``
     
-   -  ``OFF (기본)`` 원본서버에서 응답한 Expires헤더를 클라이언트에게 명시한다.
-      원본서버에서 Expires헤더가 생략되었다면 클라이언트 응답에도 Expires헤더가 생략된다.
+   -  ``OFF (default)`` Specifies Expires header that is returned from the origin server to the client.
+      If Expires header is omitted in the origin server, it will also be omitted in the client response.
    
-   -  ``ON``  Expires조건을 반영하여 Expires헤더를 명시한다.
-      조건에 해당하지 않는 콘텐츠는 ``OFF`` 설정과 동일하게 동작한다.
+   -  ``ON``  Expires condition will be reflected to the Expires header.
+      Any contents that do not meet the condition will be applied default(``OFF``) setting.
    
+The Expires condition is identical to `mod_expires <http://httpd.apache.org/docs/2.2/mod/mod_expires.html>`_ of Apache. 
+
 Expires조건은 Apache의 `mod_expires <http://httpd.apache.org/docs/2.2/mod/mod_expires.html>`_ 와 동일하게 동작한다. 
 특정 조건(URL이나 MIME Type)에 해당하는 콘텐츠의 Expires헤더와 Cache-Control 값을 설정할 수 있다. 
 Cache-Control의 max-age값은 설정된 Expires시간에서 요청한 시간을 뺀 값이 된다. 
