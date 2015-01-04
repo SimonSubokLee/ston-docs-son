@@ -206,18 +206,16 @@ The following will refresh Expires header. ::
       If Expires header is omitted in the origin server, it will also be omitted in the client response.
    
    -  ``ON``  Expires condition will be reflected to the Expires header.
-      Any contents that do not meet the condition will be applied default(``OFF``) setting.
+      Any contents that do not meet the condition will be applied ``OFF (default)`` setting.
    
 The Expires condition is identical to `mod_expires <http://httpd.apache.org/docs/2.2/mod/mod_expires.html>`_ of Apache. 
+You can also configure Expires header and Cache-Control value of contents with special conditions(URL or MIME Type). 
+The max-age value of the Cache-Control is equals to the value of Expires time subtracted by requested time. 
 
-Expires조건은 Apache의 `mod_expires <http://httpd.apache.org/docs/2.2/mod/mod_expires.html>`_ 와 동일하게 동작한다. 
-특정 조건(URL이나 MIME Type)에 해당하는 콘텐츠의 Expires헤더와 Cache-Control 값을 설정할 수 있다. 
-Cache-Control의 max-age값은 설정된 Expires시간에서 요청한 시간을 뺀 값이 된다. 
-
-Expires조건은 /svc/{가상호스트 이름}/expires.txt에 설정한다. ::
+Expires condition is saved at /svc/{virtual host name}/expires.txt. ::
 
    # /svc/www.exmaple.com/expires.txt
-   # 구분자는 콤마(,)이며 {조건},{시간},{기준} 순서로 표기한다.
+   # The identifier is a comma(,), and {condition},{time},{criteria} format is used.
 
    $URL[/test.jpg], 86400
    /test.jpg, 86400
@@ -228,24 +226,24 @@ Expires조건은 /svc/{가상호스트 이름}/expires.txt에 설정한다. ::
    $MIME[application/octet-stream], 7 weeks, modification
    $MIME[image/gif], 3600, modification
 
--  **조건**
+-  **Conditions**
 
-   URL과 MIME Type 2가지로 설정이 가능하다. 
-   URL일 경우 $URL[...]로, MIME Type일 경우 $MIME[...]로 표기한다. 
-   패턴표현이 가능하며 $표현이 생략된 경우 URL로 인식한다.
+   URL and MIME Type can be used. 
+   $URL[...] is used for URL, and $MIME[...] is used for MIME Type. 
+   Patterned expression is also available and if $ omitted, it is recognized as a URL.
 
--  **시간**
+-  **Time**
 
-   Expires만료시간을 설정한다. 
-   시간단위 표현을 지원하며 단위를 명시하지 않을 경우 초로 계산된다.
+   Set the Expires expiration time. 
+   General units of time are supported, and if the unit is not specified, second will be used.
 
--  **기준**
+-  **Criterion**
 
-   Expires만료시간의 기준시점을 설정한다. 
-   별도로 기준시점을 명시하지 않으면 Access가 기준시점으로 명시된다. 
-   Access는 현재 시간을 기준으로 한다. 
-   다음은 MIME Type이 image/gif인 파일에 대하여 접근시간으로부터 
-   1일 12시간 후로 Expires헤더 값을 설정하는 예제이다. ::
+   Configures reference time of expiration time of Expires. 
+   If the reference time is not specified, Access will be used for the reference time. 
+   Access refers current time. 
+   The following is an example of configuring Expires header value. 
+   If MIME Type accesses image/gif file, Expire header will be set as 1 day and 12 hours. ::
     
       $MIME[image/gif], 1 day 12 hours, access
       
