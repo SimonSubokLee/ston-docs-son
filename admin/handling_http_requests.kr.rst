@@ -259,7 +259,7 @@ Expires condition is saved at /svc/{virtual host name}/expires.txt. ::
 ETag Header
 ---------------------
 
-클라이언트에게 보내는 HTTP응답에 ETag 헤더 명시여부를 설정한다. ::
+This section explains how to specify an ETag header in the HTTP resonse sent to the client. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -268,20 +268,20 @@ ETag Header
     
 -  ``<ETagHeader>``
     
-   -  ``ON (기본)`` ETag헤더를 명시한다.
+   -  ``ON (default)`` Specifies ETag header.
    
-   -  ``OFF``  ETag헤더를 생략한다.
+   -  ``OFF``  Omitts ETag header.
    
    
 
 
-응답 헤더
+Response Headers
 ====================================
 
-HTTP 요청/응답 헤더 변경
+HTTP Request / Response Header Modification
 ---------------------
 
-클라이언트 HTTP요청과 응답을 특정 조건에 따라 변경한다. ::
+This section explains how to modify the client HTTP request and response based on specific condition. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -290,35 +290,36 @@ HTTP 요청/응답 헤더 변경
     
 -  ``<ModifyHeader>``
     
-   -  ``OFF (기본)`` 변경하지 않는다.
+   -  ``OFF (default)`` Does not modify.
    
-   -  ``ON`` 헤더 변경조건에 따라 헤더를 변경한다.
+   -  ``ON`` Modifies header regard to the header modification condition.
    
-헤더 변경시점을 정확히 이해하자.
+You should be able to identify the moment when the header has to be modified.
 
--  **HTTP 요청헤더 변경시점**
+-  **HTTP Request Header Modification Point**
 
-   클라이언트 HTTP 요청을 최초로 인식하는 시점에 헤더를 변경한다. 
-   헤더가 변경되었다면 변경된 상태로 Cache 모듈에서 처리된다.
-   단, Host헤더와 URI는 변조할 수 없다.
+   You should modify the header when the client HTTP request is initially identified. 
+   If header has been modified, it will be processed in the cache module as it is.
+   However, Host header and URI cannot be modulated.
 
--  **HTTP 응답헤더 변경시점**
+-  **HTTP Response Header Modification Point**
 
-   클라이언트 응답 직전에 헤더를 변경한다. 
-   단, Content-Length는 변경할 수 없다.   
+   You should modify the header right before responding to the client. 
+   However, the Content-Length cannot be modified.   
 
       
-헤더 변경조건은 /svc/{가상호스트 이름}/headers.txt에 설정한다. 
-헤더는 멀티로 설정이 가능하므로 조건과 일치한다면 모든 변경설정이 동시에 적용된다. 
+Modify condition of header is saved at /svc/{virtual host name}/headers.txt. 
+The header allows multiple configurations as long as it fits to the condition. 
+All modification will be applied at the same time. 
 
-최초 조건에만 변경을 원할 경우 ``FirstOnly`` 속성을 ``ON`` 으로 설정한다.
-서로 다른 조건이 같은 헤더를 변경하는 경우 Last-Win이 되거나 명시적으로 Append할 수 있다. ::
+If you wish to modify the first condition only, set the ``FirstOnly`` property to ``ON``.
+When different conditions try to modify an identical header, it'll be either Last-Win or specifically appended. ::
 
    # /svc/www.example.com/headers.txt
-   # 구분자는 콤마(,)이다.
+   # The comma(,) is an identifier.
    
-   # 요청변경
-   # {Match}, {$REQ}, {Action(set|unset|append)} 순서로 표기한다.
+   # Request Modification
+   # {Match}, {$REQ}, {Action(set|unset|append)} format is used.
    $IP[192.168.1.1], $REQ[SOAPAction], unset
    $IP[192.168.2.1-255], $REQ[accept-encoding: gzip], set
    $IP[192.168.3.0/24], $REQ[cache-control: no-cache], append
@@ -328,9 +329,9 @@ HTTP 요청/응답 헤더 변경
    $HEADER[via], $REQ[via], unset
    $URL[/source/*.zip], $REQ[accept-encoding: deflate], set
    
-   # 응답변경
-   # {Match}, {$RES}, {Action(set|unset|append)}, {condition} 순서로 표기한다.
-   # {condition}은 특정 응답코드에 한하여 헤더를 변경할 수 있지만 필수는 아니다.
+   # Response Modification
+   # {Match}, {$RES}, {Action(set|unset|append)}, {condition} format is used.
+   # {condition} modifies the header regarding to a specific response code, but it is not a mandatory.
    $IP[192.168.1.1], $RES[via: STON for CDN], set
    $IP[192.168.2.1-255], $RES[X-Cache], unset, 200
    $IP[192.168.3.0/24], $RES[cache-control: no-cache, private], append, 3xx
@@ -340,46 +341,46 @@ HTTP 요청/응답 헤더 변경
    $URL[/source/*], $RES[cache-control: no-cache], set, 404
    /secure/*.dat, $RES[x-custom], unset, 200
     
-{Match}는 IP, GeoIP, Header, URL 4가지로 설정이 가능하다.
+IP, GeoIP, Header and URL form can be used for {Match} configuration.
 
 -  **IP**
-   $IP[...]로 표기하며 IP, IP Range, Bitmask, Subnet 네 가지 형식을 지원한다.
+   $IP[...] format is used, and supports IP, IP Range, Bitmask and Subnet formats.
 
 -  **GeoIP**
-   $IP[...]로 표기하며 반드시 :ref:`access-control-geoip` 가 설정되어 있어야 한다.
-   국가코드는 `ISO 3166-1 alpha-2 <http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2>`_ 와 `ISO 3166-1 alpha-3 <http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3>`_ 를 지원한다.
+   $IP[...] format is used and :ref:`access-control-geoip` must be predefined.
+   Country codes of `ISO 3166-1 alpha-2 <http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2>`_ and `ISO 3166-1 alpha-3 <http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3>`_ are supported.
      
 -  **Header**
-   $HEADER[Key : Value]로 표기한다. 
-   Value는 명확한 표현과 패턴을 지원한다. 
-   Value가 생략된 경우에는 Key에 해당하는 헤더의 존재유무를 조건으로 판단한다.
+   $HEADER[Key : Value] format is used. 
+   Value supports specific expressions and patterns. 
+   If Value is omitted, ???
+   Value가 생략된 경우에는 Key에 해당하는 헤더의 존재유무를 (어떠한 조건인지???)조건으로 판단한다.
     
 -  **URL**
-   $URL[...]로 표기하며 생략이 가능하다. 명확한 표현과 패턴을 인식한다.
+   $URL[...] format is used and can be omitted. Specific expressions and patterns will be recognized.
     
-{$REQ}와 {$RES}는 헤더변경 방법을 설정한다.
-일반적으로 ``set`` 과 ``append`` 의 경우 {Key: Value}로 설정하며, 
-Value가 입력되지 않은 경우 빈 값("")이 입력된다. 
-``unset`` 의 경우 {Key}만 입력한다.
+{$REQ} and {$RES} configure how to modify the header.
+Generally ``set`` and ``append`` use {Key: Value} for configuration, and if the Value is omitted, empty value("") will be inserted. 
+For ``unset``, only {Key} value is required.
 
-{Action}은 ``set`` , ``unset`` , ``append`` 3가지로 설정이 가능하다.
+``set`` , ``unset`` , ``append`` can be used for {Action}.
 
--  ``set``  요청/응답 헤더에 설정되어 있는 Key와 Value를 헤더에 추가한다. 
-   이미 같은 Key가 존재한다면 이전 값을 덮어쓴다.    
+-  ``set``  Add Key and Value that are defined in the request/response header to the header. 
+   If an identical Key exists, overwrites the previous value.    
 
--  ``unset`` 요청/응답 헤더에 설정되어 있는 Key에 해당하는 헤더를 삭제한다.
+-  ``unset`` Discard the header related to the Key that is defined in the request/response header.
 
--  ``append``  ``set`` 과 유사하나 해당 Key가 존재한다면 기존의 Value와 설정된 Value사이에 Comma(,)로 구분하여 값을 결합한다.
+-  ``append``  This is similar to ``set``, while this setting uses comma(,) to combine previous Value with configured Value when related Key is found.
 
-{Condition}은 200이나 304같은 구체적인 응답 코드외에 2xx, 3xx, 4xx, 5xx처럼 응답코드 계열조건으로 설정한다. 
-{Match}와 일치하더라도 {Condition}과 일치하지 않는다면 변경이 반영되지 않는다.
-{Condition}이 생략된 경우 응답코드를 검사하지 않는다.
+{Condition} identifies response code families such as 2xx, 3xx, 4xx and 5xx instead of specific response codes such as 200 and 304.
+If {Condition} is not matching, modification will not be reflected even if {Match} is matching.
+If {Condition} is omitted, response code will not be examined.
 
 
-원본 헤더
+Original Header
 ---------------------
 
-성능상의 이유로 원본서버가 보내는 헤더 중 표준헤더만을 선택적으로 인식한다. ::
+In order to keep the decent performance, only standard header will be selectively identified from headers that origin server transmit. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -388,16 +389,16 @@ Value가 입력되지 않은 경우 빈 값("")이 입력된다.
     
 -  ``<OriginalHeader>``
 
-   -  ``OFF (기본)`` 표준헤더가 아니라면 무시한다. 
+   -  ``OFF (default)`` Ignores if the header is not a standard. 
    
-   -  ``OFF``  비표준 헤더를 저장하여 클라이언트에게 전달한다.
-      단, 메모리와 저장비용을 좀 더 소비한다.
+   -  ``OFF``  Saves non-standard header and transfer it to the client.
+      However, this option will consume more memory and storage.
 
 
-Via 헤더
+Via Header
 ---------------------
 
-클라이언트에게 보내는 HTTP응답에 Via 헤더 명시여부를 설정한다. ::
+This section explains how to configure whether to specify Via header or not in the HTTP response that will be sent to the client. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -406,18 +407,18 @@ Via 헤더
     
 -  ``<ViaHeader>``
     
-   - ``ON (기본)`` Via헤더를 다음과 같이 명시한다.
+   - ``ON (default)`` Specifies Via header as below.
      ::
       
         Via: STON/2.0.0
    
-   - ``OFF``  Via헤더를 생략한다.
+   - ``OFF``  Omits Via header.
    
    
-Server 헤더
+Server Header
 ---------------------
  
-클라이언트에게 보내는 HTTP응답에 Server 헤더 명시여부를 설정한다. ::
+This section explains how to configure whether to specify Server header or not in the HTTP response that will be sent to the client. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -426,26 +427,27 @@ Server 헤더
     
 -  ``<ServerHeader>``
     
-   -  ``ON (기본)`` 원본서버의 Server헤더를 명시한다. ::
+   -  ``ON (default)`` Specifies Server header of the origin server. ::
    
-   -  ``OFF``  Server헤더를 생략한다.
+   -  ``OFF``  Omits Server header.
 
 
 
-URL 전처리
+URL Preprocessing
 ====================================
 
-`정규표현식 <http://en.wikipedia.org/wiki/Regular_expression>`_ 을 사용하여 요청된 URL을 변경한다. 
+`Regular expression <http://en.wikipedia.org/wiki/Regular_expression>`_ is used to modify requested URL. 
+If URL preprocessing is defined, all client requests(HTTP or File I/O) should pass the URL Rewriter.
 URL전처리가 설정되어 있다면 모든 클라이언 요청(HTTP 또는 File I/O)은 반드시 URL Rewriter를 거친다.
 
 .. figure:: img/urlrewrite1.png
    :align: center
       
-   URL Rewriter를 통과해야 가상호스트에 갈 수 있다.
+   After passing the URL Rewriter, virtual host can be accessed.
    
-만약 URL Rewriter에 의해 접근하려는 Host이름이 변경되었다면 클라이언트 HTTP요청의 Host헤더가 변경된 것으로 간주한다.
-URL 전처리는 가상호스트 설정(vhosts.xml)에 설정한다.
-대부분의 설정이 가상호스트에 종속되지만, URL전처리의 경우 클라이언트가 요청한 Host의 이름을 변경할 수 있으므로 가상호스트와 같은 레벨로 설정한다. ::
+If an approaching Host name has been modified by URL Rewriter, it is considered that the Host header of client HTTP request has been modified.
+URL preprocessing is configured at the virtual host setting(vhosts.xml).
+Most configurations are subordinated to the virtual host, but URL preprocessing can modify Host name that a client requested so it should be configured in the same block as virtual host. ::
 
    # vhosts.xml
    
@@ -456,7 +458,7 @@ URL 전처리는 가상호스트 설정(vhosts.xml)에 설정한다.
       <URLRewrite ...> ... </URLRewrite>
    </Vhosts>
     
-멀티로 설정할 수 있으며 순차적으로 정규표현식 일치 여부를 비교한다. ::
+Multiple configurations are allowed, and regular expression will be checked in order. ::
 
    # vhosts.xml - <Vhosts>
    
@@ -467,20 +469,19 @@ URL 전처리는 가상호스트 설정(vhosts.xml)에 설정한다.
     
 -  ``<URLRewrite>``
 
-   URL전처리를 설정한다.
-   ``AccessLog (기본: Replace)`` 속성은  Access로그에 기록될 URL을 설정한다. 
-   ``Replace`` 인 경우 변환 후 URL(/logo.jpg)을, ``Pattern`` 인 경우 변환 전 
-   URL(/baseball/logo.jpg)을 Access로그에 기록한다.
+   Configures URL preprocessing.
+   ``AccessLog (default: Replace)`` attribute configures URLs that will be recorded in the Access log. 
+   ``Replace`` records preprocessed URL(/logo.jpg), whereas ``Pattern`` records unprocessed URL(/baseball/logo.jpg) to the Access log.
    
-   -  ``<Pattern>`` 매칭시킬 패턴을 설정한다. 
-      한개의 패턴은 ( ) 괄호를 사용하여 표현된다.
+   -  ``<Pattern>`` configures patterns to be matched. 
+      A single pattern is expressed with parenthesis(eg. ( )).
    
-   -  ``<Replace>`` 변환형식을 설정한다. 
-      일치된 패턴에 대해서는 #1, #2와 같이 사용할 수 있다. #0는 요청 URL전체를 의미한다. 
-      패턴은 최대 9개(#9)까지 지정할 수 있다.
+   -  ``<Replace>`` configures convert format. 
+      Identical pattern can use expressions like #1, #2. #0 stands for the entire URL that is requested. 
+      Maximum 9 patternes(#9) can be configured.
       
-처리량은 :ref:`monitoring_stats` 로 제공되며 :ref:`api-graph-urlrewrite` 으로도 확인할 수 있다. 
-URL전처리는 :ref:`media-trimming` , :ref:`media-hls` 등 다른 기능들과 결합하여 표현을 간결하게 만든다. ::
+:ref:`monitoring_stats` provides throughput, and :ref:`api-graph-urlrewrite` can be used as well. 
+URL preprocessing simplifies expressions with other functions such as :ref:`media-trimming` and :ref:`media-hls`. ::
 
    # vhosts.xml - <Vhosts>
 
@@ -526,5 +527,5 @@ URL전처리는 :ref:`media-trimming` , :ref:`media-hls` 등 다른 기능들과
    // Pattern : example.com/video.mp4_10_20
    // Replace : example.com/example.com/video.mp4_10_20/video.mp4/10/20
     
-패턴표현에 XML의 5가지 특수문자( " & ' < > )가 들어갈 경우 반드시 <![CDATA[ ... ]]>로 묶어주어야 올바르게 설정된다. 
-:ref:`wm` 을 통해 설정할 때 모든 패턴은 CDATA로 처리된다.
+If 5 XML special characters( " & ' < > ) are used for patterned expression, you must keep them in <![CDATA[ ... ]]>.
+When configuring with :ref:`wm`, all patterns are processed as CDATA.
