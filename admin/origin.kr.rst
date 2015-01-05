@@ -49,20 +49,20 @@ When the server is recovered, it'll be utilized for the service. ::
 
 -  ``<Recovery> (default: 5 times)``
    
-   ``Cycle`` 마다 ``Uri`` 로 요청하여 원본서버가 ``ResCode`` 로 연속적으로 n회 응답하면 해당 서버를 복구한다.
-   이 값을 0으로 설정하면 복구하지 않는다.   
+   Request with ``Uri`` in very ``Cycle``, and if the origin server replies ``ResCode`` for the set amount of consecutive times, then recover related server.
+   Setting this value to 0 will not recover the server.   
    
-   -  ``Cycle (기본: 10초)`` 일정시간(초)마다 시도한다.
+   -  ``Cycle (default: 10 seconds)`` Try request every configured seconds.
    
-   -  ``Uri (기본: /)`` 요청을 보낼 Uri
+   -  ``Uri (default: /)`` Uri to send request.
    
-   -  ``ResCode (기본: 0)`` 정상응답으로 처리할 응답코드.
-      0인 경우 응답코드와 상관없이 응답이 오면 성공으로 간주한다.
-      200으로 설정하면 응답코드가 반드시 200이어야 정상응답으로 처리한다.
-      콤마(,)를 사용하여 유효한 응답코드를 멀티로 설정한다.
-      200, 206, 404로 설정하면 응답코드가 이 중 하나인 경우 정상응답으로 처리한다.
+   -  ``ResCode (default: 0)`` Response code that will be identified as a normal response.
+      Setting this value to 0 will regard any reply as a success.
+      For example, setting this value to 200 will only process 200 response as a success.
+      Multiple valid response codes can be configured by using comma(,).
+      For example, 200, 206, 404 value will regard one of these responses as a success.
 
-   -  ``Log (기본: ON)`` 복구를 위해 사용된 HTTP Transaction을 :ref:`admin-log-origin` 에 기록한다.
+   -  ``Log (default: ON)`` Record HTTP Transaction that was used for recovery to :ref:`admin-log-origin`.
       
       
 
@@ -71,9 +71,9 @@ When the server is recovered, it'll be utilized for the service. ::
 Health-Checker
 ====================================
 
-`장애감지와 복구`_ 는 Caching 과정 중 발생하는 장애에 대응한다.
-``<Recovery>`` 는 응답코드를 받는 즉시 HTTP Transaction을 종료한다.
-하지만 Health-Checker는 HTTP Transaction이 성공함을 확인한다. ::
+`Error Detection and Recovery`_ responds to the failure during Caching process.
+``<Recovery>`` terminates HTTP Transaction as soon as receiving a response code.
+However, Health-Checker checks for a successful HTTP Transaction. ::
 
    # vhosts.xml - <Vhosts><Vhost>
    
@@ -85,31 +85,30 @@ Health-Checker
                      Exclusion="5" Recovery="20" Log="ON">/alive.html</HealthChecker>   
    </Origin>
 
--  ``<HealthChecker> (기본: /)``
+-  ``<HealthChecker> (default: /)``
 
-   Health-Checker를 구성한다. 멀티로 구성이 가능하다.
-   값으로 Uri를 지정하며, XML예외 문자의 경우 CDATA를 사용한다.
+   Configures Health-Checker. Multiple configurations are allowed.
+   Use Uri as a value, and CDATA is used for XML exception characters.
    
-   -  ``ResCode (기본: 0)`` 올바른 응답코드 (콤마로 멀티 구성가능)
+   -  ``ResCode (default: 0)`` Correct response codes (Multiple configurations are allowed with commas(,))
    
-   -  ``Timeout (기본: 10초)`` 소켓연결부터 HTTP Transaction이 완료될 때까지 유효시간
-   
-   -  ``Cycle (기본: 10초)`` 실행주기
-   
-   -  ``Exclusion (기본: 3회)`` 연속 n회 실패 시 해당서버 배제
-   
-   -  ``Recovery (기본: 5회)`` 연속 n회 성공 시 해당서버 재투입
-   
-   -  ``Log (기본: ON)`` HTTP Transaction을 :ref:`admin-log-origin` 에 기록한다.
+   -  ``Timeout (default: 10 seconds)`` A valid time from socket connection till complete HTTP Transaction.
 
-Health-Checker는 멀티로 구성할 수 있으며 클라이언트 요청과 상관없이 독립적으로 수행된다.
-`장애감지와 복구`_ 나 다른 Health-Checker와도 정보를 공유하지 않고 
-자신만의 기준으로 배제와 투입을 결정한다.
+   -  ``Cycle (default: 10 seconds)`` An execution period.
+   
+   -  ``Exclusion (default: 3 times)`` A number of times to fail before excluding related server.
+   
+   -  ``Recovery (default: 5 times)`` A number of consecutive successes before deploying the server.
+   
+   -  ``Log (default: ON)`` Records HTTP Transaction to :ref:`admin-log-origin` .
+
+Health-Checker can have multiple configurations, and executed independently regardless of client requests.
+It does not share information with the `Error Detection and Recovery`_ or other Health-Checkers to decide exclusion and deployment.
 
 
 .. _origin-use-policy:
 
-원본주소 사용정책
+Origin Address 원본주소 사용정책
 ====================================
 
 원본주소(IP)는 다음 요소들에 의해 어떻게 사용될지 결정된다.
