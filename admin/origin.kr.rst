@@ -108,33 +108,34 @@ It does not share information with the `Error Detection and Recovery`_ or other 
 
 .. _origin-use-policy:
 
-Origin Address 원본주소 사용정책
+Origin Address Use Policy
 ====================================
 
-원본주소(IP)는 다음 요소들에 의해 어떻게 사용될지 결정된다.
+The usage of Origin address(IP) is determined according to the following elements.
 
--  :ref:`env-vhost-activeorigin` 주소 형식(IP 또는 Domain)과 보조주소
--  `장애감지와 복구`_
+-  :ref:`env-vhost-activeorigin` Address format(IP or Domain) and stanby address
+-  `Error Dectection and Recovery`_
 -  `Health-Checker`_
 
-서비스를 운영하다보면 원본주소가 배제/복구되는 일은 빈번하다. 
-STON은 IP테이블을 기반으로 원본주소를 사용하며 `origin-status`_ API를 통해 정보를 제공한다.
+The origin address is frequently excluded/recovered when running a service.
+STON uses IP table based origin address, and information be accessed by `origin-status`_ API.
 
-원본주소를 IP로 설정한 경우 매우 간단하다. 
+If you set the origin address as an IP, it will be simple.
+원본주소를 IP로 설정한 경우 (무엇이 매우 간단한지??)매우 간단하다. 
 
--  설정변경 이외에 IP목록을 변화시키는 요인은 없다.
--  TTL에 의해 IP주소가 만료되지 않는다.
--  장애/복구 모두 설정(IP주소)에 기반하여 동작한다.
+-  Nothing will modify IP list unless you change the configuration.
+-  IP address will not be expired by TTL.
+-  Exclusion/recovery works based on IP address.
 
-원본주소를 Domain으로 설정하면 Resolving해서 IP를 얻어야 한다.
-( :ref:`admin-log-dns` 에 기록된다.)
-IP 목록은 동적으로 변경될 수 있으며 모든 IP는 TTL(Time To Live)동안만 유효하다.
+If the origin address is set as a domain, you have to use Resolving to acquire IP.
+( recorded in :ref:`admin-log-dns` .)
+IP list can be changed dynamically, and all IPs are only valid for valid TTL.
 
--  Domain은 주기적으로(1~10초) Resolving한다.
--  Resolving결과를 통해 사용할 IP테이블을 구성한다.
--  모든 IP는 TTL만큼만 유효하며 TTL이 만료되면 사용하지 않는다.
--  같은 IP가 다시 Resolving되면 TTL을 갱신한다.
--  IP테이블은 비어서는 안된다. (TTL이 만료되었더라도) 마지막 IP들은 삭제되지 않는다.
+-  Domain is periodically Resolving(1~10 seconds).
+-  Organize IP table to use from Resolving result.
+-  All IPs are valid as long as TTL is valid, and IPs will not be used if TTL is expired.
+-  If an identical IP is Revolving, renew TTL.
+-  IP table should not be cleared. (Even if TTL is expired) Latest IPs are not discarded.
 
 원본주소를 Domain으로 설정하여도 장애/복구는 IP기반으로 동작한다. 
 여기서 미묘한 점이 있다.
