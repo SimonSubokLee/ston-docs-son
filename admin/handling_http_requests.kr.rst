@@ -353,7 +353,6 @@ IP, GeoIP, Header and URL form can be used for {Match} configuration.
 -  **Header**
    $HEADER[Key : Value] format is used. 
    Value supports specific expressions and patterns. 
-   If Value is omitted, ???
    Value가 생략된 경우에는 Key에 해당하는 헤더의 존재유무를 (어떠한 조건인지???)조건으로 판단한다.
     
 -  **URL**
@@ -438,7 +437,6 @@ URL Preprocessing
 
 `Regular expression <http://en.wikipedia.org/wiki/Regular_expression>`_ is used to modify requested URL. 
 If URL preprocessing is defined, all client requests(HTTP or File I/O) should pass the URL Rewriter.
-URL전처리가 설정되어 있다면 모든 클라이언 요청(HTTP 또는 File I/O)은 반드시 URL Rewriter를 거친다.
 
 .. figure:: img/urlrewrite1.png
    :align: center
