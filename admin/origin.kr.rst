@@ -1,16 +1,16 @@
 ﻿.. _origin:
 
-7장. 원본서버
+Chapter 7. Origin Server
 ******************
 
-이 장에서는 STON과 원본서버의 관계에 대해 설명한다.
-원본서버란 일반적으로 HTTP 규격을 준수하는 웹서버를 의미한다.
-관리자라면 원본을 보호하기 위해 이번 장의 모든 내용을 숙지할 필요가 있다.
-이를 바탕으로 원본장애에도 내구성을 갖춘 유연한 서비스를 구축할 수 있다.
+This chapter will explain the relationship between STON and the origin server.
+The origin server generally stands for the web server that abides by HTTP standard.
+Administrator should have thorough understanding about the contents in this chapter in order to protect the origin server.
+After understanding this chapter, you can establish durable and flexible service that can resist from the origin server error.
 
-원본서버는 보호되어야 한다.
-장애의 종류가 다양한만큼 대처방안도 다양하다.
-원본보호 정책을 적절히 구성하면 여유로운 점검시간을 가질 수 있다.
+The origin server has to be protected.
+There are variety of plans for dealing with various errors.
+Proper protection policy for the origin server will let you have relaxed server inspection.
 
 
 .. toctree::
@@ -20,11 +20,11 @@
 
 .. _origin_exclusion_and_recovery:
 
-장애감지와 복구
+Error Detection and Recovery
 ====================================
 
-Caching과정 중 원본서버에 장애가 발생하면 자동배제한다.
-다시 안정화됐다고 판단하면 서비스에 투입한다. ::
+If failure occurs to the origin server during caching, the server will be automatically excluded.
+When the server is recovered, it'll be utilized for the service. ::
 
    # server.xml - <Server><VHostDefault><OriginOptions>
    # vhosts.xml - <Vhosts><Vhost><OriginOptions>
@@ -34,20 +34,20 @@ Caching과정 중 원본서버에 장애가 발생하면 자동배제한다.
    <Exclusion>3</Exclusion>
    <Recovery Cycle="10" Uri="/" ResCode="0" Log="ON">5</Recovery>   
 
--  ``<ConnectTimeout> (기본: 3초)``
+-  ``<ConnectTimeout> (default: 3 seconds)``
    
-   n초 이내에 원본서버와 접속이 이루어지지 않는 경우 접속실패로 간주한다.
-   
--  ``<ReceiveTimeout> (기본: 10초)``
-   
-   정상적인 HTTP요청에도 불구하고 원본서버가 HTTP응답을 n초 동안 보내지 않는 경우 전송실패로 간주한다.   
+   If the origin server is not connected within the set amount of second, it is considered as a connection failure.
 
--  ``<Exclusion> (기본: 3회)``
+-  ``<ReceiveTimeout> (default: 10 seconds)``
    
-   원본서버에서 연속적으로 n번 장애상황( ``<ConnectTimeout>`` 또는 ``<ReceiveTimeout>`` )이 발생하면 해당 서버를 유효 원본서버 목록에서 배제한다. 
-   배제 전 정상적인 통신이 이루어진다면 이 값은 다시 0으로 초기화된다.
+   If the origin server does not reply HTTP response for the set amount of second for a normal HTTP request, it is considered as transaction failure.
 
--  ``<Recovery> (기본: 5회)``
+-  ``<Exclusion> (default: 3 times)``
+   
+   If the set amount of consecutive failures( ``<ConnectTimeout>`` or ``<ReceiveTimeout>`` ) occur in the origin server, related server will be excluded from the available server list. 
+   This value will be reset to 0 if a successful communication occurs before exclusion.
+
+-  ``<Recovery> (default: 5 times)``
    
    ``Cycle`` 마다 ``Uri`` 로 요청하여 원본서버가 ``ResCode`` 로 연속적으로 n회 응답하면 해당 서버를 복구한다.
    이 값을 0으로 설정하면 복구하지 않는다.   
