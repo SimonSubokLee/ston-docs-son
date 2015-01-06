@@ -137,6 +137,7 @@ IP list can be changed dynamically, and all IPs are only valid for valid TTL.
 -  If an identical IP is Revolving, renew TTL.
 -  IP table should not be cleared. (Even if TTL is expired) Latest IPs are not discarded.
 
+Even if you set the origin address as a domain, error and recovery works based on IP address.
 원본주소를 Domain으로 설정하여도 장애/복구는 IP기반으로 동작한다. 
 여기서 미묘한 점이 있다.
 DNS 클라이언트(=STON)는 Domain의 모든 IP 목록을 정확히 알 수 없다. 
