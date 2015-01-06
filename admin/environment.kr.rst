@@ -157,8 +157,7 @@ Storage configuration is the most important setting among caching service. ::
       This option is more likely to protect origin server rather than running a normal service.
       
     - ``bypass`` option bypasses all request to the origin server. 
-      As soon as disks are recovered, STON processes service immediately.
-      디스크가 복구되면 즉시 STON이 (어떠한 서비스를 처리하는지? 서비스를 위한 요청을 처리하는지?: 캐싱 서비스를 재개합니다)서비스를 처리한다.
+      As soon as disks are recovered, STON reactivates caching service immediately.
       
     - ``selfkill`` quits STON.
     
@@ -167,9 +166,8 @@ Even if the ``Quota`` option is not specified, LRU(Least Recently Used) algorith
 
 When configuring a storage, the most important thing to consider is the number of file to keep in the storage.
 As the the number of file increases, I/O performance of the disk rapidly decreases and causes poor service quality.
-The maximum number of file can be configured in the ``FileMaxCount (default: Disk * 200 million)`` of ``<Storage>`` tag in order to construct desired service and quality and structure.
+The maximum number of file can be configured in the ``FileMaxCount (default: Disk * 2 million)`` of ``<Storage>`` tag in order to construct desired service and quality and structure.
 The following configuration example is caching 100 million contents with 5 disks.
-최대 파일개수를 ``<Storage>`` 의 ``FileMaxCount (기본: Disk * 200백만--> 2백만인가요??:네 )`` 속성으로 설정하여 원하는 서비스 품질과 형태를 구성할 수 있다.
 
     # server.xml - <Server>
     
@@ -190,8 +188,7 @@ The following configuration example is caching 100 million contents with 5 disks
 Memory Restriction
 ------------------------------------
 
-Configure maximum available memory and BodyRatio(the ratio of loaded data on the memory to disk data). ::
-사용할 최대 메모리와 BodyRatio(파일(디스크에 저장돼있는 파일??: 네)로부터 메모리에 적재된 데이터의 비율)를 설정한다. ::
+Configure maximum available memory and BodyRatio(the ratio of loaded data on the memory to data in the disk). ::
 
     # server.xml - <Server>
     
@@ -247,9 +244,6 @@ This section configures other caching service options. ::
     The server runs the system optimization once a day.
     Most optimization consists of disk cleanup that causes I/O load.
     In order to prevent service quality degradation, optimization is gradually performed.
-    하루에 한 번 시스템 최적화를 수행한다. 
-    최적화의 대부분은 디스크정리 작업으로 I/O 부하가 발생한다.    
-    서비스 품질저하를 방지하기 위해 최적화는 조금씩 점진적으로 수행된다.
 
     - ``<Time> (default: AM 2)`` This option sets the cleanup execution time. 24-hour format is used, for instance, 11:10 pm is be written as 23:10.
     
@@ -277,7 +271,7 @@ This section configures other caching service options. ::
        20130910_174843_D62CA26F16FE7C66F81D215D8C52266AB70AA5C8.tgz
     
     An Identical HASH value stands for identical configurations.
-    :ref:`api-conf-restore` 가 호출되도 새로운 설정으로 저장된다(restore가 호출되면 현재의 설정이 새로운 설정으로 압축돼서 저장된다는 뜻인가요??). 
+    Even if :ref:`api-conf-restore` is called, the restored configuration will be saved as a new configuration.
     Backup configuration file is only available for set amount of day from the time of Cleanup. 
     Configuration file can be saved for unlimited time.
 
@@ -373,7 +367,7 @@ Recreating removed virtual host doesn't recover deleted contents.
 
 .. _env-vhost-find:
     
-Discovering Virtual Host(검색. 가상호스트를 검색할 수 있도록 하는 설정을 뜻하는거죠?: 네)
+Discovering Virtual Host
 ------------------------------------
 
 The following is the simplest form of HTTP request. ::
@@ -424,8 +418,8 @@ If default virtual host is not appointed, the request will be abandoned. ::
 
 -  ``<Default>``
 
-   Configure default virtual host name. 
-   반드시 ``<Vhost>`` 의 ``Name`` 속성과 똑같은 문자열(똑같은 도메인???)로 설정해야 한다.
+   Configure the default virtual host name. 
+   This must be configured with an identical character array from ``Name`` property in the ``<Vhost>`` tag.
 
 
 .. _env-vhost-listen:
