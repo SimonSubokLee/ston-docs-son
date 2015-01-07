@@ -139,32 +139,33 @@ IP list can be changed dynamically, and all IPs are only valid for valid TTL.
 
 Even if you set the origin address as a domain, error and recovery works based on IP address.
 원본주소를 Domain으로 설정하여도 장애/복구는 IP기반으로 동작한다. 
+(??이 부분은 구체적인 설명이 필요할 것 같습니다. 무슨 내용인지 이해가 되지 않아요 ㅠㅠ)
 여기서 미묘한 점이 있다.
 DNS 클라이언트(=STON)는 Domain의 모든 IP 목록을 정확히 알 수 없다. 
 하지만 사용할 수 없는 IP들만으로 Domain을 구성할 경우 장애상태가 지속될 수 없다.
 
-Domain주소 장애/복구 정책은 다음과 같다.
+Error/Recovery policies of the domain address are listed in the below.
 
--  (Domain에 대해) 알고 있는 모든 IP주소가 배제(Inactive)되면 해당 Domain주소가 배제된다.
--  신규 IP가 Resolving되더라도 Domain이 배제되어 있다면 IP주소는 처음부터 배제된다.
--  모든 IP가 TTL 만료되더라도 배제된 Domain상태는 풀리지 않는다.
--  배제된 Domain에 속한 IP주소가 하나라도 복구되어야 해당 Domain은 다시 활성화된다.
+-  If all known IP addresses for a domain are inactivated, related domain address will also be inactive.
+-  If a new IP is resolved to the inactive domain, the IP will be inactivated.
+-  If TTL of all IPs are expired, inactive domain will not be reactivated.
+-  At least one of IP addresses of the inactive domain should be recovered in order to reactivate the domain.
 
-다소 복잡한 내용이므로 `origin-status`_ API를 통해 서비스 동작상태에 대해 이해도를 높이는 것이 좋다.
+It could be quite difficult to understand, but `origin-status`_ API will help you to understand more about the service operation status.
 
 
 
 .. _origin-status:
 
-원본상태 모니터링
+Origin Status Monitoring
 ====================================
 
-API를 통해 가상호스트의 원본상태를 모니터링한다. ::
+API is used to monitor the origin status of vitual host. ::
 
-   http://127.0.0.1:10040/monitoring/origin       // 모든 가상호스트
+   http://127.0.0.1:10040/monitoring/origin       // All virtual hosts
    http://127.0.0.1:10040/monitoring/origin?vhost=www.example.com
    
-결과는 JSON형식으로 제공된다. ::
+The result will be returned in JSON format. ::
 
    {
        "origin" : 
@@ -206,61 +207,62 @@ API를 통해 가상호스트의 원본상태를 모니터링한다. ::
        ]
    }
     
--  ``VirtualHost`` 가상호스트 이름
+-  ``VirtualHost`` Virtual host name
 
 -  ``Address`` :ref:`env-vhost-activeorigin` .
-   설정주소가 사용중이라면 ``Active`` , (장애발생으로) 사용하고 있지 않다면 ``Inactive`` 로 표시된다.
+   ``Active`` will be returned if configured address is in use, and ``Inactive`` will be returned when the address is not in use due to an error.
 
 -  ``Address2`` :ref:`env-vhost-standbyorigin` .
-   설정주소를 사용중이라면 ``Active`` , 사용하고 있지 않다면 ``Inactive`` 로 표시된다.
+   ``Active`` will be returned if configured address is in use, otherwise ``Inactive`` will be returned.
 
--  ``ActiveIP`` 사용 중인 IP목록과 TTL. 
-   원본서버를 IP로 설정하면 ``Address`` 와 동일한 IP에 TTL은 0으로 표시된다.
-   Domain으로 설정하면 Resolving결과에 따른다.
-   다양한 IP와 TTL을 사용한다.
+-  ``ActiveIP`` IP list and TTL that are in use. 
+   If the origin server is set by IP address, an identical IP of ``Address`` with TTL value of 0 will be returned.
+   If it is set by domain, the return value depends on the Resolving result.
+   Various IP and TTL are used.
+   (누가??)다양한 IP와 TTL을 사용한다.
    
--  ``InactiveIP`` 사용하지 않는 IP목록과 TTL.
-   사용하지 않더라도 복구 중이거나 HealthChecker에 의해 관리될 수 있다.
-   해당 주소는 TTL 동안 복구되지 않으면 삭제된다.
+-  ``InactiveIP`` IP list and TTL that are not in use.
+   Even though the IP is not in use, it could be in a recovery status or be managed by HealthChecker.
+   If the address is not recovered wihtin TTL, it'll be removed.
    
 
     
 .. _origin-status-reset:
 
-원본상태 초기화
+Origin Status Reset
 ====================================
 
-API를 통해 가상호스트의 원본서버 배제/복구를 초기화한다. 
-또한 현재 사용 중인 세션을 재사용하지 않고 새롭게 연결을 생성한다. ::
+API is used to reset the origin server exclusion/recovery of virtual host. 
+Also, current session will not be reused, but a new connection will be created instead. ::
 
-   http://127.0.0.1:10040/command/resetorigin       // 모든 가상호스트
+   http://127.0.0.1:10040/command/resetorigin       // All virtual hosts
    http://127.0.0.1:10040/command/resetorigin?vhost=www.example.com   
 
 
 
 .. _origin-busysessioncount:
 
-과부하 판단
+Overload Judgement
 ====================================
 
-처음 요청되는 콘텐츠는 항상 원본서버에 요청해야 한다.
-하지만 이미 Caching된 콘텐츠라면 좀 더 유연하게 대처할 수 있다.
-원본서버가 과부하 상태라고 판단되면 갱신을 늦추어 원본부하를 높이지 않는다. ::
+The contents that are requested for the first time, they must always request to the origin server.
+On the other hand, if the contents are already cached, the request can be more flexibly responded.
+If the server is already overloaded, renewal is postponed to keep low origin load. ::
 
    # server.xml - <Server><VHostDefault><OriginOptions>
    # vhosts.xml - <Vhosts><Vhost><OriginOptions>
    
    <BusySessionCount>100</BusySessionCount>   
 
--  ``<BusySessionCount> (기본: 100개)``
-   원본서버와 HTTP트랜잭션을 진행 중인 세션 수가 일정개수를 넘으면 과부하 상태로 판단한다.
-   과부하 상태에서 만료된 컨텐츠를 갱신하기 위해 원본서버로 접속하지 않도록 TTL을 :ref:`caching-policy-ttl` 중 ``<OriginBusy>`` 만큼 연장한다.
-   무조건 원본서버로 요청이 가도록 하려면 이 값을 아주 크게 설정하면 된다.
+-  ``<BusySessionCount> (default: 100)``
+   If the number of HTTP transaction in progress with the origin server exceeds certain a number, it will be judged as a overload.
+   In order to block any contents renewal requests to the origin server during the overload status, extend TTL for ``<OriginBusy>`` from :ref:`caching-policy-ttl`.
+   You can set a very large value for this option to forward all requests unconditionally to the origin server.
    
 
 .. _origin-balancemode:
 
-원본 선택
+Origin Selection
 ====================================
 
 원본서버 주소가 멀티(2개 이상)로 구성되어 있을 때 원본서버 선택정책을 설정한다. ::
