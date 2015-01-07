@@ -265,55 +265,55 @@ If the server is already overloaded, renewal is postponed to keep low origin loa
 Origin Selection
 ====================================
 
-원본서버 주소가 멀티(2개 이상)로 구성되어 있을 때 원본서버 선택정책을 설정한다. ::
+When the origin server consists of multiple addresses(at least 2 addresses), configure the origin sever selection policy. ::
 
    # server.xml - <Server><VHostDefault><OriginOptions>
    # vhosts.xml - <Vhosts><Vhost><OriginOptions>
 
    <BalanceMode>RoundRobin</BalanceMode>   
 
--  ``<BalanceMode> (기본: RoundRobin)``
+-  ``<BalanceMode> (default: RoundRobin)``
 
-   -  ``RoundRobin (기본)`` 
-      모든 원본서버가 균등하게 요청을 받도록 Round-Robin으로 동작한다. 
-      연결된 Idle세션은 해당 서버로 요청이 필요할 때만 사용한다.
+   -  ``RoundRobin (default)`` 
+      Round-Robin is applied so that all origin servers can equally get requests.
+      Connected idle session is only used when a request is need to the related server.
    
    -  ``Session``      
-      재사용할 수 있는 세션이 있다면 우선 사용한다. 
-      신규 세션이 필요하면 Round-Robin으로 할당한다.
+      If there is any reusable sessions, make use of them. 
+      If new session is required, use Round-Robin to allocate session to the server.
       
 =========== =================================================================== =====================================================
 /           RoundRobin                                                          Session
 =========== =================================================================== =====================================================
-부하(요청)	모든 서버가 부하를 균등하게 분배	                                반응성과 재사용성이 좋은 서버로 로드가 가중됨
-연결비용	높음 (해당 서버의 순서가 되면 연결된 세션을 찾고 없으면 연결시도)   낮음 (재사용할 수 있는 세션이 없을 때만 연결)
-재사용성	낮음 (서버 분배 우선)	                                            높음 (항상 연결된 세션을 우선 사용)
-세션수	    많음 (각 서버마다 동시에 진행되는 HTTP 트랜잭션의 합)               적음 (동시에 진행되는 HTTP 트랜잭션 만큼 세션 존재)
+Load(Request)  All servers equally get the load	                                Highly reactive and reusable server gets loaded
+Connection Cost   High (If connected session is not found in current server, establish new connection)   Low (Connect only when reusable session is not exist)
+Reusability	Low (Priority to server distribution)	                                            High (Priority to connected session)
+# of Session	    Many (Sum of concurrent HTTP transactions on each server)               Few (There are as many sessions as concurrent HTTP transactions)
 =========== =================================================================== =====================================================
 
 
-세션 재사용
+Session Recycle
 ====================================
 
-원본서버가 Keep-Alive를 지원한다면 연결된 세션은 항상 재사용된다. 
-하지만 세션을 재사용하여 보낸 요청에 대해 원본서버가 일방적으로 연결을 종료할 수 있다.
-때문에 연결을 복구하느라 사용자 반응성이 늦어질 가능성이 있다.
-특히 오랫동안 재사용하지 않은 세션의 경우 이러한 가능성은 더욱 높다. 
-이를 방지하기 위하여 n초 동안 재사용되지 않은 세션에 대해서 자동으로 연결을 종료하도록 설정한다. ::
+If the origin server supports Keep-Alive, connected sessions are always recycled.
+However, the origin server can unilaterally close the connection for the request from recycled session.
+Therefore, reestablishing the connection might cause a delay in user reactivity.
+The session that has not been reused for a long time, especially, have more possibility for reactivity issue.
+The following configuration will close the connection of unrecycled session for n seconds. ::
 
    # server.xml - <Server><VHostDefault><OriginOptions>
    # vhosts.xml - <Vhosts><Vhost><OriginOptions>
    
    <ReuseTimeout>60</ReuseTimeout>   
 
--  ``<ReuseTimeout> (기본: 60초)`` 
-   일정 시간동안 사용되지 않은 원본세션은 종료한다.
-   0으로 설정하면 원본서버 세션을 재사용하지 않는다.
+-  ``<ReuseTimeout> (default: 60 seconds)`` 
+   Close an origin session that has not been used for the set amount time.
+   Setting this value to 0 will not reuse the origin server session.
    
    
 .. _origin_partsize:
 
-Range요청
+Range Request
 ====================================
 
 한번에 다운로드 받는 컨텐츠 크기를 설정한다.
