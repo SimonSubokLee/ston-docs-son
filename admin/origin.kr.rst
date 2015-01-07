@@ -316,24 +316,24 @@ The following configuration will close the connection of unrecycled session for 
 Range Request
 ====================================
 
-한번에 다운로드 받는 컨텐츠 크기를 설정한다.
-동영상처럼 앞 부분만이 주로 소비되는 컨텐츠의 경우 다운로드 크기를 제한하면 불필요한 원본 트래픽를 줄일 수 있다. ::
+Configure the size of contents to download.
+The contents like video clips that are usually consumed from the head of file, unnecessary origin traffic can be reduced by restricting download size. ::
 
    # server.xml - <Server><VHostDefault><OriginOptions>
    # vhosts.xml - <Vhosts><Vhost><OriginOptions>
 
    <PartSize>0</PartSize>   
 
--  ``<PartSize> (기본: 0 MB)``
-   0보다 크면 클라이언트가 요청한 지점부터 설정크기(MB) 만큼 Range요청으로 다운로드 한다.   
+-  ``<PartSize> (default: 0 MB)``
+   If this value is greater than 0, configured size will be downloaded with using Range request from the location where client requested.   
 
 
-``<PartSize>`` 를 사용하는 또 다른 이유는 디스크 공간을 절약하기 위함이다.
-기본설정으로 STON은 원본크기의 파일을 디스크에 생성한다.
-하지만 ``<PartSize>`` 가 0이 아니라면 다운로드 되는만큼만 파일을 분할하여 저장한다.
+``<PartSize>`` can also help saving disk space.
+Ston generates a same-sized file to the original file in the disk.
+If ``<PartSize>`` is not 0, downloaded files will be partitioned and saved.
 
-예를 들어 1시간짜리 영상(600MB)을 1분(10MB)만 시청한 경우에 디스크 공간을 10MB만 사용한다.
-공간을 절약하는 장점은 있지만 파일이 분할되어 저장되기 때문에 디스크 부하가 조금 높아진다.
+For example, if a client watches first 1 minute(10MB) of the 1 hour(600MB) video clip, only 10MB of disk space is used.
+This option will save disk space, but partitioning a file will increase disk load a bit.
 
 .. note::
 
