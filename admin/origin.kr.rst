@@ -338,31 +338,31 @@ This option will save disk space, but partitioning a file will increase disk loa
 
 .. note::
 
-   최초 콘텐츠를 다운로드할 때 Content-Length를 알 수 없으므로 Range요청을 할 수 없다. 
-   때문에 ``<PartSize>`` 가 설정되어 있다면 설정크기만큼만 다운로드 받고 연결을 종료한다.
+   When the STON downloads contents for the first time, ``Content-Length`` is unknown so the ``Range`` cannot be requested.
+   If ``<PartSize>`` is configured for the contents, only configured size of contents will be downloaded before connection is closed.
    
       
 
 
-전체 Range 초기화
+Initializing Entire Range
 ====================================
 
-일반적으로 원본서버로부터 처음 파일을 다운로드 할 때나 갱신확인 할 때는 다음과 같이 단순한 형태의 GET 요청을 보낸다. ::
+When the STON for the first time  downloads or checks modification from the origin server, the simple form of ``GET`` request is sent. ::
 
     GET /file.dat HTTP/1.1
     
-하지만 원본서버가 일반적인 GET요청에 대하여 항상 파일을 변조하도록 설정되어 있다면 원본파일 그대로를 Caching할 수 없어서 문제가 될 수 있다.
+However, if the origin server is configured to modulate files for general ``GET`` requests, this could be an issue because original file cannot be cached.
 
-가장 대표적인 예는 Apache 웹서버가 mod_h.264_streaming같은 외부모듈과 같이 구동되는 경우이다.
-Apache 웹서버는 GET요청에 대해서 항상 mod_h.264_streaming모듈을 통해서 응답한다.
-클라이언트(이 경우에는 STON)는 원본파일 그대로가 아닌 모듈에 의해 변조된 파일을 서비스 받는다.
+One of the most common examples is that the Apache web server embeds external modules such as mod_h.264_streaming. 
+Apache web server always response to ``GET`` requests via mod_h.264_streaming module.
+Client(STON, in this case) is being serviced with modulated file by mod_h.264_streaming module.
 
    .. figure:: img/conf_origin_fullrangeinit1.png
       :align: center
       
-      mod_h.264_streaming모듈은 항상 원본을 변조한다.
+      mod_h.264_streaming module always modulate original files.
 
-Range요청을 사용하면 모듈을 우회하여 원본을 다운로드할 수 있다. ::
+Range request bypasses the module and downloads original files. ::
 
    # server.xml - <Server><VHostDefault><OriginOptions>
    # vhosts.xml - <Vhosts><Vhost><OriginOptions>
@@ -371,19 +371,19 @@ Range요청을 사용하면 모듈을 우회하여 원본을 다운로드할 수
 
 -  ``<FullRangeInit>``
 
-   - ``OFF (기본)`` 일반적인 HTTP요청을 보낸다.
+   - ``OFF (default)`` Transmit general HTTP request.
    
-   - ``ON`` 0부터 시작하는 Range요청을 보낸다. 
-     Apache의 경우 Range헤더가 명시되면 모듈을 우회한다. ::
+   - ``ON`` Transmit the Range request that starts from 0. 
+     Apache will bypass modules if Range header is specified. ::
       
         GET /file.dat HTTP/1.1
         Range: bytes=0-
     
-     최초로 파일 Caching할 때는 컨텐츠의 Range를 알지 못하므로 Full-Range(=0부터 시작하는)를 요청한다. 
-     원본서버가 Range요청에 대해 정상적으로 응답(206 OK)하는지 반드시 확인해야 한다.
+     When caching file for the first time, Full-Range(starting from 0) will be requested because the Range of contents is unknown.
+     You should check whether the origin server responds to the ``Range`` request with normal response(206 OK).
 
-콘텐츠를 갱신할 때는 다음과 같이 **If-Modified-Since** 헤더가 같이 명시된다.
-원본서버가 올바르게 **304 Not Modified** 로 응답해야 한다. ::
+When contents are being modified, **If-Modified-Since** header will be specified as below.
+The origin server must properly reply with **304 Not Modified**. ::
 
    GET /file.dat HTTP/1.1
    Range: bytes=0-
@@ -391,7 +391,7 @@ Range요청을 사용하면 모듈을 우회하여 원본을 다운로드할 수
     
 .. note::
 
-   ``<FullRangeInit>`` 가 정상동작함을 확인한 웹서버들 목록.
+   The list of web server that ``<FullRangeInit>`` is working correctly.
     
    - Microsoft-IIS/7.5
    - nginx/1.4.2
@@ -401,14 +401,14 @@ Range요청을 사용하면 모듈을 우회하여 원본을 다운로드할 수
 
 .. _origin-httprequest:
     
-원본요청 헤더
+Origin Request Header
 ====================================
 
-Host 헤더
+Host Header
 ---------------------
 
-원본서버로 보내는 HTTP요청의 Host헤더를 설정한다.
-별도로 설정하지 않은 경우 가상호스트 이름이 명시된다. ::
+Configure the Host header of HTTP request that will be sent to the origin server.
+If not configured, virtual host name will be specified. ::
 
    # server.xml - <Server><VHostDefault><OriginOptions>
    # vhosts.xml - <Vhosts><Vhost><OriginOptions>
@@ -416,8 +416,8 @@ Host 헤더
    <Host />   
 
 -  ``<Host>``
-   원본서버로 보낼 Host헤더를 설정한다.
-   원본서버에서 80포트 이외의 포트로 서비스하고 있다면 반드시 포트 번호를 명시해야 한다. ::
+   Configure the Host header that will be sent to the origin server.
+   If the origin server is using some other port than 80, you should also specify the port number. ::
    
       # server.xml - <Server><VHostDefault><OriginOptions>
       # vhosts.xml - <Vhosts><Vhost><OriginOptions>
@@ -425,28 +425,28 @@ Host 헤더
       <Host>www.example2.com:8080</Host>
 
 
-클라이언트가 보낸 Host헤더를 원본으로 보내고 싶은 경우 *로 설정한다.
+If you want to transfer the Host header from a client, use * for this setting.
 
 
-User-Agent 헤더
+User-Agent Header
 ---------------------
 
-원본서버로 보내는 HTTP요청의 User-Agent헤더를 설정한다. ::
+Configure the User-Agent header of HTTP request that will e sent to the origin server. ::
 
    # server.xml - <Server><VHostDefault><OriginOptions>
    # vhosts.xml - <Vhosts><Vhost><OriginOptions>
 
    <UserAgent>STON</UserAgent>   
 
--  ``<UserAgent> (기본: STON)``
-   원본서버로 보낼 User-Agent헤더를 설정한다.
+-  ``<UserAgent> (default: STON)``
+   Configure the User-Agent header that will be sent to the origin server.
 
 
-XFF(X-Forwarded-For) 헤더
+XFF(X-Forwarded-For) Header
 ---------------------
 
-클라이언트와 원본서버 사이에 STON이 위치하면 원본서버는 클라이언트 IP를 얻을 수 없다.
-때문에 STON은 원본서버로 보내는 모든 HTTP요청에 X-Forwarded-For헤더를 명시한다. ::
+If STON is placed in between the client and the origin server, the origin server cannot obtain client's IP address.
+Therefore, STON specifes X-Forwarded-For header to all HTTP requests that are sent to the origin server. ::
 
    # server.xml - <Server><VHostDefault><OriginOptions>
    # vhosts.xml - <Vhosts><Vhost><OriginOptions>
@@ -455,20 +455,20 @@ XFF(X-Forwarded-For) 헤더
 
 -  ``<XFFClientIPOnly>``
    
-   - ``OFF (기본)`` 클라이언트(IP: 128.134.9.1)가 보낸 XFF헤더에 클라이언트 IP를 추가한다.
-     클라이언트가 XFF헤더를 보내지 않았다면 클라이언트 IP만 명시된다. ::
+   - ``OFF (default)`` Append client's IP to the XFF header that is received from the client(IP: 128.134.9.1).
+     If the client did not send XFF header, only the client IP will be specified. ::
       
         X-Forwarded-For: 220.61.7.150, 61.1.9.100, 128.134.9.1
    
-   - ``ON`` XFF헤더의 첫번째 주소만을 원본서버로 전송한다. ::
+   - ``ON`` Send the first address of XFF header to the origin server. ::
    
         X-Forwarded-For: 220.61.7.150
 
 
-ETag 헤더 인식
+Identifying ETag Header
 ---------------------
 
-원본서버에서 응답하는 ETag인식여부를 설정한다. ::
+The following shows hot to configure whether or not to recognize the ETag that will be responded by the origin server. ::
 
    # server.xml - <Server><VHostDefault><OriginOptions>
    # vhosts.xml - <Vhosts><Vhost><OriginOptions>
@@ -477,20 +477,20 @@ ETag 헤더 인식
 
 -  ``<OriginalETag>``
    
-   - ``OFF (기본)`` ETag헤더를 무시한다.
+   - ``OFF (default)`` Ignores the ETag header.
    
-   - ``ON`` ETag를 인식하며 컨텐츠 갱신시 If-None-Match헤더를 추가한다.
+   - ``ON`` Identifies ETag and append If-None-Match header when updating contents.
 
    
-Redirect 추적
+Redirect Tracking
 ====================================
 
-원본서버에서 Redirect계열(301, 302, 303, 307)로 응답하는 경우 Location헤더를 추적하여 콘텐츠를 요청한다. 
+If the origin server replies with Redirect responses(301, 302, 303, 307), tracks Location header and requests contents. 
 
    .. figure:: img/conf_redirectiontrace.png
       :align: center
       
-      클라이언트는 Redirect여부를 모른다.
+      Clients does not know whether they are redirected or not.
 
 ::
 
@@ -501,9 +501,11 @@ Redirect 추적
 
 -  ``<RedirectionTrace>``
 
-   - ``OFF (기본)`` 3xx 응답으로 저장된다.
+   - ``OFF (default)`` Saved as 3xx response.
    
-   - ``ON`` Location헤더에 명시된 주소에서 콘텐츠를 다운로드 한다.
-     형식에 맞지 않거나 Location헤더가 없는 경우에는 동작하지 않는다.
-     무한히 Redirect되는 경우를 방지하기 위하여 1회만 추적한다.
+   - ``ON`` Download contents from the address in Location header.
+     If the format is incorrect or the Location header is missing, tracking will not work.
+     (무엇이??)형식에 맞지 않거나 Location헤더가 없는 경우에는 동작하지 않는다.
+     In order to prevent infinite rediretion, the STON only tracks once.
+     무한히 Redirect되는 경우를 방지하기 위하여 (STON이??)1회만 추적한다.
 
