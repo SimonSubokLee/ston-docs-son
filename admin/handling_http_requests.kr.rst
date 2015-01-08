@@ -353,7 +353,7 @@ IP, GeoIP, Header and URL form can be used for {Match} configuration.
 -  **Header**
    $HEADER[Key : Value] format is used. 
    Value supports specific expressions and patterns. 
-   Value가 생략된 경우에는 Key에 해당하는 헤더의 존재유무를 (어떠한 조건인지???:  Key에 해당하는 헤더가 존재한다면 응답변경합니다)조건으로 판단한다.
+   When the ``Value`` is omitted, the existence of header that is corresponding to the ``Key`` will be the condition to make a decision.
     
 -  **URL**
    $URL[...] format is used and can be omitted. Specific expressions and patterns will be recognized.
