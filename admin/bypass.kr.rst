@@ -1,30 +1,32 @@
 ﻿.. _bypass:
 
-8장. 바이패스
+Chapter 8. Bypass
 ******************
 
-이 장에서는 클라이언트 요청처리를 원본서버에게 위임하는 바이패스에 대해 설명한다.
-바이패스는 조건과 동작으로 구분된다.
+This chapter explains how to set a bypass that is delegating client request handling to the origin server.
+Bypass is divided into condition and operation.
+(바이패스는 조건과 동작으로 구분된다?? 조건과 동작이 각각 무엇인지 조금 더 설명해주세요. 적절한 단어가 떠오르지 않습니다.)
 
-바이패스는 Caching정책보다 우선한다.
-설계단계에서 Edge도입이 고려되지 않은 서비스라면 정적리소스와 동적리소스를 정교하게 구분해낼 수 없는 경우가 많다.
-이런 경우 모든 클라이언트 요청을 바이패스하도록 구성한 뒤 로그에 기반하여 요청이 많은 콘텐츠만 Caching하도록 설정한다.
-대개의 경우 몇 시간의 로그만으로 원본부하를 극적으로 낮출 수 있다.
-:ref:`monitoring_stats` 에서 실시간 정보를 제공하는 이유도 서비스를 실시간 튜닝할 수 있도록 하기 위함이다.
+Bypass has a priority to the Caching policy.
+A service that was not considered to adopt the Edge from design stage, most likely it cannot delicately distinguish static resources and dynamic resources.
+In this case, configure to bypass all client requests and only cache the contents that are frequently requested based on the log.
+Usually a few hours of log can dramatically decrease the origin server load.
+:ref:`monitoring_stats` provides real time status in order to help tuning the service in real time.
 
-바이패스는 아주 빠를뿐만 아니라 HTTP트랜잭션 단위로 동작한다.
-아무리 개인화된 사이트라고 해도 대부분은 메인 페이지(.html)만 동적으로 변경될 뿐 나머지 99%는 정적인 리소스로 구성된다.
-원본서버 동작에 맞출 수 있도록 :ref:`origin-httprequest` 의 바이패스 버전이 별도로 존재한다.
+Bypass is fast and acts as an HTTP transactions basis.
+Even if the web site is personalized, mostly main page(.html) changes dynamically and the rest of 99% is made up of static resources.
+Bypass version of :ref:`origin-httprequest` is provided in order to apply to the origin server.
+원본서버 동작에 맞출 수 있도록(동작에 맞춘다는 의미가 무엇인지??) :ref:`origin-httprequest` 의 바이패스 버전이 별도로 존재한다.
 
 
 .. toctree::
    :maxdepth: 2
 
 
-No-Cache 요청 바이패스
+No-Cache Request Bypass
 ====================================
 
-클라이언트가 no-cache요청을 보냈다면 바이패스한다. ::
+If a client sends no-cache request, bypass the request. ::
 
    GET / HTTP/1.1
    cache-control: no-cache 또는 cache-control:max-age=0
