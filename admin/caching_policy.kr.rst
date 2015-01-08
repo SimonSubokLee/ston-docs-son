@@ -6,13 +6,13 @@ Chapter 4. Caching Policy
 This chapter will explain TTL(Time To Live), Caching-Key and expiration policy that are fundamental to the service.
 Stored contents are only available while TTL is valid.
 Standard HTTP protocol specifies Cache-Control for setting the TTL.
-하지만 이는 절대적인 것은 아니다(무엇이 어떻게 절대적인 것이 아닌지???). 
+하지만 이는 절대적인 것은 아니다(무엇이 어떻게 절대적인 것이 아닌지???: 규격은 있지만 꼭 해야 하는것도 아니고 그렇게 되지도 않습니다). 
 Various TTL policies and :ref:`caching-purge` will improve service quality.
 
 HTTP has various standards that classify contents. 
 Also, there could be various Caching-Key as well. 
 Less frequently updating contents not only help reducing load on the origin server but also easy to scale up.
-콘텐츠 변경이 없을수록 원본부하를 줄일 수 있을뿐만 아니라 (무엇을 쉽게 확장할 수 있는지??) 쉽게 확장할 수 있다.
+콘텐츠 변경이 없을수록 원본부하를 줄일 수 있을뿐만 아니라 (무엇을 쉽게 확장할 수 있는지??: 서비스를 쉽게 확장할수 있습니다) 쉽게 확장할 수 있다.
 In this chapter, several methods to establish optimized expiration policy for a service will be discussed.
 
 In order to use upcoming configuration as a default setting for all virtual hosts, place it under the ``<VHostDefault>``.
@@ -253,12 +253,12 @@ These different requirments led to the development of background contents update
    -  ``OFF`` Reply without the response of modification check.
       When the new content download is completed, swap with the old content.
 
-``OFF`` 설정의 더 큰 이유(OFF 설정을 기본인 ON보다 더 많이 쓴다는 뜻인가요??)는 콘텐츠가 대부분 자주 바뀌지 않기 때문이다.
+``OFF`` 설정의 더 큰 이유(OFF 설정을 기본인 ON보다 더 많이 쓴다는 뜻인가요??: 네 OFF 설정이 일반적입니다)는 콘텐츠가 대부분 자주 바뀌지 않기 때문이다.
 
    .. figure:: img/perf_refreshexpired5.jpg
       :align: center
       
-      변경에 민감하지 않다면 (서버로부터 변경 확인을??)기다리지 않는다.
+      변경에 민감하지 않다면 (서버로부터 변경 확인을??: 원본서버로부터)기다리지 않는다.
 
 In the above figure, contents update of the origin server is running on the background, so cached contents can be serviced to clients immediately.
 If the origin server replies **304 Not Modified** then simply TTL is extended.
@@ -301,7 +301,7 @@ Accept-Encoding Header
 Even if there is a HTTP request for identical URL, the existence of Accept-Ending header affects which contents to be cached.
 At the moment sending a request to the origin server, 
 같은 URL에 대한 HTTP요청이라도 Accept-Encoding헤더의 존재 유무에 따라 다른 콘텐츠가 캐싱될 수 있다. 
-원본서버에 요청을 보내는 시점에 (누가 무엇에 대한 압축여부를 확인하는지??)압축여부를 알 수 없다.
+원본서버에 요청을 보내는 시점에 (누가 무엇에 대한 압축여부를 확인하는지??: STON이 원본서버에 요청하는 시점을 말합니다)압축여부를 알 수 없다.
 응답을 받았다고해도 압축여부를 매번 비교할 수도 없다.
 
    .. figure:: img/acceptencoding.png
@@ -330,7 +330,7 @@ If the origin server does not support compression or bulk file that does not req
 Identifying Upper / Lower Case Letters
 ====================================
 
-(누가?? STON이??) 원본서버의 대소문자 구분여부를 능동적으로 알 수 없다.
+(누가?? STON이??: 네) 원본서버의 대소문자 구분여부를 능동적으로 알 수 없다.
 
    .. figure:: img/casesensitive.png
       :align: center
@@ -385,7 +385,7 @@ QueryString exceptions are saved at /svc/{virtual host name}/querystring.txt. ::
     /image/ad.jpg
 
 Please be aware that the exception can work in a different way depends on the ``<ApplyQueryString>`` setting.
-예외조건이 ``<ApplyQueryString>`` 설정에 따라 (예외조건의 의미?? 예외조건의 조건??)의미가 달라짐에 주의한다. 
+예외조건이 ``<ApplyQueryString>`` 설정에 따라 (예외조건의 의미?? 예외조건의 조건??: querystring.txt에 설정하는 조건은 <ApplyQueryString> 설정에 따라 무시(예외)될수도 인식(포함)될수도 있습니다)의미가 달라짐에 주의한다. 
 Distinctive or patterned URL(* is only allowed) can be used in the configuration.
 
 
@@ -462,7 +462,7 @@ POST request exception is saved at /svc/{virtual host name}/postbody.txt. ::
     
 Please be aware that the exception can work in a different way depends on the ``<BodySensitive>`` setting.
 Distinctive or patterned URL(* is only allowed) can be used in the configuration.
-예외조건이 ``BodySensitive`` 설정에 따라 (예외조건의 의미?? 예외조건의 조건??)의미가 달라짐에 주의한다. 
+예외조건이 ``BodySensitive`` 설정에 따라 (예외조건의 의미?? 예외조건의 조건??: postbody.txt에 설정하는 조건은 <BodySensitive> 설정에 따라 무시(예외)될수도 인식(포함)될수도 있습니다 )의미가 달라짐에 주의한다. 
   
 .. note::
 
