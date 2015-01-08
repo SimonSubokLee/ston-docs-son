@@ -121,7 +121,7 @@ The origin address is frequently excluded/recovered when running a service.
 STON uses IP table based origin address, and information be accessed by `origin-status`_ API.
 
 If you set the origin address as an IP, it will be simple.
-원본주소를 IP로 설정한 경우 (무엇이 매우 간단한지??)매우 간단하다. 
+원본주소를 IP로 설정한 경우 (무엇이 매우 간단한지??: 아래와 같이 Domain 으로 설정하는것과 비교하면 간단합니다)매우 간단하다. 
 
 -  Nothing will modify IP list unless you change the configuration.
 -  IP address will not be expired by TTL.
@@ -139,7 +139,8 @@ IP list can be changed dynamically, and all IPs are only valid for valid TTL.
 
 Even if you set the origin address as a domain, error and recovery works based on IP address.
 원본주소를 Domain으로 설정하여도 장애/복구는 IP기반으로 동작한다. 
-(??이 부분은 구체적인 설명이 필요할 것 같습니다. 무슨 내용인지 이해가 되지 않아요 ㅠㅠ)
+(??이 부분은 구체적인 설명이 필요할 것 같습니다. 무슨 내용인지 이해가 되지 않아요 ㅠㅠ: 원본서버를 IP가 아닌 Domain으로 설정하여도, 장애/복구는 Domain을 리졸빙하여 얻은 IP주소를 기준으로 동작한다는 뜻입니다)
+
 여기서 미묘한 점이 있다.
 DNS 클라이언트(=STON)는 Domain의 모든 IP 목록을 정확히 알 수 없다. 
 하지만 사용할 수 없는 IP들만으로 Domain을 구성할 경우 장애상태가 지속될 수 없다.
