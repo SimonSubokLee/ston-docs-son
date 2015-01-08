@@ -29,7 +29,7 @@ No-Cache Request Bypass
 If a client sends no-cache request, bypass the request. ::
 
    GET / HTTP/1.1
-   cache-control: no-cache 또는 cache-control:max-age=0
+   cache-control: no-cache or cache-control:max-age=0
    pragma: no-cache
     
 ::
@@ -41,9 +41,9 @@ If a client sends no-cache request, bypass the request. ::
     
 -  ``<BypassNoCacheRequest>``
 
-   - ``OFF (기본)`` Cache모듈이 처리한다.
+   - ``OFF (default)`` Cache module handles the request.
    
-   - ``ON`` 원본서버로 바이패스한다.
+   - ``ON`` Bypass the request to the origin server.
    
 .. note::
 
