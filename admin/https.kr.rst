@@ -1,14 +1,14 @@
 ﻿.. _https:
 
-9장. HTTPS
+Chapter 9. HTTPS
 ******************
 
-이 장에서는 HTTPS 구성에 대해 설명한다.
-SSL 3.0, TLS 1.0, TLS 1.1을 지원하며 SSL 2.0은 보안상의 이유로 업그레이드만 허용한다.
-HTTPS는 클라이언트와 STON구간에서만 사용된다. 
-STON은 원본서버와 HTTPS로 통신하지 않는다.
-왜냐하면 보안적으로나 성능적으로 STON이 HTTPS를 중계하는 것은 적절하지 않기 때문이다.
-만약 원본서버와 반드시 HTTPS로 통신해야 한다면 :ref:`bypass-port` 를 권장한다.
+This chapter explains how to configure HTTPS.
+HTTPS supports SSL 3.0, TLS 1.0 and TLS 1.1, but for a security reason, SSL 2.0 is allowed only for upgrade.
+HTTPS is only used in between clients and STON. 
+STON does not use HTTPS to communicate with the origin server.
+In terms of security and performance, it will be inappropriate if STON relays HTTPS.
+If HTTPS has to be used for communicating with the origin server, using :ref:`bypass-port` is recommended.
 
 
 .. toctree::
@@ -16,11 +16,11 @@ STON은 원본서버와 HTTPS로 통신하지 않는다.
 
 
 
-서비스 구성
+Service Configuration
 ====================================
 
-별도의 IP 또는 포트를 지정하지 않는 경우 기본으로 바인딩되는 서비스 주소는 "*:443" 이다.
-전역설정(server.xml)에 설정한다. ::
+As long as specific IP or port is not designated, default binding service address is "*:443".
+This can be configured in the global configuration(server.xml). ::
 
    # server.xml - <Server>
 
@@ -42,16 +42,17 @@ STON은 원본서버와 HTTPS로 통신하지 않는다.
       <CA>/usr/ssl_port/CA.pem</CA>
    </Https>   
    
--  ``<Https>`` HTTPS를 구성한다.
+-  ``<Https>`` Configures HTTPS
    
-   -  ``<Cert>`` 서버 인증서
+   -  ``<Cert>`` A server certification
    
-   -  ``<Key>`` 서버 인증서의 개인키. 암호화된 형식은 지원하지 않는다.
+   -  ``<Key>`` A private key of server certification. Encrypted format is not supported.
    
-   -  ``<CA>`` CA(Certificate Authority) 체인 인증서
+   -  ``<CA>`` CA(Certificate Authority) Chain certification(체인?? 인증서)
   
-같은 Port를 서비스하더라도 보다 명확한 표현이 우선한다. 
+Even if the same port is being serviced, more specific expression has a priority. 
 
+For example, if there are multiple NIC from the above example, the client that came through 1.1.1.1:443 will be serviced with a specific 
 예를 들어 위 예제처럼 NIC가 여러 개인 경우 1.1.1.1:443으로 들어온 클라이언트는 
 명시적 표현인 2번째(1.1.1.1:443) 인증서로 서비스되며 1.1.1.4:443으로 들어온 
 클라이언트는 일반적 표현인 1번째(생략 또는 *:443) 인증서로 서비스된다.
