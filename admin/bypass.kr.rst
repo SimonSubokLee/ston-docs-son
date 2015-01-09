@@ -199,7 +199,7 @@ Setting a ``Timeout`` only for bypass is recommended to prevent hastily assuming
 Bypass Header
 ====================================
 
-:ref:`origin-httprequest` 설정의 바이패스 적용여부를 설정한다. ::
+Configure whether to apply the bypass setting of :ref:`origin-httprequest`. ::
 
    # server.xml - <Server><VHostDefault><OriginOptions>
    # vhosts.xml - <Vhosts><Vhost><OriginOptions>
@@ -208,20 +208,20 @@ Bypass Header
    <Host Bypass="ON"/>
    <XFFClientIPOnly Bypass="ON">...</XFFClientIPOnly>   
     
--  ``Bypass`` 속성
+-  ``Bypass`` Property
 
-   - ``ON`` 설정된 헤더를 명시한다.
+   - ``ON`` Specifies configured header.
         
-   - ``OFF`` 클라이언트가 보낸 관련헤더를 명시한다.
+   - ``OFF`` Specifies relative header from clients.
 
 
 .. _bypass-port:
 
-Port 바이패스
+Port Bypass
 ====================================
 
-특정 TCP포트의 모든 패킷을 원본서버로 바이패스한다. 
-가상호스트 전용설정이다. ::
+Bypasses all packets of a specific TCP port to the origin server.
+This setting is exclusive for virtual host. ::
 
    # vhosts.xml - <Vhosts>
       
@@ -231,15 +231,15 @@ Port 바이패스
    </Vhost>
 
 -  ``<PortBypass>``   
-   지정된 포트로 입력된 모든 패킷을 원본서버의 같은 포트로 바이패스한다.
-   ``Dest`` 속성으로 원본서버 포트를 설정한다.
+   Bypasses all packets from a designated port to the same port of the origin server.
+   ``Dest`` property will configure the origin server port.
 
-예를 들어 443포트를 바이패스 한다면 클라이언트는 원본서버와 직접 SSL통신을 하는 효과를 가진다. 
-바이패스되는 포트는 절대 중복설정할 수 없다. 
+For example,if you are bypassing 443 port, the result is similar to establishing a direct SSL connection between the client and origin server. 
+The port that is being bypassed can never have redundant setting. 
 
 .. note::
    
-   구조적으로 Port 바이패스는 HTTP보다 하위 Layer인 TCP에서 이루어진다. 
-   특정 가상호스트 하위에 Port 바이패스를 설정하는 이유는 통계를 수집할 주체가 필요하기 때문이다.
+   Structurally port bypass is handled in a TCP Layer that is lower than HTTP. 
+   The reason of configuring a port bypass under a specific virtual host is that a subject to collect statistics is required.
    
 
