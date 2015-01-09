@@ -85,30 +85,29 @@ Exception for bypass is saved at /svc/{virtual host name}/bypass.txt. ::
    /index.html   
     
 If cache or bypass condition has not been specified, the opposite setting of default condition will be applied.
-조건을 명확하게 명시하지 않은 경우 기본설정과 반대로 동작한다.
-예를 들어 ``<BypassGetRequest>`` 이 ``ON`` 이라면 예외조건은 Caching목록이 된다.
-헷갈릴 여지가 많다면 2번째 파라미터를 사용하여 보다 분명하게 조건을 설정할 수 있다. ::
+For example, if ``<BypassGetRequest>`` is set to ``ON``, the exceptional condition is a Caching list.
+If this is confusing, you can use second parameter to make the condition more clear. ::
 
    # /svc/www.winesoft.co.kr/bypass.txt
    
-   $HEADER[cookie: *ILLEGAL*], cache               // 항상 Caching처리
-   !HEADER[referer:]                               // 기본 설정에 따라 다름
-   !HEADER[referer] & !HEADER[user-agent], bypass  // 항상 바이패스
-   $URL[/source/public.zip]                        // 기본 설정에 따라 다름
+   $HEADER[cookie: *ILLEGAL*], cache               // Always cache
+   !HEADER[referer:]                               // Depends on the default setting
+   !HEADER[referer] & !HEADER[user-agent], bypass  // Always bypass
+   $URL[/source/public.zip]                        // Depends on the default setting
 
-정리하면 우선순위는 다음과 같다.
+The priority will be as below.
 
-1. No-Cache 바이패스
-2. bypass.txt에 bypass라고 명시된 경우
-3. bypass.txt의 기본 설정
+1. No-Cache bypass
+2. Bypass is stated in bypass.txt
+3. Default setting of bypass.txt
     
 
 
-원본서버 고정
+Origin Server Affinity
 ====================================
 
-로그인 상태처럼 원본서버와 클라이언트가 반드시 1:1로 통신해야 하는 경우가 있다.
-`GET/POST 바이패스`_ 의 속성으로 원본서버를 고정시킬 수 있다. ::
+Some transactions have to be directly made between the origin server and the client such as login status.
+The origin server affinity can be configured in the `GET/POST Bypass`_ property. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -118,39 +117,39 @@ If cache or bypass condition has not been specified, the opposite setting of def
 
 -  ``OriginAffinity``
 
-   - ``ON (기본)`` 클라이언트 요청이 항상 같은 서버로 바이패스되는 것을 보장한다. 
-     단, 같은 소켓임을 보장하지는 않는다. 
+   - ``ON (default)`` This setting guarantees to bypass client requests to an identical server. 
+     But, it might not be an identical socket. 
      
-     바이패스해야 하는 원본서버와 연결된 모든 소켓이 끊어지는 상황이 발생할 수도 있다. 
-     하지만 이런 경우에도 해당 서버로 새로운 소켓연결을 요청한다.
+     The origin server and all connected sockets could lose connections.
+     In this case, new socket connections will be requested to the relative server.
      
      .. figure:: img/private_bypass3.jpg
         :align: center
       
-        항상 같은서버로 바이패스된다.
+        Requests are always bypassed to the same server.
      
-     바이패스하던 원본서버가 장애로 배제되거나 DNS에서 빠질 경우 새로운 서버로 바이패스된다.
+     If bypassed origin server is inactive due to errors or excluded from DNS, another server will be used for bypass.
    
-   - ``OFF`` 클라이언트의 요청이 어느 서버로 바이패스되는지 보장할 수 없다.
+   - ``OFF`` This setting does not guarantee which server will be used for client requests.
    
      .. figure:: img/private_bypass1.jpg
         :align: center
       
-        :ref:`origin-balancemode` 에 의해 따른다.
+        Abides by :ref:`origin-balancemode`.
         
 
 
-원본세션 고정
+Origin Session Affinity
 ====================================
 
-클라이언트 소켓마다 원본서버와 1:1로 바이패스 세션을 사용한다. 
+Each client socket use 1:1 bypass session with the origin server. 
 
 .. figure:: img/private_bypass2.jpg
    :align: center
       
-   클라이언트가 원본세션을 소유한다.
+   Client owns origin session.
 
-`GET/POST 바이패스`_ 의 속성으로 원본세션을 고정시킬 수 있다. ::
+Origin session can be fixed with `GET/POST Bypass`_ property. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -160,26 +159,27 @@ If cache or bypass condition has not been specified, the opposite setting of def
     
 -  ``Private``
 
-   - ``OFF (기본)`` 클라이언트 세션이 원본서버 전용세션을 사용하도록 동작한다.
-     항상 같은 서버로 요청이 바이패스 된다.
-     클라이언트와 원본서버 중 어느 한쪽이 세션을 종료되는 순간 상대방 세션 또한 종료됩니다.
+   - ``OFF (default)`` This setting let client session use a dedicated origin server session.
+     Requests are always bypassed to the same server.
+     Either client or origin server terminates the session, other party's session will be also closed.
         
-   - ``OFF`` 전용세션을 사용하지 않는다.
+   - ``OFF`` This setting does not use a dedicated session.
 
-원본서버가 사용자의 로그인 정보를 세션에 기반하여 유지하는 경우처럼 클라이언트의 요청이 반드시 같은 소켓으로 처리되야 하는 경우 유용하다.
+Just like the origin server keeps client's login information based on the session, 
+it is useful when the client request must be handled with the same socket.
 
 .. note::
 
-   자칫 너무 많은 요청을 ``Private`` 으로 바이패스하는 경우 클라이언트 수 만큼 원본서버에 연결되어 엄청난 부하를 줄 수 있다. 
-   또한 이렇게 연결된 원본세션은 클라이언트가 소유하게 되므로 악의적인 공격상황에서 위험을 초래할 수도 있다.
+   If too many requests are bypassed with ``Private``, the origin server could be loaded as much as the number of client.  
+   Also, these origin sessions are owned by clients and this could endanger the server from melicious attacks.
    
 
 Timeout
 -----------------------
 
-바이패스는 원본서버에서 동적으로 처리한 결과를 응답하는 경우가 많다.
-이로 인해 처리 속도가 정적인 콘텐츠보다 느린 경우가 많다.
-바이패스 전용 Timeout을 설정하여 섣부른 장애판단이 되지 않도록 한다. ::
+Bypass usually responds a result that is dynamically processed from the origin server.
+Therefore, the processing speed is slower than static contents.
+Setting a ``Timeout`` only for bypass is recommended to prevent hastily assuming as an error condition. ::
 
    # server.xml - <Server><VHostDefault><OriginOptions>
    # vhosts.xml - <Vhosts><Vhost><OriginOptions>
@@ -187,16 +187,16 @@ Timeout
    <BypassConnectTimeout>5</BypassConnectTimeout>
    <BypassReceiveTimeout>300</BypassReceiveTimeout>   
 
--  ``<BypassConnectTimeout> (기본: 5초)``   
-   바이패스를 위해 n초 이내에 원본서버와 접속이 이루어지지 않는 경우 접속실패로 처리한다.
+-  ``<BypassConnectTimeout> (default: 5 seconds)``   
+   If the bypass connection with origin server is not established for the set amount of time, it is handled as a connection timeout.
 
 
--  ``<BypassReceiveTimeout> (기본: 5초)``
-   바이패스 중 원본서버의 응답이 n초 없을 경우 전송실패로 처리한다.
+-  ``<BypassReceiveTimeout> (default: 5 seconds)``
+   If the origin server does not respond for the set amount of tiem during bypass, it is handled as a receive timeout.
    
    
 
-바이패스 헤더
+Bypass Header
 ====================================
 
 :ref:`origin-httprequest` 설정의 바이패스 적용여부를 설정한다. ::
