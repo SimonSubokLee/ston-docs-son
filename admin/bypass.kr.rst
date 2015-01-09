@@ -4,7 +4,7 @@ Chapter 8. Bypass
 ******************
 
 This chapter explains how to set a bypass that is delegating client request handling to the origin server.
-Bypass is divided into condition and operation.
+Bypass is divided into condition and action.
 (바이패스는 조건과 동작으로 구분된다?? 조건과 동작이 각각 무엇인지 조금 더 설명해주세요. 적절한 단어가 떠오르지 않습니다.)
 
 Bypass has a priority to the Caching policy.
@@ -47,17 +47,17 @@ If a client sends no-cache request, bypass the request. ::
    
 .. note::
 
-    이 설정은 클라이언트 동작(아마도 ``ctrl`` + ``F5`` )에 의해 판단된다.
-    그러므로 대량의 바이패스가 원본에 부담을 줄 가능성이 있다.
+    This configuration is judged by client's action(probably ``ctrl`` + ``F5`` ).
+    Therefore, excessive number of bypass might increase origin load.
     
 
 .. _bypass-getpost:    
  
-GET/POST 바이패스
+GET/POST Bypass
 ====================================
 
-바이패스가 GET/POST요청의 기본동작이 되도록 설정할 수 있다. 
-GET과 POST의 용도가 다른만큼 기본동작이 다름에 유의한다. ::
+Bypass can be set a default reaction for GET/POST requests.
+The default reaction of the two requests might be different as GET and POST have different usages. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -67,24 +67,25 @@ GET과 POST의 용도가 다른만큼 기본동작이 다름에 유의한다. ::
     
 -  ``<BypassPostRequest>``
 
-   - ``ON (기본)`` POST요청을 원본서버로 바이패스한다.
+   - ``ON (default)`` Bypass POST requests to the origin server.
    
-   - ``OFF`` POST요청을 STON이 처리한다.
+   - ``OFF`` STON handles POST requests.
    
 -  ``<BypassGetRequest>``
 
-   - ``OFF (기본)`` GET요청을 STON이 처리한다.
+   - ``OFF (default)`` STON handles GET requests.
 
-   - ``ON`` GET요청을 원본서버로 바이패스한다.
+   - ``ON`` Bypass GET requests to the origin server.
 
-:ref:`access-control-vhost_acl` 과 동일한 조건을 모두 지원한다.
-바이패스 예외조건은 /svc/{가상호스트 이름}/bypass.txt 에 설정한다. ::
+Supports all condition as :ref:`access-control-vhost_acl`.
+Exception for bypass is saved at /svc/{virtual host name}/bypass.txt. ::
 
    # /svc/www.example.com/bypass.txt
    $IP[192.168.2.1-255]
    /index.html   
     
-cache나 bypass조건을 명확하게 명시하지 않은 경우 기본설정과 반대로 동작한다.
+If cache or bypass condition has not been specified, the opposite setting of default condition will be applied.
+조건을 명확하게 명시하지 않은 경우 기본설정과 반대로 동작한다.
 예를 들어 ``<BypassGetRequest>`` 이 ``ON`` 이라면 예외조건은 Caching목록이 된다.
 헷갈릴 여지가 많다면 2번째 파라미터를 사용하여 보다 분명하게 조건을 설정할 수 있다. ::
 
