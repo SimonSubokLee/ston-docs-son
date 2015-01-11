@@ -52,44 +52,43 @@ This can be configured in the global configuration(server.xml). ::
   
 Even if the same port is being serviced, more specific expression has a priority. 
 
-For example, if there are multiple NIC from the above example, the client that came through 1.1.1.1:443 will be serviced with a specific 
-예를 들어 위 예제처럼 NIC가 여러 개인 경우 1.1.1.1:443으로 들어온 클라이언트는 
-명시적 표현인 2번째(1.1.1.1:443) 인증서로 서비스되며 1.1.1.4:443으로 들어온 
-클라이언트는 일반적 표현인 1번째(생략 또는 *:443) 인증서로 서비스된다.
-인증서파일을 같은 이름으로 덮어쓰기 하여도 Reload할 때 반영된다.
+For example, if there are multiple NIC like the above example, 
+the client that came through 1.1.1.1:443 will be serviced with a specific certification, 
+and the client that came through 1.1.1.4:443 will be serviced with a general certification.
+Even if you overwrite a certification with an existing file name, it'll be reflected when reloading.
 
 .. note::
 
-   인증서 포맷은 PEM(Privacy Enhanced Mail), 비대칭키 알고리즘은 RSA만 지원한다.
+   Cerification format is PEM(Privacy Enhanced Mail), and only supports RSA asymmetric key algorithm.
 
 
 .. _https-aes-ni:
 
-SSL/TLS 가속
+SSL/TLS Acceleration
 ====================================
 
-CPU(AES-NI)를 통해 SSL/TLS를 가속한다.
-AES-NI를 지원하는 CPU인 경우 SSL/TLS에서 AES알고리즘을 우선적으로 사용하도록 동작한다. 
-AES-NI가 인식된 경우 다음과 같이 Info.log에 기록된다. ::
+SSL/TLS is accelerated by CPU(AES-NI).
+A CPU that supports AES-NI, SSL/TLS will preferentially choose AES algorithm.
+If AES-NI is recognized, the following will be recorded in the Info.log file. ::
 
    AES-NI : ON (SSL/TLS accelerated)
    
-관리자가 AES-NI 사용여부를 선택할 수 있다. ::
+Administrator can select whether to use AES-NI or not. ::
 
    # server.xml - <Server><Cache>
 
    <AES-NI>ON</AES-NI>   
 
--  ``<AES-NI> (기본: ON)`` AES-NI 사용여부를 선택한다.
+-  ``<AES-NI> (default: ON)`` Use AES-NI.
 
 
 
 .. _https-ciphersuite:
 
-CipherSuite 선택
+CipherSuite Selection
 ====================================
 
-지원하는 CipherSuites는 다음과 같다.
+The followings are supported CipherSuites.
 
 - RSA_WITH_RC4_SHA
 - RSA_WITH_RC4_MD5
@@ -99,7 +98,7 @@ CipherSuite 선택
 - ECDHE_RSA_WITH_AES_128_CBC_SHA
 - ECDHE_RSA_WITH_AES_256_CBC_SHA
 
-``<Https>`` 의 ``CipherSuite`` 속성을 사용하면 사용할 CipherSuite를 설정할 수 있다. ::
+You can choose which CipherSuite to use by configuring ``CipherSuite`` property in ``<Https>``. ::
 
    # server.xml - <Server>
 
@@ -109,21 +108,21 @@ CipherSuite 선택
       <CA>/usr/ssl/CA.pem</CA>
    </Https>   
 
--  ``CipherSuite`` `Apache mod_ssl의 SSL CipherSuite표현 <http://httpd.apache.org/docs/2.2/mod/mod_ssl.html#sslciphersuite>`_ 을 따른다.
+-  ``CipherSuite`` Abides by `SSL CipherSuite expression of Apache mode_ssl <http://httpd.apache.org/docs/2.2/mod/mod_ssl.html#sslciphersuite>`_.
 
 
 
 .. _https-ciphersuite-query:
 
-CipherSuite 조회
+CipherSuit Inquiry
 ====================================
 
-CipherSuite 설정결과를 조회한다. 
-CipherSuite표현식은 `OpenSSL 1.0.0E <https://www.openssl.org/docs/apps/ciphers.html>`_ 를 준수한다. ::
+Inquiries CipherSuite configuration result. 
+CipherSuite expression abides by `OpenSSL 1.0.0E <https://www.openssl.org/docs/apps/ciphers.html>`_. ::
 
    http://127.0.0.1:10040/monitoring/ssl?ciphersuite=...
 
-결과는 JSON형식으로 제공된다. ::
+The result is returned in JSON format. ::
 
   {
       "version": "2.0.0",
@@ -152,52 +151,51 @@ CipherSuite표현식은 `OpenSSL 1.0.0E <https://www.openssl.org/docs/apps/ciphe
 
 
 
-멀티 Domain 구성
+Multi Domain Configuration
 ====================================
 
-한 대의 서버에서 여러 서비스를 동시에 운영할 경우 SSL설정이 문제가 될 수 있다. 
-대부분의 Web/Cache서버들은 HTTP 요청의 Host헤더를 보고 어떤 가상호스트에서 서비스할 것인지 결정한다. 
+SSL configuration can cause problems when running multiple services simultaneously with one server.
+Most Web/Cache servers decide which virtual host will be used for the service by examining Host header in the HTTP request 
 
 .. figure:: img/ssl_alert.png
    :align: center
       
-   일반적 HTTPS통신
+   General HTTPS Communication
    
-일반적으로 SSL은 클라이언트(Browser)가 자신이 접속하려는 서버 도메인명(winesoft.co.kr)을 인증서를 통해 확인하는 것으로 신원확인을 한다. 
-만약 인증서로 신원확인이 되지 않는다면(잘못된 인증서 또는 유효기간 만료 등) 다음과 같이 사용자에게 신뢰여부를 묻는다(아예 차단하는 경우도 있다). 
-신뢰는 클라이언트가 하는 것이므로 정상적인 신원확인이 안되어도 계속 진행하길 원한다면 SSL통신이 이루어진다.
+Generally SSL identifies the domain(winesoft.co.kr) of the server that a client(Browser) is trying to access by confirming a certification. 
+When the certification is rejected for identification(wrong certification, expired certification, etc), user will be asked whether to trust website or not(sometimes the website might be blocked). 
+If the client decides to trust the website, SSL communication will be established without a proper identification.
 
 .. figure:: img/faq_ssl1.jpg
    :align: center
       
-   사용자에게 판단을 맡긴다.
+   Client will decide whether to trust website or not.
    
-서버에서 SSL을 사용하는 가상호스트가 하나라면 문제가 되지 않는다. 
-하지만 여러 개의 가상호스트를 동시에 운영하는 서버에서는 문제가 될 수 있다. 
-왜냐하면 서버가 클라이언트에게 인증서를 전달할 때("일반적 HTTPS통신"의 "2. 인증서 전달") 
-클라이언트가 어떤 Host에 접속하려는지 알 수 없기 때문이다. 
+It will not be a problem if there is only one virtual host that uses SSL in the server. 
+However, a server that runs multiple virtual hosts at the same time could be an issue. 
+The problem occurs when the server transmits the certification to a client("2. Certification Transmission" of the "General HTTPS Communication")
+because the server does not know which Host the client is trying to reach. 
 
-이 문제를 극복하는 대표적인 방법은 다음과 같다.
+The following shows typical solutions for this issue.
 
 =================== ====================================== ========================================================================
-방식	            장점	                               단점
+Methods	            Pros	                               Cons
 =================== ====================================== ========================================================================
-SNI                 서버설정만으로 동작 (표준)	           Windows XP와 IE6 미지원
-Multi Certificate	인증서만 교체하여 동작	               메인 도메인 또는 서비스 주체가 같아야 하며 자칫 재발급이 빈번할 수 있음
-Multi Port          포트만 변경하여 동작	               웹 페이지에서 HTTPS포트를 명시해주어야 함
-Multi NIC	        서버설정만으로 동작 (가장 널리쓰임)    NIC와 IP추가 구성필요
+SNI                 Works with server configuration(default)	           Does not support Windows XP and IE6
+Multi Certificate	Works with replaced certification	               The subject of main domain or service has to be the same and reissuing the certification could be too frequent
+Multi Port          Works with modified port	               The web page has to specifiy HTTPS ports
+Multi NIC	        Works with server configuration(most popular)    NIC and additional IP configuration are required
 =================== ====================================== ========================================================================
 
 
 SNI (Server Name Indication)
 --------------------------
 
-SSL/TLS의 `SNI(Server Name Indication) <http://en.wikipedia.org/wiki/Server_Name_Indication>`_ 
-확장 필드를 사용하는 방식이다. 
-이 기능은 처음 클라이언트가 서버에게 SSL 연결을 요청할 때 HTTP 요청의 Host헤더처럼 대상 가상호스트를 명시함으로써 가능하다. 
-이 기능은 가장 우아한 방법이지만 호환성에 문제가 있다. 
-다음은 SNI를 지원하지 않는 클라이언트 목록이다.
-(출처: `Wikipedia - Server Name Indication <http://en.wikipedia.org/wiki/Server_Name_Indication#Client_side>`_ ).
+This method uses `SNI(Server Name Indication) <http://en.wikipedia.org/wiki/Server_Name_Indication>`_ expansion field of SSL/TLS. 
+When the client requests SSL connection to the server, target virtual host should be specified like the Host header of HTTP request. 
+This is the most delicate method, but there are some compatibility issues. 
+The followings are the client list that does not support SNI.
+(source: `Wikipedia - Server Name Indication <http://en.wikipedia.org/wiki/Server_Name_Indication#Client_side>`_ ).
 
 - Internet Explorer (any version) on Windows XP or Internet Explorer 6 or earlier
 - Safari on Windows XP
@@ -207,34 +205,32 @@ SSL/TLS의 `SNI(Server Name Indication) <http://en.wikipedia.org/wiki/Server_Nam
 - wget before 1.14
 - Java before 1.7
 
-현실적으로 SNI의 사용은 불가능하므 STON은 SNI를 지원하고 있지 않다.
+SNI is unavailable in reality, therefore STON does not support SNI.
 
 
 
 Multi Certificate
 --------------------------
 
-인증서의에 여러 도메인을 넣거나 Wildcard(i.e. *.winesoft.co.kr)를 명시하여 
-하나의 인증서로 여러 도메인의 신원을 확인시킬 수 있는 방법이다.
+Multiple domains or a wildcard(eg. *.winesoft.co.kr) is specified in the certification to identify multiple domains with a single certification.
 
 .. figure:: img/faq_ssl2.jpg
    :align: center
       
-   하나의 인증서로 여러 Domain을 인증한다.
+   Multiple domains can be identified with a single certification.
    
-서비스 주체가 같다면 효과적인 방법이지만 무관하다면 같은 인증서를 공유하는 것은 
-현실적으로 어렵다. 
-이 방법은 인증서만 교체하면 되는 것이므로 STON에서 별도로 설정하실 것은 없다
-[ `DigiCert <http://www.digicert.com/wildcard-ssl-certificates.htm>`_ 참고].
+This method is effective if subjects of the service are the same, otherwise this method is realistically unavailable. 
+Replacing certification will work for this method, therefore you don't need to configure anything from STON.
+[ Refer `DigiCert <http://www.digicert.com/wildcard-ssl-certificates.htm>`_].
 
 
 
 Multi Port
 --------------------------
 
-SSL은 기본적으로 443포트를 사용한다.
-SSL포트를 중복되지 않는 포트로 설정하시면 인증서를 여러개 설치할 수 있다. 
-클라이언트에서는 다음과 같이 포트를 명시함으로써 SSL통신이 가능하다. ::
+SSL basically use 443 port.
+If you configure the SSL port that is not overlapping, you can install multiple certifications. 
+Client can enable SSL communication by specifying port as below. ::
 
     https://winesoft.co.kr:543/
     
