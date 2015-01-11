@@ -113,16 +113,16 @@ Because if HTTP request is not sent, virtual host cannot be found. ::
    - ``OFF (default)`` ACL is inactivated. All client requests are allowed.
     
    - ``ON`` ACL is activated. 
-     차단된 요청에 대해서는 ``DenialCode`` 속성에 설정된 응답코드로 응답한다.
-     ``Default (기본: Allow)`` 속성이 ``Allow`` 라면 ACL은 거부목록이 된다. 
-     반대로 ``Deny`` 라면 ACL은 허가목록이 된다.
+     For denied requests, response code that is configured in ``DenialCode`` property will be returned.
+     ``Default (default: Allow)`` If the property is set to ``Allow``, ACL is used as block list. 
+     Otherwise, if it is set to ``Deny``, ACL is used as allowed list.
      
-Deny된 요청은 :ref:`admin-log-access` 에 TCP_DENY로 기록된다.
+Denied requests are logged at :ref:`admin-log-access` as TCP_DENY.
 
 
 .. _access-control-vhost_acl:
 
-가상호스트 ACL
+Virtual Host ACL
 ---------------------
 
 모든 클라이언트 HTTP요청에 대하여 허용/거부/Redirect 여부를 판단한다.
