@@ -125,17 +125,17 @@ Denied requests are logged at :ref:`admin-log-access` as TCP_DENY.
 Virtual Host ACL
 ---------------------
 
-모든 클라이언트 HTTP요청에 대하여 허용/거부/Redirect 여부를 판단한다.
-각 조건마다 별도로 응답코드를 설정할 수도 있다.
-Redirect된 요청에 대해서는 **302 Moved temporarily** 로 응답한다. 
-ACL은 /svc/{가상호스트 이름}/acl.txt에 설정한다. ::
+Judges whether to allow/deny/redirect for the HTTP requests from all clients.
+Different response codes can be configured for each condition.
+For redirected requests, reply with **302 Moved temporarily**. 
+ACL is saved at /svc/{virtual host name}/acl.txt. ::
 
    # /svc/www.example.com/acl.txt
-   # 구분자는 콤마(,)이며 {조건},{키워드 = allow | deny | redirect} 순서로 표기한다.
-   # deny일 경우 키워드 뒤에 응답코드를 명시할 수 있다.
-   # 명시하지 않으면 ``<AccessControl>`` 의 ``DenialCode`` 를 사용한다.
-   # redirect일 경우 키워드 뒤에 이동시킬 URL을 명시한다. (Location헤더의 값으로 명시)
-   # n 개의 조건을 결합(AND)하기 위해서는 &를 사용한다.
+   # Comma(,) is an identifier, and {condition},{keyword = allow | deny | redirect} format is used.
+   # In case of deny, response code can be appended to the keyword.
+   # If not specified, adopt ``DenialCode`` from ``<AccessControl>``.
+   # In case of redirect, specify redirected URL after the keyword. (state as a value of Location header)
+   # In order to combine(AND) multiple conditions, use &.
    
    $IP[192.168.1.1], allow
    $IP[192.168.2.1-255]
@@ -153,32 +153,32 @@ ACL은 /svc/{가상호스트 이름}/acl.txt에 설정한다. ::
    /profile.zip, deny, 500
    /secure/*.dat
    
-조건은 IP, GeoIP, Header, URL 4가지로 설정이 가능하다.
+IP, GeoIP, Header, URL can be used as conditions.
 
 -  **IP**
-   $IP[...]로 표기하며 IP, IP Range, Bitmask, Subnet 네 가지 형식을 지원한다.
+   $IP[...] format is used, and IP, IP Range, Bitmask, Subnet forms are supported.
 
 -  **GeoIP**
-   $IP[...]로 표기하며 반드시 GeoIP설정이 되어 있어야 동작한다. 
+   $IP[...] format is used, and GeoIP has to be configured in order to use. 
      
 -  **Header**
-   $HEADER[Key : Value]로 표기한다. 
-   Value는 명확한 표현과 패턴을 인식한다. 
-   $HEADER[Key:]처럼 구분자는 있지만 Value가 빈 문자열이라면 요청 헤더의 값이 비어 있는 경우를 의미한다. 
-   $HEADER[Key]처럼 구분자 없이 Key만 명시되어 있다면 Key에 해당하는 헤더의 존재유무를 조건으로 판단한다.
+   $HEADER[Key : Value] format is used. 
+   Value recognizes specific and patterned expressions. 
+   An identifier exists like $HEADER[Key:], but if the Value is an empty string, this stands for empty header value. 
+   If the ``Key`` is only specified without an identifier like $HEADER[Key], the condition is used to judge existence of header for ``Key``.
     
 -  **URL**
-   $URL[...]로 표기하며 생략이 가능합니다. 명확한 표현과 패턴을 인식합니다.
+   $URL[...] format is used and can be omitted. This recognizes specific and patterend expressions.
     
-$는 "조건에 맞다면 ~ 한다"를 의미하지만 !는 "조건에 맞지 않는다면 ~ 한다"를 의미한다. 
-다음과 같이 부정조건으로 지원한다. ::
+$ means "If it meets the condition, do~", but ! means "If it doesn't meet the condition, do~". 
+The below negated conditions are supported. ::
 
-   # 국가가 KOR이 아니라면 deny한다.
+   # If the country is not KOR, deny.
    !IP[KOR], deny
     
-   # referer헤더가 존재하지 않는다면 deny한다.
+   # If referer header is missing, deny.
    !HEADER[referer], deny
    
-   # /secure/ 경로 하위가 아니라면 allow한다.
+   # /secure/ path is not a subordinate, allow.
    !URL[/secure/*], allow
 
