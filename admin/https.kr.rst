@@ -162,8 +162,8 @@ Most Web/Cache servers decide which virtual host will be used for the service by
       
    General HTTPS Communication
    
-Generally SSL identifies the domain(winesoft.co.kr) of the server that a client(Browser) is trying to access by confirming a certification. 
-When the certification is rejected for identification(wrong certification, expired certification, etc), user will be asked whether to trust website or not(sometimes the website might be blocked). 
+Generally SSL identifies the domain(winesoft.co.kr) of the server that a client(Browser) is trying to access by confirming a certificate. 
+When the certificate is rejected for identification(wrong certificate, expired certificate, etc), user will be asked whether to trust website or not(sometimes the website might be blocked). 
 If the client decides to trust the website, SSL communication will be established without a proper identification.
 
 .. figure:: img/faq_ssl1.jpg
@@ -173,7 +173,7 @@ If the client decides to trust the website, SSL communication will be establishe
    
 It will not be a problem if there is only one virtual host that uses SSL in the server. 
 However, a server that runs multiple virtual hosts at the same time could be an issue. 
-The problem occurs when the server transmits the certification to a client("2. Certification Transmission" of the "General HTTPS Communication")
+The problem occurs when the server transmits the certificate to a client("2. Certificate Transmission" of the "General HTTPS Communication")
 because the server does not know which Host the client is trying to reach. 
 
 The following shows typical solutions for this issue.
@@ -182,7 +182,7 @@ The following shows typical solutions for this issue.
 Methods	            Pros	                               Cons
 =================== ====================================== ========================================================================
 SNI                 Works with server configuration(default)	           Does not support Windows XP and IE6
-Multi Certificate	Works with replaced certification	               The subject of main domain or service has to be the same and reissuing the certification could be too frequent
+Multi Certificate	Works with replaced certificate	               The subject of main domain or service has to be the same and reissuing the certificate could be too frequent
 Multi Port          Works with modified port	               The web page has to specifiy HTTPS ports
 Multi NIC	        Works with server configuration(most popular)    NIC and additional IP configuration are required
 =================== ====================================== ========================================================================
@@ -212,15 +212,15 @@ SNI is unavailable in reality, therefore STON does not support SNI.
 Multi Certificate
 --------------------------
 
-Multiple domains or a wildcard(eg. *.winesoft.co.kr) is specified in the certification to identify multiple domains with a single certification.
+Multiple domains or a wildcard(eg. *.winesoft.co.kr) is specified in the certificate to identify multiple domains with a single certificate.
 
 .. figure:: img/faq_ssl2.jpg
    :align: center
       
-   Multiple domains can be identified with a single certification.
+   Multiple domains can be identified with a single certificate.
    
 This method is effective if subjects of the service are the same, otherwise this method is realistically unavailable. 
-Replacing certification will work for this method, therefore you don't need to configure anything from STON.
+Replacing certificates will work for this method, therefore you don't need to configure anything from STON.
 [ Refer `DigiCert <http://www.digicert.com/wildcard-ssl-certificates.htm>`_].
 
 
@@ -229,35 +229,34 @@ Multi Port
 --------------------------
 
 SSL basically use 443 port.
-If you configure the SSL port that is not overlapping, you can install multiple certifications. 
+If you configure the SSL port that is not overlapping, you can install multiple certificates. 
 Client can enable SSL communication by specifying port as below. ::
 
     https://winesoft.co.kr:543/
     
-STON에서는 다음과 같이 Listen속성에 포트를 명시하여 인증서를 여러개로 설정한다. ::
+STON can configure multiple certificates by specifying port in the Listen property as below. ::
 
    # server.xml - <Server>
 
-   <Https> ..A사 인증서.. </Https>  
-   <Https Listen="*:543"> ..B사 인증서.. </Https>  
-   <Https Listen="*:544"> ..C사 인증서.. </Https>
+   <Https> ..A Company Certificate.. </Https>  
+   <Https Listen="*:543"> ..B Company Certificate.. </Https>  
+   <Https Listen="*:544"> ..C Company Certificate.. </Https>
     
-이 방법은 가장 경제적이기는하나 모든 웹페이지 링크에 HTTPS 포트를 명시해야 하는 문제가 있다.
+This method is economically effective, but every web page link has to be specified with HTTPS port.
 
 
 Multi NIC
 --------------------------
 
-서버의 NIC가 여러개로 구성되어 있다면 NIC마다 IP를 별도로 할당할 수 있다. 
-그러므로 서버 IP마다 별도의 인증서를 설치하여 클라이언트가 접속한 서버IP에 기반하여 
-인증서를 결정하도록 설정한다. 
-STON에서는 다음과 같이 Listen속성에 IP명시하여 인증서를 여러개로 설정한다. ::
+If there are multiple server NICs, different IPs can be assigned to each NIC. 
+Therefore, each server IP can have separate certificates in order to decide which certificate to use based on the server IP that a client is connected. 
+The following shows how to configure multiple certificates by specifying IP in the Listen property. ::
 
    # server.xml - <Server>
 
-   <Https Listen="10.10.10.10"> ..A사 인증서.. </Https>  
-   <Https Listen="10.10.10.11"> ..B사 인증서.. </Https>  
-   <Https Listen="10.10.10.12"> ..C사 인증서.. </Https>
+   <Https Listen="10.10.10.10"> ..A Company Certificate.. </Https>  
+   <Https Listen="10.10.10.11"> ..B Company Certificate.. </Https>  
+   <Https Listen="10.10.10.12"> ..C Company Certificate.. </Https>
 
-이 방법은 현재 가장 일반적으로 사용되는 방식이다.
+This is the most popular method.
 
