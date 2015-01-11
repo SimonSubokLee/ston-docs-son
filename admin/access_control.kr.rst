@@ -1,14 +1,14 @@
 ﻿.. _access-control:
 
-10장. 접근제어
+Chapter 10. Access Control
 ******************
 
-이 장에서는 원치않는 클라이언트 접근을 차단하는 방법에 대해 설명한다.
-접근차단은 보통 ACL(Access Control List)에 차단목록을 작성하지만 설정편의상 허용목록을 작성하기도 한다.
+This chapter explains how to deny unwanted client accesses.
+Normally ACL(Access Control List) saves block list for access deny, but for the convenience of configuration, allowed list might be used.
 
-접근제어는 접속단계에서 수행하는 서버 접근제어와 가상호스트마다 설정하는 가상호스트 접근제어로 나뉜다.
-수준별로 시점과 판단기준이 다르므로 효과적인 차단시점을 결정해야 한다.
-접근제어의 동작은 모두 로그에 기록된다.
+Access control is divided into server access control that is excuted during connection stage and virtual host access control that is configured for each virtual host.
+You will have to decide efficient time to block access.
+All access control is logged.
 
 .. toctree::
    :maxdepth: 2
@@ -16,12 +16,12 @@
 
 .. _access-control-serviceaccess:
 
-서버 접근제어
+Server Access Control
 ====================================
 
-클라이언트가 서버에 접속하는 순간 IP정보를 통해 차단여부를 결정한다.
-접속단계에서 처리되기 때문에 가장 확실하며 빠르다.
-전역설정(server.xml)에 설정하며 가장 높은 우선순위를 가진다. ::
+At the moment a client accesses to the server, the server dicides whether to block the connection or not based on the IP address.
+This occurs during the connection stage, it is the most certain and quick method.
+This is configured in the global setting(server.xml) and has the highest priority. ::
 
    # server.xml - <Server><Host>
 
@@ -31,13 +31,12 @@
    </ServiceAccess>
 
 -  ``<ServiceAccess>``   
-   IP기반의 ACL을 설정한다. 
-   IP, IP Range, Bitmask, Subnet 이상 네 가지 형식을 지원한다.
-   순서를 인식하며 상위에 설정된 표현이 우선한다. 
-   ``Default (기본: Allow)`` 속성은 일치하는 조건이 없을 때 처리방법이다.
-   이 속성을 ``Deny`` 로 설정하면 하위에 ``<Allow>`` 로 허가할 조건들을 명시해주어야 한다.
+   This tag configures ACL based on IP and supports 4 formats(IP, IP Range, Bitmask, Subnet).
+   This is sequence sensitive and the configuration on top has priority. 
+   ``Default (default: Allow)`` property is adopted when there is no matching condition.
+   If you set this property to ``Deny``, you should specify allowed conditions in ``<Allow>``.
    
-차단된 IP는 :ref:`admin-log-deny` 에 기록된다.
+Blocked IP is logged at :ref:`admin-log-deny`.
 
 
 .. _access-control-geoip:
@@ -45,10 +44,9 @@
 GeoIP
 ====================================
 
-GeoIP를 사용하여 국가별로 접근을 차단할 수 있다. 
-`GeoIP Databases <http://dev.maxmind.com/geoip/legacy/downloadable/>`_ 중 
-Binary Databases를 `GEOIP_MEMORY_CACHE and GEOIP_CHECK_CACHE <http://dev.maxmind.com/geoip/legacy/benchmarks/>`_ 로 
-링크하여 실시간으로 변경내용을 반영한다. ::
+GeoIP can be used to deny accesses from pre-populated regional selection. 
+Binary Databases of `GeoIP Databases <http://dev.maxmind.com/geoip/legacy/downloadable/>`_
+is linked to `GEOIP_MEMORY_CACHE and GEOIP_CHECK_CACHE <http://dev.maxmind.com/geoip/legacy/benchmarks/>`_ to apply changes in real time. ::
 
    # server.xml - <Server><Host>
 
@@ -57,22 +55,22 @@ Binary Databases를 `GEOIP_MEMORY_CACHE and GEOIP_CHECK_CACHE <http://dev.maxmin
       <Deny>GIN</Deny>
    </ServiceAccess>
     
-``<ServiceAccess>`` 의 ``GeoIP`` 속성에 GeoIP Databases 경로를 설정한다.
-국가코드는 `ISO 3166-1 alpha-2 <http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2>`_ 와 
-`ISO 3166-1 alpha-3 <http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3>`_ 를 지원한다.
+GeoIP Databases path is configured in the ``GeoIP`` property of ``<ServiceAccess>``.
+`ISO 3166-1 alpha-2 <http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2>`_ and 
+`ISO 3166-1 alpha-3 <http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3>`_ country codes are supported.
 
 .. note::
 
-   GeoIP는 파일명이 예약되어 있으므로 반드시 저장된 로컬경로를 입력하도록 설정한다. 
-   또한 자동으로 변경이 반영되기 때문에 별도로 설정을 Reload하지 않아도 된다.
+   GeoIP has a reserved file name, saved local directory must be used. 
+   Also, changes are automatically reflected to the service, there is no need to reload configuraion.
    
    
-GeoIP가 설정되어 있다면 해당 디렉토리에 저장된 파일목록을 조회한다. 
-설정되어 있지 않다면 404 NOT FOUND로 응답한다. ::
+If GeoIP is configured, check the files in the related directory. 
+If GeoIP is not configured, 404 NOT FOUND is returned. ::
    
    http://127.0.0.1:10040/monitoring/geoiplist
    
-결과는 JSON형식으로 제공된다. ::
+The result is returned in JSON format. ::
 
    {
        "version": "2.0.0",
@@ -98,12 +96,12 @@ GeoIP가 설정되어 있다면 해당 디렉토리에 저장된 파일목록을
 
 .. _access-control-vhost:
 
-가상호스트 접근제어
+Virtual Host Access Control
 ====================================
 
-가상호스트별로 접근을 제어한다.
-클라이언트가 HTTP요청을 보냈을 때 차단여부를 결정한다.
-왜냐하면 HTTP요청을 보내지 않는다면 가상호스트를 찾을 수 없기 때문이다. ::
+Each virtual hosts control accesses.
+When a client sends HTTP request, virtual hosts decide whether to deny access or not.
+Because if HTTP request is not sent, virtual host cannot be found. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -112,9 +110,9 @@ GeoIP가 설정되어 있다면 해당 디렉토리에 저장된 파일목록을
     
 -  ``<AccessControl>``
    
-   - ``OFF (기본)`` ACL이 활성화되지 않는다. 모든 클라이언트 요청을 허가한다.
+   - ``OFF (default)`` ACL is inactivated. All client requests are allowed.
     
-   - ``ON`` ACL이 활성화된다. 
+   - ``ON`` ACL is activated. 
      차단된 요청에 대해서는 ``DenialCode`` 속성에 설정된 응답코드로 응답한다.
      ``Default (기본: Allow)`` 속성이 ``Allow`` 라면 ACL은 거부목록이 된다. 
      반대로 ``Deny`` 라면 ACL은 허가목록이 된다.
