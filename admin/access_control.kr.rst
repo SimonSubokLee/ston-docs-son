@@ -179,6 +179,6 @@ The below negated conditions are supported. ::
    # If referer header is missing, deny.
    !HEADER[referer], deny
    
-   # /secure/ path is not a subordinate, allow.
+   # /secure/ if the path is not a subordinate, allow.
    !URL[/secure/*], allow
 
