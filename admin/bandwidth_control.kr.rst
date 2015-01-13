@@ -3,38 +3,38 @@
 Chapter 11. Bandwidth
 ******************
 
-이 장에서는 가상호스트별로 다양한 방식의 Bandwidth 제한(조절)방법에 대해 설명한다.
-예전에는 Bandwidth가 일정수준을 넘지 못하도록 제한하는 것이 목적이었다.
-이제는 효과적으로 Bandwidth를 조절하는 것으로 그 개념이 옮겨갔다.
-나아가 콘텐츠를 실시간으로 분석해 각각에 최적화된 Bandwidth를 사용하도록 설정할 수 있다.
+This chapter explains various bandwidth control methods for each virtual host.
+In the old days, the focus was on limiting bandwidth so it wouldn't exceed some level.
+Nowadays, on the other hand, effectively controlling bandwidth is more important.
+Moreover, you can analyze contents in real time to use optimized bandwidth.
 
 
 .. toctree::
    :maxdepth: 2
 
-가상호스트 Bandwidth 제한
+Virtual Host Bandwidth Restriction
 ====================================
 
-가상호스트의 최대 Bandwidth을 제한한다.
-이는 가장 우선하는 물리적인 방법이다. ::
+Limits the maximum bandwidth of virtual host.
+This physcial method has the highest priority. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
 
    <TrafficCap Session="0">0</TrafficCap>   
     
--  ``<TrafficCap> (기본: 0 Mbps)``
-   가상호스트의 최대 Bandwidth를 Mbps단위로 설정한다. 
-   0으로 설정하면 Bandwidth을 제한하지 않는다. 
-   ``Session (기본: 0 Kbps)`` 속성은 클라이언트 세션별로 전송할 수 있는 최대 Bandwidth을 설정한다.
+-  ``<TrafficCap> (default: 0 Mbps)``
+   Configure the maxinum bandwidth of virtual host in Mbps. 
+   Setting this value to 0 will not limit bandwidth. 
+   ``Session (default: 0 Kbps)`` property configures maximum bandwidth of each client session.
 
-예를 들어 ``<TrafficCap>`` 을 50 (Mbps)로 설정했다면 50Mbps NIC를 설치한 것과 같은 효과를 낸다.
-해당 가상호스트에 접근하는 모든 클라이언트 Bandwidth의 합은 50Mbps를 넘을 수 없다. 
+For example, if you set ``<TrafficCap>`` to 50 (Mbps), it has the same effect with having 50Mbps NIC.
+The sum of bandwidth of all clients that are connected to the relative virtual host cannot exceed 50Mbps. 
 
-``Session`` 은 다음과 같이 동작한다.
+``Session`` works as below.
 
-1. ``Session`` 이 설정되어 있더라도 모든 클라이언트 Bandwidth의 합은 ``<TrafficCap>`` 을 넘을 수 없다.
-2. `Bandwidth Throttling`_ 를 설정해도 클라이언트 세션별 최대 속도는 ``Session`` 을 넘을 수 없다.
+1. Even if ``Session`` is configured, the sum of bandwidth of all clients cannot exceed ``<TrafficCap>``.
+2. Even if `Bandwidth Throttling`_ is configured, the maximum speed of each client session cannot exceed ``Session``.
 
 
 .. _bandwidth-control-bt:
@@ -42,22 +42,22 @@ Chapter 11. Bandwidth
 Bandwidth Throttling
 ====================================
 
-BT(Bandwidth Throttling)이란 (각 세션마다)클라이언트 전송 대역폭을 동적으로 조절하는 기능이다.
-일반적인 미디어 파일의 내부는 다음과 같이 헤더, V(Video), A(Audio)로 구성되어 있다.
+BT(Bandwidth Throttling) dynamically controls client transfer bandwidth for each session.
+Media file usually includes V(Video) and A(Audio) headers as below figure.
 
 .. figure:: img/conf_media_av.png
    :align: center
       
-   헤더는 BT의 대상이 아니다.
+   Header is not a subject of BT.
 
-헤더는 재생시간이 길거나 Key Frame주기가 짧을수록 커진다.
-그러므로 인식할 수 있는 미디어 파일이라면 원활한 재생을 위해 헤더는 대역폭 제한없이 전송한다.
-다음 그림처럼 헤더가 완전히 전송된 뒤 BT가 시작된다.
+Header gets bigger when the play time is longer or key frame cycle is shorter.
+Therefore, if the media file can be recognized, header has to be transferred withtout limiting bandwidth for smooth playback.
+BT starts after the header transfer is completed as below.
 
 .. figure:: img/conf_bandwidththrottling2.png
    :align: center
       
-   동작 시나리오
+   Operational Scenario
    
 ::
 
@@ -73,43 +73,43 @@ BT(Bandwidth Throttling)이란 (각 세션마다)클라이언트 전송 대역�
       <Throttling>OFF</Throttling> 
    </BandwidthThrottling>   
     
-``<BandwidthThrottling>`` 태그 하위에 기본동작을 설정한다.
+``<BandwidthThrottling>`` configures default operation underneath the tag.
 
 -  ``<Settings>``
    
-   기본 동작을 설정한다.
+   Configures default operation.
    
-   -  ``<Bandwidth> (기본: 1000 Kbps)``   
-      클라이언트 전송 대역폭을 설정한다. 
-      ``Unit`` 속성을 통해 기본 단위( ``kbps`` , ``mbps`` , ``bytes`` , ``kb`` , ``mb`` )를 설정한다.
+   -  ``<Bandwidth> (default: 1000 Kbps)``   
+      configures client transfer bandwidth. 
+      ``Unit`` property configures default units ( ``kbps`` , ``mbps`` , ``bytes`` , ``kb`` , ``mb`` ).
    
-   -  ``<Ratio> (기본: 100 %)``    
-      ``<Bandwidth>`` 설정에 비율을 반영하여 대역폭을 설정한다.
+   -  ``<Ratio> (default: 100 %)``    
+      configures ``<Bandwidth>`` property based on the ratio.
    
-   -  ``<Boost> (기본: 5 초)``   
-      일정 시간만큼의 데이터를 속도제한 없이 클라이언트에게 전송한다.
-      데이터의 양은 ``<Boost>`` X ``<Bandwidth>`` X ``<Ratio>`` 공식으로 계산한다.
+   -  ``<Boost> (default: 5 seconds)``   
+      transfers data with unlimited speed for set amount of time.
+      The amount of data can be calculated with ``<Boost>`` X ``<Bandwidth>`` X ``<Ratio>``.
          
 -  ``<Throttling>``
 
-   -  ``OFF (기본)`` BT를 적용하지 않는다.  
-   -  ``ON`` 조건목록과 일치하면 BT를 적용한다.
+   -  ``OFF (default)`` Does not apply BT.  
+   -  ``ON`` If condition list is met, apply BT.
 
 
-Bandwidth Throttling 조건목록
+Bandwidth Throttling Condition List
 --------------------------
 
-BT 조건목록을 설정한다.
-조건목록과 일치해야 BT가 적용된다.
-설정된 순서대로 조건과 일치하는지 검사한다.
-전송 정책은 /svc/{가상호스트 이름}/throttling.txt 에 설정한다. ::
+Configures BT condition list.
+BT is applied when the condition list is met.
+Check in sequence of configuration if configurations are matching with condition.
+Transfer policy is saved at /svc/{virtual host name}/throttling.txt. ::
 
    # /svc/www.example.com/throttling.txt
-   # 구분자는 콤마(,)이며 {조건},{Bandwidth},{Ratio},{Boost} 순서로 표기한다.
-   # {조건}을 제외한 모든 필드는  생략가능하다.
-   # 생략된 필드는 ``<Settings>`` 에 설정된 기본 값을 사용한다.
-   # 모든 조건표현은 acl.txt설정과 동일하다.
-   # {Bandwidth} 단위는 ``<Settings>`` ``<Bandwidth>`` 의 ``Unit`` 속성을 사용한다.
+   # Comma is an identifier, and {condition},{Bandwidth},{Ratio},{Boost} format is used.
+   # Other than {condition} field, everything else can be omitted.
+   # Omitted field adopts default value from ``<Settings>``.
+   # All expressions are identical to acl.txt setting.
+   # The unit of {Bandwidth} uses ``Unit`` property of ``<Settings>`` ``<Bandwidth>``.
    
    # 3초의 데이터를 속도 제한없이 전송한 후 3Mbps(3000Kbps = 2000Kbps X 150%)로 클라이언트에게 전송한다.
    $IP[192.168.1.1], 2000, 150, 3
