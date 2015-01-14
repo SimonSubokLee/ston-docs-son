@@ -1,12 +1,12 @@
 ﻿.. _media:
 
-12장. 미디어
+Chapter 12. Media
 ******************
 
-이 장에서는 미디어를 스마트하게 서비스하는 방법에 대해 설명한다.
-클라이언트 환경과 서비스 다양화와 함께 콘텐츠를 다양한 형태로 가공하는 경우가 많다.
-때문에 같은 콘텐츠지만 다양한 형태로 원본서버에 존재하게 된다.
-이런 방식은 처리시간과 저장공간의 낭비로 이어질 뿐만 아니라 관리가 어렵다.
+This chapter explains how to intelligently service media.
+In many cases, contents are processed to various formats due to various client environments and diversity of service.
+Therefore, identical contents exist in the origin server in various formats.
+This method wastes processing time and storage, and moreover, it is difficult to maintain.
 
 
 .. toctree::
@@ -14,16 +14,16 @@
 
 
 
-MP4/M4A 헤더위치 변경
+Changing MP4/M4A Header Position
 ====================================
 
-보통 MP4포맷의 경우 인코딩 과정 중에는 헤더를 완성할 수 없기 때문에 완료 후 파일의 맨 뒤에 붙인다. 
-헤더를 앞으로 옮기려면 별도의 처리가 필요하다.
-헤더가 뒤에 있다면 이를 지원하지 않는 플레이어에서 Pseudo-Streaming이 불가능하다.
-헤더위치 변경을 통해 Pseudo-Streaming을 간편하게 지원할 수 있다.
+Usually MP4 format, the header cannot be completed during encoding process, it will be attached at the end of file when encoding is done. 
+In order to change the header position, an extra process is required.
+If the header is located at the end of file, a player that does not support this format cannot Pseudo-Streaming the file.
+However, simply changing header position will support Pseudo-Streaming.
 
-헤더위치 변경은 전송단계에서만 발생할 뿐 원본의 형태를 변경하지 않는다.
-별도의 저장공간을 사용하지도 않는다. ::
+The change of header position only occurs during the transfer procedure without modifying original format.
+Also, it does not consume additional storage. ::
 
    # server.xml - <Server><VHostDefault><Media>
    # vhosts.xml - <Vhosts><Vhost><Media>
@@ -33,23 +33,23 @@ MP4/M4A 헤더위치 변경
 
 -  ``<UpfrontMP4Header>``
    
-   - ``OFF (기본)`` 아무 것도 하지 않는다.
+   - ``OFF (default)`` nothing happens.
    
-   - ``ON`` 확장자가 .mp4이고 헤더가 뒤에 있다면 헤더를 앞으로 옮겨서 전송한다.
+   - ``ON`` If the extension is .mp4 and the header is located at the end of file, bring the header to the front of file before transfer.
 
 -  ``<UpfrontM4AHeader>``
 
-   - ``OFF (기본)`` 아무 것도 하지 않는다.
+   - ``OFF (default)`` nothing happens.
    
-   - ``ON`` 확장자가 .m4a이고 헤더가 뒤에 있다면 헤더를 앞으로 옮겨서 전송한다.
+   - ``ON`` If the extension is .m4a and the header is located at the end of file, bring the header to the front of file before transfer.
 
-처음 요청되는 콘텐츠의 헤더를 앞으로 옮겨야 한다면 헤더를 옮기기위해 필요한 부분을 우선적으로 다운로드 받는다.
-아주 영리할뿐만 아니라 빠르게 동작한다.
-커튼 뒤의 복잡한 과정과는 상관없이, 클라이언트는 원래부터 헤더가 앞에 있는 온전한 파일을 서비스 받는다.
+If the header of first requested contents needs to be moved to the front, preferentially download necessary part.
+This is very intelligent and fast method.
+Regardless of complicated processes in the server, clients are being serviced with a complete file that the header is located in front of file.
 
 .. note::
 
-   분석할 수 없거나 깨진 파일이라면 원본형태 그대로 서비스된다.
+   If the file is unable to analyze or damaged, it will be serviced as it is.
 
 
 .. _media-trimming:
@@ -57,9 +57,9 @@ MP4/M4A 헤더위치 변경
 Trimming
 ====================================
 
-시간 값을 기준으로 원하는 구간을 추출한다.
-Trimming은 전송단계에서만 발생할 뿐 원본의 형태를 변경하지 않는다.
-별도의 저장공간을 사용하지 않는다. ::
+Trimming extracts desired section based on time value.
+It only trims at the transfer stage without modifying the original format.
+Also, it does not consume additional storage. ::
 
    # server.xml - <Server><VHostDefault><Media>
    # vhosts.xml - <Vhosts><Vhost><Media>
@@ -70,16 +70,16 @@ Trimming은 전송단계에서만 발생할 뿐 원본의 형태를 변경하지
 
 -  ``<MP4Trimming>`` ``<MP3Trimming>`` ``<M4ATrimming>``
    
-   - ``OFF (기본)`` 아무 것도 하지 않는다.
+   - ``OFF (default)`` nothing happens.
    
-   - ``ON`` 확장자(.mp4, .mp3, .m4a)가 일치하면 원하는 구간만큼 서비스하도록 Trimming한다.
-     Trimming구간은 ``StartParam`` 속성과 ``EndParam`` 으로 설정한다.
+   - ``ON`` If the extention is matching with one of these (.mp4, .mp3, .m4a), trim the file to service desired section.
+     Trimming section can be configured with ``StartParam`` and ``EndParam`` attributes.
      
-   - ``AllTracks`` 속성
+   - ``AllTracks`` attribute
    
-     - ``OFF (기본)`` Audio/Video 트랙만 Trimming한다. (Mod-H264 방식)
+     - ``OFF (default)`` trims only Audio/Video track. (Mod-H264 format)
      
-     - ``ON`` 모든 트랙을 Trimming한다. 사용 전 반드시 플레이어 호환성을 확인해야 한다.
+     - ``ON`` trims all tracks. Player compatibility must be check before setting this.
      
 파라미터는 클라이언트 QueryString을 통해 입력받는다.     
 예를 들어 10분 분량의 동영상(/video.mp4)을 특정 구간만 Trimming하고 싶다면 QueryString에 원하는 시점(단위: 초)을 명시한다. ::
