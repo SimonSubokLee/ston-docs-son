@@ -125,24 +125,23 @@ Transfer policy is saved at /svc/{virtual host name}/throttling.txt. ::
 
 If you analyze media files(MP4, M4A, MP3), you will get bandwidth from encoding rate. 
 The extension of being accessed contents should be one of .mp4, .m4a, .mp3. 
-In order to extract bandwidth dynamically, append **x** to the bandwidth as below
-동적으로 Bandwidth를 추출하려면 다음과 같이 Bandwidth뒤에 **x** 를 붙인다. ::
+In order to extract bandwidth dynamically, attach **x** to the bandwidth as below. ::
 
-   # /vod/*.mp4 파일에 대한 접근이라면 bandwidth를 구한다. 구할 수 없다면 1000을 bandwidth로 사용한다.
+   # If /vod/*.mp4 file is being accessed, find bandwidth. If the bandwidth cannot be found, use 1000 for bandwidth.
    $URL[/vod/*.mp4], 1000x, 120, 5
 
-   # user-agent헤더가 없다면 bandwidth를 구한다. 구할 수 없다면 500을 bandwidth로 사용한다.
+   # If user-agent header is missing, find bandwidth. If the bandwidth cannot be found, use 500 for bandwidth.
    !HEADER[user-agent], 500x
 
-   # /low_quality/* 파일에 대한 접근이라면 bandwidth를 구한다. 구할 수 없다면 기본 값을 bandwidth로 사용한다.
+   # If /low_quality/* file is being accessed, find bandwidth. If the bandwidth cannot be found, use default value for bandwidth.
    $URL[/low_quality/*], x, 200
 
 
-QueryString 우선조건
+QueryString Priority Condition
 --------------------------
 
-약속된 QueryString을 사용하여 ``<Bandwidth>`` , ``<Ratio>`` , ``<Boost>`` 를 동적으로 설정한다. 
-이 설정은 BT조건보다 우선한다. 
+Use predetermined QueryString to dynamically configure ``<Bandwidth>`` , ``<Ratio>`` , ``<Boost>``. 
+This configuration has priority over BT condition. 
 
 ::
 
@@ -158,39 +157,37 @@ QueryString 우선조건
       <Throttling QueryString="ON">ON</Throttling>
    </BandwidthThrottling>   
     
--  ``<Bandwidth>`` , ``<Ratio>`` , ``<Boost>`` 의 ``Param``
+-  ``<Bandwidth>`` , ``<Ratio>`` , ``Param`` of the ``<Boost>``
 
-    각각의 의미에 맞게 QueryString 키를 설정한다.
+    Configures QueryString key based on each purpose.
    
--  ``<Throttling>`` 의 ``QueryString``
+-  ``QueryString`` of the ``<Throttling>``
 
-   - ``OFF (기본)`` QueryString으로 조건을 재정의하지 않는다.
+   - ``OFF (default)`` does not redefine condition with the QueryString.
    
-   - ``ON`` QueryString으로 조건을 재정의한다.
+   - ``ON`` redefines condition with the QueryString.
    
-위와 같이 설정되어 있다면 다음과 같이 클라이언트가 요청한 URL에 따라 BT가 동적으로 설정된다. ::
+If you configured as above example, BT will be dynamically configured as below depends on the URL that client requested. ::
 
-    # 10초의 데이터를 속도 제한없이 전송한 후 1.3Mbps(1mbps X 130%)로 클라이언트에게 전송한다.
+    # Transfer 10 seconds of data with unlimited speed, then the transfer speed will be limited to 1.3Mbps(1mbps X 130%).
     http://www.winesoft.co.kr/video/sample.wmv?myboost=10&mybandwidth=1&myratio=130
     
-반드시 모든 파라미터를 명시할 필요는 없다. ::
+Not all parameters have to be specified. ::
 
     http://www.winesoft.co.kr/video/sample.wmv?myratio=150
     
-위와 같이 일부 조건이 생략된 경우 나머지 조건(여기서는 bandwidth, boost)을 결정하기 위해 조건목록을 검색한다.
-여기서도 적합한 조건을 찾지 못하는 경우 ``<Settings>`` 에 설정된 기본 값을 사용한다.
-QueryString이 일부 존재하더라도 조건목록에서 미적용옵션(no)이 설정되어 있다면 
-BT는 적용되지 않는다.
+If some of conditions are omitted like above example, search for condition list to define rest conditions(bandwidth and boost in the above example).
+If proper conditions are not found, default value from ``<Settings>`` will be applied.
+Even if there are some QueryString is specified, condition list is set to ``no``(do not apply), BT will not be applied.
 
-QueryString을 사용하므로 자칫 :ref:`caching-policy-applyquerystring` 과 혼동을 일으킬 소지가 있다. 
-:ref:`caching-policy-applyquerystring` 이 ``ON`` 인 경우 클라이언트가 요청한 URL의 QueryString이 
-모두 인식되지만 ``BoostParam`` , ``BandwidthParam`` , ``RatioParam`` 은 제외된다. ::
+QueryString is being used, and you might be confused with :ref:`caching-policy-applyquerystring`. 
+If you set :ref:`caching-policy-applyquerystring` as ``ON``, entire QueryString of requested URL from client is recongized except ``BoostParam`` , ``BandwidthParam`` , ``RatioParam``. ::
 
    GET /video.mp4?mybandwidth=2000&myratio=130&myboost=10
    GET /video.mp4?tag=3277&myboost=10&date=20130726
         
-예를 들어 위같은 입력은 BT를 결정하는데 쓰일 뿐 Caching-Key를 생성하거나 원본서버로 요청을 보낼 때는 제거된다. 
-즉 각각 다음과 같이 인식된다. ::
+The above querystrings are only used to decide BT, and removed when creating Caching-Key or sending request to the origin server. 
+Therefore, they are recognized as following. ::
 
     GET /video.mp4
     GET /video.mp4?tag=3277&date=20130726
