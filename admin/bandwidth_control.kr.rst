@@ -111,20 +111,21 @@ Transfer policy is saved at /svc/{virtual host name}/throttling.txt. ::
    # All expressions are identical to acl.txt setting.
    # The unit of {Bandwidth} uses ``Unit`` property of ``<Settings>`` ``<Bandwidth>``.
    
-   # 3초의 데이터를 속도 제한없이 전송한 후 3Mbps(3000Kbps = 2000Kbps X 150%)로 클라이언트에게 전송한다.
+   # After transferring 3 seconds of data to the client with unlimited speed, then limit the transfer speed to 3Mbps(3000Kbps = 2000Kbps X 150%).
    $IP[192.168.1.1], 2000, 150, 3
    
-   # bandwidth만 정의. 5(기본)초의 데이터를 속도 제한없이 전송한 후 800 Kbps로 클라이언트에게 전송한다.
+   # This only defines bandwidth. Transfer 5 seconds(default) of data to the client with unlimited speed, then limit the transfer speed to 800 Kbps.
    !HEADER[referer], 800
    
-   # boost만 정의. 10초의 데이터를 속도 제한없이 전송한 후 1000 Kbps로 클라이언트에게 전송한다.
+   # This only defines boost. Transfer 10 seconds of data to the client with unlimited speed, then limit the transfer speed to 1000 Kbps.
    HEADER[cookie], , , 10
    
-   # 확장자가 m4a인 경우 BT를 적용하지 않는다.
+   # This does not apply BT for files with m4a extension.
    $URL[*.m4a], no
 
-미디어 파일(MP4, M4A, MP3)을 분석하면 Encoding Rate로부터 Bandwidth를 얻을 수 있다. 
-접근되는 콘텐츠의 확장자는 반드시 .mp4, .m4a, .mp3 중 하나여야 한다. 
+If you analyze media files(MP4, M4A, MP3), you will get bandwidth from encoding rate. 
+The extension of being accessed contents should be one of .mp4, .m4a, .mp3. 
+In order to extract bandwidth dynamically, append **x** to the bandwidth as below
 동적으로 Bandwidth를 추출하려면 다음과 같이 Bandwidth뒤에 **x** 를 붙인다. ::
 
    # /vod/*.mp4 파일에 대한 접근이라면 bandwidth를 구한다. 구할 수 없다면 1000을 bandwidth로 사용한다.
