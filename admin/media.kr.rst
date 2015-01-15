@@ -168,8 +168,7 @@ Regardless of the location of MP4 file header, real time conversion to .m3u8/.ts
 
 Existing method requires original files for Pseudo-Streaming and HLS as below. 
 In this case, STON also duplicates original files to service clients. 
-However, as the play time gets longer, more derived files will be created, and harder to manage.
-하지만 재생시간이 길수록 파생파일은 많아지며 관리의 어려움은 증가한다.
+However, as the play time gets longer, more derived files will be created, and it will get harder to manage.
 
 .. figure:: img/conf_media_mp4hls1.png
    :align: center
@@ -246,21 +245,21 @@ The following four cases can exist.
 -  **Video** is not exist.
    ``<Duration>`` is used to split the video.
    
-#EXT-X-MEDIA-SEQUENCE은 .ts파일의 시작 숫자를 정의하며 ``<Sequence>`` 로 설정한다.
+#EXT-X-MEDIA-SEQUENCE defines starting number of .ts file and configured with ``<Sequence>``.
 
-다음 클라이언트 요청에 대해 STON이 어떻게 동작하는지 이해해보자. ::
+Let's take a look at the following client request and see how STON responses to it. ::
 
    GET /video.mp4/mp4hls/99.ts HTTP/1.1
    Range: bytes=0-512000
    Host: www.wineosft.com
 
-1.	``STON`` 최초 로딩. (아무 것도 캐싱되어 있지 않음.)
-#.	``Client`` HTTP Range 요청. (100번째 파일의 최초 500KB 요청)     
-#.	``STON`` /video.mp4 파일 캐싱객체 생성.
-#.	``STON`` /video.mp4 파일 분석을 위해 필요한 부분만을 원본서버에서 다운로드
-#.	``STON`` 100번째(99.ts)파일 서비스를 위해 필요한 부분만을 원본서버에서 다운로드
-#.	``STON`` 100번째(99.ts)파일 생성 후 Range 서비스
-#.	``STON`` 서비스가 완료되면 99.ts파일 파괴
+1.	``STON`` Initial loading. (Nothing has been cached yet.)
+#.	``Client`` HTTP Range request. (Requests the first 500KB of 100th file.)     
+#.	``STON`` creates caching object of /video.mp4 file.
+#.	``STON`` downloads necessary portion from the origin server to analyze /video.mp4 file.
+#.	``STON`` downloads necessary portion from the origin server to service 100th(99.ts) file.
+#.	``STON`` creates 100th(99.ts) file and proceed Range service.
+#.	``STON`` discards the 99.ts file after completing service.
 
 
 
@@ -269,14 +268,14 @@ The following four cases can exist.
 DIMS
 ====================================
 
-DIMS(Dynamic Image Management System)는 원본이미지를 다양한 형태로 가공하는 기능이다. 
-`mod_dims <https://code.google.com/p/moddims/wiki/WebserviceApi>`_ 를 기반으로 확장한 형태이다. 
-가공형태는 모두 6가지(crop, thumbnail, resize, reformat, quality, composite)이며 이를 조합한 복합가공이 가능하다.
+DIMS(Dynamic Image Management System) function processes an original image to various forms. 
+DIMS is an expansion based on `mod_dims <https://code.google.com/p/moddims/wiki/WebserviceApi>`_. 
+Total 6 forms(crop, thumbnail, resize, reformat, quality, composite) are available, and these forms can be complexed.
 
 .. figure:: img/dims.png
    :align: center
    
-   다양한 동적 이미지 가공
+   Various dynamic image processing
 
 이미지는 동적으로 생성되며 원본 이미지 URL뒤에 약속된 키워드와 가공옵션을 붙여서 호출한다. 
 가공된 이미지는 캐싱되어 원본서버 이미지가 바뀌지 않는 이상 다시 가공되지 않는다. 
