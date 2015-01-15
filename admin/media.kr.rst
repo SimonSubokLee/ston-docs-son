@@ -81,56 +81,57 @@ Also, it does not consume additional storage. ::
      
      - ``ON`` trims all tracks. Player compatibility must be check before setting this.
      
-파라미터는 클라이언트 QueryString을 통해 입력받는다.     
-예를 들어 10분 분량의 동영상(/video.mp4)을 특정 구간만 Trimming하고 싶다면 QueryString에 원하는 시점(단위: 초)을 명시한다. ::
+Parameters can be fed via client QueryString.     
+For example, if you want to trim a certain section of 10-minute video clip(/video.mp4), desired time(unit in second) can be specified in the QueryString. ::
 
-   http://vod.wineosoft.co.kr/video.mp4                // 10분 : 전체 동영상
-   http://vod.wineosoft.co.kr/video.mp4?end=60         // 1분 : 처음부터 60초까지
-   http://vod.wineosoft.co.kr/video.mp4?start=120      // 8분 : 2분(120초)부터 끝까지
-   http://vod.wineosoft.co.kr/video.mp4?start=3&end=13 // 10초 : 3초부터 13초까지
+   http://vod.wineosoft.co.kr/video.mp4                // 10 minutes : trim entire video clip
+   http://vod.wineosoft.co.kr/video.mp4?end=60         // 1 minute : trim from 0 to 60 second section
+   http://vod.wineosoft.co.kr/video.mp4?start=120      // 8 minutes : trim from 0 to 120 second section
+   http://vod.wineosoft.co.kr/video.mp4?start=3&end=13 // 10 seconds : trim from 3 second to 13 second section
 
-``StartParam`` 값이 ``EndParam`` 값보다 클 경우 구간이 지정되지 않은 것으로 판단한다.
-이 기능은 HTTP Pseudo-Streaming으로 구현된 동영상 플레이어의 Skip기능을 위해서 개발되었다. 
-그러므로 Range요청을 처리하는 것처럼 파일을 Offset기반으로 자르지 않고 올바르게 재생될 수 있도록 키프레임과 시간을 인지하여 구간을 추출한다. 
+If ``StartParam`` value is larger than ``EndParam`` value, it is considered as undefined section.
+This feature is developed to support skip function of a video player that is based on HTTP Pseudo-Streaming. 
+Therefore, STON recognizes keyframe and time to extract section from the original file so the video can be played properly
+instead of trimming the original file based on the offset like when the Range request is processed. 
 
-클라이언트에게 전달되는 파일은 다음 그림처럼 MP4헤더가 재생성된 완전한 형태의 MP4파일이다.
+The file that will be relayed to the client is the complete form of MP4 file that has a recreated MP4 header as below.
 
 .. figure:: img/conf_media_mp4trimming.png
    :align: center
       
-   완전한 형태의 파일이 제공된다.
+   Complete form of file is transferred.
 
-추출된 구간은 별도의 파일로 인식되기 때문에 200 OK로 응답된다. 
-그러므로 다음과 같이 Range헤더가 명시된 경우 추출된 파일로부터 Range를 계산하여 **206 Particial Content** 로 응답한다.
+The extracted section is recognized as a separate file, therefore, 200 OK will be responded. 
+If the Range header is specified as below, Range will be calculated from extracted file to respond **206 Particial Content**.
 
 .. figure:: img/conf_media_mp4trimming_range.png
    :align: center
       
-   일반적인 Range요청처럼 처리된다.
+   It is processed just like general Range request.
    
-구간추출 파라미터가 QueryString 표현을 사용하기 때문에 자칫 :ref:`caching-policy-applyquerystring` 과 헷갈릴 수 있다. 
-``<ApplyQueryString>`` 설정이 ``ON`` 인 경우 클라이언트가 요청한 URL의 QueryString이 모두 인식되지만 ``StartParam`` 과 ``EndParam`` 은 제거된다. ::
+QueryString expression is used for trimming parameters so there could be a confusion with :ref:`caching-policy-applyquerystring`. 
+If ``<ApplyQueryString>`` is set to ``ON``, all querystrings of client request URL are recognized, but ``StartParam`` and ``Endparam`` are removed. ::
 
    GET /video.mp4?start=30&end=100
    GET /video.mp4?tag=3277&start=30&end=100&date=20130726
     
-예를 들어 위와 같이 ``StartParam`` 이 **start** 로 ``EndParam`` 이 **end** 로 입력된 경우 
-이 값들은 구간을 추출하는데 쓰일 뿐 Caching-Key를 생성하거나 원본서버로 요청을 보낼 때는 제거된다. 
-각각 다음과 같이 인식된다. ::
+From above example, if **start** and **end** are entered for ``StartParam`` and ``EndParam`` respectively,
+these values are only used when extracting section and will be removed when creating Caching-Key or sending a request to the origin server. 
+Above examples are recognized as below. ::
 
    GET /video.mp4
    GET /video.mp4?tag=3277&date=20130726
     
-또한 QueryString파라미터는 확장모듈이나 CDN솔루션에 따라 달라질 수 있다. 
+Also, QueryString parameters can be differ by expansion modules or CDN solutions. 
 
 .. figure:: img/conf_media_mp4trimming_range.png
    :align: center
    
-   JW Player에서 제공하고 있는 Module/CDN별 참고자료
+   Module/CDN references that are provided from JW Player
    
-이외의 nginx의 `ngx_http_mp4_module <http://nginx.org/en/docs/http/ngx_http_mp4_module.html>`_ 과, 
-lighttpd의 `Mod-H264-Streaming-Testing-Version2 <http://h264.code-shop.com/trac/wiki/Mod-H264-Streaming-Testing-Version2>`_ 에서도 
-모두 **start** 를 QueryString으로 사용하고 있다.
+In addition, both `ngx_http_mp4_module <http://nginx.org/en/docs/http/ngx_http_mp4_module.html>`_ of nginx and 
+`Mod-H264-Streaming-Testing-Version2 <http://h264.code-shop.com/trac/wiki/Mod-H264-Streaming-Testing-Version2>`_ of lighttpd
+use **start** as QueryString.
 
 
 .. _media-hls:
@@ -138,14 +139,16 @@ lighttpd의 `Mod-H264-Streaming-Testing-Version2 <http://h264.code-shop.com/trac
 HLS (HTTP Live Streaming)
 ====================================
 
-MP4파일을 HLS(HTTP Live Streaming)로 서비스한다. 
-원본서버는 더 이상 HLS서비스를 위해 파일을 분할저장할 필요가 없다. 
-MP4파일 헤더의 위치에 상관없이 다운로드와 동시에 실시간으로 .m3u8/.ts파일 변환 후 서비스한다. 
+MP4 files are serviced with HLS(HTTP Live Streaming). 
+The origin server does not need to split files for HLS service any more. 
+Regardless of the location of MP4 file header, real time conversion to .m3u8/.ts occurs when downloading the file. 
 
 ..  note::
 
-    MP4HLS는 Elementary Stream(Video 또는 Audio)을 변환하는 트랜스코딩(Transcoding)이 아니다. 
-    그러므로 HLS에 적합한 형식으로 인코딩된 MP4파일에 한해서 원활한 단말 재생이 가능하다. 
+    MP4HLS is not a transcoding that converts elementary streams(Video or Audio). 
+    If the file is not properly encoded, the file might not played properly.
+    Current(2014.2.20) video/audio encoding format from Apple is as below.
+    그러므로 HLS에 적합한 형식으로 인코딩된 MP4파일에 한해서 원활한 단말 재생(단말 재생?? 단말기/모바일기기에서 재생??)이 가능하다. 
     인코딩이 적합하지 않을 경우 화면이나 깨지거나 소리가 재생되지 않을 수 있다. 
     현재(2014.2.20) Apple에서 밝히고 있는 Video/Audio 인코딩 규격은 다음과 같다.
 
@@ -163,24 +166,25 @@ MP4파일 헤더의 위치에 상관없이 다운로드와 동시에 실시간�
     Note: iPad, iPhone 3G, and iPod touch (2nd generation and later) support H.264 Baseline 3.1. If your app runs on older versions of iPhone or iPod touch, however, you should use H.264 Baseline 3.0 for compatibility. If your content is intended solely for iPad, Apple TV, iPhone 4 and later, and Mac OS X computers, you should use Main Level 3.1.	
    
 
-기존 방식의 경우 Pseudo-Streaming과 HLS를 위해 다음과 같이 원본파일이 각각 존재해야 한다. 
-이런 경우 STON 역시 원본 파일을 그대로 복제하여 고객에게 서비스한다. 
+Existing method requires original files for Pseudo-Streaming and HLS as below. 
+In this case, STON also duplicates original files to service clients. 
+However, as the play time gets longer, more derived files will be created, and harder to manage.
 하지만 재생시간이 길수록 파생파일은 많아지며 관리의 어려움은 증가한다.
 
 .. figure:: img/conf_media_mp4hls1.png
    :align: center
    
-   수고가 많은 HLS
+   Laborious HLS
    
-``<MP4HLS>`` 는 원본파일로부터 HLS서비스에 필요한 파일을 동적으로 생성한다.
+``<MP4HLS>`` dynamically creates required files from original files for HLS service.
 
 .. figure:: img/conf_media_mp4hls2.png
    :align: center
    
-   똑똑한 HLS
+   Intelligent HLS
 
-모든 .m3u8/.ts파일은 원본파일에서 파생되며 별도의 저장공간을 소비하지 않는다. 
-서비스 즉시 메모리에 임시적으로 생성되며 서비스되지 않을 때 자동으로 없어진다. ::
+All .m3u8/.ts files are derived from original files and do not consume additional storage. 
+The file is temporarily created on the memory when it is being serviced, and automatically discarded when it is not serviced. ::
 
    # server.xml - <Server><VHostDefault><Media>
    # vhosts.xml - <Vhosts><Vhost><Media>
@@ -192,19 +196,19 @@ MP4파일 헤더의 위치에 상관없이 다운로드와 동시에 실시간�
    </MP4HLS>   
     
 -  ``<MP4HLS>``   
-   ``Status`` 속성이 ``Active`` 일 때 활성화된다.
+   is activated when ``Status`` attribute is ``Active``.
 
-예를 들어 서비스 주소가 다음과 같다면 해당 주소로 Pseudo-Streaming을 진행할 수 있다. ::
+For example, if the service address is following, Pseudo-Streaming can be processed to the address. ::
 
     http://www.example.com/video.mp4
     
-가상호스트는 ``<MP4HLS>`` 에 정의된 ``Keyword`` 문자열을 인식함으로써 HLS서비스를 진행한다. 
-다음 URL이 호출되면 /video.mp4로부터 index.m3u8파일을 생성한다. 
-인덱스 파일명은 ``<Index>`` 에서 문자열로 설정한다. ::
+Virtual host recognizes ``Keyword`` string that is defined in the ``<MP4HLS>`` in order to proceed HLS service. 
+If the following URL is called, index.m3u8 file is created from /video.mp4 file. 
+The index file name can be configured with a string in the ``<Index>``. ::
 
    http://www.example.com/video.mp4/mp4hls/index.m3u8
     
-생성된 index.m3u8은 다음과 같다. ::
+Generated index.m3u8 looks like below. ::
 
    #EXTM3U
    #EXT-X-TARGETDURATION: 10
@@ -216,7 +220,7 @@ MP4파일 헤더의 위치에 상관없이 다운로드와 동시에 실시간�
    #EXTINF:10,
    /video.mp4/mp4hls/2.ts
    
-   ... (중략)...
+   ... (skip)...
     
    #EXTINF:10,
    /video.mp4/mp4hls/161.ts
@@ -224,21 +228,23 @@ MP4파일 헤더의 위치에 상관없이 다운로드와 동시에 실시간�
    /video.mp4/mp4hls/162.ts
    #EXT-X-ENDLIST
     
-#EXT-X-TARGETDURATION은 ``<Duration>`` 으로 설정한다.
-주의할 점은 원본파일은 정확히 Video의 KeyFrame에 의해서만 분할된다는 것이다. 
-다음 4가지 경우가 존재할 수 있다.
+#EXT-X-TARGETDURATION can be configured with ``<Duration>``.
+The original file can only be splited by KeyFrame of Video.
+The following four cases can exist.
 
--  **KeyFrame 간격보다** ``<Duration>`` **설정이 큰 경우**   
-   KeyFrame이 3초, ``<Duration>`` 이 20초라면 20초를 넘지 않는 KeyFrame의 배수인 18초로 분할된다.
+-  The **KeyFrame** interval is smaller than the ``<Duration>`` value.   
+   If the KeyFrame is 3 seconds and the ``<Duration>`` is 20 seconds,
+   the largest multiple of 3(KeyFrame) that does not exceeding 20(Duration) will be used to split the video (18 seconds in this case).
    
--  **KeyFrame 간격과** ``<Duration>`` **이 비슷한 경우**   
-   KeyFrame이 9초, ``<Duration>`` 이 10초라면 10초를 넘지 않는 KeyFrame의 배수인 9초로 분할된다.
+-  The **KeyFrame** interval is close to the ``<Duration>`` value.   
+   If the KeyFrame is 9 seconds and the ``<Duration>`` is 10 seconds,
+   the largest multiple of 9(KeyFrame) within 10(Duration) will be used to split the video (9 seconds in this case).
    
--  **KeyFrame 간격이** ``<Duration>`` **설정보다 큰 경우**
-   KeyFrame단위로 분할된다.
+-  The **KeyFrame** interval is bigger than the ``<Duration>`` value.
+   The video is splitted using KeyFrame.
    
--  **Video가 없는 경우**
-   ``<Duration>`` 단위로 분할된다.
+-  **Video** is not exist.
+   ``<Duration>`` is used to split the video.
    
 #EXT-X-MEDIA-SEQUENCE은 .ts파일의 시작 숫자를 정의하며 ``<Sequence>`` 로 설정한다.
 
