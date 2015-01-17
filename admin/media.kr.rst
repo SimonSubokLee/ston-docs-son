@@ -454,9 +454,7 @@ The function can be called as following. ::
    http://image.example.com/img.jpg/dims/byoriginal/size1/
     
 Different ``<Composite>`` conditions can be applied based on the size of image.
-
-또 다른 예로 이미지 크기에 따라 다른 ``<Composite>`` 조건을 줄 수 있다. 
-이런 경우 다음과 같이 사전에 정의된 ``<Composite>`` 의 ``Name`` 으로 설정한다. ::
+The following example shows how to set various pre-defined ``Name`` in ``<Composite>``. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -472,31 +470,32 @@ Different ``<Composite>`` conditions can be applied based on the size of image.
       </ByOriginal>
    </Dims>   
     
-다음과 같이 호출하면 원본 이미지 크기에 따라 합성이 적용된다. ::
+The following expression will generate composite image based on the size of original image. ::
 
    http://image.example.com/img.jpg/dims/byoriginal/size_water/
 
 
 
-기타
+ETC
 -----------------------
 
-이상의 기본기능을 결합하여 복합적인 이미지 가공을 할 수 있다. 
-예를 들어 Thumbnail생성(78x110), 포맷을 JPG에서 PNG로 변환, 품질 50% 이상의 옵션을 한번의 호출로 실행할 수 있다. ::
+Combining above functions will allow you to generate complex image. 
+For example, generating thumbnail(78x110), JPG format converting to PNG, and 50% image quality options can be processed with a single call. ::
 
    http://image.example.com/img.jpg/dims/thumbnail/78x110/format/png/quality/50/
     
-DIMS는 URL을 이용하여 이미지 가공이 이루어진다. 
-그러므로 URL에 영향을 주는 다른 옵션들 때문에 원하지 않는 결과가 얻어지지 않도록 주의해야 한다.
+DIMS uses URL for image processing. 
+Therefore, you should be careful for other options that might affect to the URL to avoid any unexpected result.
 
--  :ref:`caching-policy-applyquerystring` 이 ``OFF`` 라면 키워드 이전의 QueryString이 무시된다. ::
+-  If :ref:`caching-policy-applyquerystring` is set to ``OFF``, the QueryString prior to the keyword will be ignored. ::
    
       http://image.example.com/img.jpg?session=5234&type=37/dims/resize/200x200/
       
-   위와 같은 호출에 이 설정이 ``ON`` 이라면 입력된 URL 그대로 인식되지만 OFF라면 다음과 같이 인식된다. ::
+   The above example will be identified as it is if the attribute is ``ON``.
+   However, if the attribute is ``OFF``, the above URL will be identified as below. ::
       
       http://image.example.com/img.jpg/dims/resize/200x200/
       
--  :ref:`caching-policy-casesensitive` 이 ``OFF`` 라면 모든 URL을 소문자로 변환하여 처리한다.
-   그러므로 DIMS 키워드에 대문자가 포함되었다면 키워드를 인식하지 못한다. 
-   항상 키워드는 소문자로 사용하는 것이 좋다.
+-  If :ref:`caching-policy-casesensitive` is set to ``OFF``, all characters in the URL will be converted to lower characters.
+   Therefore, upper characters are included in the DIMS keyword, the keyword will not be recognized. 
+   Using lower characters for the keyword is recommended.
