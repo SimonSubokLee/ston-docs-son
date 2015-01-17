@@ -147,7 +147,7 @@ Regardless of the location of MP4 file header, real time conversion to .m3u8/.ts
 
     MP4HLS is not a transcoding that converts elementary streams(Video or Audio). 
     If the file is not properly encoded, the file might not played properly.
-    Current(2014.2.20) video/audio encoding format from Apple is as below.
+    Current(2014.2.20) video/audio encoding format by Apple is shown as below.
     그러므로 HLS에 적합한 형식으로 인코딩된 MP4파일에 한해서 원활한 단말 재생(단말 재생?? 단말기/모바일기기에서 재생??)이 가능하다. 
     인코딩이 적합하지 않을 경우 화면이나 깨지거나 소리가 재생되지 않을 수 있다. 
     현재(2014.2.20) Apple에서 밝히고 있는 Video/Audio 인코딩 규격은 다음과 같다.
@@ -419,12 +419,12 @@ If you configure the ``<Composite>``, ``Name`` property can be used to synthesiz
 
     
 
-원본이미지 조건판단
+Conditional Process of Original Image
 -----------------------
 
-원본 이미지 조건에 따라 동적으로 가공 옵션을 다르게 적용할 수 있다. 
-예를 들어 1024 X 768 이하의 이미지는 품질을 50%로 떨어트리고 그 이상의 
-이미지는 1024 X 768로 크기변환을 하려면 다음과 같이 ``<ByOriginal>`` 을 설정한다. ::
+You can dynamically apply different processing options based on the condition of original image. 
+For example, if you want to decrease the image quality by 50% for images that are smaller than 1024 X 768, 
+and resize the image to 1024 X 768 for images that are bigger than 1024 X 768, ``<ByOriginal>`` can be used as below. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -437,19 +437,19 @@ If you configure the ``<Composite>``, ``Name`` property can be used to synthesiz
    </Dims>   
 
 -  ``<ByOriginal>``
-   ``Name`` 속성으로 호출한다. 
-   하위에 다양한 조건의 ``<Condition>`` 을 설정한다.
+   can be called by ``Name`` attribute. 
+   Various ``<Condition>`` can be configured.
    
 -  ``<Condition>``
-   조건을 만족할 때 설정된 값을 적용한다. 
-   설정하는 속성은 "상관없음"으로 판단한다.
+   When condition is met, apply configured value. 
+   ("상관없음"으로 판단한다는게 무슨뜻인지??)설정하는 속성은 "상관없음"으로 판단한다.
 
-   -  ``Width`` 가로길이가 설정 값보다 작으면 적용된다.   
-   -  ``Heigth`` 세로길이가 설정 값보다 작으면 적용된다.
+   -  ``Width`` The condition is met if the width is smaller than this value.   
+   -  ``Heigth`` The condition is met if the height is smaller than this value.
 
-``<Condition>`` 은 명시된 순서대로 적용된다. 
-그러므로 작은 이미지 조건을 먼저 배치해야 한다.
-다음과 같이 호출한다. ::
+``<Condition>`` is applied in the order. 
+Therefore specific conditions have to come first.
+The function can be called as following. ::
 
    http://image.example.com/img.jpg/dims/byoriginal/size1/
     
