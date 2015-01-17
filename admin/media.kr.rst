@@ -453,6 +453,8 @@ The function can be called as following. ::
 
    http://image.example.com/img.jpg/dims/byoriginal/size1/
     
+Different ``<Composite>`` conditions can be applied based on the size of image.
+
 또 다른 예로 이미지 크기에 따라 다른 ``<Composite>`` 조건을 줄 수 있다. 
 이런 경우 다음과 같이 사전에 정의된 ``<Composite>`` 의 ``Name`` 으로 설정한다. ::
 
