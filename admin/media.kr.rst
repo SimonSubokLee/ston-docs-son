@@ -277,17 +277,17 @@ Total 6 forms(crop, thumbnail, resize, reformat, quality, composite) are availab
    
    Various dynamic image processing
 
-이미지는 동적으로 생성되며 원본 이미지 URL뒤에 약속된 키워드와 가공옵션을 붙여서 호출한다. 
-가공된 이미지는 캐싱되어 원본서버 이미지가 바뀌지 않는 이상 다시 가공되지 않는다. 
-예를 들어 원본 파일이 /img.jpg라면 다음과 같은 형식으로 이미지를 가공할 수 있다. 
-("12AB"는 약속된 Keyword이다.) ::
+Dynamically generated image is called by pre-defined keywords and process options after the URL of original image. 
+Processed image is cached as it is until the image of the origin server is modified. 
+For example, the following expressions can process /img.jpg file in the origin server. 
+(Let's say "12AB" is a pre-defined keyword.) ::
 
-   http://image.example.com/img.jpg    // 원본 이미지
+   http://image.example.com/img.jpg    // Original image
    http://image.example.com/img.jpg/12AB/resize/500x500/
    http://image.example.com/img.jpg/12AB/crop/400x400/
    http://image.example.com/img.jpg/12AB/composite/watermark1/
 
-``<Dims>`` 는 별도로 설정하지 않으면 모두 비활성화되어 있다. ::
+If ``<Dims>`` is not configured, it is inactivated. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -296,43 +296,43 @@ Total 6 forms(crop, thumbnail, resize, reformat, quality, composite) are availab
 
 -  ``<Dims>``
 
-   - ``Status`` DIMS활성화 ( ``Active`` 또는 ``Inactive`` )   
-   - ``Keyword`` 원본과 DIMS를 구분하는 키워드   
-   - ``Port`` WM접속포트
+   - ``Status`` activates DIMS ( ``Active`` or ``Inactive`` )   
+   - ``Keyword`` distinguishes the original and DIMS   
+   - ``Port`` WM connection port
    
-``<Dims>`` 동작을 위해서는 :ref:`wm` 이 반드시 동작하고 있어야 한다.
+In order to utilize ``<Dims>``, :ref:`wm` must be running.
 
 
-잘라내기
+Crop
 -----------------------
 
-좌상단을 기준으로 원하는 영역만큼 이미지를 잘라낸다. 
-영역은 **widthxheight{+-}x{+-}y{%}** 로 표현한다. 
-다음은 좌상단 x=20, y=30을 기준으로 width=100, height=200만큼 잘라내는 예제다. ::
+Crop desired section of an image from top left corner. 
+Section is specified by **widthxheight{+-}x{+-}y{%}** format. 
+The following example crops 100(width) by 200(height) section of image from x=20, y=30. ::
 
    http://image.example.com/img.jpg/dims/crop/100x300+20+30/
     
 
-Thumbnail 생성
+Generating Thumbnails
 -----------------------
 
-Thumbnail 을 생성한다. 
-크기와 옵션은 **widthxheight{%} {@} {!} {<} {>}** 로 표현한다.
-기본적으로 이미지의 가로와 세로는 최대값을 사용한다. 
-이미지를 확대 또는 축소하여도 가로 세로 비율은 유지된다. 
-정확하게 지정한 크기로 이미지를 조절할 때는 크기 뒤에 느낌표(!)를 추가한다. 
-**640X480!** 라는 표현은 정확하게 640x480 크기의 Thumbnail을 생성한다는 뜻이다. 
-만약 가로 또는 세로 크기만 지정된 경우, 생략된 값은 가로/세로 비율에 의해 자동결정 된다. 
+This section explains how to generate thumbnails. 
+The size and option can be expressed with **widthxheight{%} {@} {!} {<} {>}**.
+Normally, maximum value is applied for width and height of the image. 
+Even if the image is stretched or shrunk, the width and height ratio is maintained. 
+If the image has to have a specific size, an exclamation mark(!) is added at the end of the expression. 
+**640X480!** expression will generate 640x480 size thumbnail image. 
+If either width or height is specified only, the omitted value is automatically determined by the width and height ratio. 
 
-예를 들어 **/thumbnail/100/** 은 가로 크기에 맞추어 세로 크기가 결정되며 
-**/thumbnail/x200/** 은 세로 크기에 맞추어 가로 크기가 결정된다. 
-가로/세로 크기를 이미지의 크기에 맞추어 백분율(%)로 표현할 수 있다. 
-이미지 크기를 늘리려면, 100 보다 큰 값(예 : 125 %)을 사용한다. 
-이미지 크기를 줄이려면 100 미만의 비율을 사용한다.
-URL Encoding규칙에 따라 %문자가 %25로 인코딩 됨을 명심해야 한다. 
+For example, **/thumbnail/100/** expression will determine the height of thumbnail with the width attribute, 
+and **/thumbnail/x200/** expression will determine the width of thumbnail by the height attribute. 
+The size of thumbnail can be expressed with percentage(%) of the original image. 
+In order to stretch the image, use a value that exceeds 100(eg. 125%). 
+Likewise, in order to shrink the image, use a value less than 100.
+You should be aware that the URL encoding rule encodes % character as %25. 
 
-예를 들어 50%라는 표현은 50%25로 인코딩 된다. 
-다음은 width=78, height=110크기의 Thumbnail을 생성하는 예제다. ::
+For example, 50% expression will be encoded as 50%25. 
+The below is an example that generates a thumbnail of width=78 and height=110. ::
 
    http://image.example.com/img.jpg/dims/thumbnail/78x110/
     
@@ -340,41 +340,41 @@ URL Encoding규칙에 따라 %문자가 %25로 인코딩 됨을 명심해야 한
 Resizing
 -----------------------
 
-이미지 크기를 변경한다. 
-크기는 **width x height** 로 표현한다. 
-이미지는 변경되어도 비율은 유지된다. 
-다음은 원본 이미지를 width=200, height=200크기로 변경하는 예제다. ::
+This function resizes the image size. 
+The size of image is expressed with **width x height** format. 
+The ratio will be kept the same after the resizing. 
+The below is an example that resizes an original image to width=200 and height=200. ::
 
    http://image.example.com/img.jpg/dims/resize/200x200/
 
 
-Format 변경
+Converting Format
 -----------------------
 
-이미지 포맷을 변경한다. 
-지원되는 포맷은 "png", "jpg", "gif" 이다. 
-다음은 JPG를 PNG로 변환하는 예제다. ::
+This function converts the image format. 
+Supported formats are "png", "jpg", "gif". 
+The following is an example that converts JPG to PNG. ::
 
    http://image.example.com/img.jpg/dims/format/png/
 
 
-품질 변경
+Adjusting Image Quality
 -----------------------
 
-이미지 품질을 조절한다. 
-이 기능은 전송되는 이미지 용량을 줄일 수 있어서 효과적이다. 
-유효 범위는 0부터 100까지다. 
-다음은 이미지 품질을 25%로 조절하는 예제다. ::
+This function adjusts the image quality. 
+It is useful as it can reduce the volume of transferring image. 
+Effective values are from 0 to 100. 
+The following example will adjust the quality of image to 25%. ::
 
    http://image.example.com/img.jpg/dims/quality/25/
   
 
-합성
+Image Synthesis
 -----------------------
 
-두 이미지를 합성한다.
-앞서 설명한 기능과는 다르게 합성조건은 미리 설정되어 있어야 한다. 
-주로 워터마크 효과를 내기 위해 사용된다. ::
+This function systhesize two images.
+Not like the previous functions, the image composite condition has to be pre-determined. 
+This function is helpful when applying watermark on the image.. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -387,33 +387,33 @@ Format 변경
     
 -  ``<Composite>``
 
-    이미지 합성조건을 설정한다. 속성에 의해 정해지며 별도의 값을 가지지 않는다.
+    Configure the image composite condition. The condition is determined by attributes.
     
-    -  ``Name`` 호출될 이름을 지정한다. 
-       '/'문자는 입력할 수 없다. 
-       URL의 "/composite/" 뒤에 위치합니다.
+    -  ``Name`` designates a name to be called. 
+       '/' character cannot be used. 
+       This option is located behind the "/composite/" of URL.
        
-    -  ``File`` 합성할 이미지파일 경로를 지정한다. 
+    -  ``File`` designates a path of the image to be synthesized. 
     
-    -  ``Gravity (기본: c)`` 합성할 위치는 좌측상단부터 9가지의 포인트(nw, n, ne, w, c, e, sw, s, se)가 존재합니다.
+    -  ``Gravity (default: c)`` There are 9 composite points (nw, n, ne, w, c, e, sw, s, se).
        
        .. figure:: img/conf_dims2.png
           :align: center
        
-          Gavity 기준점
+          Gavity Reference Points
           
-    -  ``Geometry (기본: +0+0)`` ``Gravity`` 기준으로 합성할 이미지 위치를 설정한다. 
-       {+-}x{+-}y. 붉은색 원은 Gravity속성에 따라 +0+0이 의미하는 기준점으로 +x+y의 
-       값이 커질수록 이미지 안쪽으로 배치된다. 
-       초록색 화살표는 +x, 보라색 화살표는 +y가 증가하는 방향이다. 
-       -x-y를 사용하면 대상 이미지의 바깥에 위치하게 되어 결과 이미지에서는 보여지지 않는다. 
-       이 속성은 다소 복잡해 보이지만 이미지 크기를 자동으로 계산하여 배치하므로 
-       일관된 결과물을 얻을 수 있어서 효과적이다. 
-       또한 +x%+y% 처럼 %옵션을 주어 비율로 배치할 수도 있다.
+    -  ``Geometry (default: +0+0)`` Based on the ``Gravity``, ``Geometry`` decides where the composite image is located at. 
+       {+-}x{+-}y. The red dots are reference points that stands for +0+0 of the ``Gravity`` attribute.
+       붉은색 원은 Gravity속성에 따라 +0+0이 의미하는 기준점으로 +x+y의 
+       값이 커질수록 이미지 안쪽으로 배치된다(??값이 커질수록 이미지 안쪽으로 배치되는 것 같지않아 혼동되어 생략했습니다).
+       The green arrow stands for increasing x axis, and the purple one stands for increasing y axis. 
+       Using -x-y will locate the composite image outside of the boundary and will be invisible in the result image. 
+       This method looks quite complicated, but it automatically calculates the size of image so results are consistent. 
+       In addition, you can use a percentage option(%) like +x%+y% to locate the image.
 
-    -  ``Dissolve (기본: 50)`` 합성할 이미지의 투명도(0~100).
+    -  ``Dissolve (default: 50)`` Transparency of the image to be synthesized(0~100).
 
-``<Composite>`` 을 설정했다면 ``Name`` 속성을 사용하여 이미지를 합성할 수 있다. ::
+If you configure the ``<Composite>``, ``Name`` property can be used to synthesize image. ::
 
     http://image.example.com/img.jpg/dims/composite/water1/
 
