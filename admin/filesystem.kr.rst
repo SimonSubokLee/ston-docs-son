@@ -16,17 +16,16 @@ You can view this system as **a readonly disk with caching function**.
 When the Linux Kernel directly forwards the file I/O function call to STON, 
 no other elements(physical file I/O, socket communication, etc) interfere the process.
 This architecture enables extremely high performance.
-이런 구조는 아주 높은 성능을 가능케 한다.
-STON의 메모리 Caching을 통해 물리적 디스크 접근보다 뛰어난 성능을 기대할 수 있다.
+The memory caching of STON will enhance access performance more than the physical disk.
 
 
 .. toctree::
    :maxdepth: 2
 
-Mount하기
+Mount
 ====================================
 
-전역설정(server.xml)에 설정한다. ::
+Mount is configured in the global setting(server.xml). ::
 
    # server.xml - <Server><Cache>
 
@@ -34,7 +33,7 @@ Mount하기
     
 -  ``<FileSystem>``
 
-   -  ``OFF (기본)`` 아무 것도 하지 않는다.
+   -  ``OFF (default)`` doesn't do anything.
    
    -  ``ON`` STON을 ``Mount`` 속성의 경로에 Mount한다.
    
