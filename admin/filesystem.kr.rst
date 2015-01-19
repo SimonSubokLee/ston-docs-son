@@ -71,11 +71,11 @@ In order to achieve best performance, you should thoroughly understand each step
 
 
 
-가상호스트 찾기
+Searching for a Virtual Host
 ====================================
 
-첫 번째 과정은 접근하려는 가상호스트를 찾는 것이다. 
-HTTP 요청에는 다음과 같이 Host헤더가 명시되어 있어 가상호스트를 쉽게 찾을 수 있다. ::
+The first step is searching for a virtual host to access. 
+The Host header in the HTTP request helps to find virtual host. ::
 
     GET /ston.jpg HTTP/1.1
     host: example.com
