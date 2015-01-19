@@ -35,26 +35,26 @@ Mount is configured in the global setting(server.xml). ::
 
    -  ``OFF (default)`` doesn't do anything.
    
-   -  ``ON`` STON을 ``Mount`` 속성의 경로에 Mount한다.
+   -  ``ON`` mounts STON to the path of ``Mount`` property.
    
-기존 HTTP 구조를 그대로 유지한 채 Cache 모듈에 접근하는 방식(File System)이 추가된 구조로 개발되었다. 
-그러므로 어느 쪽으로부터의 접근이든 Caching은 처음 한번만 이루어지며 HTTP 또는 File I/O로 서비스된다. 
-FileSystem은 Cache모듈에 접근하는 새로운 다리를 하나 더 놓은 것다. 
+STON keeps the previous HTTP structure, but developed an expanded file system that accesses to the cache module. 
+Therefore, wherever the access is coming from, caching only happens once and serviced with either HTTP or file I/O. 
+The File System is another method to access cache module. 
    
 .. figure:: img/conf_fs2.png
    :align: center
       
-   HTTP와 File I/O가 Cache모듈을 공유한다.
+   HTTP and File I/O share cache module.
 
-원본서버의 콘텐츠를 HTTP 뿐만 아니라 File I/O로 양쪽에서 접근할 수 있다.
-이를 활용하면 로컬파일에 기반한 솔루션들의 가용성을 더 높일 수 있다.
+Not only HTTP, but also File I/O can access contents in the origin server.
+By utilizing this method, you can increase the availability of solutions that are based on local files.
 
 .. figure:: img/conf_fs3.png
    :align: center
       
-   어떤 서버라도 OK
+   Any servers are OK
    
-현재 STON File System이 지원하는 함수 목록은 다음과 같다.
+The followings are supported functions by STON File System.
 
 ========= =============== ===========
 FUSE	  C	              LINUX
@@ -66,8 +66,8 @@ getattr	  fstat	          stat
 unlink	  remove	      unlink
 ========= =============== ===========
 
-File I/O는 내부적으로 여러 단계를 거친다. 
-각 단계에 대한 이해가 바탕이 되어야 최고의 성능을 얻을 수 있다.
+File I/O goes through several internal steps. 
+In order to achieve best performance, you should thoroughly understand each step.
 
 
 
