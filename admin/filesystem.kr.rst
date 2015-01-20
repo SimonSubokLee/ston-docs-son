@@ -80,27 +80,26 @@ The Host header in the HTTP request helps to find virtual host. ::
     GET /ston.jpg HTTP/1.1
     host: example.com
     
-File System에서는 첫 번째 경로로 이 문제를 해결한다. 
-예를 들어 STON이 /cachefs 라는 경로에 Mount되어 있다면 로컬파일에 접근하기 위해서는 
-다음 경로를 사용해야 한다. ::
+File System에서는 첫 번째 경로로 이 문제(무엇이 문제인지 명시되지 않았음??)를 해결한다. 
+For example, if the STON is mounted to the /cachefs path, the below path can be used to access local files. ::
 
     /cachefs/example.com/ston.jpg
         
-:ref:`env-vhost-find` 도 동일하게 동작한다.
-example.com의 ``<Alias>`` 로 *.example.com이 지정되어 있다면 다음 접근은 모두 같은 파일을 가리킨다. ::
+:ref:`env-vhost-find` works in the same way.
+If *.example.com is configured as an ``<Aliss>`` of example.com, all following accesses refer to the identical file. ::
 
     /cachefs/example.com/ston.jpg
     /cachefs/img.example.com/ston.jpg
     /cachefs/example.example.com/ston.jpg
     
-예를들어 Apache에서 example.com을 연동하기 위해서는 DocumentRoot를 /cachefs/example.com/로 설정해야 한다.
+For instance, in order to link example.com to Apache server, you have to set the DocumentRoot as /cachefs/example.com/.
 
 
-파일/디렉토리
+File/Directory
 ====================================
 
-가상호스트 별로 File System을 설정한다. 
-또는 기본 가상호스트를 통해 모든 가상호스트에 일괄설정 할 수 있다. ::
+This section explains how to configure file systems for each virtual host. 
+All virtual hosts can also be uniformly configured with a default virtual host. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -112,30 +111,30 @@ example.com의 ``<Alias>`` 로 *.example.com이 지정되어 있다면 다음 �
    </FileSystem>   
     
 -  ``<FileSystem>``
-   ``Status`` 속성이 ``Inactive`` 라면 File System에서 접근할 수 없다. 
-   `Active` 로 설정해야 한다.
+   If ``Status`` attribute is set to ``Inactive``, File System cannot access to the file/directory. 
+   Set this to `Active`.
 
 -  ``<FileStatus>``
-   파일로 인식할 원본서버 HTTP 응답코드를 설정한다. 
-   일반적으로는 200만을 설정하지만 특별한 제약은 없다.
+   Configures HTTP response code of the origin server that will be identified as a file. 
+   Usually 2000000 is used, but there is no restriction on this value.
    
 -  ``<DirStatus>``
-    디렉토리로 인식할 원본서버 HTTP 응답코드를 설정한다. 
-    기본 값으로 302, 400, 401, 403등이 설정된다.
+    Configures HTTP response code of the origin server that will be identified as a directory. 
+    Default values are 302, 400, 401, 403.
     
 -  ``<Unlink>``
-   파일삭제 요청이 들어온 경우 동작방식 ``Purge`` , ``Expire`` , ``HardPurge`` 을 설정한다.
+   Select how to deal with a file removal request from ``Purge``, ``Expire``, ``HardPurge``.
 
-원본서버마다 HTTP 응답코드가 다양하게 해석될 수 있다. 
-그러므로 각각의 HTTP 응답코드 해석방식을 설정해야 한다. 
+Each origin server can interpret HTTP response codes in multiple ways. 
+Therefore, you have to configure how to interpret each HTTP response code. 
 
-대부분의 경우 원본서버에 존재하는 파일의 경우 **200 OK** 로 응답한다. 
-디렉토리 접근인 경우 **403 Forbidden** 응답이나 **302 Found** 로 다른 페이지로 Redirect시키기도 한다. 
-응답코드명을 comma(,)로 구분하여 설정하면 해당 HTTP 응답코드의 Body를 파일 또는 디렉토리로 인식한다. 
-설정되지 않은 응답코드에 대해서는 존재하지 않는 것으로 판단, File I/O가 실패한다.
+If the file is existing in the origin server, it will be replied with **200 OK** in most cases. 
+In case of directory access, **403 Forbidden** can be replied or redirected to other page with **302 Found**. 
+If the comma(,) is used to identify each response code name, the Body of corresponding HTTP response code is identifed as a file or a directory. 
+Any response codes that are not configured will be considered as not existing code, and the File I/O for the code will fail.
 
 
-파일속성
+File Attributes
 ====================================
 
 대부분 File I/O의 첫 번째 단계는 파일속성을 얻는 것이다. 
