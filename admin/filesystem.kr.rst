@@ -6,7 +6,7 @@ Chapter 13. File System
 This chapter explains how to utilize STON like a local disk.
 STON is based on `FUSE <http://fuse.sourceforge.net/>`_ and mounted on the Linux VFS(Virtual File System).
 All files in the mounted path will be cached at the moment of access, but other processes do not notice this.
-You can view this system as **a readonly disk with caching function**.
+You can view this system as **a ReadOnly disk with Caching function**.
 
 .. figure:: img/conf_fs1.png
    :align: center
