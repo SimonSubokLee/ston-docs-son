@@ -150,18 +150,19 @@ From the STON side of view, Kernel services the file attribute as below.
 Linux does not distinguish files from directories, so acquiring a specific file attribute is more complex than it seems to be. 
 As you can see from the above figure, as the number of subfolder increases, the performance gets decreased
 because unnecessary virtual host search and file access occur. 
-특히 /one 또는 /one/two처럼 웹 서비스라면 접근되지도 않을 경로의 요청이 발생하여 원본서버 부하를 발생시킨다. 
-물론 Caching되면 TTL(Time To Live) 시간 동안 접근은 발생하지 않지만 아름답지 않은 것만은 분명한다.
+Especially, inaccessible directory requests like /one or /one/two occurs and causes origin server load. 
+Once the file is cached, the origin server access will not happen while the TTL(Time To Live) is alive.
+However, still it is not an ideal solution for the system.
 
-이런 구조적 부하를 휴리스틱(Heuristic)하게 해결하기 위해 ``DotDir`` 속성을 추가하였다.
-``DotDir`` 은 dot(.)이 요청된 경로에 없으면 디렉토리(Dir)로 인식하는 기능이다. 
-앞서 설명한 그림은 ``DotDir`` 이 ``OFF`` 인 상태이다. 
-``DotDir`` 이 ``ON`` 인 경우는 다음과 같이 동작한다.
+A heuristic solution for this structural load ia adding a ``DotDir`` attribute.
+``DotDir`` is a function that recognizes a path without a dot(.) as a directory(Dir). 
+The previous figure illustrates when the ``DotDir`` is ``OFF``. 
+The following figure illustrates when the ``DotDir`` is ``ON``.
 
 .. figure:: img/conf_fs5.png
    :align: center
       
-   전역 ``DotDir`` 활성화( ``ON`` )
+   Enabling( ``ON`` ) the global ``DotDir``
 
 Kernel에서 호출되는 과정이나 회수에는 변함이 없다. 
 하지만 요청된 경로에 dot(.)이 없으면 가상호스트까지 가지 않고 즉시 디렉토리로 응답하기 때문에 꼭 필요한 부분에서만 가상호스트와 파일이 참조된다. 
