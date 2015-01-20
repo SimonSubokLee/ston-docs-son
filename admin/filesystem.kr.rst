@@ -137,19 +137,19 @@ Any response codes that are not configured will be considered as not existing co
 File Attributes
 ====================================
 
-대부분 File I/O의 첫 번째 단계는 파일속성을 얻는 것이다. 
-파일을 open하기 전에 파일정보를 얻는 것은 당연한 순서다. 
-Kernel이 파일속성을 서비스하는 과정을 STON관점에서 보면 다음과 같다. 
-(/cachefs는 Mount경로이므로 Kernel이 생략한다.)
+The first step of file I/O is getting the file attribute. 
+It is an obvious procedure to acquire the file attribute before opening it. 
+From the STON side of view, Kernel services the file attribute as below. 
+(/cachefs is a mount path so Kernel drops it.)
 
 .. figure:: img/conf_fs4.png
    :align: center
       
-   파일속성을 얻는 과정
+   Process of acquiring the file attribute
 
-Linux의 경우 파일과 디렉토리를 별도로 구분하지 않는다. 
-그러므로 특정 파일속성을 얻는 과정이 생각보다 복잡하다. 
-위 그림에서도 알 수 있듯이 디렉토리가 깊으면 깊을수록 중간 과정의(=필요 없는) 가상호스트 검색과 파일 접근이 발생하여 성능이 저하된다. 
+Linux does not distinguish files from directories, so acquiring a specific file attribute is more complex than it seems to be. 
+As you can see from the above figure, as the number of subfolder increases, the performance gets decreased
+because unnecessary virtual host search and file access occur. 
 특히 /one 또는 /one/two처럼 웹 서비스라면 접근되지도 않을 경로의 요청이 발생하여 원본서버 부하를 발생시킨다. 
 물론 Caching되면 TTL(Time To Live) 시간 동안 접근은 발생하지 않지만 아름답지 않은 것만은 분명한다.
 
