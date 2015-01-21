@@ -164,50 +164,51 @@ The following figure illustrates when the ``DotDir`` is ``ON``.
       
    Enabling( ``ON`` ) the global ``DotDir``
 
-Kernel에서 호출되는 과정이나 회수에는 변함이 없다. 
-하지만 요청된 경로에 dot(.)이 없으면 가상호스트까지 가지 않고 즉시 디렉토리로 응답하기 때문에 꼭 필요한 부분에서만 가상호스트와 파일이 참조된다. 
-이 기능은 대부분의 프로그래머들이 파일에만 확장자를 부여하고 디렉토리에는 그렇지 않다는 것에 착안한 기능이다. 
-그러므로 사용하기 전에 디렉토리 구조에 대해 반드시 확인이 필요하다.
+The calling process or frequency from the Kernel does not change. 
+However, if a dot(.) is missing in the requested path, the request is considered as a directory.
+Therefore, the virtual host does not respond, but the virtual host and file will be refered only for necessary requests. 
+This feature is based on the observation that most programmers do not assign extensions to directories. 
+In order to properly use this feature, you have to confirm the directory structure.
 
-``<FileSystem>`` 은 ``DotDir`` 속성은 전역이다.
-쉽게 말해 모든 가상호스트가 디렉토리에 dot(.)을 사용하지 않는다면 전역 ``DotDir`` 을 ``ON`` 으로 설정하시는 것이 아주 효과적이다. 
-물론 전역 ``DotDir`` 을 ``OFF`` 로 설정하고 가상호스트마다 별도로 설정할 수도 있다. 
-이 경우 다음 그림처럼 약간의 성능부하가 발생한다.
+``DotDir`` is a global attribute of the ``<FileSystem>``.
+In other words if none of virtual hosts use dots(.) for all directories, setting the ``DotDir`` to ``ON`` will make a very efficient system. 
+Of course you can set the ``DotDir`` to ``OFF`` and configure each virtual host separately. 
+This case, there will be a minor performance degradation as the below figure.
 
 .. figure:: img/conf_fs6.png
    :align: center
       
-   가상호스트 ``DotDir`` 활성화( ``ON`` )
+   Activating( ``ON`` ) ``DotDir`` feature of virtual host
 
-가상호스트 검색은 발생하지만 파일참조는 dot(.)이 있는 상태에서만 발생한다.
-매우 빈번하게 호출되는 만큼 성능과 관련하여 반드시 이해할 것을 권장한다.
+Virtual host search will occur, but refering file will only occur with a dot(.) in the request.
+Since this function is frequently called, it is recommended for you to understand for better performance.
 
 
-파일읽기
+File Read
 ====================================
 
-파일속성을 얻는 과정은 복잡하지만 정작 파일 읽기는 간단하다. 
-먼저 파일을 Open한다. 
-모든 파일은 당연히 ReadOnly이다.
-Write권한의 파일 접근은 실패한다.
-최초 파일이 접근되는 경우 HTTP와 마찬가지로 원본서버에서 파일을 Caching한다. 
-파일을 요청한 프로세스가 기다리지 않도록 다운로드를 진행하면서 동시에 File I/O 서비스가 이루어진다.
+Acquiring a file attribute is complicated while reading a file is simple. 
+First of all, open the file. 
+All files are ReadOnly, therefore a file access with the Write permission will fail.
+If a file is accessed for the first time, the file will be cached from the origin server just like the HTTP service. 
+While downloading the requested file, file I/O is serviced concurrently so that the process would not wait.
 
 .. figure:: img/conf_fs7.png
    :align: center
       
-   파일 Open
+   File Open
 
-이후 동작은 HTTP 서비스와 동일하다.
-다만 HTTP의 경우 처음 결정된 Range에서 순차적(Sequential)인 파일접근이 발생하기 때문에 파일 전송에 유리한 면이 있다.
-반면 File I/O의 경우 파일 크기와 상관없이 아주 작은 1KB단위의 read접근이 매우 많이 발생할 수 있다. 
-성능의 극대화를 위해 STON은 Cache모듈에 `Readahead <http://en.wikipedia.org/wiki/Readahead>`_ 를 구현했으며, 이를 통해 File I/O 성능을 극대화시켰다. 
+After opening a file, procedures are identical to the HTTP service.
+HTTP is advantageous in file transfer because sequential file access occurs from initially determined range.
+On the other hand, file I/O might generate perpetual read accesses of about 1KB size regardless of the file size. 
+STON implemented `Readahead <http://en.wikipedia.org/wiki/Readahead>`_ in the cache module
+and this feature maximized file I/O performance. 
 
-파일닫기(fclose등) 함수가 호출되거나 프로세스가 종료되는 경우 파일 handle은 Kernel에 의해 반납된다. 
-이는 HTTP 트랜잭션이 종료되는 것과 같다.
+If a function to close a file(eg. fclose) is called or a process is terminated, file handle is turned in by the Kernel. 
+This is same as closing an HTTP transaction.
 
 
-파일삭제
+File Delete
 ====================================
 Caching된 파일은 STON에 의해 관리되지만 프로세스가 삭제요청을 보낼 수 있다.
 STON은 다양한 :ref:`api-cmd-purge` 방법을 제공하고 있으므로 이런 요청에 쉽게 대응할 수 있다. 
