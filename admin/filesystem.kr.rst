@@ -210,11 +210,12 @@ This is same as closing an HTTP transaction.
 
 File Delete
 ====================================
-Caching된 파일은 STON에 의해 관리되지만 프로세스가 삭제요청을 보낼 수 있다.
-STON은 다양한 :ref:`api-cmd-purge` 방법을 제공하고 있으므로 이런 요청에 쉽게 대응할 수 있다. 
+Cached file is managed by STON, but the process can request to delete the file.
+STON provides several :ref:`api-cmd-purge` methods to respond with these requests 
 
-예를 들어 ``<Unlink>`` 가 ``expire`` 로 설정되어 있는 경우 파일삭제 요청에 대해 해당 파일을 expire하도록 동작한다.
-Kernel에서 다시 해당 파일에 접근한다면 expire된 상태이므로 원본서버에서 변경여부를 확인한 뒤 변경되지 않았다면 해당 파일을 다시 서비스한다.
+For example, if ``<Unlink>`` is set to ``expire``, the corresponding file will be expired upon the file deletion request.
+If the Kernel tries to access the file again, the file needs to be checked for modification because the file is expired.
+Then, if the file is not modified, it can be serviced again.
 
 
 파일확장
