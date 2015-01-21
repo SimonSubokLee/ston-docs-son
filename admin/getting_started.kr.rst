@@ -3,12 +3,12 @@
 Chapter 2. Getting Started
 ******************
 
-This chapter explains how to set up an example virtual host from installation and system configuration.
-All this proccess can be done with a simple text editor.
+This chapter explains how to set up an example virtual host through installation and system configuration.
+The entire proccess can be done with a simple text editor.
 
 STON is developed to run on the standard Linux server.
 Any hardware, OS or file system dependencies are excluded from developing stages.
-It is very important to help customers to select appropriate equipments because configuring proper server based on the nature and scale of service is the beginning of service.
+It is very important to help customers to select the appropriate equipments because configuring the proper server, based on the nature and scale of service is the beginning of service.
 
 .. toctree::
    :maxdepth: 2
@@ -23,44 +23,44 @@ Especially for a service that requires a high performance like 10Gbps, each comp
 
 -  **CPU**
 
-   At least quad core processor is recommended. 
+   At least a quad core processor is recommended. 
    Many-Core system increases the scalability of STON.
-   Every additional processor core will boost processing power of the server.
-   However, high processing power does not necessarily mean high traffic transmission rate.
+   Every additional processor core will boost the processing power of the server.
+   However, high processing power does not necessarily mean a high traffic transmission rate.
 
    .. figure:: img/10g_cpu.jpg
       :align: center
 
-      Multiple processing core will prove its effectiveness when more clients are accessing to the server.
+      A multiple processing core will prove its effectiveness when more clients are accessing to the server.
 
-   In terms of bandwidth use, transferring a 4KB file for 260 thousand times or one time transfer of one 1GB file takes identical bandwidth.
-   The most critical criterion for selecting CPU is a processing power of simultaneous connetions.
+   In terms of bandwidth use, transferring a 4KB file for 260,000 times or a 1GB file 1 time takes identical bandwidth.
+   The most critical criterion for selecting CPU is the processing power of simultaneous connections.
 
 
 -  **Memory**
 
    The STON recommends at least 4GB of system memory.
-   Frequently accessed contents should be allocated on the memory in order to increase the performance.
-   A server with lack of physical memory will inevitably accesses to the storage disk more frequently that increases burden of the disk.
-   If the I/O load of the disk is significantly high regardless of the number of served contents, installing additional memory can reduce the I/O load.
+   Memory should be allocated to frequently accessed contents in order to increase the performance.
+   A server lacking physical memory will inevitably accesses to the storage disk more frequently, creating an increases burden on the disk.
+   If the I/O load of the disk is significantly high, regardless of the number of served content, installing additional memory can reduce the I/O load.
    
 
 -  **Disk**
 
-   At least 3 disks including OS disk are recommended.
-   Just like memory, more disk gives better performance because I/O load will be dispersed and more contents could be cached.
+   At least three disks, including the OS disk are recommended.
+   Just like memory, more disks give better performance because the I/O load will be dispersed and more contents can be cached.
    
    .. figure:: img/02_disk.png
       :align: center
       
-      OS and STON always have to be installed on separate disks.
+      OS and STON always have to be installed on a separate disk from content storage.
    
    Usually the STON is installed on the OS disk.
-   Log is also configured on the identical disk where OS is installed.
-   However, log is recording real time service status, the disk is always suffered from write load.
+   The log is also configured on the identical disk where OS is installed.
+   However, the log is recording real time service status, the disk is always suffered from write load.
    
-   STON utilizes disks as RAID 0 setting.
-   Depends on the required performance of client service, RAID may or may not be adopted.
+   STON utilizes disks in the RAID 0 setting.
+   Depending on the required performance of the client's service, RAID may or may not be adopted.
    However, when file modification is not frequent and the size of content is much larger than that of physical memory, read speed can be effectively increased via RAID.
 
 
@@ -69,8 +69,8 @@ Especially for a service that requires a high performance like 10Gbps, each comp
 OS Configuration
 ====================================
 
-The standard installation is good enough.
-The STON works great with standard 64bit Linux(Cent 6.2 or higher, Ubuntu 10.04 or higher), and it does not rely on any packages.
+Standard installation is good enough.
+STON works great with the standard 64bit Linux(Cent 6.2 or higher, Ubuntu 10.04 or higher), and it does not rely on any packages.
 
 
 .. _getting-started-install:
@@ -93,7 +93,7 @@ Installation
       2014-06-17 13:29:15 (42.9 MB/s) - “ston.2.0.0.rhel.2.6.32.x64.tar.gz” saved [71340645/71340645]
 
 
-2. Extract downloaded package. ::
+2. Extract the downloaded package. ::
 
 		[root@localhost ~]# tar -zxf ston.2.0.0.rhel.2.6.32.x64.tar.gz
 
@@ -101,7 +101,7 @@ Installation
 
 		[root@localhost ~]# ./ston.2.0.0.rhel.2.6.32.x64.sh
 
-4. All installation processes are recorded in the install.log file. The log file helps tracking any possible issues during installation process. ::
+4. All installation processes are recorded in the install.log file. The log file helps track any possible issues during the installation process. ::
 
       #DownloadURL: http://foobar.com/ston/ston.2.0.0.rhel.2.6.32.x64.tar.gz
       #DownloadTime: 13 sec
@@ -162,11 +162,11 @@ Installation
 
 Update
 ====================================
-When the updated version is released, use stonu command to update STON to the latest version. ::
+When the updated version is released, use the stonu command to update STON to the latest version. ::
 
 	./stonu 2.0.1
 	
-:ref:`wm-update` option from :ref:`wm` command will also help easy update of STON.
+:ref:`wm-update` option from :ref:`wm` command will also help easily update STON.
 
    .. figure:: img/conf_update1.png
       :align: center
@@ -177,11 +177,11 @@ When the updated version is released, use stonu command to update STON to the la
 Run
 ====================================
 
-The following is the default directory where STON is usually installed at. ::
+The following is the default directory where STON is usually installed ::
 
     /usr/local/ston/
 
-If any of the below files is missing in the default directory or has incorrect XML syntax, STON will not run.
+If any of the below files are missing in the default directory or have incorrect XML syntax, STON will not run.
 
 - license.xml
 - server.xml
@@ -190,14 +190,14 @@ If any of the below files is missing in the default directory or has incorrect X
 After the initial installation, xml files might be missing from the default directory.
 In this case, copy the distributed license.xml file to the directory.
 Then duplicate or rename server.xml.default and vhosts.xml.default files from the default installation directory.
-*.default files will be distributed with the latest package all the time.
+*.default files will be distributed with the latest package every time.
 
 
 .. _getting-started-samplevhost:
 
 Hello World
 ====================================
-Open vhosts.xml file and modify as below. ::
+Open vhosts.xml file and modify, as shown below. ::
 
     <Vhosts>
         <Vhost Name="www.example.com">
@@ -227,14 +227,14 @@ Run STON
       
 .. note::
 
-   STON uses disk as a storage, default disk has to be configured in order to run STON.
-   Setting up the disk will be reviewed in the next chapter.
+   STON uses disk storage. A default disk has to be configured in order to run STON.
+   Disk set-up will be reviewed in the next chapter.
 
 3. Run STON.  ::
 
       [root@localhost ~]# service ston start
 
-   In order to stop STON, use stop command.  ::
+   In order to stop STON, use stop the command.  ::
 
       [root@localhost ~]# service ston stop
 
@@ -244,7 +244,7 @@ Run STON
 Checking Virtual Host
 -----------------------------------------------
 
-(For Windows 7) Add www.example.com domain in the C:\\Windows\\System32\\drivers\\etc\\hosts file as below. ::
+(For Windows 7) Add www.example.com domain in the C:\\Windows\\System32\\drivers\\etc\\hosts file as shown below. ::
 
     192.168.0.100        www.example.com
 
@@ -259,15 +259,15 @@ If all settings are correctly configured, the following page will be displayed o
 Trouble Shooting for Slow WM or Graph Displaying Error
 -----------------------------------------------
 
-RRD graph is dynamically downloaded and installed during installation procedure.
+RRD graph is dynamically downloaded and installed during the installation procedure.
 Therefore, RRD may not be installed properly under the restricted network.
 In addition, :ref:`wm` may run very slowly or :ref:`api-graph` may not work at all.
-In order to fix these issues, follow the belw steps.
+In order to fix these issues, follow the steps below.
 
 
-**1. Checking the rrdtool Installation Status**
+**1. Checking the RRDtool Installation Status**
 
-   Below procedure is to check the rrdtool installation status. ::
+   The procedure displayed below features how to check the RRDtool installation status. ::
    
       [root@localhost ston]# yum install rrdtool
       Loaded plugins: fastestmirror, security
@@ -281,7 +281,7 @@ In order to fix these issues, follow the belw steps.
       Package rrdtool-1.3.8-6.el6.x86_64 already installed and latest version
       Nothing to do
       
-   Below procedure is the rrdtool installation check for Ubuntu. ::
+   The procedure displayed below is the RRDtool installation check for Ubuntu. ::
 
       root@ubuntu:~# apt-get install rrdtool
       Reading package lists... Done
@@ -296,8 +296,8 @@ In order to fix these issues, follow the belw steps.
       
 **2. RRD Manual Installation**
 
-   If yum fails to install rrdtool, administrator should `downlaod <http://pkgs.repoforge.org/rrdtool/>`_ 
-   proper package for installed OS version and manually proceed installation.
+   If yum fails to install RRDtool, the administrator should `download <http://pkgs.repoforge.org/rrdtool/>`_ 
+   the proper package for installeing the OS version and manually proceed with installation.
    
 ======================================== =================== ======= ============================
 Name                                     Last Modified       Size    Description
@@ -314,8 +314,8 @@ tcl-rrdtool-1.4.7-1.el6.rfx.x86_64.rpm	 06-Apr-2012 16:57   35K     RHEL6 and Ce
 Origin Server
 ============================================
 
-Virtual host is intended to serve contents to users on behalf of the origin server. 
-Depends on the service platform, various origin servers can be accessed by serveral ways.
+A virtual host is intended to serve contents to users on behalf of the origin server. 
+Depending on the service platform, various origin servers can be accessed by serveral ways.
 
     <Vhosts>
         <Vhost Name="www.example.com">
@@ -327,13 +327,13 @@ Depends on the service platform, various origin servers can be accessed by serve
     </Vhosts>
 
 -  ``<Address>``
-   The address of origin server where the virtual host duplicates contents.
-   Unlimited number of origin addresses can be added in the list. 
+   The address of the origin server where the virtual host duplicates contents.
+   An unlimited number of origin addresses can be added to the list. 
    When there are more than 2 addresses, Active/Active method(Round-Robin) is adopted to choose an address.
    If the origin server port is 80, it can be omitted.
 
-For example, if the origin server is using a different port such as 8080, then port number has to be specified as 1.1.1.1:8080.
-There are 8 different types of address based on {IP|Domain}{Port}{Path} format.
+For example, if the origin server is using a different port such as 8080, then the port number has to be specified as 1.1.1.1:8080.
+There are eight different types of addresses based on the {IP|Domain}{Port}{Path} format.
 
 ============================== ==========================
 Address                        Host Header
@@ -348,7 +348,7 @@ example.com/account/dir	       example.com
 example.com:8080/account/dir   example.com:8080
 ============================== ==========================
 
-As long as the host header is not specified in the :ref:`origin-httprequest`, the host header from above table will be trasmitted. ::
+As long as the host header is not specified in the :ref:`origin-httprequest`, the host header from above the table above will be transmitted. ::
 
     <Vhosts>
         <Vhost Name="www.example.com">
@@ -358,7 +358,7 @@ As long as the host header is not specified in the :ref:`origin-httprequest`, th
         </Vhost>
     </Vhosts>
 
-For example, the above setting will request below host header as an origin server. ::
+For example, the  setting above will request the host header below as an origin server. ::
 
    GET / HTTP/1.1
    Host: origin.com:8888
@@ -374,7 +374,7 @@ For example, the above setting will request below host header as an origin serve
 Standby Origin Server Address
 ------------------------------------------------
 
-Configure standby origin server as belows.::
+Configure the standby origin server, as shown below ::
 
     <Vhosts>
         <Vhost Name="www.example.com">
@@ -389,10 +389,10 @@ Configure standby origin server as belows.::
     
 -  ``<Address2>``
 
-   If all ``<Address>`` are woking without problems, ``<Address2>`` will not run for the service.
-   However, if failure is detected to the Active server, standby server functionally substitutes failed server until all issues are recovered.
+   If all ``<Address>`` are working without problems, ``<Address2>`` will not run for the service.
+   However, if failure is detected in the active server, the standby server functionally substitutes for the failed server until all issues are recovered.
    When the active server is recovered, the standby server returns to standby status.
-   If there is any error in the standby server, relevant standby server will not standby for service until all errors are recovered. 
+   If there is any error in the standby server, the relevant standby server will not standby for service until all errors are recovered. 
 
 
 .. _api-etc-help:
@@ -401,13 +401,13 @@ API Call
 ====================================
 
 The STON provides HTTP based API.
-:ref:`env-host` authorizes API call, and if API call is unauthorized, the connection will be terminated immediately.
+:ref:`env-host` authorizes an API call, and if the API call is unauthorized, the connection will be terminated immediately.
 
 Check STON Version. ::
 
    http://127.0.0.1:10040/version
     
-Execute the identical API version checking command on the Linux Shell. ::
+Execute the identical API version by checking command on the Linux Shell. ::
 
    ./stonapi version
 
@@ -424,7 +424,7 @@ The following API looks over hardware information. ::
 
    http://127.0.0.1:10040/monitoring/hwinfo
    
-The result will be returned into JSON format as below. ::
+The result will be returned into JSON format as shown below. ::
 
    {
       "version": "1.1.9",
@@ -480,7 +480,7 @@ Restart/Quit
 ====================================
 
 The following commands restart or quit STON. 
-In order to avoid unintended result, STON provides confirmation for restart/quit commands on the web page. ::
+In order to avoid an unintended result, STON provides a confirmation for restart/quit commands on the web page. ::
 
    http://127.0.0.1:10040/command/restart
    http://127.0.0.1:10040/command/restart?key=JUSTDOIT       // Immediately execute the command
@@ -494,12 +494,12 @@ Caching Reset
 ====================================
 
 The following commands stop service and discard all cached contents.
-The command will format all disks and the service is resumed when disk format is completed. ::
+The command will format all disks and the service will resume, when the disk format is completed. ::
 
    http://127.0.0.1:10040/command/cacheclear
    http://127.0.0.1:10040/command/cacheclear?key=JUSTDOIT       // Immediately execute the command
    
-In the console window, the following command will reset one or entire virtual host. ::
+In the console window, the following command will reset one or the entire virtual host. ::
 
    ./stonapi reset
    ./stonapi reset/ston.winesoft.co.kr
