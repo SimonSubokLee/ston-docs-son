@@ -248,9 +248,8 @@ In order to resolve this issue, STON uses ``Separator (default: ^)`` attribute o
       
    MP4HLS access
 
-Inside of the STON, ``Separator`` is switched to slash(/) so HTTP call standard can be 
-STON 내부에서는 ``Separator`` 를 slash(/)로 변경하여 HTTP와 동일한 호출규격을 사용한다. 
-이를 적극적으로 활용할 경우 다음과 같이 불필요 File I/O접근을 완전히 제거할 수 있다.
+Inside of the STON, ``Separator``s are switched to slashes(/) so HTTP call standard can be identically used. 
+Using the separator can eliminate unnecessary File I/O access as below.
 
 .. figure:: img/conf_fs7.png
    :align: center
@@ -259,29 +258,29 @@ STON 내부에서는 ``Separator`` 를 slash(/)로 변경하여 HTTP와 동일�
 
 
 
-Wowza 연동
+Wowza Interworking
 ====================================
 
-File System을 이용해 손쉽게 Wowza를 연동할 수 있다. 
-STON이 Mount된 경로를 Wowza의 파일경로로 설정하는 것으로 모든 설정이 완료된다.
+File System can easily interwork Wowza. 
+All you have to do is configuring a STON mounted path as a file path of the Wowza.
 
-**1. [STON - 전역설정] 파일시스템 설정 ON**
+**1. [STON - Global setting] Turn on the file system configuration**
 
-  전역설정(server.xml)에 다음과 같이 ``<FileSystem>`` 을 ``ON`` 으로 설정한다. 
-  (예제에서는 Mount경로를 "/cachefs"로 설정한다.) ::
+  Set the ``<FileSystem>`` to ``ON`` in the global setting(server.xml). 
+  (In the below example, mount path is configured as "/cachefs".) ::
   
      # server.xml - <Server><Cache>
          
      <FileSystem Mount="/cachefs" DotDir="OFF" Separator="^">ON</FileSystem>     
      
-  또는 WM의 전역설정 - 파일시스템에서 다음과 같이 파일 시스템을 "사용한다"로 설정한다.
+  Or, in the WM, use global setting - File system to configure the file system to ``enable``.
   
   .. figure:: img/faq_wowza1.png
      :align: center
 
-     설정 후 반드시 STON을 재시작해야 Mount된다.
+     For successful mount, STON must be restarted after the configuration.
      
-**2. [STON - 가상호스트] 파일시스템 접근허가 & 응답코드 설정**
+**2. [STON - Virtual host] file system access permission & response code configuration**
 
   가상호스트의 파일시스템 접근을 Active시킨다. 
   원본서버 응답코드에 따른 파일/디렉토리 결정도 설정한다. 
