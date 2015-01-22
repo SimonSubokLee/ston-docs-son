@@ -134,7 +134,7 @@ If the comma(,) is used to identify each response code name, the Body of corresp
 Any response codes that are not configured will be considered as not existing code, and the File I/O for the code will fail.
 
 
-File Attributes
+File Attribute
 ====================================
 
 The first step of file I/O is getting the file attribute. 
@@ -218,27 +218,27 @@ If the Kernel tries to access the file again, the file needs to be checked for m
 Then, if the file is not modified, it can be serviced again.
 
 
-파일확장
+File Expansion
 ====================================
-HTTP의 경우 다음과 같이 URL을 이용하여 원본 파일을 동적으로 가공할 수 있다. :: 
+HTTP can dynamically process original file with the following URL. :: 
     
-    # HTTP를 통해 /video.mp4의 0~60초 구간을 Trimming한다.
+    # Trim 0-60 second section of the /video.mp4 file via HTTP.
     http://www.example.com/video.mp4?start=0&end=60
     
-이와 같은 QueryString방식은 HTTP와 File System 모두 호출규격을 동일하게 사용할 수 있다. ::
+QueryString method like this can be used for both HTTP and File System call methods. ::
 
-    # "/video.mp4의 0~60초 구간을 Trimming한" 로컬파일에 접근한다.
+    # Access the local file that has been trimmed from 0 to 60 second of /video.mp4.
     /cachefs/www.example.com/video.mp4?start=0&end=60
     
-하지만 MP4HLS나 DIMS처럼 원본 URL뒤에 가공옵션을 디렉토리 형식으로 명시하는 방식은 File I/O에 문제가 있다. ::
+However, the process option followed by URL like MP4HLS or DIMS has problem in File I/O. ::
 
     /cachefs/image.winesoft.com/img.jpg/12AB/resize/500x500/
     /cachefs/www.winesoft.com/video.mp4/mp4hls/index.m3u8
     
-"파일속성 얻기" 에서 설명한 바와 같이 LINUX는 경로 각 부분의 속성을 매번 물어본다. 
-STON관점에서는 현재 물어보는 경로 뒤에 추가 경로가 있는지 알 수 없기 때문에 가공되지 않은 파일을 서비스하게 된다.
+As it is explained in "File Attribute", Linux inquries attribute for each path. 
+STON does not know whether the additinoal path is existing at the end of requested path or not, so unprocessed files are serviced.
 
-이 문제를 극복하기 위해서 STON은 별도의 구분자로 ``<FileSystem>`` 의 ``Separator (기본: ^)`` 속성을 사용한다. ::
+In order to resolve this issue, STON uses ``Separator (default: ^)`` attribute of the ``<FileSystem>`` as an identifier. ::
 
     /cachefs/image.winesoft.com/img.jpg^12AB^resize^500x500^
     /cachefs/www.winesoft.com/video.mp4^mp4hls^index.m3u8
@@ -246,15 +246,16 @@ STON관점에서는 현재 물어보는 경로 뒤에 추가 경로가 있는지
 .. figure:: img/conf_fs9.png
    :align: center
       
-   MP4HLS 접근
+   MP4HLS access
 
+Inside of the STON, ``Separator`` is switched to slash(/) so HTTP call standard can be 
 STON 내부에서는 ``Separator`` 를 slash(/)로 변경하여 HTTP와 동일한 호출규격을 사용한다. 
 이를 적극적으로 활용할 경우 다음과 같이 불필요 File I/O접근을 완전히 제거할 수 있다.
 
 .. figure:: img/conf_fs7.png
    :align: center
       
-   극도로 최적화된 접근
+   Extremely optimized access
 
 
 
