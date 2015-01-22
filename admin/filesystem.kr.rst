@@ -273,7 +273,7 @@ All you have to do is configuring a STON mounted path as a file path of the Wowz
          
      <FileSystem Mount="/cachefs" DotDir="OFF" Separator="^">ON</FileSystem>     
      
-  Or, in the WM, use global setting - File system to configure the file system to ``enable``.
+  Or, in the WM, go to global setting - File system and configure the file system to ``enable``.
   
   .. figure:: img/faq_wowza1.png
      :align: center
@@ -282,10 +282,9 @@ All you have to do is configuring a STON mounted path as a file path of the Wowz
      
 **2. [STON - Virtual host] file system access permission & response code configuration**
 
-  가상호스트의 파일시스템 접근을 Active시킨다. 
-  원본서버 응답코드에 따른 파일/디렉토리 결정도 설정한다. 
-  여기서는 가상호스트 기본 설정(server.xml)을 예로 설명하지만 
-  각각의 가상호스트(vhosts.xml)에서 개별적으로 설정할 수 있다. ::
+  This section explains how to activate the file system access of the virtual host. 
+  원본서버 응답코드에 따른 파일/디렉토리 결정도 설정한다.(응답코드를 보고 요청된 URL이 파일 인지 디렉토리인지를 결정??) 
+  The following takes the virtual host default setting(server.xml) as an example, but each virtual hosts(vhosts.xml) can have independent configurations. ::
   
      # server.xml - <Server><VHostDefault><Options>
      # vhosts.xml - <Vhosts><Vhost><Options>
@@ -295,17 +294,17 @@ All you have to do is configuring a STON mounted path as a file path of the Wowz
         <DirStatus>301, 302, 400, 401, 403</DirStatus>
      </FileSystem>
      
-  또는 WM의 가상호스트 - 파일시스템에서 다음과 같이 접근을 "허가한다"로 설정한다.
+  Or, in the WM, go to global setting - File system and configure the following access to ``allow``.
   
   .. figure:: img/faq_wowza2.png
      :align: center
 
-     응답코드를 설정한다.
+     Configure the response code.
      
      
-**3. [Wowza] Storage 경로 설정**
+**3. [Wowza] Storage Path Configuration**
 
-  Wowza설치경로 /Conf/Application.xml 파일을 다음과 같이 STON이 Mount된 경로를 바라보도록 편집한다. ::
+  In the Wowza installed path, /Conf/Application.xml file should be edited to refer the STON mounted path as below. ::
 
      <Streams>
        <StreamType>default</StreamType>
@@ -313,9 +312,9 @@ All you have to do is configuring a STON mounted path as a file path of the Wowz
        <KeyDir>${com.wowza.wms.context.VHostConfigHome}/keys</KeyDir>
      </Streams>
      
-**4. [Wowza] VOD 경로설정**
+**4. [Wowza] VOD Path Configuration**
 
-  Wowza설치경로 /Conf/vod/Application.xml 파일을 다음과 같이 STON이 Mount된 경로를 바라보도록 편집한다. ::
+  In the Wowza installed path, /Conf/vod/Application.xml file should be edited to refer the STON mounted path as below. ::
   
      <Streams>
        <StreamType>default</StreamType>
@@ -323,11 +322,11 @@ All you have to do is configuring a STON mounted path as a file path of the Wowz
        <KeyDir>${com.wowza.wms.context.VHostConfigHome}/keys</KeyDir>
      </Streams>
      
-**5. 플레이어 테스트**
+**5. Player Test**
 
-  Wowza 테스트 플레이어로 로컬에 존재하지 않는(=STON이 캐싱해야 하는) 영상을 RTMP로 재생한다.
+  Using Wowza test player to play the video that is not saved in the local storage(the video that STON has to cache) through RTMP.
   
   .. figure:: img/faq_wowza3.png
      :align: center
 
-     테스트엔 적절한 영상이 필요합니다.
+     The test needs an appropriate video clip.
