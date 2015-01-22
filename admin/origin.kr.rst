@@ -505,7 +505,7 @@ If the origin server replies with Redirect responses(301, 302, 303, 307), tracks
    
    - ``ON`` Download contents from the address in Location header.
      If the format is incorrect or the Location header is missing, tracking will not work.
-     (무엇이??)형식에 맞지 않거나 Location헤더가 없는 경우에는 동작하지 않는다.
+     (무엇이??:Redirection 응답이)형식에 맞지 않거나 Location헤더가 없는 경우에는 동작하지 않는다.
      In order to prevent infinite rediretion, the STON only tracks once.
-     무한히 Redirect되는 경우를 방지하기 위하여 (STON이??)1회만 추적한다.
+     무한히 Redirect되는 경우를 방지하기 위하여 (STON이??: 네)1회만 추적한다.
 
