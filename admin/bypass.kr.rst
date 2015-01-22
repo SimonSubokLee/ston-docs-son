@@ -5,7 +5,7 @@ Chapter 8. Bypass
 
 This chapter explains how to set a bypass that is delegating client request handling to the origin server.
 Bypass is divided into condition and action.
-(바이패스는 조건과 동작으로 구분된다?? 조건과 동작이 각각 무엇인지 조금 더 설명해주세요. 적절한 단어가 떠오르지 않습니다.)
+(바이패스는 조건과 동작으로 구분된다?? 조건과 동작이 각각 무엇인지 조금 더 설명해주세요. 적절한 단어가 떠오르지 않습니다.: 조건과 그에 따른 동작으로 caching과 구분됩니다)
 
 Bypass has a priority to the Caching policy.
 A service that was not considered to adopt the Edge from design stage, most likely it cannot delicately distinguish static resources and dynamic resources.
@@ -16,7 +16,7 @@ Usually a few hours of log can dramatically decrease the origin server load.
 Bypass is fast and acts as an HTTP transactions basis.
 Even if the web site is personalized, mostly main page(.html) changes dynamically and the rest of 99% is made up of static resources.
 Bypass version of :ref:`origin-httprequest` is provided in order to apply to the origin server.
-원본서버 동작에 맞출 수 있도록(동작에 맞춘다는 의미가 무엇인지??) :ref:`origin-httprequest` 의 바이패스 버전이 별도로 존재한다.
+원본서버 동작에 맞출 수 있도록(동작에 맞춘다는 의미가 무엇인지??: 원본서버의 의도와 동일한 응답을 준다는 뜻입니다) :ref:`origin-httprequest` 의 바이패스 버전이 별도로 존재한다.
 
 
 .. toctree::
