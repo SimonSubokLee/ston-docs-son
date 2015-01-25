@@ -120,8 +120,7 @@ The usage of Origin address(IP) is determined according to the following element
 The origin address is frequently excluded/recovered when running a service.
 STON uses IP table based origin address, and information be accessed by `origin-status`_ API.
 
-If you set the origin address as an IP, it will be simple.
-원본주소를 IP로 설정한 경우 (무엇이 매우 간단한지??: 아래와 같이 Domain 으로 설정하는것과 비교하면 간단합니다)매우 간단하다. 
+If you set the origin address with an IP, the setting is much simpler than using a domain. 
 
 -  Nothing will modify IP list unless you change the configuration.
 -  IP address will not be expired by TTL.
@@ -137,13 +136,10 @@ IP list can be changed dynamically, and all IPs are only valid for valid TTL.
 -  If an identical IP is Revolving, renew TTL.
 -  IP table should not be cleared. (Even if TTL is expired) Latest IPs are not discarded.
 
-Even if you set the origin address as a domain, error and recovery works based on IP address.
-원본주소를 Domain으로 설정하여도 장애/복구는 IP기반으로 동작한다. 
-(??이 부분은 구체적인 설명이 필요할 것 같습니다. 무슨 내용인지 이해가 되지 않아요 ㅠㅠ: 원본서버를 IP가 아닌 Domain으로 설정하여도, 장애/복구는 Domain을 리졸빙하여 얻은 IP주소를 기준으로 동작한다는 뜻입니다)
-
-여기서 미묘한 점이 있다.
-DNS 클라이언트(=STON)는 Domain의 모든 IP 목록을 정확히 알 수 없다. 
-하지만 사용할 수 없는 IP들만으로 Domain을 구성할 경우 장애상태가 지속될 수 없다.
+Even if you set the origin address as a domain, error/recovery features work based on IP address.
+DNS client(STON) does not identify all IP addresses in the domain. 
+However, if the domain consists of unavailable IP addresses, server failure status cannot last
+(??이 문장에 대한 구체적인 설명이 필요합니다.)하지만 사용할 수 없는 IP들만으로 Domain을 구성할 경우 장애상태가 지속될 수 없다.
 
 Error/Recovery policies of the domain address are listed in the below.
 
@@ -219,8 +215,7 @@ The result will be returned in JSON format. ::
 -  ``ActiveIP`` IP list and TTL that are in use. 
    If the origin server is set by IP address, an identical IP of ``Address`` with TTL value of 0 will be returned.
    If it is set by domain, the return value depends on the Resolving result.
-   Various IP and TTL are used.
-   (누가??)다양한 IP와 TTL을 사용한다.
+   Various IPs and TTLs are used.
    
 -  ``InactiveIP`` IP list and TTL that are not in use.
    Even though the IP is not in use, it could be in a recovery status or be managed by HealthChecker.
@@ -504,8 +499,6 @@ If the origin server replies with Redirect responses(301, 302, 303, 307), tracks
    - ``OFF (default)`` Saved as 3xx response.
    
    - ``ON`` Download contents from the address in Location header.
-     If the format is incorrect or the Location header is missing, tracking will not work.
-     (무엇이??:Redirection 응답이)형식에 맞지 않거나 Location헤더가 없는 경우에는 동작하지 않는다.
+     If the format of redirection response is incorrect or the Location header is missing, tracking will not work.
      In order to prevent infinite rediretion, the STON only tracks once.
-     무한히 Redirect되는 경우를 방지하기 위하여 (STON이??: 네)1회만 추적한다.
 
