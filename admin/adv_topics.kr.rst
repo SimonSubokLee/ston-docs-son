@@ -11,15 +11,15 @@ Some of the contents are bounded up with internal structure to assist advanced a
 
 
 
-Request hit ratio
+Request Hit Ratio
 ====================================
 
 First of all, you should understand how HTTP requests from clients are processed.
 Cache processing results are using TCP_* format just like that of Squid, and each expression stands for the process method.
 
 -  ``TCP_HIT`` The requested resource(not expired) is already cached and responded immediately.
--  ``TCP_IMS_HIT`` IMS(If-Modified-Since)헤더와 함께 요청된 리소스가 만료되지 않은 상태로 캐싱되어 있어 304 NOT MODIFIED로 응답함. TTLExtensionBy4xx, TTLExtensionBy5xx설정에 해당하는 경우에도 이에 해당함.
--  ``TCP_REFRESH_HIT`` 요청된 리소스가 만료되어 원본서버 확인(원본 미변경, 304 NOT MODIFIED) 후 응답함. 리소스 만료시간 연장됨.
+-  ``TCP_IMS_HIT`` The requested resource with IMS(If-Modified-Since) header is not expired and still cached, so 304 NOT MODIFIED is responded. TTLExtensionBy4xx, TTLExtensionBy5xx설정에 해당하는 경우(TTLExtensionBy4xx/5xx의 어떤 설정에 어떻게 해당되어야 304 NOT MODIFIED 응답이 나오는지??)에도 이에 해당함.
+-  ``TCP_REFRESH_HIT`` The requested resource is expired and needs to check the origin server(origin not modified, 304 NOT MODIFIED) to respond. Resource expiration is extended.
 -  ``TCP_REF_FAIL_HIT`` TCP_REFRESH_HIT과정 중 원본서버에서 확인이 실패(접속실패, 전송지연)한 경우 만료된 컨텐츠로 응답함.
 -  ``TCP_NEGATIVE_HIT`` 요청된 리소스가 비정상적인 상태(원본서버 접속/전송 실패, 4xx응답, 5xx응답)로 캐싱되어 있고 해당상태를 응답함.
 -  ``TCP_REDIRECT_HIT`` 서비스 허용/거부/Redirect 조건에 의해 Redirect를 응답함.
