@@ -1,10 +1,10 @@
 ﻿.. _adv_topics:
 
-14장. 고급주제
+Chapter 14. Advanced Topics
 ******************
 
-이 장에서는 고급스럽지만 잡다한 주제에 관해 다룬다.
-일부 내용은 내부구조와 밀접한 관련이 있는 내용으로 고급 사용자들을 대상으로 한다.
+This chapter will explain handful advanced topics.
+Some of the contents are bounded up with internal structure to assist advanced administrators.
 
 .. toctree::
    :maxdepth: 2
@@ -14,10 +14,10 @@
 Request hit ratio
 ====================================
 
-먼저 클라언트의 HTTP요청이 어떻게 처리되는지 이해해야 한다.
-캐시처리 결과는 Squid와 동일하게 TCP_*로 명명되며 각 표현마다 캐시서버가 처리한 방식을 의미한다.
+First of all, you should understand how HTTP requests from clients are processed.
+Cache processing results are using TCP_* format just like that of Squid, and each expression stands for the process method.
 
--  ``TCP_HIT`` 요청된 리소스(만료되지 않음)가 캐싱되어 있어 즉시 응답함.
+-  ``TCP_HIT`` The requested resource(not expired) is already cached and responded immediately.
 -  ``TCP_IMS_HIT`` IMS(If-Modified-Since)헤더와 함께 요청된 리소스가 만료되지 않은 상태로 캐싱되어 있어 304 NOT MODIFIED로 응답함. TTLExtensionBy4xx, TTLExtensionBy5xx설정에 해당하는 경우에도 이에 해당함.
 -  ``TCP_REFRESH_HIT`` 요청된 리소스가 만료되어 원본서버 확인(원본 미변경, 304 NOT MODIFIED) 후 응답함. 리소스 만료시간 연장됨.
 -  ``TCP_REF_FAIL_HIT`` TCP_REFRESH_HIT과정 중 원본서버에서 확인이 실패(접속실패, 전송지연)한 경우 만료된 컨텐츠로 응답함.
