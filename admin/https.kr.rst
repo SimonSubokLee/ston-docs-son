@@ -48,7 +48,7 @@ This can be configured in the global configuration(server.xml). ::
    
    -  ``<Key>`` A private key of server certification. Encrypted format is not supported.
    
-   -  ``<CA>`` CA(Certificate Authority) Chain certification(체인?? 인증서: 네 chain 맞습니다)
+   -  ``<CA>`` CA(Certificate Authority) Chain certification
   
 Even if the same port is being serviced, more specific expression has a priority. 
 
