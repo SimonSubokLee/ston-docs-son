@@ -128,14 +128,14 @@ Distributed cache does not modify the origin, but sharing contents from the cach
       
    Well known distributed cache method
 
-(C)는 L7 로드밸런서가 사용자 요청을 분석하여 각각의 캐시서버에 약속된 룰로 요청을 분배해주는 방법이다. 
-하지만 이 방법의 경우 서비스가 L7장비에 종속되어 추후 증설에 문제가 있다. 
-뿐만 아니라 한 HTTP세션으로 여러개의 리소스를 요청할 때 캐싱되지 않은 컨텐츠를 요청받을 확률이 높다. 
+(C) explains how the L7 load balancer analyzes client requests and distribute them to each cache server with appointed rules. 
+However, the service could be subordinated to L7 device and become problematic when expanding service. 
+In addition, when multiple resources are requested through a single HTTP session, there might be a change to request uncached contents. 
 
-(D)는 캐시서버들끼리 서로 인식하여 컨텐츠를 나누어 가지는 방식이다. 
-가령 #1이 가지지 못한 컨텐츠는 #2에게서 가져와서 서비스하는 방식이다. 
-언뜻 효율적인 방법처럼 보이지만 허점이 있다. 
-근본적으로 Topology가 매우 복잡해지므로 서버를 증설할 때마다 내부 트래픽이 매우 높게 발생한다. 
+(D) explains a method that shares contents among cache servers. 
+The contents that are missing from #1 will be obtained from #2 and serviced. 
+This might seem efficient, but there is a disadvantage. 
+The topology becomes very complicated and the internal traffic sharply rises for additional servers. 
 또한 사용자들은 연결된 캐시서버에서 즉각적으로 서비스받지 못하고 다른 캐시서버로부터 
 데이터를 가져올 때까지 기다려야 하므로 서비스품질이 저하된다.
 
