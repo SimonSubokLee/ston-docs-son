@@ -136,21 +136,21 @@ In addition, when multiple resources are requested through a single HTTP session
 The contents that are missing from #1 will be obtained from #2 and serviced. 
 This might seem efficient, but there is a disadvantage. 
 The topology becomes very complicated and the internal traffic sharply rises for additional servers. 
-또한 사용자들은 연결된 캐시서버에서 즉각적으로 서비스받지 못하고 다른 캐시서버로부터 
-데이터를 가져올 때까지 기다려야 하므로 서비스품질이 저하된다.
+Moreover, clients might have to wait until data is brought from another cache server instead of connected cache server.
+For this reason, service quality could be deteriorated.
 
-우리가 제안하는 분산캐시는 3 Tier구조의 분산캐시이다. 
+STON suggests 3 Tier structure distributed cache. 
 
-우선 클라이언트와 직접 연결되는 Child(=Edge)서버부터 이야기를 시작해 보자. 
-HTTP는 한번 연결을 맺은 서버와 여러번의 HTTP 트랜잭션을 수행하는 특성을 가진다. 
-웹 페이지의 경우 데이터 전송보다 DNS Query와 소켓 연결에 더 많은 시간이 소요된다. 
-클라이언트는 자신이 연결된 서버로부터 모든 데이터를 제공받을 때 가장 빠르다. 
-결국 Child는 항상 가장 Hot한(=많이 접근되는) 컨텐츠를 캐싱하고 있어야 한다. 
-이것이 빠른 반응성을 보장하는 방법이다. 
+Let's begin with the Child(Edge) server that is directly connected to clients. 
+Once HTTP establishes a connection with a server, several HTTP transactions are executed. 
+In case of web pages, DNS query and socket connection take more time than data transfer. 
+Clients experience fast service when they are provided all data directly from connected servers. 
+Therefore, child server always have to keep the hottest(most frequently accessed) contents. 
+This guarantees fast response. 
 
-사용자들이 가장 많이 접근하는 페이지들은 대부분 Child에 캐싱되어 있을 것이며, 
-어느 캐시서버에 접속하더라도 해당 페이지를 빠르게 서비스받을 수 있다.
-우선 Child는 Hot한 컨텐츠를 항상 캐싱하고 있어야 한다는데는 이견이 없다. 
+The most frequently accessed pages from clients will be cached in the child server 
+and which cache server clients may connect, pages can be serviced quickly.
+Above all, there is no doubt that the child server must cache hottest contents all the time. 
 
 예를 들어 원본서버의 전체 컨텐츠가 2,000만개이고 한대의 캐시서버가 1,000만개의 컨텐츠를 
 캐싱할 수 있다고 가정해보자. 
