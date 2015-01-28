@@ -65,42 +65,43 @@ Configures the range of data to be collected. ::
    
    - ``ON`` accumulates stats to upper directory.
    
-   예를 들어, ``<DirDepth>`` 이 2이고 모든 디렉토리에 동일하게 10만큼의 트래픽이 발생하고 있다고 가정한다. 
-   ``<DirDepthAccum>`` 이 ``OFF`` 라면 좌측 그림처럼 트래픽이 발생하는 디렉토리별로 따로 통계가 수집된다.
-   ``ON`` 이라면 우측 그림처럼 하위 디렉토리의 모든 통계가    부모 디렉토리로 누적된다.
+   Let's assume that ``<DirDepth>`` is set to 2 and all directories equally have 10 traffics. 
+   If ``<DirDepthAccum>`` is set to ``OFF``, the stats are collected in each directory where traffics are occuring as the left figure.
+   On the other hand, if it is set to ``ON``, all stats from subdirectories are accumulated to upper directories as the right figure.
    
    .. figure:: img/stats_dirdepth.jpg
       :align: center
           
-      상위 디렉토리 누적통계
+      Accumulated Statistics of Upper Directory
    
-   예를 들어 /img 디렉토리는 하위 디렉토리의 트래픽과 자신의 트래픽을 더한 30을    통계 값으로 가지며 이 트래픽은 부모 디렉토리로 합산된다.
+   For instance, summation of accumulated traffics from subdirectories and traffic from /img directory will be 30.
+   This statistic value is accumulated to upper directory.
 
 -  ``<HttpsTraffic>`` 
 
-   - ``OFF (기본)`` HTTPS트래픽을 SSL통계로만 수집한다.
+   - ``OFF (default)`` collects HTTPS traffics only with SSL stats.
    
-   - ``ON`` HTTPS트래픽을 SSL과 HTTP양쪽 통계에 같이 수집한다. 
+   - ``ON`` collects HTTPS traffics with both SSL and HTTP stats. 
    
-   기본적으로 SSL레이어를 통과하면 별도의 SSL 통계로 수집한다.
-   HTTPS의 경우 상위 프로토콜에서 HTTP로 처리되기 때문에 보다 세세한 통계수집이 가능하다. 
-   하지만 SSL통계와 HTTP통계 양쪽에 중복 통계수집이 되므로 HTTP통계만을 신뢰할 것을 권장한다.
+   When the traffic passes through the SSL layer, it will be collected to a separate SSL stats.
+   HTTPS is processed as HTTP in the upper protocol, therefore more detailed stats can be collected. 
+   However, there are redundancy in SSL and HTTP stats, it is recommended to trust HTTP stats.
 
 -  ``<ClientLocal>`` 
 
-   Loopback 클라이언트와 STON구간의 트래픽을 통계로 집계한다.
+   Count the traffic between Loopback client and STON as a statistics.
 
-   - ``OFF (기본)`` 집계하지 않는다.
+   - ``OFF (default)`` does not count the traffic.
    
-   - ``ON`` 집계한다.
+   - ``ON`` count the traffic.
 
 -  ``<OriginLocal>`` 
 
-   STON구간과 Loopback 원본서버 구간의 트래픽을 통계로 집계한다.
+   Count the traffic between STON and Loopback origin server as a statistics.
 
-   - ``OFF (기본)`` 집계하지 않는다.
+   - ``OFF (default)`` does not count the traffic.
    
-   - ``ON`` 집계한다.
+   - ``ON`` count the traffic.
    
 
 호스트 종합통계
