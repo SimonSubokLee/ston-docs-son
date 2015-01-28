@@ -104,11 +104,11 @@ Configures the range of data to be collected. ::
    - ``ON`` count the traffic.
    
 
-호스트 종합통계
+Host Comprehensive Stats
 ====================================
 
-호스트 통계는 가장 상위 개념의 통계로 서비스하는 모든 가상호스트의 통계를 종합한다. 
-같은 통계를 JSON과 XML형식으로 제공한다. ::
+Host stats is the generic concept among stats and aggregates stats of all virtual host in service. 
+An identical stats are provided in JSON and XML formats. ::
 
    {                                            <Host                                    
      "Host":                                      Version="2.0.0"                       
@@ -202,18 +202,18 @@ Configures the range of data to be collected. ::
      }
    }
    
--  ``Version`` STON 버전
--  ``Name`` 호스트이름. 설정하지 않았다면 시스템 이름을 보여준다.
--  ``State`` 서비스 상태. (Healthy=정상 서비스, Inactive=라이센스 비활성화, Emergency)
--  ``Uptime (단위: 초)`` 서비스 실행시간
--  ``OriginSession`` 원본세션 수
--  ``OriginActiveSession`` 전송 중인 원본세션 수
--  ``OriginInbound (단위: Bytes, 평균)`` 원본서버부터 받은 양
--  ``OriginReqCount (평균)`` 원본서버로 보낸 요청횟수
--  ``OriginOutbound (단위: Bytes, 평균)`` 원본서버로 보낸 양
--  ``OriginResTotalCount (평균)`` 원본서버 응답횟수
--  ``OriginResTotalTimeRes (단위: 0.01ms, 평균)`` 원본서버 응답시간 (HTTP요청 전송 ~ HTTP응답 첫 수신)
--  ``OriginResTotalTimeComplete (단위: 0.01ms, 평균)`` 원본서버 HTTP 트랜잭션 완료시간 (HTTP요청 전송 ~ HTTP응답 완료)
+-  ``Version`` STON version
+-  ``Name`` Host name. If not defined, system name will be stated.
+-  ``State`` Service status. (Healthy=Normal service, Inactive=Inactive license, Emergency)
+-  ``Uptime (unit: second)`` Running time of the service
+-  ``OriginSession`` The number of origin session
+-  ``OriginActiveSession`` The number of transmitting origin session
+-  ``OriginInbound (unit: Bytes, average)`` The amount of received data from the origin server
+-  ``OriginReqCount (average)`` The number of requests sent to the origin server
+-  ``OriginOutbound (unit: Bytes, average)`` The amount of transmitted data to the origin server
+-  ``OriginResTotalCount (average)`` The number of responses from the origin server
+-  ``OriginResTotalTimeRes (unit: 0.01ms, average)`` Response time of the origin server (HTTP request ~ First HTTP response)
+-  ``OriginResTotalTimeComplete (unit: 0.01ms, average)`` 원본서버 HTTP 트랜잭션 완료시간 (HTTP요청 전송 ~ HTTP응답 완료)
 -  ``OriginRes2xxCount (평균)`` 원본서버 2xx응답횟수
 -  ``OriginRes2xxTimeRes (단위: 0.01ms, 평균)`` 원본서버 2xx응답시간
 -  ``OriginRes2xxTimeComplete (단위: 0.01ms, 평균)`` 원본서버 2xx 트랜잭션 완료시간
