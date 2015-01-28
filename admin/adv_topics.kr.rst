@@ -103,7 +103,7 @@ These expressions can be used for followings.
 
 
 
-Origin Server Dispersion
+Origin Server Distribution
 ====================================
 
 When there are billions of contents to be serviced, it is impossible and inefficient to cache all contents. 
@@ -115,8 +115,8 @@ The most effective method is to disperse contents domain and configure with mult
       
    Multi-domain is advantageous to service expansion.
    
-If a service is configured with only one domain like (A), there is no way to physically disperse traffics. 
-The service (B) separates multiple domains and configures separate cache servers to disperse traffic.
+If a service is configured with only one domain like (A), there is no way to physically split traffics. 
+The service (B) separates multiple domains and configures separate cache servers to split traffics.
 However, having multiple domains could be inappropriate in some cases. 
 
 For example, when the traffic is low compare to the size of contents or service update cost is too high, having multiple domain is not adequate. 
@@ -152,79 +152,68 @@ The most frequently accessed pages from clients will be cached in the child serv
 and which cache server clients may connect, pages can be serviced quickly.
 Above all, there is no doubt that the child server must cache hottest contents all the time. 
 
-예를 들어 원본서버의 전체 컨텐츠가 2,000만개이고 한대의 캐시서버가 1,000만개의 컨텐츠를 
-캐싱할 수 있다고 가정해보자. 
-2 Tier구성일 경우 Child서버는 캐싱하지 못한 1,000만개를 캐싱하기 위해 
-항상 원본서버로 요청을 보낸다. 
-서비스가 커질수록 원본서버가 많은 부하를 받게 된다. 
+For example, let's say there are total 20 million contents in the origin server and the cache server can cache 10 million contents. 
+In case of 2 tier structure, the child server sends frequent requests to the origin server in order to get the rest 10 million contents that have not been cached. 
+As the service gets bigger, the load on the origin server gets heavier as well. 
 
-이런 단점을 극복하기 위해 Child와 원본서버 사이에 캐시서버를 두면 효과적이다. 
-언뜻 큰 의미가 없어 보이기도 한다.
-하지만 클라이언트가 요청을 분산해서 보내면 이야기가 달라진다. 
+To effectively overcome this disadvantage, configuring cache servers in between child servers and the origin server. 
+This might seem meaningless, however, if clients distribute their requests, it's a whole different story. 
 
-Child와 원본서버 사이에 Parent를 2대 투입한다. 
-Parent한대당 1,000만개를 캐싱할 수 있다. 
-모든 Chlid들은 해쉬 알고리즘에 의해서 홀수 컨텐츠는 왼쪽 서버에, 
-짝수 컨텐츠는 오른쪽 서버로 요청할 수 있다. 
-이렇게 설정하면 Parent캐시서버의 집중도가 매우 높아지는 효과가 발생한다. 
-결국 원본서버의 부하없이 모든 컨텐츠를 캐시서버팜 안에 캐싱할 수 있을 뿐만 아니라 
-간단히 Child서버를 증설하여 부담없는 Topology를 구성할 수 있다.
+Now, let's install two parent servers between child servers and the origin server.
+Each parent server can cache 10 million contents.
+All child servers can split their requests based on hash algorithm, for example, odd numbered contents request to the left server and even numbered contents request to the right server. 
+This configuration will concentrate most requests to parent servers.
+As a result, all contents can be cached in cache servers and simply install additional child servers to configure less burdened topology.
 
 .. figure:: img/faq_3tierdist.jpg
    :align: center
       
-   콘텐츠 분산캐시
+   Distributed Cache of Contents
 
-분산캐시는 Child서버의 가상호스트에 설정한다. ::
+Distributed cache is configured in the virtual host of the child server. ::
 
     # server.xml - <Server><VHostDefault><OriginOptions>
     # vhosts.xml - <Vhosts><Vhost><OriginOptions>
 
     <Distribution>OFF</Distribution>
     
--  ``<Distribution>`` 원본서버 분산모드를 설정한다.
+-  ``<Distribution>`` configures distribution mode of the origin server.
 
-   - ``OFF (기본)`` ``<BalanceMode>`` 에 따라 동작한다.
+   - ``OFF (default)`` ``<BalanceMode>`` becomes a determinant.
    
-   - ``ON`` 콘텐츠를 분산하여 요청한다. ``<BalanceMode>`` 는 무시된다. 
+   - ``ON`` splits contents requests. ``<BalanceMode>`` is ignored. 
 
-원본 컨텐츠가 더 늘어나면 Parent서버를 한대 더 투입만 하면된다. 
-여전히 Child는 Hot 컨텐츠 위주로 캐싱하며 가장 빠르고 신뢰할 수 있는 경로로 
-Long-Tail컨텐츠를 캐싱할 수 있다. 
-Parent서버에 장애가 발생하면 Child들은 장애서버를 배제하고 컨텐츠를 다시 분산한다. 
-Standby서버가 있다면 장애서버 위치에 Standby서버를 위치시켜 다른 Parent서버가 
-영향받지 않게 한다.
+If the origin contents increase, you can simply put additional parent server. 
+Child servers still cache hottest contents first and Long-Tail contents are cached via fastest and most credible path. 
+When parent servers are failing, child servers exclude failed servers and redistribute contents. 
+If there are available standby servers, replace failed parent servers with standby servers so other parent servers are not affected.
 
 
-Emergency 모드
+Emergency Mode
 ====================================
 
-내부적으로 모든 가상호스트가 MemoryBlock을 공유하면서 데이터를 관리하도록 설계되어 있다. 
-신규 메모리가 필요한 경우 참조되지 않는 오래된 MemoryBlock을 재사용하여 신규 메모리를 확보한다. 
-이 과정을 Memory-Swap이라고 부른다. 
-이런 구조를 통해 장기간 운영하여도 안정성을 확보할 수 있다.
+The STON is designed that all virtual hosts are sharing MomoeryBlock and managing data.
+When a new memory is needed, STON will reuse the MemoryBlock that has not been accessed for a long time to secure new memory. 
+This process is called Memory-Sway.
+This architecture guarantees stability during long period of service.
 
 .. figure:: img/faq_emergency1.png
    :align: center
       
-   콘텐츠 데이터는 MemoryBlock에 담겨 서비스된다.
+   Contents data are loaded on the MemoryBlock and serviced.
 
-위 그림의 우측 상황처럼 모든 MemoryBlock이 사용 중이어서 재사용할 수 있는 MemoryBlock이 
-존재하지 않는 상황이 발생할 수 있다. 
-이때는 Memory-Swap이 불가능해진다. 
-예를 들어 모든 클라이언트가 서로 다른 데이터 영역을 아주 조금씩 다운로드 받거나 
-원본서버에서 서로 다른 데이터를 아주 조금씩 전송하는 상황이 동시에 발생하는 경우가 최악이다. 
-이런 경우 시스템으로부터 새로운 메모리를 할당받아 사용하는 것도 방법이다. 
-하지만 이런 상황이 지속될 경우 메모리 사용량이 높아진다. 
-메모리 사용량이 과도하게 높아질 경우 시스템 메모리스왑을 발생시키거나 최악의 경우 
-OS가 STON을 종료시키는 상황이 발생할 수 있다.
+The left figure of the above illustration explains a situation when all MemoryBlocks are accupied and no MemoryBlock can be reused. 
+Memory-Sway is not available in this situation. 
+For example, the worst case happens when all clients are downloading tiny parts of different data portions, and at the same time the origin server trasmits tiny size of different data. 
+Allocating a new memory from the system could be a solution for the worst case. 
+However, persistent worst cases will evidently raise memory usage. 
+An excessive use of memory will occur system memory swap, or at the worst, OS could force quit the STON.
 
 .. note::
 
-   Emergency 모드란 메모리 부족상황이 발생할 경우 임시적으로 신규 MemoryBlock의 할당을 금지시키는 상황을 의미한다.
+   Emergency mode stands for a situation when there is insufficient memory and temporarily prohibits new MemoryBlock allocation.
 
-이는 과다 메모리 사용으로부터 스스로를 보호하기 위한 방법이며, 
-재사용가능한 MemoryBlock이 충분히 확보되면 자동 해지된다. ::
+Emergency mode is to protect the service from excessive memory usage, and it will be released when enough size of reusable MemoryBlocks are secured. ::
 
     # server.xml - <Server><Cache>
    
@@ -232,40 +221,40 @@ OS가 STON을 종료시키는 상황이 발생할 수 있다.
     
 -  ``<EmergencyMode>``
 
-   - ``OFF (기본)`` 사용하지 않는다.
+   - ``OFF (default)`` Do not use Emergency Mode.
    
-   - ``ON`` 사용한다.
+   - ``ON`` Use Emergency Mode.
 
-Emergency모드일 때 STON은 다음과 같이 동작합니다.
+In Emergency mode, STON operates as below.
 
-- 이미 로딩되어 있는 컨텐츠는 정상적으로 서비스된다.
-- 바이패스는 정상적으로 이루어진다.
-- 로딩되어 있지 않은 컨텐츠에 대해서는 503 service temporarily unavailable로 응답한다. TCP_ERROR상태가 증가한다.
-- Idle 클라이언트 소켓을 빠르게 정리한다.
-- 신규 컨텐츠를 캐싱할 수 없다.
-- TTL이 만료된 컨텐츠를 갱신하지 않는다.
-- SNMP의 cache.vhost.status와 XML/JSON통계의 Host.State 값이 "Emergency"로 제공된다.
-- Info로그에 Emergency모드로 전환/해제를 다음과 같이 기록한다. ::
+- Loaded contents are serviced normally.
+- Bypass works normally.
+- Unloaded contents will be returned with 503 service temporarily unavailable. TCP_ERROR status increases.
+- Quickly cleans up idle client sockets.
+- Does not cache modified contents.
+- TTL does not renew expired contents.
+- The cache.vhost.status of SNMP and Host.State value of XML/JSON statistics is returned as "Emergency".
+- Info log writes Emergency mode activate/inactivate as below. ::
 
     2013-08-07 21:10:42 [WARNING] Emergency mode activated. (Memory overused: +100.23MB)
-    ...(생략)...
+    ...(skip)...
     2013-08-07 21:10:43 [NOTICE] Emergency mode inactivated.
     
     
-디스크 Hot-Sawp
+Disk Hot-Sawp
 ====================================
 
-서비스 중단없이 디스크를 교체한다. 
-파라미터는 반드시 ``<Disk>`` 설정과 같아야 한다. ::
+Without stopping the service, you can change the disk. 
+The parameter must be the same with ``<Disk>`` configuration. ::
 
    http://127.0.0.1:10040/command/unmount?disk=...
    http://127.0.0.1:10040/command/umount?disk=...
 
-배제된 디스크는 즉시 사용되지 않으며 해당 디스크에 저장되었던 모든 컨텐츠는 무효화된다. 
-관리자에 의해 배제된 디스크의 상태는 "Unmounted"로 설정된다.
+An excluded disk is immediately inactivated and all contents in the corresponding disk becomes invalid. 
+The status of excluded disk by the administrator is set to "Unmounted".
 
-디스크를 서비스에 재투입하려면 다음과 같이 호출한다. ::
+In order to reactivate the disk, the following should be called. ::
 
    http://127.0.0.1:10040/command/mount?disk=...
 
-재투입된 디스크의 모든 콘텐츠는 무효화된다.
+All contents in the reactivated disk becomes invalid.
