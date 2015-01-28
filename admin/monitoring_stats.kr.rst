@@ -1,29 +1,28 @@
 ﻿.. _monitoring_stats:
 
-15장. 모니터링 & 통계
+Chapter 15. Monitoring & Stats
 ******************
 
-이 장에서는 모니터링과 통계에 대해 설명한다.
-모니터링과 통계는 용도에 따라 서로 다르게 이해되는 경우가 많다.
-하지만 서비스는 숫자로 이야기한다는 관점에서 둘은 같다.
+This chapter explains about the monitoring and the statistics.
+They are somewhat different in their usage, but they are similar in the way that they use numbers to notify.
 
-여기서 가장 중요한 요소는 실시간성이다.
-5분도 너무 길다.
-실시간으로 서비스 상태변화를 볼 수 있어야 한다.
-수 많은 정책이 적용과 동시에 효과를 내는지 즉시 알 수 있어야 한다.
-모든 통계는 1초단위로 수집되며 최소 단위가 된다.
+Real time update is very important in monitoring service.
+Waiting for 5 minutes is too long for you.
+You have to see the change of service status in real time.
+You must observe whether the policies are taking effects when they are applied.
+All statistics are collected every second.
 
-모든 통계는 가상호스트별로 따로 수집될 뿐만 아니라 실시간(1초), 5분 평균으로 제공된다. 
-고객이 통계를 보다 쉽게 분석, 가공할 수 있도록 JSON과 XML 포맷으로 제공한다. ::
+Statistics are collected on each virtual host and provided every second and 5 minute average. 
+In order to help customer to analyze and process stats more easily, JSON and XML format is used. ::
 
-    http://127.0.0.1:10040/monitoring/realtime?type=[JSON 또는 XML]
-    http://127.0.0.1:10040/monitoring/average?type=[JSON 또는 XML]
+    http://127.0.0.1:10040/monitoring/realtime?type=[JSON or XML]
+    http://127.0.0.1:10040/monitoring/average?type=[JSON or XML]
     
 -  ``realtime`` 
-   1초 전 서비스 상태를 제공한다.
+   Provides prior 1 second service status.
 
 -  ``average`` 
-   5분 단위 통계를 제공한다.
+   Provides the average of 5 minutes statistics.
 
 
 .. toctree::
@@ -31,10 +30,10 @@
 
 
 
-수집범위
+Data Range
 ====================================
 
-통계수집 범위를 설정한다. ::
+Configures the range of data to be collected. ::
 
    # server.xml - <Server><VHostDefault>
    # vhosts.xml - <Vhosts><Vhost>
@@ -47,24 +46,24 @@
       <OriginLocal>OFF</OriginLocal>
    </Stats>
     
--  ``<DirDepth> (기본: 0)`` 
+-  ``<DirDepth> (default: 0)`` 
    
-   디렉토리별로 통계를 수집한다. 
-   0으로 설정된 경우 모든 통계를 루트(/) 디렉토리로 수집한다. 
-   1로 설정하면 통계는 첫 번째 Depth 디렉토리별로 수집된다. 
+   Collect statistics of each directory. 
+   If this is set to 0, all statistics are collected in the root(/) directory. 
+   If this is set to 1, statistics are collected in every first depth directory. 
    
    .. note:
       
-      값의 제한은 없지만 수 만개 이상의 디렉토리 통계를 수집할 경우 자칫 메모리 문제를 초래할 수 있다.
+      There is no restriction in this value, but memory problem could occur if you are trying to collect stats from tens of thousands of directories.
    
 -  ``<DirDepthAccum>`` 
 
-   디렉토리별로 통계수집할 때 상위 디렉토리 통계 합산여부를 설정한다.
-   ``<DirDepth>`` 이 0이라면 이 설정은 무시된다.
+   Configures whether to accumulate statistics to upper directory when collecting stats of each directory.
+   This will be ignored if ``<DirDepth>`` is set to 0.
    
-   - ``OFF (기본)`` 상위 디렉토리로 통계를 합산하지 않는다.
+   - ``OFF (default)`` does not accumulate stats to upper directory.
    
-   - ``ON`` 상위 디렉토리로 통계를 합산한다.
+   - ``ON`` accumulates stats to upper directory.
    
    예를 들어, ``<DirDepth>`` 이 2이고 모든 디렉토리에 동일하게 10만큼의 트래픽이 발생하고 있다고 가정한다. 
    ``<DirDepthAccum>`` 이 ``OFF`` 라면 좌측 그림처럼 트래픽이 발생하는 디렉토리별로 따로 통계가 수집된다.
