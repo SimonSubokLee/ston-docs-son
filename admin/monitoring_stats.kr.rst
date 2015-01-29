@@ -213,48 +213,48 @@ An identical stats are provided in JSON and XML formats. ::
 -  ``OriginOutbound (unit: Bytes, average)`` The amount of transmitted data to the origin server
 -  ``OriginResTotalCount (average)`` The number of responses from the origin server
 -  ``OriginResTotalTimeRes (unit: 0.01ms, average)`` Response time of the origin server (HTTP request ~ First HTTP response)
--  ``OriginResTotalTimeComplete (unit: 0.01ms, average)`` 원본서버 HTTP 트랜잭션 완료시간 (HTTP요청 전송 ~ HTTP응답 완료)
--  ``OriginRes2xxCount (평균)`` 원본서버 2xx응답횟수
--  ``OriginRes2xxTimeRes (단위: 0.01ms, 평균)`` 원본서버 2xx응답시간
--  ``OriginRes2xxTimeComplete (단위: 0.01ms, 평균)`` 원본서버 2xx 트랜잭션 완료시간
--  ``OriginRes3xxCount (평균)`` 원본서버 3xx응답횟수
--  ``OriginRes3xxTimeRes (단위: 0.01ms, 평균)`` 원본서버 3xx응답시간
--  ``OriginRes3xxTimeComplete (단위: 0.01ms, 평균)`` 원본서버 3xx 트랜잭션 완료시간
--  ``OriginRes4xxCount (평균)`` 원본서버 4xx응답횟수
--  ``OriginRes4xxTimeRes (단위: 0.01ms, 평균)`` 원본서버 4xx응답시간
--  ``OriginRes4xxTimeComplete (단위: 0.01ms, 평균)`` 원본서버 4xx 트랜잭션 완료시간
--  ``OriginRes5xxCount (평균)`` 원본서버 5xx응답횟수
--  ``OriginRes5xxTimeRes (단위: 0.01ms, 평균)`` 원본서버 5xx응답시간
--  ``OriginRes5xxTimeComplete (단위: 0.01ms, 평균)`` 원본서버 5xx 트랜잭션 완료시간
--  ``ClientSession`` 클라이언트 세션 수
--  ``ClientActiveSession`` 전송 중인 클라이언트 세션 수
--  ``ClientInbound (단위: Bytes, 평균)`` 클라이언트로부터 받은 양
--  ``ClientOutbound (단위: Bytes, 평균)`` 클라이언트로에게 보낸 양
--  ``ClientReqCount (평균)`` 클라이언트로 받은 요청횟수
--  ``ClientResTotalCount (평균)`` 클라이언트 응답횟수
--  ``ClientResTotalTimeRes (단위: 0.01ms, 평균)`` 클라이언트 응답시간 (HTTP요청 수신 ~ HTTP응답 전송)
--  ``ClientResTotalTimeComplete (단위: 0.01ms, 평균)`` 클라이언트 HTTP 트랜잭션 완료시간 (HTTP요청 수신 ~ HTTP응답 완료)
--  ``ClientRes2xxCount (평균)`` 클라이언트 2xx응답횟수
--  ``ClientRes2xxTimeRes (단위: 0.01ms, 평균)`` 클라이언트 2xx응답시간
--  ``ClientRes2xxTimeComplete (단위: 0.01ms, 평균)`` 클라이언트 2xx 트랜잭션 완료시간
--  ``ClientRes3xxCount (평균)`` 클라이언트 3xx응답횟수
--  ``ClientRes3xxTimeRes (단위: 0.01ms, 평균)`` 클라이언트 3xx응답시간
--  ``ClientRes3xxTimeComplete (단위: 0.01ms, 평균)`` 클라이언트 3xx 트랜잭션 완료시간
--  ``ClientRes4xxCount (평균)`` 클라이언트 4xx응답횟수
--  ``ClientRes4xxTimeRes (단위: 0.01ms, 평균)`` 클라이언트 4xx응답시간
--  ``ClientRes4xxTimeComplete (단위: 0.01ms, 평균)`` 클라이언트 4xx 트랜잭션 완료시간
--  ``ClientRes5xxCount (평균)`` 클라이언트 5xx응답횟수
--  ``ClientRes5xxTimeRes (단위: 0.01ms, 평균)`` 클라이언트 5xx응답시간
--  ``ClientRes5xxTimeComplete (단위: 0.01ms, 평균)`` 클라이언트 5xx 트랜잭션 완료시간
--  ``RequestHitRatio (단위: 0.01%, 평균)`` Hit율. 
-   캐싱객체가 생성되어 있고 해당 객체가 초기화되어 있다면 Hit이다. 
-   반대로 캐싱객체가 없거나 해당 객체가 원본서버로부터 초기화되지 않았다면 Hit로 치지 않는다. 
-   응답코드와 Hit율은 관련이 없다.
+-  ``OriginResTotalTimeComplete (unit: 0.01ms, average)`` HTTP transaction completion time of the origin server (transfer HTTP request ~ complete HTTP response)
+-  ``OriginRes2xxCount (average)`` The number of 2xx responses of the origin server
+-  ``OriginRes2xxTimeRes (unit: 0.01ms, average)`` The 2xx response time of the origin server
+-  ``OriginRes2xxTimeComplete (unit: 0.01ms, average)`` 2xx transaction completion time of the origin server
+-  ``OriginRes3xxCount (average)`` The number of 3xx responses of the origin server
+-  ``OriginRes3xxTimeRes (unit: 0.01ms, average)`` The 3xx response time of the origin server
+-  ``OriginRes3xxTimeComplete (unit: 0.01ms, average)`` 3xx transaction completion time of the origin server
+-  ``OriginRes4xxCount (average)`` The number of 4xx responses of the origin server
+-  ``OriginRes4xxTimeRes (unit: 0.01ms, average)`` The 4xx response time of the origin server
+-  ``OriginRes4xxTimeComplete (unit: 0.01ms, average)`` 4xx transaction completion time of the origin server
+-  ``OriginRes5xxCount (average)`` The number of 5xx responses of the origin server
+-  ``OriginRes5xxTimeRes (unit: 0.01ms, average)`` The 5xx response time of the origin server
+-  ``OriginRes5xxTimeComplete (unit: 0.01ms, average)`` 5xx transaction completion time of the origin server
+-  ``ClientSession`` The number of client session
+-  ``ClientActiveSession`` The number of transmitting client session
+-  ``ClientInbound (unit: Bytes, average)`` The amount of inbound data from clients
+-  ``ClientOutbound (unit: Bytes, average)`` The amount of outbound data to clients
+-  ``ClientReqCount (average)`` The number of request from clients
+-  ``ClientResTotalCount (average)`` The number of response from clients
+-  ``ClientResTotalTimeRes (unit: 0.01ms, average)`` Client response time (HTTP request reception ~ transfer HTTP response)
+-  ``ClientResTotalTimeComplete (unit: 0.01ms, average)`` Client HTTP transaction completion time (HTTP request reception ~ complete HTTP response)
+-  ``ClientRes2xxCount (average)`` The number of 2xx responses of the client
+-  ``ClientRes2xxTimeRes (unit: 0.01ms, average)`` The 2xx response time of the origin server
+-  ``ClientRes2xxTimeComplete (unit: 0.01ms, average)`` 2xx transaction completion time of the client
+-  ``ClientRes3xxCount (average)`` The number of 3xx responses of the client
+-  ``ClientRes3xxTimeRes (unit: 0.01ms, average)`` The 3xx response time of the origin server
+-  ``ClientRes3xxTimeComplete (unit: 0.01ms, average)`` 3xx transaction completion time of the client
+-  ``ClientRes4xxCount (average)`` The number of 4xx responses of the client
+-  ``ClientRes4xxTimeRes (unit: 0.01ms, average)`` The 4xx response time of the origin server
+-  ``ClientRes4xxTimeComplete (unit: 0.01ms, average)`` 4xx transaction completion time of the client
+-  ``ClientRes5xxCount (average)`` The number of 5xx responses of the client
+-  ``ClientRes5xxTimeRes (unit: 0.01ms, average)`` The 4xx response time of the origin server
+-  ``ClientRes5xxTimeComplete (unit: 0.01ms, average)`` 5xx transaction completion time of the client
+-  ``RequestHitRatio (unit: 0.01%, average)`` Hit ratio. 
+   If a caching object is created and the corresponding object is initialized, then it is considered as a Hit. 
+   On the other hand, the caching object is missing or the object is not initialized from the origin server, it does not count as a Hit. 
+   The response code does not have to do with the hit ratio.
    
    .. figure:: img/stat_filesystem1.png
       :align: center
       
-      HTTP와 File I/O는 가상호스트를 공유한다.
+      HTTP and File I/O share the virtual host.
       
    Apache를 통해 접근되는 File I/O의 RequestHitRatio는 0%이 된다.
    하지만 HTTP Server의 경우 File I/O에 의해 캐싱된 파일을 접근하기 때문에 100%의 RequestHitRatio를 가진다. 
