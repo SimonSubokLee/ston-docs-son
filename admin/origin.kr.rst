@@ -139,7 +139,7 @@ IP list can be changed dynamically, and all IPs are only valid for valid TTL.
 Even if you set the origin address as a domain, error/recovery features work based on IP address.
 DNS client(STON) does not identify all IP addresses in the domain. 
 However, if the domain consists of unavailable IP addresses, server failure status cannot last
-(??이 문장에 대한 구체적인 설명이 필요합니다.)하지만 사용할 수 없는 IP들만으로 Domain을 구성할 경우 장애상태가 지속될 수 없다.
+(??이 문장에 대한 구체적인 설명이 필요합니다.: STON은 DNS resolving으로 얻은 IP 기반으로 동작하는데, 해당 DNS의 등록된 IP가 바뀔 경우도 있기 때문에 모든 IP를 다 알수 없다는 말입니다)하지만 사용할 수 없는 IP들만으로 Domain을 구성할 경우 장애상태가 지속될 수 없다.
 
 Error/Recovery policies of the domain address are listed in the below.
 
