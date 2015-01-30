@@ -1,6 +1,6 @@
 ﻿.. _monitoring_stats:
 
-Chapter 15. Monitoring & Stats
+Chapter 15. Monitoring & Statistics
 ******************
 
 This chapter explains about the monitoring and the statistics.
@@ -104,7 +104,7 @@ Configures the range of data to be collected. ::
    - ``ON`` count the traffic.
    
 
-Host Comprehensive Stats
+Host Comprehensive Statistics
 ====================================
 
 Host stats is the generic concept among stats and aggregates stats of all virtual host in service. 
@@ -441,7 +441,7 @@ The stats of system and global resources are provided with JSON and XML formats.
 -  ``URLRewrite`` The number of successful conversion by the URL preprocessor
     
     
-Virtual Host Stats
+Virtual Host Statistics
 ====================================
 
 Each virtual host provides statistics. 
@@ -552,7 +552,7 @@ There are four virtual host statistics; HTTP transfer(per directory), URL bypass
    -  ``ClientHttpReqDeniedSum`` Total number of denied HTTP requests
 
 
-Disk Stats
+Disk Statistics
 ------------------------------
 
 Provides statistics of the disk that the virtual host uses. ::
@@ -637,10 +637,10 @@ Provides statistics of the disk that the virtual host uses. ::
    - ``O16G`` The number of files that are less than 16GB
 
 
-Session Stats
+Session Statistics
 ------------------------------
 
-가상호스트가 사용하는 디스크통계를 제공한다. ::
+(디스크 통계와 같은 문장인것 같습니다??)가상호스트가 사용하는 디스크통계를 제공한다. ::
 
    "Session":                                   <Session            
    {                                              Client="30"       
@@ -650,17 +650,17 @@ Session Stats
      "ActiveOrigin":7
    },
    
--  ``Client`` 전체 HTTP 클라이언트 세션수
--  ``ActiveClient`` 전체 HTTP 클라이언트 중 전송 중인 세션수
--  ``Origin`` 전체 원본서버 세션수
--  ``ActiveOrigin`` 전체 원본서버 세션수 중 전송 중인 세션수
+-  ``Client`` The number of total HTTP client sessions
+-  ``ActiveClient`` The number of transmitting sessions among HTTP clients
+-  ``Origin`` The number of total origin server sessions
+-  ``ActiveOrigin`` The number of transmitting sessions among origin server sessions.
 
 
 
-원본 통계
+The Origin Server Statistics
 ------------------------------
 
-STON과 원본서버 사이에 발생하는 트래픽통계를 제공한다. ::
+Provides traffic stats between STON and the origin server. ::
 
    "OriginTraffic":                             <OriginTraffic>                                  
    {                                              <HttpReqCount Sum="600">2</HttpReqCount>       
@@ -732,47 +732,47 @@ STON과 원본서버 사이에 발생하는 트래픽통계를 제공한다. ::
      }
    },
 
--  ``HttpReqCount`` 원본서버로 보낸 HTTP 요청 횟수
--  ``HttpReqHeaderSize (단위: Bytes)`` 원본서버로 보낸 HTTP 헤더 크기
--  ``HttpReqBodySize (단위: Bytes)`` 원본서버로 보낸 HTTP Body 크기
--  ``HttpResHeaderSize (단위: Bytes)`` 원본서버에서 받은 HTTP 헤더 크기
--  ``HttpResBodySize (단위: Bytes)`` 원본서버에서 받은 HTTP Body 크기
--  ``Response`` 원본서버에서 보낸 응답 (ResXXX)
+-  ``HttpReqCount`` The number of HTTP requests sent to the origin server
+-  ``HttpReqHeaderSize (unit: Bytes)`` The size of HTTP header sent to the origin server
+-  ``HttpReqBodySize (unit: Bytes)`` The size of HTTP Body sent to the origin server
+-  ``HttpResHeaderSize (unit: Bytes)`` The size of HTTP header received at the origin server
+-  ``HttpResBodySize (unit: Bytes)`` The size of HTTP Body received at the origin server
+-  ``Response`` The resonse from the origin server (ResXXX)
 
-   -  ``Count`` 응답횟수
-   -  ``Completed`` 정상적으로 전송완료된 HTTP트랜잭션 횟수
-   -  ``TimeRes`` HTTP 응답시간
-   -  ``TimeComplete`` HTTP 트랜잭션 완료시간
+   -  ``Count`` The number of responses
+   -  ``Completed`` The number of completely transferred HTTP transactions
+   -  ``TimeRes`` HTTP resonse time
+   -  ``TimeComplete`` Completed time of the HTTP transaction
 
--  ``Response`` 원본서버 연결에러
+-  ``Response`` Origin server connection error
    
-   -  ``ConnectTimeout`` 연결실패
-   -  ``ReceiveTimeout`` 전송지연
-   -  ``Close`` 전송 중 원본서버에서 먼저 소켓 종료
+   -  ``ConnectTimeout`` Connection failure
+   -  ``ReceiveTimeout`` Transmission delay
+   -  ``Close`` Origin server closed socket during transfer
    
--  ``Connect`` 원본서버 접속통계
+-  ``Connect`` Origin server connection stats
 
-   -  ``Count`` 접속횟수
-   -  ``AvgDNSQueryTime (단위: 0.01ms)`` 평균 DNS쿼리 시간
-   -  ``AvgConnTime (단위: 0.01ms)`` 평균 접속시간 (TCP SYN전송 ~ TCP SYN ACK수신)
+   -  ``Count`` The number of connections
+   -  ``AvgDNSQueryTime (unit: 0.01ms)`` Average DNS query time
+   -  ``AvgConnTime (unit: 0.01ms)`` Average connection time (TCP SYN transmittion ~ TCP SYN ACK reception)
    
 .. note::
 
-   5분 통계에서만 제공되는 항목.
+   Items that are only provided in 5 minute statistics.
    
-   -  ``HttpReqCountSum`` HTTP요청의 총 회수
-   -  ``CountSum`` HTTP응답의 총 회수
-   -  ``CompletedSum`` 완료된 HTTP 트랜잭션의 총 회수
-   -  ``ConnectTimeoutSum`` 원본서버 접속실패 총 회수
-   -  ``ReceiveTimeoutSum`` 원본서버 전송지연 총 회수
-   -  ``CloseSum`` 원본서버에서 먼저 연결을 종료한 총 회수
+   -  ``HttpReqCountSum`` Total number of HTTP requests
+   -  ``CountSum`` Total number of HTTP responses
+   -  ``CompletedSum`` Total number of completed HTTP transactions
+   -  ``ConnectTimeoutSum`` Total number of the origin server connection failures
+   -  ``ReceiveTimeoutSum`` Total number of the origin server transmission delays
+   -  ``CloseSum`` Total number of connection close by the origin server
       
    
 
-포트바이패스 통계
+Port Bypass Statistics
 ------------------------------
 
-``<PortBypass>`` 를 통해 발생한 트래픽통계를 제공한다. ::
+Provides traffic stats via ``<PortBypass>``. ::
 
    "PortBypass":                                            <PortBypass SrcPort="1935" DestPost="1935">
    [                                                          <Session>0</Session>                     
@@ -793,26 +793,26 @@ STON과 원본서버 사이에 발생하는 트래픽통계를 제공한다. ::
    ],
    
    
--  ``SrcPort/DestPort`` 바이패스 하는 STON포트/원본서버 포트
--  ``Session`` 현재 연결된 세션 수
--  ``Hit`` 바이패스 접속 통계
+-  ``SrcPort/DestPort`` Bypassed STON port/origin server port
+-  ``Session`` Total number of connected sessions
+-  ``Hit`` Bypass connection stats
 
-   -  ``Established`` 성립된 연결 개수
-   -  ``ClientClosed`` 클라이언트가 연결 종료한 횟수
-   -  ``OriginClosed`` 원본서버에서 연결 종료한 횟수
-   -  ``OriginCT`` 원본서버 접속실패 횟수
+   -  ``Established`` Total number of established connections
+   -  ``ClientClosed`` Total number of connection closed by clients
+   -  ``OriginClosed`` Total number of connection closed by the origin server
+   -  ``OriginCT`` Total number of origin server connection failures
 
--  ``ClientTraffic (단위: Bytes)`` 클라이언트 트래픽 (In=Inbound, Out=Outbound)
--  ``OriginTraffic (단위: Bytes)`` 원본서버 트래픽 (In=Inbound, Out=Outbound)
+-  ``ClientTraffic (unit: Bytes)`` Client traffic (In=Inbound, Out=Outbound)
+-  ``OriginTraffic (unit: Bytes)`` Origin server traffic (In=Inbound, Out=Outbound)
 
 
 
-클라이언트 통계
+Client Statistics
 ------------------------------
 
-클라이언트 트래픽은 디렉토리별 통계설정 여부에 의해 "Traffic"이 멀티로 표현된다. 
-디렉토리별 통계를 설정하지 않았다면 모든 트래픽은 루트(/)로 집계된다. 
-디렉토리 통계가 설정되어 있다면 루트(/)와 트래픽이 발생한 디렉토리만 제공된다. ::
+(멀티로 표현된다는 의미???)클라이언트 트래픽은 디렉토리별 통계설정 여부에 의해 "Traffic"이 멀티로 표현된다. 
+All traffics are counted in the root(/) if stats for each directory have not been set. 
+If directory stats have been set, only the root(/) and directories invloved with traffic will be counted. ::
 
    "ClientTraffic":                             <ClientTraffics Depth="0" Accum="OFF" HttpsTraffic="OFF">
    {                                              <TrafficCount>1</TrafficCount>                         
@@ -971,58 +971,58 @@ STON과 원본서버 사이에 발생하는 트래픽통계를 제공한다. ::
      ]
    }
    
--  ``Depth`` 통계를 수집할 디렉토리 Depth
--  ``Accum`` 디렉토리 통계가 설정된 경우 하위 디렉토리의 통계를 상위 디렉토리로 누적시키는 설정
--  ``HttpsTraffic`` HTTPS트래픽을 HTTP트래픽으로 중복하여 집계하는 설정
--  ``TrafficCount`` 집계된 트래픽 카운트
--  ``Traffic`` 디렉토리별 통계. 루트(/)는 항상 존재한다.
+-  ``Depth`` The directory depth to collect stats
+-  ``Accum`` If directory stats is set, then accumulate the stats of subdirectory to the stats of upper directory
+-  ``HttpsTraffic`` Allow redundant accumulation of HTTPS traffics as HTTP traffics
+-  ``TrafficCount`` Aggregated traffic count
+-  ``Traffic`` Stats per each directory. Root(/) always have traffic.
 
-   -  ``Path`` 서비스 디렉토리
-   -  ``HttpReqCount(단위: Bytes)`` 클라이언트가 보낸 HTTP 요청 개수
-   -  ``HttpReqHeaderSize(단위: Bytes)`` 클라이언트가 보낸 HTTP 요청 헤더 크기
-   -  ``HttpReqBodySize(단위: Bytes)`` 클라이언트가 보낸 HTTP 요청 Body 크기
-   -  ``HttpResHeaderSize(단위: Bytes)`` STON이 보낸 HTTP 응답 헤더 크기
-   -  ``HttpResBodySize(단위: Bytes)`` STON이 보낸 HTTP 응답 Body 크기
-   -  ``Response`` STON이 보낸 응답
+   -  ``Path`` Service directory
+   -  ``HttpReqCount(unit: Bytes)`` Total number of HTTP requests sent by clients
+   -  ``HttpReqHeaderSize(unit: Bytes)`` The size of HTTP request headers sent by clients
+   -  ``HttpReqBodySize(unit: Bytes)`` The size of HTTP request Body sent by clients
+   -  ``HttpResHeaderSize(unit: Bytes)`` The size of HTTP response headers sent by the STON
+   -  ``HttpResBodySize(unit: Bytes)`` The size of HTTP response Body sent by the STON
+   -  ``Response`` Responses sent by the STON
    
-      -  ``Count`` 응답횟수
-      -  ``Completed`` 정상적으로 전송완료된 HTTP트랜잭션 횟수
-      -  ``TimeRes`` HTTP 응답시간
-      -  ``TimeComplete`` HTTP 트랜잭션 완료시간
+      -  ``Count`` Response counts
+      -  ``Completed`` Total number of completed transferred HTTP transactions
+      -  ``TimeRes`` HTTP response time
+      -  ``TimeComplete`` Completed time of the HTTP transaction
         
--  ``SSL(단위: Bytes)`` HTTPS 트래픽 (RecvSize=수신크기, SendSize=송신크기)
--  ``RequestHit`` 캐싱 HIT결과
--  ``FileSystem`` FileSystem 접근
+-  ``SSL(unit: Bytes)`` HTTPS traffic (RecvSize=received size, SendSize=transmitted size)
+-  ``RequestHit`` Cache HIT result
+-  ``FileSystem`` FileSystem access
 
-   -  ``GetAttr`` getattr함수 호출회수와 응답시간. (FileCount: File응답, DirCount: Dir응답, FailCount: 실패응답)
-   -  ``Open`` open함수 호출회수와 응답시간
-   -  ``Read`` read함수 호출회수와 응답시간, 요청크기(BufferSize)와 응답크기(BufferFilled)
-   -  ``RequestHit`` (File I/O 접근) 캐싱 HIT결과
+   -  ``GetAttr`` getattr function call count and response time. (FileCount: File response, DirCount: Dir response, FailCount: failure response)
+   -  ``Open`` open function call count and response time
+   -  ``Read`` read function call count and reponse time, requested size(BufferSize) and reponse size(BufferFilled)
+   -  ``RequestHit`` (File I/O access) Cache HIT result
 
 
 .. note::
 
-   5분 통계에서만 제공되는 항목.
+   Items that are only provided in 5 minute statistics.
    
-   -  ``HttpReqCountSum`` HTTP요청의 총 회수
-   -  ``CountSum`` HTTP응답의 총 회수
-   -  ``CompletedSum`` 완료된 HTTP 트랜잭션의 총 회수
-   -  ``RequestHitSum`` 캐시 HIT 결과
+   -  ``HttpReqCountSum`` Total number of the HTTP requests
+   -  ``CountSum`` Total number of HTTP responses
+   -  ``CompletedSum`` Total number of completed HTTP transactions
+   -  ``RequestHitSum`` Cache HIT result
    
 
 View
 ====================================
 
-View는 가상호스트들을 하나로 묶어 통계를 추출하는 방식이다. 
-Database에서 여러 Table을 마치 하나인 것처럼 다루는 View에서 따온 개념이다. 
-구성은 다음과 같이 아주 간단하다. ::
+View extracts statistics from multiple virtual hosts 
+The concept of View came from the View that deals with multiple Tables in a Database. 
+The structure is as simple as below. ::
 
    # vhosts.xml
 
    <Vhosts>
      <Vhost> ... </Vhost>
      <Vhost> ... </Vhost>
-     ... (생략) ... 
+     ... (skip) ... 
      <View Name="SK">
        <Vhost>...</Vhost>
        <Vhost>...</Vhost>
@@ -1038,14 +1038,14 @@ Database에서 여러 Table을 마치 하나인 것처럼 다루는 View에서 �
      </View>
    </Vhosts>
    
-존재하지 않는 가상호스트로 View를 구성해도 상관없다. 
-View가 제공하는 통계는 다음과 같다. ::
+The View can even include a virtual host that does not exist. 
+The following is the stats provided by View. ::
 
 -  Realtime XML/JSON
 -  SNMP - cache(1.3.6.1.4.1.40001.1.4).10 ~ 12
 
-이해를 돕기 위해 View가 필요한 예를 들어보자. 
-류헌진, 서장혼, 박지송은 각각 자신이 좋아하는 스포츠 커뮤니티 사이트를 운영하고 있다. ::
+In order to help your understanding, let's take an example that View can be adopted. 
+There are three administrators who are running their favorite sport communities. ::
 
    # vhosts.xml
 
@@ -1055,16 +1055,16 @@ View가 제공하는 통계는 다음과 같다. ::
      <Vhost Name="football.com"> ... </Vhost>
    </Vhosts>
    
-평소 친분이 있던 셋은 의기투합하여 스포츠 종합 커뮤니티 서비스를 오픈하기로 결정했다. 
-도메인도 서비스를 모두 아우를 수 있는 sports.com으로 정했다. 
-개발/운영팀이 해결해야하는 미션은 다음과 같다.
+Now, they decided to run a comprehensive sports community service. 
+The sprots.com domain is considered because it can include three sports in the same category. 
+Development/management team have to resolve following issues.
 
-- 통합 서비스는 sports.com으로 한다.
-- 기존 사용자를 위해 기존 도메인과 서비스는 그대로 유지한다.
-- 개발팀은 통합한다. 운영팀은 통합한다.
-- 대문(첫 페이지)만 신규 개발한다. 링크를 통해 기존 서비스를 이용한다.
-- 예산이 없다. 사람이 없다. 시간이 없다. 정신이 없다.
-- 이미 모든 구매절차가 끝났다.
+- The service is provided through sports.com.
+- Previous domains and services have to be kept the same for previous users.
+- Amalgamate development teams. Amalgamate management teams.
+- Only the first page is newly built. Previous services will be provided via links.
+- There are not enough budget, manpower, time.
+- All purchase procedures are completed.
 
 이 모든 요구사항을 처리하는 현실적인 방법으로 개발팀은 다음과 같이 1번째 디렉토리에 
 기존 도메인을 명시하는 규칙을 사용하기로 결정했다. ::
