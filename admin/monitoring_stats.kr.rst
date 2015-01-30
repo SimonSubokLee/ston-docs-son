@@ -256,35 +256,36 @@ An identical stats are provided in JSON and XML formats. ::
       
       HTTP and File I/O share the virtual host.
       
-   Apache를 통해 접근되는 File I/O의 RequestHitRatio는 0%이 된다.
-   하지만 HTTP Server의 경우 File I/O에 의해 캐싱된 파일을 접근하기 때문에 100%의 RequestHitRatio를 가진다. 
-   ByteHitRatio의 경우 원본 Inbound대비 Http outbound, File I/O outbound로 각각 계산된다.
+   The RequestHitRatio of the File I/O that is accessed via Apache becomes 0%.
+   HTTP server, on the other hand, has 100% RequestHitRatio because it accesses cached files via File I/O. 
+   ByteHitRatio is calculated from the ratio of the origin inbound to Http outbound and File I/O outbound.
+   (무엇과 무엇을 비교하는건지 모호함??)ByteHitRatio의 경우 원본 Inbound대비 Http outbound, File I/O outbound로 각각 계산된다.
    
--  ``ByteHitRatio (단위: 0.01%, 평균)`` 원본서버 대비 클라이언트 전송률. ::
+-  ``ByteHitRatio (unit: 0.01%, average)`` The transfer ratio of the origin server to the client. ::
 
-      (클라이언트 Outbound - 원본서버 Inbound) / 클라이언트 Outbound
+      (Client Outbound - Orign server Inbound) / Client Outbound
       
-   원본서버가 훨씬 빠른 속도를 가지고 있거나 클라이언트 세션이 금방 끊어진다면 음수가 된다.
+   Even if the origin server has much faster transfer speed, the client session closes quickly, the total ratio becomes a negative value.
    
--  ``FileSystem`` 독립적인 FileSystem 통계로 다른 통계 수치에 취합되지 않는다.
+-  ``FileSystem`` A separate FileSystem stats that does not accumulated with other stat values.
 
-   - ``RequestHitRatio (단위: 0.01%, 평균)`` File I/O를 통한 Hit율
-   - ``ByteHitRatio (단위: 0.01%, 평균)`` 원본서버 대비 File I/O 전송률
-   - ``Outbound (단위: Bytes, 평균)`` File I/O로 서비스한 데이터 크기
-   - ``Session (평균)`` File I/O 진행 중인 Thread 수
+   - ``RequestHitRatio (unit: 0.01%, average)`` Hit ratio via File I/O
+   - ``ByteHitRatio (unit: 0.01%, average)`` Transfer ratio of the origin server to the File I/O
+   - ``Outbound (unit: Bytes, average)`` Outbound data size via File I/O
+   - ``Session (average)`` The number of thread in File I/O process
       
 .. note::
 
-   5분 통계에서만 제공되는 항목.
+   Items that are only provided in 5 minute statistics.
    
-   -  ``HttpCountSum`` HTTP 트랜잭션의 총 개수   
-   -  ``HttpRequestHitSum`` 캐시 HIT 결과
+   -  ``HttpCountSum`` The total number of HTTP transaction   
+   -  ``HttpRequestHitSum`` Cache HIT result
    
    
-System 통계
+System Statistics
 ====================================
 
-시스템 및 전역자원 통계를 JSON과 XML형식으로 제공한다. ::
+The stats of system and global resources are provided with JSON and XML formats. ::
 
     "System":                                   <System>                                          
     {                                             <CPU                                            
@@ -377,74 +378,74 @@ System 통계
       "URLRewrite":57
     }
 
--  ``CPU (단위: 0.01%)`` CPU사용량. 전체 CPU사용량은 Kernel + User로 계산해야 한다.
+-  ``CPU (unit: 0.01%)`` CPU usage. Total CPU usage can be calculated by Kernel + User.
    
-   - ``Kernel`` CPU(Kernel) 사용량
-   - ``User`` CPU(User) 사용량
-   - ``Idle`` 사용되지 않는 CPU량
-   - ``ProcKernel`` STON이 사용하는 CPU(Kernel) 사용량
-   - ``ProcUser`` STON이 사용하는 CPU(User) 사용량
+   - ``Kernel`` CPU(Kernel) usage
+   - ``User`` CPU(User) usage
+   - ``Idle`` Idle CPU
+   - ``ProcKernel`` CPU(Kernel) usage of the STON
+   - ``ProcUser`` CPU(User) usage of the STON
    - ``Nice`` niced processes executing in user mode
    - ``IOWait`` waiting for I/O to complete
    - ``IRQ`` servicing interrupts
    - ``SoftIRQ`` servicing softirqs
    - ``Steal`` involuntary wait
 
--  ``Mem (단위: Bytes)`` 메모리 사용량.
-   - ``Free`` 시스템 Free 메모리 크기
-   - ``STON`` STON이 사용하는 메모리 크기
+-  ``Mem (unit: Bytes)`` Memory usage.
+   - ``Free`` The size of free Memory of system.
+   - ``STON`` Memory usage of the STON
    
--  ``Disk`` 디스크 성능지표
+-  ``Disk`` Disk performance stats
 
-   - ``Path`` 디스크 경로
-   - ``Status`` 디스크 상태 (Normal: 정상동작, Invalid: 장애로 배제됨, Unmounted: 관리자에 의해 Unmount됨)
-   - ``Read`` 읽기 성공 횟수
-   - ``ReadMerged`` 읽기가 병합된 횟수
-   - ``ReadMerged`` 읽은 섹터 수
-   - ``ReadTime (단위: ms)`` 읽기 소요시간
-   - ``Write`` 쓰기 성공 횟수
-   - ``WriteMerged`` 쓰기가 병합된 횟수
-   - ``WriteSectors`` 써진 섹터 수
-   - ``WriteTime (단위: ms)`` 쓰기 소요시간
-   - ``IOProgress`` 진행 중인 IO개수
-   - ``IOTime (단위: ms)`` IO 소요시간
-   - ``IOWeightedTime (단위: ms)`` IO 소요시간(가중치 적용)
+   - ``Path`` Disk path
+   - ``Status`` Disk status (Normal: normal, Invalid: excluded due to failure, Unmounted: unmounted by administrator)
+   - ``Read`` The number of successful read
+   - ``ReadMerged`` The number of accumulated ``Read``
+   - ``ReadSectors`` The number of read sector
+   - ``ReadTime (unit: ms)`` Elapsed time for read
+   - ``Write`` The number of successful write
+   - ``WriteMerged`` The number of accumulated ``Write``
+   - ``WriteSectors`` The number of written sector
+   - ``WriteTime (unit: ms)`` Elapsed time for write
+   - ``IOProgress`` The number of progressing IO
+   - ``IOTime (unit: ms)`` Elapsed time for IO
+   - ``IOWeightedTime (unit: ms)`` Elapsed time for IO(Weight applied)
       
--  ``ServerSocket`` 서버 소켓(클라이언트와 STON 구간) 정보
+-  ``ServerSocket`` Server socket(between client and STON) information
 
-   - ``Total`` 전체 서버소켓 수
-   - ``Established`` 연결된 상태의 서버소켓 수
-   - ``Accepted`` 새롭게 연결된 서버소켓 수
-   - ``Closed`` 연결이 종료된 서버소켓 수
+   - ``Total`` Total number of server socket
+   - ``Established`` The number of connected server socket
+   - ``Accepted`` The number of newly connected server socket
+   - ``Closed`` The number of closed server socket
    
--  ``ClientSocket`` 클라이언트 소켓(STON과 원본서버 구간) 정보
+-  ``ClientSocket`` Client socket(between STON and the origin server) information
 
-   - ``Total`` 전체 클라이언트소켓 수
-   - ``Established`` 연결된 상태의 클라이언트소켓 수
-   - ``Connected`` 새롭게 연결된 클라이언트소켓 수
-   - ``Closed`` 연결이 종료된 클라이언트소켓 수
+   - ``Total`` Total number of client socket
+   - ``Established`` The number of connected client socket
+   - ``Connected`` The number of newly connected client socket
+   - ``Closed`` The number of closed client socket
    
--  ``TCPSocket`` 시스템(OS)이 제공하는 TCP상태 정보
+-  ``TCPSocket`` TCP status information provided by system(OS)
 
-   - ``Established`` Established상태의 TCP 연결개수
-   - ``Timewait`` TIME_WAIT 상태의 TCP 연결개수
-   - ``Orphan`` 아직 file handle에 attach되지 않은 TCP 연결
-   - ``Alloc`` 할당된 TCP 연결
+   - ``Established`` The number of established status TCP connection
+   - ``Timewait`` The number of TIME_WAIT status TCP connection
+   - ``Orphan`` The number of TCP connections that have not been attached to the file handle
+   - ``Alloc`` Allocated TCP connection
    - ``Mem`` undocumented
    
--  ``EQ`` STON Framework에서 아직 처리되지 않은 Event개수
--  ``RQ`` 최근 서비스된 컨텐츠 참조 큐에 저장된 Event 개수
--  ``WaitingFiles2Write`` 디스크에 쓰기 대기중인 파일개수
--  ``ServiceAccess`` ServiceAccess에 의해 허가(Allow), 거부(Deny)된 소켓 수
--  ``SystemLoadAverage`` System Load Average의 1분/5분/15분 평균
--  ``URLRewrite`` URL전처리에 의해 변환이 성공한 횟수
+-  ``EQ`` The number of unprocessed event in STON Framework
+-  ``RQ`` The number of events that are saved in the recently serviced contents reference que
+-  ``WaitingFiles2Write`` The number of disk write pending files
+-  ``ServiceAccess`` The number of allowed(Allow), denied(Deny) sockets by the ServiceAccess
+-  ``SystemLoadAverage`` 1/5/15 minute average of the System Load Average
+-  ``URLRewrite`` The number of successful conversion by the URL preprocessor
     
     
-가상호스트 통계
+Virtual Host Stats
 ====================================
 
-가상호스트별로 통계가 제공된다. 
-가상호스트 통계는 HTTP전송(디렉토리 별), URL바이패스, 포트바이패스, SSL로 구분된다. ::
+Each virtual host provides statistics. 
+There are four virtual host statistics; HTTP transfer(per directory), URL bypass, port bypass and SSL. ::
 
    "VirtualHost":                               <VirtualHost                                              
    [                                                Name="image.11st.co.kr"                               
@@ -524,37 +525,37 @@ System 통계
    
 .. note:
 
-   ※ Name부터 FileSystem까지 호스트 통계와 동일하다.
+   ※ Items from Name to FileSystem are identical to those from the host statistics.
    
--  ``Memory (단위: Bytes)`` 메모리에 적재된 컨텐츠 양
--  ``SecuredMemory (단위: Bytes)`` 메모리에서 삭제한 컨텐츠 양
--  ``Disk`` 디스크 정보
--  ``Session`` 세션 정보
--  ``FileTotal`` 전체파일 개수
--  ``FileOpened`` 열려져 있는 로컬파일 개수
--  ``FileInstance`` 캐싱파일 개수
--  ``Cached`` 캐싱 정보
--  ``CacheFileEvent`` 캐싱파일 이벤트
--  ``WaitingFiles2Delete`` 삭제대기 중인 파일개수
--  ``ClientHttpReqBypass`` 바이패스한 클라이언트 HTTP요청 횟수
--  ``ClientHttpReqDenied`` HTTP요청이 차단된 횟수
--  ``OriginTraffic`` 원본서버 트래픽 통계
--  ``PortBypass`` 포트 바이패스 트래픽 통계
--  ``ClientTraffic`` 클라이언트 트래픽 통계
--  ``UrlBypass`` URL매칭 또는 ``<BypassNoCacheRequest>`` 를 통해 원본서버로 바이패스되는 HTTP트래픽 통계
+-  ``Memory (unit: Bytes)`` The amount of contents that are loaded on the memory
+-  ``SecuredMemory (unit: Bytes)`` The amount of contents that are discarded from the memory
+-  ``Disk`` Disk information
+-  ``Session`` Session information
+-  ``FileTotal`` The number of total files
+-  ``FileOpened`` The number of opened local files
+-  ``FileInstance`` The number of caching files
+-  ``Cached`` Caching information
+-  ``CacheFileEvent`` Caching file event
+-  ``WaitingFiles2Delete`` The number of pending delete files
+-  ``ClientHttpReqBypass`` The number of bypassed client HTTP requests
+-  ``ClientHttpReqDenied`` The number of denied HTTP requests
+-  ``OriginTraffic`` Stats of the origin server traffic
+-  ``PortBypass`` Stats of the port bypass traffic
+-  ``ClientTraffic`` Stats of the client traffic
+-  ``UrlBypass`` HTTP traffic stats that are bypassed to the origin server via URL matching or ``<BypassNoCacheRequest>``
 
 .. note::
 
-   5분 통계에서만 제공되는 항목.
+   Items that are only provided in 5 minute statistics.
    
-   -  ``ClientHttpReqBypassSum`` 바이패스되는 HTTP요청의 총 개수   
-   -  ``ClientHttpReqDeniedSum`` Deny되는 HTTP요청의 총 개수
+   -  ``ClientHttpReqBypassSum`` The number of total bypassed HTTP requests   
+   -  ``ClientHttpReqDeniedSum`` Total number of denied HTTP requests
 
 
-디스크 통계
+Disk Stats
 ------------------------------
 
-가상호스트가 사용하는 디스크통계를 제공한다. ::
+Provides statistics of the disk that the virtual host uses. ::
 
    "Disk":                                      <Disk>                              
    {                                              <TotalSize>22003701435</TotalSize>
@@ -598,45 +599,45 @@ System 통계
      }
    }
 
--  ``TotalSize (단위: Bytes)`` 로컬파일 크기 합
--  ``Create`` 로컬파일 생성 횟수
--  ``Open`` 로컬파일 Open 횟수
--  ``Delete`` 로컬파일 삭제 횟수
--  ``ReadCount`` 로컬파일에서 Read한 횟수
--  ``ReadSize (단위: Bytes)`` 로컬파일에서 Read한 크기
--  ``WriteCount`` 로컬파일에서 Write한 횟수
--  ``WriteSize (단위: Bytes)`` 로컬파일에서 Write한 크기
--  ``Distribution`` 로컬파일 크기별 분포
+-  ``TotalSize (unit: Bytes)`` The total size of local files
+-  ``Create`` The number of created local files
+-  ``Open`` The number of opened local files
+-  ``Delete`` The number of deleted local files
+-  ``ReadCount`` The mumber of Read in the local file
+-  ``ReadSize (unit: Bytes)`` The total size of read local files
+-  ``WriteCount`` The number of Write in the local file
+-  ``WriteSize (unit: Bytes)`` The total size of written local files
+-  ``Distribution`` Distribution of local files based on the size
 
-   - ``U1K`` 1KB 미만 파일 개수
-   - ``U2K`` 2KB 미만 파일 개수
-   - ``U4K`` 4KB 미만 파일 개수
-   - ``U8K`` 8KB 미만 파일 개수
-   - ``U16K`` 16KB 미만 파일 개수
-   - ``U32K`` 32KB 미만 파일 개수
-   - ``U64K`` 64KB 미만 파일 개수
-   - ``U128K`` 128KB 미만 파일 개수
-   - ``U256K`` 256KB 미만 파일 개수
-   - ``U512K`` 512KB 미만 파일 개수
-   - ``U1M`` 1MB 미만 파일 개수    
-   - ``U2M`` 2MB 미만 파일 개수    
-   - ``U4M`` 4MB 미만 파일 개수    
-   - ``U8M`` 8MB 미만 파일 개수    
-   - ``U16M`` 16MB 미만 파일 개수  
-   - ``U32M`` 32MB 미만 파일 개수  
-   - ``U64M`` 64MB 미만 파일 개수  
-   - ``U128M`` 128MB 미만 파일 개수
-   - ``U256M`` 256MB 미만 파일 개수
-   - ``U512M`` 512MB 미만 파일 개수
-   - ``U1G`` 1GB 미만 파일 개수
-   - ``U2G`` 2GB 미만 파일 개수
-   - ``U4G`` 4GB 미만 파일 개수
-   - ``U8G`` 8GB 미만 파일 개수
-   - ``U16G`` 16GB 미만 파일 개수
-   - ``O16G`` 16GB 이상 파일 개수
+   - ``U1K`` The number of files that are less than 1KB
+   - ``U2K`` The number of files that are less than 2KB
+   - ``U4K`` The number of files that are less than 4KB
+   - ``U8K`` The number of files that are less than 8KB
+   - ``U16K`` The number of files that are less than 16KB
+   - ``U32K`` The number of files that are less than 32KB
+   - ``U64K`` The number of files that are less than 64KB
+   - ``U128K`` The number of files that are less than 128KB
+   - ``U256K`` The number of files that are less than 256KB
+   - ``U512K`` The number of files that are less than 512KB
+   - ``U1M`` The number of files that are less than 1MB
+   - ``U2M`` The number of files that are less than 2MB
+   - ``U4M`` The number of files that are less than 4MB
+   - ``U8M`` The number of files that are less than 8MB
+   - ``U16M`` The number of files that are less than 16MB
+   - ``U32M`` The number of files that are less than 32MB
+   - ``U64M`` The number of files that are less than 64MB
+   - ``U128M`` The number of files that are less than 128MB
+   - ``U256M`` The number of files that are less than 256MB
+   - ``U512M`` The number of files that are less than 512MB
+   - ``U1G`` The number of files that are less than 1GB
+   - ``U2G`` The number of files that are less than 2GB
+   - ``U4G`` The number of files that are less than 4GB
+   - ``U8G`` The number of files that are less than 8GB
+   - ``U16G`` The number of files that are less than 16GB
+   - ``O16G`` The number of files that are less than 16GB
 
 
-세션 통계
+Session Stats
 ------------------------------
 
 가상호스트가 사용하는 디스크통계를 제공한다. ::
