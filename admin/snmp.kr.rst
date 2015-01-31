@@ -1,16 +1,16 @@
 ﻿.. _snmp:
 
-16장. SNMP
+Chapter 16. SNMP
 ******************
 
-이 장에서는 SNMP(Simple Network Monitoring Protocol)에 대해 다룬다.
-:ref:`monitoring_stats` 의 모든 수치는 SNMP로도 제공된다.
-뿐만 아니라 더욱 세분화된 시간단위와 시스템 상태정보까지 제공한다.
-가상호스트별로 실시간 통계와 최대 60분까지 "분" 단위의 평균 통계를 제공한다. 
+This chapter explains about the SNMP(Simple Network Monitoring Protocol).
+All values of :ref:`monitoring_stats` are also provided as SNMP.
+Besided, SNMP provides more segmentalized time unit and more detailed system status information.
+SNMP provides real time stats and average stats up to 60 minutes for each virtual host. 
 
-- 별도의 패키지가 필요없다.
-- snmpd를 별도로 실행하지 않는다.
-- SNMP v1과 v2c를 지원한다.
+- No additional package is required.
+- Does not run snmpd separately.
+- Supports SNMP v1 and v2c.
 
 .. toctree::
    :maxdepth: 2
@@ -18,17 +18,17 @@
 
 .. _snmp-var:
 
-변수
+Variables
 ====================================
 
-설정이나 사용자의 의도에 의하여 변경될 수 있는 값을 [변수명]으로 명시한다. 
-예를 들어 디스크는 여러개가 존재할 수 있다. 
-이 경우 각 디스크를 가리키는 고유 번호가 필요하며 입력된 순서대로 1부터 할당된다. 
-이런 변수를 ``[diskIndex]`` 로 명시한다.
+A value that can be changed by a configuration or administrator's intention is specified as [variable name]. 
+For example, there could be multiple disks. 
+In this case, designated reference number for each disk is required, and a sequential number from 1 is assigned in the listed order. 
+These values are specified as ``[diskIndex]``.
 
 -  ``[diskIndex]``
 
-   Storage에 설정된 디스크를 의미한다. ::
+   This index stands for the configured disks in the storage. ::
    
       # server.xml - <Server><Cache>
    
@@ -38,16 +38,16 @@
          <Disk>/cache3</Disk>
       </Storage>
       
-   위와 같이 3개의 디스크가 설정된 환경에서 /cache1의 
-   ``[diskIndex]`` 는 1, /cache3의 ``[diskIndex]`` 는 3을 가진다. 
+   From the above configuration with 3 disks, the ``[diskIndex]`` of /cache1 becomes 1, and the ``[diskIndex]`` of /cache3 becomes 3. 
+   For example, OID of /cache1 is system.diskInfo.diskInfoTotalSize.1 (1.3.6.1.4.1.40001.1.2.18.1.3.1) and the last .1 refers to the first disk.
+   (OID가 system.diskInfo.diskInfoTotalSize.1인가요 아님 1.3.6.1.4.....3.1인가요?? 괄호가 닫혀있지 않아서 헷갈립니다)
    예를 들어 /cache1의 전체용량에 해당하는 OID는 
-   system.diskInfo.diskInfoTotalSize.1 
-   (1.3.6.1.4.1.40001.1.2.18.1.3.1이 된다. 
+   system.diskInfo.diskInfoTotalSize.1(1.3.6.1.4.1.40001.1.2.18.1.3.1이 된다. 
    마지막 .1은 첫번째 디스크를 의미한다.
    
 -  ``[vhostIndex]`` 
 
-   가상호스트가 로딩될 때 자동으로 부여된다. ::
+   This index is automatically assigned when the virtual host is loaded. ::
    
       # vhosts.xml
    
@@ -57,40 +57,37 @@
          <Vhost Status="Active" Name="park.com" StaticIndex="10300"> ... </Vhost>
       </Vhosts>
    
-   최초 위와 같이 3개의 가상호스트가 로딩되면 1부터 순차적으로  ``[vhostIndex]`` 가 부여된다. 
-   이후 가상호스트는  ``[vhostIndex]`` 를 기억하며, 가상호스트가 삭제되더라도  ``[vhostIndex]`` 는 변하지 않는다. 
-   가상호스트의 삭제와 추가가 동시에 발생할 경우 삭제가 먼저 동작하며, 
-   신규 추가된 가상호스트는 비어있는  ``[vhostIndex]`` 를 부여 받는다.
+   If the first 3 virtual hosts are loaded like the above, a sequential number from 1 is assigned to the ``[vhostIndex]``. 
+   Then the virtual host remembers the permanent ``[vhostIndex]`` even when the virtual host is discarded. 
+   Deletion of the virtual host has priority over addition of the virtual host, and newly added virtual host is given an empty ``[vhostIndex]``.
    
    .. figure:: img/snmp_vhostindex.png
       :align: center
       
-      ``[vhostIndex]`` 의 동작방식
+      Operation method of ``[vhostIndex]``
 
 -  ``[diskMin]`` , ``[vhostMin]`` 
 
-   시간(분)을 의미한다. 
-   5는 5분의 평균을 의미하며 60은 60분의 평균을 의미한다. 
-   이 값은 1(분)부터 60(분)까지 범위를 가지며 0은 실시간(1초) 데이터를 의미한다.
+   These stand for time in minute. 
+   A value 5 refers to the average of last 5 minutes, and 60 refers to the average of last 60 minutes. 
+   Up to 60 minutes of data can be requested, and 0 refers to the real time data of every second.
    
-SNMP에서는 동적으로 값이 바뀔 수 있는 항목에 대하여 Table구조를 사용한다. 
-예를 들어 "디스크 전체크기"는 디스크의 개수에 따라 제공하는 데이터 개수가 
-달라지기 때문에 Table구조를 사용하여 표현해야 한다. 
-STON은 모든 가상호스트에 대하여 "분"단위 통계를 제공한다. 
-그러므로 ``[vhostMin]`` . ``[vhostIndex]`` 라는 다소 난해한 표현을 제공한다. 
+SNMP uses Table architecture for the items with dynamically changing values. 
+For example, "Total disk size" can be differ by the number of disk so it has to adopt Table architecture to express data 
+STON provides stats in every minute for all virtual hosts. 
+Therefore, you can use a complicated expression like ``[vhostMin]`` . ``[vhostIndex]``. 
 
-이 표현은 가상호스트별로 원하는 "분" 단위의 통계를 볼 수 있다는 장점을 가지고 있지만 
-변수가 2개이므로 Table구조로 표현하기 어렵다는 단점이 있다. 
-이런 문제를 극복하기 위하여  ``[vhostMin]`` 의 기본값을 설정하여 
-SNMPWalk가 동작할 수 있도록 한다.
+This expression can subscribe stats of each virtual host for every minute, 
+while it is hard to express with the Table architecture because it contains two variables. 
+In order to resolve this problem, you can set the default value of ``[vhostMin]`` to enable SNMPWalk.
 
 
 .. _snmp-conf:
 
-활성화
+Activation
 ====================================
 
-전역설정(server.xml)을 통해 SNMP동작방식과 ACL을 설정한다. ::
+You can set the SNMP oepration method and ACL in the global setting(server.xml). ::
 
    # server.xml - <Server><Host>
 
@@ -99,19 +96,19 @@ SNMPWalk가 동작할 수 있도록 한다.
       <Allow>192.168.6.0/24</Allow>    
    </SNMP>   
 
--  ``<SNMP>`` 속성을 통해 SNMPdml 동작방식을 설정한다.
+-  ``<SNMP>`` attirbute configures operation method of SNMPdml.
 
-   - ``Port (기본: 161)`` SNMP 서비스 포트
+   - ``Port (default: 161)`` SNMP service port
    
-   - ``Status (기본: Inactive)`` SNMP를 활성화 하려면 이 값을 ``Active`` 로 설정한다.
+   - ``Status (default: Inactive)`` Set this value to ``Active`` in order to activate SNMP.
    
--  ``<Allow>`` SNMP접근을 허가할 IP주소를 설정한다. 
-    IP지정, IP범위지정, 비트마스크, 서브넷 이상 네 가지 형식을 지원한다. 
-    접속한 소켓이 허가된 IP가 아니면 응답을 주지 않는다.
+-  ``<Allow>`` Configures an IP address to allow SNMP access. 
+    Designated IP, designated IP range, bitmask and subnet are supported. 
+    If the connected socket is not an approved IP, no response is returned.
     
     
 
-가상호스트/View 변수
+Virtual Host/View Variables
 ====================================
 
 SNMP를 통해 제공되는 가상호스트/View 개수와 기본시간(분)을 설정한다. ::
