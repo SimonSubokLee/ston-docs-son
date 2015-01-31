@@ -1061,25 +1061,24 @@ Development/management team have to resolve following issues.
 
 - The service is provided through sports.com.
 - Previous domains and services have to be kept the same for previous users.
-- Amalgamate development teams. Amalgamate management teams.
+- Merge development teams. Merge management teams.
 - Only the first page is newly built. Previous services will be provided via links.
 - There are not enough budget, manpower, time.
 - All purchase procedures are completed.
 
-이 모든 요구사항을 처리하는 현실적인 방법으로 개발팀은 다음과 같이 1번째 디렉토리에 
-기존 도메인을 명시하는 규칙을 사용하기로 결정했다. ::
+In order to reasonably meet all of the above requirements, development team decided to specify previous domains in the first directory as below. ::
 
-   # 기존 서비스
+   # Previous services
    http://baseball.com/standing/list.html
    http://basketball.com/stats/2014/view.html
    http://football.com/player/messi.php
 
-   # 통합 서비스
+   # Integrated services
    http://sports.com/baseball/standing/list.html
    http://sports.com/basketball/stats/2014/view.html
    http://sports.com/football/player/messi.php
    
-URL 전처리를 사용하면 간단히 설정할 수 있다. ::
+This can be configured easily with the URL preprocessor. ::
 
    # vhosts.xml
 
@@ -1093,9 +1092,8 @@ URL 전처리를 사용하면 간단히 설정할 수 있다. ::
      </URLRewrite>  
    </Vhosts>
    
-통합된 운영팀에서는 이제 각각의 서비스 뿐만 아니라 통합된 서비스(트래픽, 세션, 응답코드 등)에 
-대해서도 모니터링해야 한다. 
-대부분 SNMP에 익숙한 관리자들이며 통합된 지표를 얻기 위해 다음과 같이 View를 구성한다.
+Newly merged management team now has to monitor not only each service but also integrated service such as traffics, sessions and response codes. 
+Most administrators are familiar with SNMP, and in order to acquire integrated index, the View can be configured as below.
 
 .. figure:: img/view1.png
    :align: center
@@ -1119,13 +1117,13 @@ URL 전처리를 사용하면 간단히 설정할 수 있다. ::
       </View>  
    </Vhosts>
    
-이상의 예에서 알 수 있듯이 URL Rewrite와 View의 조합은 기존 사이트를 하나로 묶어 서비스할 때 효과적이다.
+As you can see from the above example, the combination of URL Rewrite and View is effective when merging multiple sites into one.
 
 
-View 통계
+View Statistics
 ----------------------------
 
-가상호스트와 동일한 통계를 제공한다. 다음과 같이 태그 이름만 다르다. ::
+View statistics provides identical stats of the virtual host, except the following different tag names. ::
 
    "View":                                  <View ...>        
    [                                           ...            
@@ -1136,14 +1134,14 @@ View 통계
    
 .. _api-monitoring-vhostlist:
    
-가상호스트 목록조회
+Virtual Host List Inquiry
 ====================================
 
-가상호스트 목록을 조회한다. ::
+This inquiries the list of virtual hosts. ::
 
     http://127.0.0.1:10040/monitoring/vhostslist
     
-결과는 JSON형식으로 제공된다. ::
+The result is returned in JSON format. ::
 
     {
         "version": "2.0.0",
@@ -1159,17 +1157,16 @@ View 통계
 
 .. _api-monitoring-fileinfo:
    
-캐싱정보
+Caching Information
 ====================================
 
-캐싱하고 있는 파일상태를 모니터링한다. 
-일반적으로 파일은 URL로 구분되지만 같은 URL에 다른 옵션(i.e. Accept-Encoding등)이 
-존재하는 경우 여러 개의 파일이 존재할 수 있다. ::
+This monitors file status of being cached. 
+Generally, files are distinguished by URLs, but there could be multiple files when a URL has other options(eg. Accept-Encoding). ::
 
     http://127.0.0.1:10040/monitoring/fileinfo?url=example.com/sample.dat
     
-결과는 JSON형식으로 제공된다.
-다음은 /sample.dat파일의 정보를 열람한 결과이다. ::
+The result is returned in JSON format.
+The following is the result of /sample.dat file inquiry. ::
 
     {
         "version": "2.0.0",
@@ -1215,39 +1212,39 @@ View 통계
         ]
     }
     
--  ``URI`` 파일 URI
--  ``Accept-Encoding`` ("Y" or "N") Accept-Encoding을 지원한다면 "Y"
--  ``RefCount`` 파일참조 카운트
--  ``Size`` (Bytes) 파일크기
--  ``Disk-Index`` (0부터 시작) 저장된 디스크 인덱스
--  ``FID`` 파일 ID
--  ``LocalPath`` 로컬 경로
--  ``File-Opened`` ("Y" or "N") 로컬파일을 열고 있다면 "Y"
--  ``File-Updating`` 파일을 갱신 중이라면 갱신하는 객체의 포인터가 명시
--  ``Downloader-Count`` 원본서버에서 이 파일을 다운로드 받는 현재 세션의 개수
--  ``LastAccess`` (마지막 접근시간, 마지막 접근시간-현재시간) [ 2012.09.03 14:29:50, -2 ]의 의미는 2012.09.03 14:29:50에 접근됐으며 현재로부터 2초 전에 접근됐다는 의미이다.
--  ``UpdateTime`` (갱신시간, 갱신시간-현재시간) 파일이 마지막으로 갱신된 시간. 304 Not Modified에도 시간은 갱신된다.
--  ``TTL-Left`` (만료시간, 만료시간-현재시간) 컨텐츠 만료 예정시간. TTL이 남았다면 양수로, 만료됐다면 음수로 표기된다.
--  ``ResponseCode`` 원본서버 응답코드
+-  ``URI`` File URI
+-  ``Accept-Encoding`` ("Y" or "N") If Accept-Encoding is supported, then "Y"
+-  ``RefCount`` File reference count
+-  ``Size`` (Bytes) File size
+-  ``Disk-Index`` (starting from 0) Saved disk index
+-  ``FID`` File ID
+-  ``LocalPath`` Local path
+-  ``File-Opened`` ("Y" or "N") If a local file is opened, then "Y"
+-  ``File-Updating`` If a file is being updated, specify the pointer of the updated object
+-  ``Downloader-Count`` Total number of sessions that are downloading corresponding file from the origin server
+-  ``LastAccess`` (Last accessed time, last accessed time - current time) [ 2012.09.03 14:29:50, -2 ] means that the file is accessed at 2012.09.03 14:29:50 and it is 2 seconds before.
+-  ``UpdateTime`` (Modified time, modified time - current time) The time when the file is modified. 304 Not Modified will also update the time.
+-  ``TTL-Left`` (Expiration time, expiration time - current time) Expiration time of the contents. If TTL is left, the value is positive, otherwise a negative is returned.
+-  ``ResponseCode`` Origin server response code
 -  ``ContentType`` MIME Type
--  ``LastModifiedTime`` (Last Modified Time, Last Modified Time`` 현재시간) 원본서버가 보낸 Last Modified Time. 원본서버가 이 값을 보내지 않았다면 0으로 표시된다.
--  ``ExpireTime`` (Expire Time, Expire Time`` 현재시간) 원본서버가 보낸 Expire Time. 원본서버가 이 값을 보내지 않았다면 0으로 표시된다.
--  ``CacheControl`` ("no-cache" or "not-specified" or (정수)) 원본서버가 보낸 Cache-Contorl 값
--  ``ETag`` STON이 생성한 ETag
--  ``CustomTTL`` 커스텀 TTL. 설정되어 있지 않다면 0이다.
--  ``NoMoreExist`` ("Y" or "N") 파일을 파기예약되어 있다면 "Y"
--  ``LocalFileExist`` ("Y" or "N") 로컬에 파일이 존재하면 "Y" (200 OK가 아닌 파일들은 항상 "Y")
--  ``SmallFile`` ("Y" or "N") 파일을 작은파일로 판단한다면 "Y" (개발적인 이유)
--  ``State`` ("Not Init" or "Cached" or "Error") 파일 상태
--  ``Deleted`` ("Y" or "N") 삭제되었다면 "Y" (개발적인 이유)
--  ``AddedSize`` ("Y" or "N") 크기가 통계에 반영되었다면 "Y" (개발적인 이유)
--  ``TransferEncoding`` ("Y" or "N") Transfer-Encoding을 지원한다면 "Y"
--  ``Compression`` 압축방식
--  ``Purge`` ("Y" or "N") Purge됐다면 "Y"
--  ``Ignore-IMS`` ("Y" or "N") 갱신할 때 If-Modified-Since헤더를 보내지 않도록 설정되었다면 "Y"
--  ``Redirect-Location`` Location 헤더 값
--  ``Content-Disposition`` Content-Disposition 헤더 값
--  ``NoCache`` ("Y" or "N") 원본서버에서 no-cache응답을 줬다면 "Y"
+-  ``LastModifiedTime`` (Last Modified Time, Last Modified Time`` current time) Last Modified Time sent from the origin server. If the origin server didn't send this value, 0 will be returned.
+-  ``ExpireTime`` (Expire Time, Expire Time`` current time) Expire Time sent from the origin server. If the origin server didn't send this value, 0 will be returned.
+-  ``CacheControl`` ("no-cache" or "not-specified" or (Integer)) Cache-Contorl value sent from the origin server.
+-  ``ETag`` ETag created by STON
+-  ``CustomTTL`` Custom TTL. If not configured, 0 will be returned.
+-  ``NoMoreExist`` ("Y" or "N") If the file is pending for discard, then "Y"
+-  ``LocalFileExist`` ("Y" or "N") If the file is exist in the local, then "Y" (Files that are not 200 OK will always return "Y")
+-  ``SmallFile`` ("Y" or "N") If the file is considered as a small file, then "Y" (development purpose)
+-  ``State`` ("Not Init" or "Cached" or "Error") File status
+-  ``Deleted`` ("Y" or "N") If the file is deleted, then "Y" (development purpose)
+-  ``AddedSize`` ("Y" or "N") If the file size is reflected to the stats, then "Y" (development purpose)
+-  ``TransferEncoding`` ("Y" or "N") If Transfer-Encoding is supported, then "Y"
+-  ``Compression`` Compression method
+-  ``Purge`` ("Y" or "N") If the file is purged, then "Y"
+-  ``Ignore-IMS`` ("Y" or "N") When the file is being updated, if the setting does not send If-Modified-Since header, then "Y"
+-  ``Redirect-Location`` Location header value
+-  ``Content-Disposition`` Content-Disposition header value
+-  ``NoCache`` ("Y" or "N") If the origin server replied no-cache, then "Y"
 
 
 
@@ -1256,8 +1253,8 @@ View 통계
 Log Trace
 ====================================
 
-기록되는 로그를 실시간으로 받아본다. 
-Access, Origin, Monitoing로그는 가상호스트(vhost)를 지정해야 한다. ::
+Subscribes log in real time. 
+Access, Origin, Monitoing logs have to specify virtual host(vhost). ::
 
     http://127.0.0.1:10040/monitoring/logtrace/info
     http://127.0.0.1:10040/monitoring/logtrace/deny
