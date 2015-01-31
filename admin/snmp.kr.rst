@@ -111,32 +111,32 @@ You can set the SNMP oepration method and ACL in the global setting(server.xml).
 Virtual Host/View Variables
 ====================================
 
-SNMP를 통해 제공되는 가상호스트/View 개수와 기본시간(분)을 설정한다. ::
+This section explains how to configure the number of virtual host/View and default time(minute) provided through SNMP. ::
 
    # server.xml - <Server><Host>
    
    <SNMP VHostCount=0, VHostMin=5 ViewCount=0, ViewMin=5 />
 
--  ``VHostCount (기본: 0)`` 0일 경우 존재하는 가상호스트까지만 응답을 한다. 
-   0보다 큰 값일 경우 가상호스트 존재 유무에 상관없이 설정된 가상호스트까지 응답한다. 
+-  ``VHostCount (default: 0)`` If this is set to 0, only existing virtual hosts respond. 
+   If this value is greater than 0, configured virtual hosts respond regardless of the existence of virtual host. 
    
--  ``ViewCount (기본: 0)`` View에 적용. ( ``VHostCount`` 와 동일)
+-  ``ViewCount (default: 0)`` Applied to the View. ( identical to ``VHostCount`` )
    
--  ``VHostMin (기본: 5분, 최대: 60분)``  ``[vhostMin]``  값을 설정한다. 
-   0~60까지의 값을 가진다. 
-   0일 경우 실시간 데이터를 제공하하며 1~60사이인 경우 해당 분만큼의 평균값을 제공한다.
+-  ``VHostMin (default: 5 minutes, maximum: 60 minutes)``  Configures ``[vhostMin]`` value. 
+   The value from 0 to 60 is valid. 
+   Setting this to 0 will return the real time data whereas 1~60 returns corresponding minutes of average data.
    
--  ``ViewMin (기본: 0)`` View에 적용. ( ``VHostMin`` 와 동일)
+-  ``ViewMin (default: 0)`` Applied to the View. ( identical to ``VHostMin`` )
 
-예를 들어 3개의 가상호스트가 설정되어 있는 환경에서 SNMPWalk의 동작방식이 달라진다.
+For example, operation method of SNMPWalk in 3 vitual host environment differs based on the VHostCount value.
 
-- VHostCount=0인 경우 ::
+- When VHostCount=0 ::
 
     SNMPv2-SMI::enterprises.40001.1.4.2.1.2.1 = STRING: "web.winesoft.co.kr"
     SNMPv2-SMI::enterprises.40001.1.4.2.1.2.2 = STRING: "img.winesoft.co.kr"
     SNMPv2-SMI::enterprises.40001.1.4.2.1.2.3 = STRING: "vod.winesoft.co.kr"
     
-- VHostCount=5 경우 ::
+- When VHostCount=5 ::
 
     SNMPv2-SMI::enterprises.40001.1.4.2.1.2.1 = STRING: "web.winesoft.co.kr"
     SNMPv2-SMI::enterprises.40001.1.4.2.1.2.2 = STRING: "img.winesoft.co.kr"
@@ -146,30 +146,30 @@ SNMP를 통해 제공되는 가상호스트/View 개수와 기본시간(분)을 
 
 
 
-기타 변수
+Other Variables
 ---------------------
 
-기타 변수를 설정한다. ::
+Configures other variables. ::
 
    # server.xml - <Server><Host>
    
    <SNMP GlobalMin="5" DiskMin="5" ConfCount="10" />
     
--  ``GlobalMin (기본: 5분, 최대: 60분)``  ``[globalMin]``  값을 설정한다.
+-  ``GlobalMin (default: 5 minutes, maximum: 60 minutes)`` Configures ``[globalMin]`` value.
 
--  ``DiskMin (기본: 5분, 최대: 60분)``  ``[diskMin]``  값을 설정한다.
+-  ``DiskMin (default: 5 minutes, maximum: 60 minutes)`` Configures ``[diskMin]`` vaue.
 
--  ``ConfCount (기본: 10)`` 설정목록을 n개까지 열람한다. 
-   1~100사이에서 지정 가능하다. 
-   1은 현재 반영된 설정을 의미하며 2는 이전 설정을 의미한다. 
-   100은 현재를 기준으로 99번 이전의 설정을 의미한다.
+-  ``ConfCount (default: 10)`` Browse previous configurations list. 
+   The value from 1 to 100 is valid. 
+   1 refers to the current configuration, and 2 refers to the previous configuration.
+   100 refers to the 99th prior configuration from current configuration.
    
 
 
 Community
 ====================================
 
-Community를 설정하여 허가된 OID에만 접근/차단되도록 설정한다. ::
+This section explains how to set the community to allow/deny access to the specific OID. ::
 
    # server.xml - <Server><Host>
 
@@ -184,18 +184,18 @@ Community를 설정하여 허가된 OID에만 접근/차단되도록 설정한�
       </Community>
    </SNMP>
     
-``<SNMP>`` 의 ``UnregisteredCommunity`` 를 "Deny"로 설정하면 등록되지 않은 Community 요청은 차단한다.
+If you set the ``UnregisterdCommunity`` of ``<SNMP>`` as "Deny", unregistered Community requests are blocked.
 
--  ``<Community>`` Community를 설정한다.
+-  ``<Community>`` Configures Community.
 
-   - ``Name`` Community 이름.
+   - ``Name`` Community name.
    
-   - ``OID (기본: Allow)`` 하위 ``<OID>`` 태그의 값을 설정한다.
-     속성 값이 ``Allow`` 라면 하위 ``<OID>`` 목록만 접근 가능하다. 
-     반대로 속성 값이 ``Deny`` 라면 하위 <OID>목록에는 접근이 불가능하다.
+   - ``OID (default: Allow)`` Configures lower ``<OID>`` tag value.
+     If this value is set to ``Allow``, only lower ``<OID>`` list can be accessed. 
+     On the other hand, if the value is set to ``Deny``, lower <OID> list can't be accessed.
 
-명시적인 OID(1.3.6.1.4.1.40001.1.4.4)와 범위OID(1.3.6.1.4.1.40001.1.4.3.1.11.11.10.1-61) 표현이 가능하다. 
-OID를 허용/차단할 경우 하위 모든 OID에 대해 같은 규칙이 적용된다.
+Specific OID(1.3.6.1.4.1.40001.1.4.4) and ranged OID(1.3.6.1.4.1.40001.1.4.3.1.11.11.10.1-61) expressions are available. 
+If you allow/deny OID, all subordinate OID follows the identical configuration.
 
 
 
@@ -208,19 +208,19 @@ meta
 
    OID = 1.3.6.1.4.1.40001.1.1
 
-메타정보를 제공한다. 
+Provides meta information. 
 
 ===== ============= ========= ===========================================
 OID   Name          Type      Description
 ===== ============= ========= ===========================================
 .1    manufacture   String    "WineSOFT Inc."
 .2    software      String    "STON"
-.3    version       String    버전
-.4    hostname      String    호스트 이름
-.5    state         String    "Healthy" 또는 "Inactive" 또는 "Emergency"
-.6    uptime        Integer   실행시간 (초)
+.3    version       String    Version
+.4    hostname      String    Host name
+.5    state         String    "Healthy" or "Inactive" or "Emergency"
+.6    uptime        Integer   Running time (seconds)
 .7    admin         String    <Admin> ... </Admin>
-.10   Conf          OID       Conf 확장
+.10   Conf          OID       Conf expansion
 ===== ============= ========= ===========================================
 
 
@@ -234,21 +234,20 @@ meta.conf
 
    OID = 1.3.6.1.4.1.40001.1.1.10
 
-``[confIndex]`` 는 ``<SNMP>`` 의 ``ConfCount`` 속성에서 설정한다.
-``[confIndex]`` 가 1인 경우는 항상 현재 적용된 설정 값을, 
-2인 경우는 이전 설정 값을 의미한다. 
-10 이라면 현재(1)로부터 9번째 이전의 설정을 의미한다.
+``[confIndex]`` is configured at the ``ConfCount`` property in ``<SNMP>``.
+If ``[confIndex]`` is 1, always return current configuration values whereas 2 returns previous configuration. 
+If ``[confIndex]`` is 10, 9th prior configuration values are returned.
 
 ==================== ======= ======= =============================================================================================
 OID                  Name    Type    Description
 ==================== ======= ======= =============================================================================================
-.1. ``[confIndex]``  ID      Integer 설정 ID
-.2. ``[confIndex]``  Time    Integer 설정시간 (Unix 시간)
-.3. ``[confIndex]``  Type    Integer 설정형태 (0 = Unknown, 1 = STON 시작, 2 = /conf/reload, 3 = /conf/upload, 4 = /conf/restore)
-.4. ``[confIndex]``  Size    Integer 설정파일 크기
-.5. ``[confIndex]``  Hash    String  설정파일 Hash문자열
-.6. ``[confIndex]``  Path    String  설정파일 저장경로
-.7. ``[confIndex]``  Ver     String  설정할 때의 STON 버전
+.1. ``[confIndex]``  ID      Integer Configuration ID
+.2. ``[confIndex]``  Time    Integer Configuration time (Unix time)
+.3. ``[confIndex]``  Type    Integer Configuration type (0 = Unknown, 1 = STON start, 2 = /conf/reload, 3 = /conf/upload, 4 = /conf/restore)
+.4. ``[confIndex]``  Size    Integer Configuration file size
+.5. ``[confIndex]``  Hash    String  Configuration file Hash string
+.6. ``[confIndex]``  Path    String  Saved path of the configuration file
+.7. ``[confIndex]``  Ver     String  STON version of the configuration
 ==================== ======= ======= =============================================================================================
 
 
@@ -262,39 +261,39 @@ system
 
    OID = 1.3.6.1.4.1.40001.1.2
 
-STON이 동작하는 시스템 정보를 제공한다.
-``[sysMin]`` 변수는 0~60분까지의 값을 가지며 실시간 또는 원하는 시간만큼의 평균 값을 제공한다. 
-SNMPWalk에서  ``[sysMin]`` 은 0으로 설정되며 현재 정보를 제공한다.
+Provides system information that runs STON.
+``[sysMin]`` variable can be set from 0 to 60(minute), and provide average value of desired time period. 
+``[sysMin]`` in the SNMPWalk is set to 0, and provide current information.
 
 =================== ========================================= ======= ===============================================
 OID                 Name                                      Type    Description
 =================== ========================================= ======= ===============================================
-.1. ``[sysMin]``    cpuTotal                                  Integer 전체 CPU 사용률 (100%)
-.2. ``[sysMin]``                                                      전체 CPU 사용률 (10000%)
-.3. ``[sysMin]``    cpuKernel                                 Integer	CPU(Kernel) 사용률 (100%)
-.4. ``[sysMin]``                                                      CPU(Kernel) 사용률 (10000%)
-.5. ``[sysMin]``    cpuUser                                   Integer CPU(User) 사용률 (100%)
-.6. ``[sysMin]``                                                      CPU(User) 사용률 (10000%)
-.7. ``[sysMin]``    cpuIdle                                   Integer CPU(Idle) 사용률 (100%)
-.8. ``[sysMin]``                                                      CPU(Idle) 사용률 (10000%)
-.9                  memTotal                                  Integer 시스템 전체 메모리 (KB)
-.10. ``[sysMin]``   memUse                                    Integer 시스템 사용 메모리 (KB)
-.11. ``[sysMin]``   memFree                                   Integer 시스템 여유 메모리 (KB)
-.12. ``[sysMin]``   memSTON                                   Integer STON 사용 메모리 (KB)
-.13. ``[sysMin]``   memUseRatio                               Integer 시스템 메모리 사용률 (100%)
-.14. ``[sysMin]``                                                     시스템 메모리 사용률 (10000%)
-.15. ``[sysMin]``   memSTONRatio                              Integer STON 메모리 사용률 (100%)
-.16. ``[sysMin]``                                                     STON 메모리 사용률 (10000%)
-.17                 diskCount                                 Integer disk개수
-.18.1               diskInfo                                  OID     diskInfo확장
-.19.1               diskPerf                                  OID     diskPerf확장
-.20. ``[sysMin]``   cpuProcKernel                             Integer STON이 사용하는 CPU(Kernel) 사용률 (100%)
-.21. ``[sysMin]``                                                     STON이 사용하는 CPU(Kernel) 사용률 (10000%)
-.22. ``[sysMin]``   cpuProcUser                               Integer STON이 사용하는 CPU(User) 사용률 (100%)
-.23. ``[sysMin]``                                                     STON이 사용하는 CPU(User) 사용률 (10000%)
-.24. ``[sysMin]``   sysLoadAverage                            Integer Load Average 1분 평균 (0.01)
-.25. ``[sysMin]``                                                     Load Average 5분 평균 (0.01)
-.26. ``[sysMin]``                                                     Load Average 15분 평균 (0.01)
+.1. ``[sysMin]``    cpuTotal                                  Integer Total CPU usage (100%)
+.2. ``[sysMin]``                                                      Total CPU usage (10000%)
+.3. ``[sysMin]``    cpuKernel                                 Integer	CPU(Kernel) usage (100%)
+.4. ``[sysMin]``                                                      CPU(Kernel) usage (10000%)
+.5. ``[sysMin]``    cpuUser                                   Integer CPU(User) usage (100%)
+.6. ``[sysMin]``                                                      CPU(User) usage (10000%)
+.7. ``[sysMin]``    cpuIdle                                   Integer CPU(Idle) usage (100%)
+.8. ``[sysMin]``                                                      CPU(Idle) usage (10000%)
+.9                  memTotal                                  Integer Total system memory (KB)
+.10. ``[sysMin]``   memUse                                    Integer Memory use of system (KB)
+.11. ``[sysMin]``   memFree                                   Integer Free memory of system (KB)
+.12. ``[sysMin]``   memSTON                                   Integer Memory used for STON (KB)
+.13. ``[sysMin]``   memUseRatio                               Integer System memory usage (100%)
+.14. ``[sysMin]``                                                     System memory usage (10000%)
+.15. ``[sysMin]``   memSTONRatio                              Integer STON memory usage (100%)
+.16. ``[sysMin]``                                                     STON memory usage (10000%)
+.17                 diskCount                                 Integer Number of disk
+.18.1               diskInfo                                  OID     diskInfo expansion
+.19.1               diskPerf                                  OID     diskPerf expansion
+.20. ``[sysMin]``   cpuProcKernel                             Integer CPU(Kernel) usage of STON (100%)
+.21. ``[sysMin]``                                                     CPU(Kernel) usage of STON (10000%)
+.22. ``[sysMin]``   cpuProcUser                               Integer CPU(User) usage of STON (100%)
+.23. ``[sysMin]``                                                     CPU(User) usage of STON (10000%)
+.24. ``[sysMin]``   sysLoadAverage                            Integer Load Average for 1 minute (0.01)
+.25. ``[sysMin]``                                                     Load Average for 5 minute (0.01)
+.26. ``[sysMin]``                                                     Load Average for 15 minute (0.01)
 .27. ``[sysMin]``   cpuNice                                   Integer CPU(Nice) (100%)
 .28. ``[sysMin]``                                                     CPU(Nice) (10000%)
 .29. ``[sysMin]``   cpuIOWait                                 Integer CPU(IOWait) (100%)
@@ -305,10 +304,10 @@ OID                 Name                                      Type    Descriptio
 .34. ``[sysMin]``                                                     CPU(SoftIRQ) (10000%)
 .35. ``[sysMin]``   cpuSteal                                  Integer CPU(Steal) (100%)
 .36. ``[sysMin]``   CPU(Steal)                                Integer (10000%)
-.40. ``[sysMin]``   TCPSocket.Established. ``[globalMin]``    Integer Established상태의 TCP 연결개수
-.41. ``[sysMin]``   TCPSocket.Timewait. ``[globalMin]``       Integer TIME_WAIT 상태의 TCP 연결개수
-.42. ``[sysMin]``   TCPSocket.Orphan. ``[globalMin]``         Integer 아직 file handle에 attach되지 않은 TCP 연결
-.43. ``[sysMin]``   TCPSocket.Alloc. ``[globalMin]``          Integer 할당된 TCP 연결
+.40. ``[sysMin]``   TCPSocket.Established. ``[globalMin]``    Integer Number of established TCP connections
+.41. ``[sysMin]``   TCPSocket.Timewait. ``[globalMin]``       Integer Number of TIME_WAIT status TCP connections
+.42. ``[sysMin]``   TCPSocket.Orphan. ``[globalMin]``         Integer Number of TCP connections that have not been attached to the file handle
+.43. ``[sysMin]``   TCPSocket.Alloc. ``[globalMin]``          Integer Allocatted TCP connection
 .44. ``[sysMin]``   TCPSocket.Mem. ``[globalMin]``            Integer undocumented
 =================== ========================================= ======= ===============================================
 
@@ -323,18 +322,18 @@ system.diskInfo
 
    OID = 1.3.6.1.4.1.40001.1.2.18.1
 
-디스크 정보를 제공한다.
+Provides disk information.
 
 ======================= ================== =========== =========================================
 OID                     Name               Type        Description
 ======================= ================== =========== =========================================
-.2. ``[diskIndex]``     diskInfoPath       String      디스크 경로                                 
-.3. ``[diskIndex]``     diskInfoTotalSize  Integer     디스크 전체용량 (MB)                    
-.4. ``[diskIndex]``     diskInfoUseSize    Integer     디스크 사용량 (MB)                          
-.5. ``[diskIndex]``     diskInfoFreeSize   Integer     디스크 사용 가능량 (MB)                 
-.6. ``[diskIndex]``     diskInfoUseRatio   Integer     디스크 사용률 (100%)                    
-.7. ``[diskIndex]``                                    디스크 사용률 (10000%)                                              
-.8. ``[diskIndex]``     diskInfoStatus     String      "Normal" 또는 "Invalid" 또는 "Unmounted"
+.2. ``[diskIndex]``     diskInfoPath       String      Disk path                                 
+.3. ``[diskIndex]``     diskInfoTotalSize  Integer     Total disk size (MB)                    
+.4. ``[diskIndex]``     diskInfoUseSize    Integer     Total disk usage (MB)                          
+.5. ``[diskIndex]``     diskInfoFreeSize   Integer     Total available disk size (MB)                 
+.6. ``[diskIndex]``     diskInfoUseRatio   Integer     Disk usage ratio (100%)                    
+.7. ``[diskIndex]``                                    Disk usage ratio (10000%)                                              
+.8. ``[diskIndex]``     diskInfoStatus     String      "Normal" or "Invalid" or "Unmounted"
 ======================= ================== =========== =========================================
 
 
