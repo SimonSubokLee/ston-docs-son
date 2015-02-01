@@ -633,7 +633,7 @@ OID                        Name                                       Type      
 .10                        http                                       OID        Client HTTP traffic information
 .10.1. ``[vhostMin]``      http.inbound                               Integer    Average HTTP traffic received from clients(Bytes)
 .10.2. ``[vhostMin]``      http.outbound                              Integer    Average HTTP traffic sent to clients(Bytes)
-.10.3. ``[vhostMin]``      http.sessionAverage                        Integer    The number of average client HTTP sessions
+.10.3. ``[vhostMin]``      http.sessionAverage                        Integer    The number of average HTTP sessions in the client 
 .10.4. ``[vhostMin]``      http.reqHeaderSize                         Integer    Average HTTP Header traffic received from clients(Bytes)
 .10.5. ``[vhostMin]``      http.reqBodySize                           Integer    Average HTTP Body traffic received from clients(Bytes)
 .10.6. ``[vhostMin]``      http.resHeaderSize                         Integer    Average HTTP Header traffic sent to clients(Bytes)
@@ -882,65 +882,65 @@ OID                                           Name                              
 .1. ``[vhostMin]`` . ``[vhostIndex]``         inbound                               Integer    Average traffic received from the origin server(Bytes)
 .2. ``[vhostMin]`` . ``[vhostIndex]``         outbound                              Integer    Average traffic sent to the origin server(Bytes)
 .3. ``[vhostMin]`` . ``[vhostIndex]``         sessionAverage                        Integer    The number of average session in the entire origin server
-.4. ``[vhostMin]`` . ``[vhostIndex]``         activesessionAverage                  Integer    전체 원본서버 세션수 중 전송 중인 평균 세션수
-.10                                           http                                  OID        원본서버 HTTP 트래픽 정보
-.10.1. ``[vhostMin]`` . ``[vhostIndex]``      http.inbound                          Integer    원본서버로부터 받는 평균 HTTP 트래픽(Bytes)
-.10.2. ``[vhostMin]`` . ``[vhostIndex]``      http.outbound                         Integer    원본서버로 보내는 평균 HTTP 트래픽(Bytes)
-.10.3. ``[vhostMin]`` . ``[vhostIndex]``      http.sessionAverage                   Integer    원본서버 평균 HTTP세션 수
-.10.4. ``[vhostMin]`` . ``[vhostIndex]``      http.reqHeaderSize                    Integer    원본서버로 보내는 평균 HTTP Header 트래픽(Bytes)
-.10.5. ``[vhostMin]`` . ``[vhostIndex]``      http.reqBodySize                      Integer    원본서버로 보내는 평균 HTTP Body 트래픽(Bytes)
-.10.6. ``[vhostMin]`` . ``[vhostIndex]``      http.resHeaderSize                    Integer    원본서버로부터 받는 평균 HTTP Header트래픽(Bytes)
-.10.7. ``[vhostMin]`` . ``[vhostIndex]``      http.resBodySize                      Integer    원본서버로부터 받는 평균 HTTP Body트래픽(Bytes)
-.10.8. ``[vhostMin]`` . ``[vhostIndex]``      http.reqAverage                       Integer    원본서버로 보낸 평균 HTTP요청 개수
-.10.9. ``[vhostMin]`` . ``[vhostIndex]``      http.reqCount                         Integer    원본서버로 보낸 HTTP요청 개수
-.10.10. ``[vhostMin]`` . ``[vhostIndex]``     http.resTotalAverage                  Integer    원본서버가 보낸 전체 평균 HTTP응답 개수
-.10.11. ``[vhostMin]`` . ``[vhostIndex]``     http.resTotalCompleteAverage          Integer    원본서버로부터 성공한 평균 HTTP트랜잭션 개수
-.10.12. ``[vhostMin]`` . ``[vhostIndex]``     http.resTotalTimeRes                  Integer    원본서버로부터 응답 헤더를 받을때까지 평균 소요시간(0.01ms)
-.10.13. ``[vhostMin]`` . ``[vhostIndex]``     http.resTotalTimeComplete             Integer    원본서버로부터 응답 HTTP Transaction 평균 완료시간(0.01ms)
-.10.14. ``[vhostMin]`` . ``[vhostIndex]``     http.resTotalCount                    Integer    원본서버가 보낸 전체 HTTP응답 개수
-.10.15. ``[vhostMin]`` . ``[vhostIndex]``     http.resTotalCompleteCount            Integer    원본서버로부터 성공한 HTTP트랜잭션 개수
-.10.20. ``[vhostMin]`` . ``[vhostIndex]``     http.res2xxAverage                    Integer    원본서버가 보낸 평균 2xx응답 개수
-.10.21. ``[vhostMin]`` . ``[vhostIndex]``     http.res2xxCompleteAverage            Integer    원본서버로부터 성공한 평균 2xx 트랜잭션 개수
-.10.22. ``[vhostMin]`` . ``[vhostIndex]``     http.res2xxTimeRes                    Integer    원본서버로부터 2xx응답 헤더를 받을때까지 평균 소요시간(0.01ms)
-.10.23. ``[vhostMin]`` . ``[vhostIndex]``     http.res2xxTimeComplete               Integer    원본서버로부터 2xx응답 HTTP Transaction 평균 완료시간(0.01ms)
-.10.24. ``[vhostMin]`` . ``[vhostIndex]``     http.res2xxCount                      Integer    원본서버가 보낸 2xx응답 개수
-.10.25. ``[vhostMin]`` . ``[vhostIndex]``     http.res2xxCompleteCount              Integer    원본서버로부터 성공한 2xx 트랜잭션 개수
-.10.30. ``[vhostMin]`` . ``[vhostIndex]``     http.res3xxAverage                    Integer    원본서버가 보낸 평균 3xx응답 개수
-.10.31. ``[vhostMin]`` . ``[vhostIndex]``     http.res3xxCompleteAverage            Integer    원본서버로부터 성공한 평균 3xx 트랜잭션 개수
-.10.32. ``[vhostMin]`` . ``[vhostIndex]``     http.res3xxTimeRes                    Integer    원본서버로부터 3xx응답 헤더를 받을때까지 평균 소요시간(0.01ms)
-.10.33. ``[vhostMin]`` . ``[vhostIndex]``     http.res3xxTimeComplete               Integer    원본서버로부터 3xx응답 HTTP Transaction 평균 완료시간(0.01ms)
-.10.34. ``[vhostMin]`` . ``[vhostIndex]``     http.res3xxCount                      Integer    원본서버가 보낸 3xx응답 개수
-.10.35. ``[vhostMin]`` . ``[vhostIndex]``     http.res3xxCompleteCount              Integer    원본서버로부터 성공한 3xx 트랜잭션 개수
-.10.40. ``[vhostMin]`` . ``[vhostIndex]``     http.res4xxAverage                    Integer    원본서버가 보낸 평균 4xx응답 개수
-.10.41. ``[vhostMin]`` . ``[vhostIndex]``     http.res4xxCompleteAverage            Integer    원본서버로부터 성공한 평균 4xx 트랜잭션 개수
-.10.42. ``[vhostMin]`` . ``[vhostIndex]``     http.res4xxTimeRes                    Integer    원본서버로부터 4xx응답 헤더를 받을때까지 평균 소요시간(0.01ms)
-.10.43. ``[vhostMin]`` . ``[vhostIndex]``     http.res4xxTimeComplete               Integer    원본서버로부터 4xx응답 HTTP Transaction 평균 완료시간(0.01ms)
-.10.44. ``[vhostMin]`` . ``[vhostIndex]``     http.res4xxCount                      Integer    원본서버가 보낸 4xx응답 개수
-.10.45. ``[vhostMin]`` . ``[vhostIndex]``     http.res4xxCompleteCount              Integer    원본서버로부터 성공한 4xx 트랜잭션 개수
-.10.50. ``[vhostMin]`` . ``[vhostIndex]``     http.res5xxAverage                    Integer    원본서버가 보낸 평균 5xx응답 개수
-.10.51. ``[vhostMin]`` . ``[vhostIndex]``     http.res5xxCompleteAverage            Integer    원본서버로부터 성공한 평균 5xx 트랜잭션 개수
-.10.52. ``[vhostMin]`` . ``[vhostIndex]``     http.res5xxTimeRes                    Integer    원본서버로부터 5xx응답 헤더를 받을때까지 평균 소요시간(0.01ms)
-.10.53. ``[vhostMin]`` . ``[vhostIndex]``     http.res5xxTimeComplete               Integer    원본서버로부터 5xx응답 HTTP Transaction 평균 완료시간(0.01ms)
-.10.54. ``[vhostMin]`` . ``[vhostIndex]``     http.res5xxCount                      Integer    원본서버가 보낸 5xx응답 개수
-.10.55. ``[vhostMin]`` . ``[vhostIndex]``     http.res5xxCompleteCount              Integer    원본서버로부터 성공한 5xx 트랜잭션 개수
-.10.60. ``[vhostMin]`` . ``[vhostIndex]``     http.connectTimeoutAverage            Integer    평균 원본서버 접속실패 횟수
-.10.61. ``[vhostMin]`` . ``[vhostIndex]``     http.receiveTimeoutAverage            Integer    평균 원본서버 전송실패 횟수
-.10.62. ``[vhostMin]`` . ``[vhostIndex]``     http.connectAverage                   Integer    평균 원본서버 접속성공 횟수
-.10.63. ``[vhostMin]`` . ``[vhostIndex]``     http.dnsQueryTime                     Integer    원본서버 접속 시 평균 DNS쿼리 소요시간
-.10.64. ``[vhostMin]`` . ``[vhostIndex]``     http.connectTime                      Integer    원본서버 평균 접속 소요시간(0.01ms)
-.10.65. ``[vhostMin]`` . ``[vhostIndex]``     http.connectTimeoutCount              Integer    원본서버 접속실패 횟수
-.10.66. ``[vhostMin]`` . ``[vhostIndex]``     http.receiveTimeoutCount              Integer    원본서버 전송실패 횟수
-.10.67. ``[vhostMin]`` . ``[vhostIndex]``     http.connectCount                     Integer    원본서버 접속성공 횟수
-.10.68. ``[vhostMin]`` . ``[vhostIndex]``     http.closeAverage                     Integer    전송 중 원본서버에서 먼저 소켓을 종료한 평균 횟수
-.10.69. ``[vhostMin]`` . ``[vhostIndex]``     http.closeCount                       Integer    전송 중 원본서버에서 먼저 소켓을 종료한 횟수
-.11                                           portbypass                            OID        Port바이패스 원본서버 트래픽 정보
-.11.1. ``[vhostMin]`` . ``[vhostIndex]``      portbypass.inbound                    Integer    Port바이패스를 통해 원본서버로부터 받는 평균 트래픽(Bytes)
-.11.2. ``[vhostMin]`` . ``[vhostIndex]``      portbypass.outbound                   Integer    Port바이패스를 통해 원본서버로 보내는 평균 트래픽(Bytes)
-.11.3. ``[vhostMin]`` . ``[vhostIndex]``      portbypass.sessionAverage             Integer    Port바이패스 중인 평균 원본서버 세션 수
-.11.4. ``[vhostMin]`` . ``[vhostIndex]``      portbypass.closedAverage              Integer    Port바이패스 중 원본서버가 연결을 종료한 평균 횟수
-.11.5. ``[vhostMin]`` . ``[vhostIndex]``      portbypass.connectTimeoutAverage      Integer    Port바이패스 원본서버 평균 접속실패 횟수
-.11.6. ``[vhostMin]`` . ``[vhostIndex]``      portbypass.closedCount                Integer    Port바이패스 중 원본서버가 연결을 종료한 횟수
-.11.7. ``[vhostMin]`` . ``[vhostIndex]``      portbypass.connectTimeoutCount        Integer    Port바이패스 원본서버 접속실패 횟수
+.4. ``[vhostMin]`` . ``[vhostIndex]``         activesessionAverage                  Integer    The number of average session that are being transferred in the entire origin server sessions
+.10                                           http                                  OID        The origin server HTTP traffic information
+.10.1. ``[vhostMin]`` . ``[vhostIndex]``      http.inbound                          Integer    Average HTTP traffic received from the origin server(Bytes)
+.10.2. ``[vhostMin]`` . ``[vhostIndex]``      http.outbound                         Integer    Average HTTP traffic sent to the origin server(Bytes)
+.10.3. ``[vhostMin]`` . ``[vhostIndex]``      http.sessionAverage                   Integer    The number of average HTTP sessions in the origin server
+.10.4. ``[vhostMin]`` . ``[vhostIndex]``      http.reqHeaderSize                    Integer    Average HTTP Header traffic sent to the origin server(Bytes)
+.10.5. ``[vhostMin]`` . ``[vhostIndex]``      http.reqBodySize                      Integer    Average HTTP Body traffic sent to the origin server(Bytes)
+.10.6. ``[vhostMin]`` . ``[vhostIndex]``      http.resHeaderSize                    Integer    Average HTTP Header traffic received from the origin server(Bytes)
+.10.7. ``[vhostMin]`` . ``[vhostIndex]``      http.resBodySize                      Integer    Average HTTP Body traffic received from the origin server(Bytes)
+.10.8. ``[vhostMin]`` . ``[vhostIndex]``      http.reqAverage                       Integer    Average HTTP requests sent to the origin server
+.10.9. ``[vhostMin]`` . ``[vhostIndex]``      http.reqCount                         Integer    The number of HTTP requests sent to the origin server
+.10.10. ``[vhostMin]`` . ``[vhostIndex]``     http.resTotalAverage                  Integer    The average number of total responses sent by the origin server
+.10.11. ``[vhostMin]`` . ``[vhostIndex]``     http.resTotalCompleteAverage          Integer    The average number of HTTP transaction completed by the origin server
+.10.12. ``[vhostMin]`` . ``[vhostIndex]``     http.resTotalTimeRes                  Integer    Average elapsed time to receive response headers from the origin server(0.01ms)
+.10.13. ``[vhostMin]`` . ``[vhostIndex]``     http.resTotalTimeComplete             Integer    Average time of completing response HTTP Transactions(0.01ms)
+.10.14. ``[vhostMin]`` . ``[vhostIndex]``     http.resTotalCount                    Integer    The number of entire HTTP responses sent by the origin server
+.10.15. ``[vhostMin]`` . ``[vhostIndex]``     http.resTotalCompleteCount            Integer    The number of HTTP transactions completed by the origin server
+.10.20. ``[vhostMin]`` . ``[vhostIndex]``     http.res2xxAverage                    Integer    The average number of 2xx responses sent by the origin server
+.10.21. ``[vhostMin]`` . ``[vhostIndex]``     http.res2xxCompleteAverage            Integer    The average number of 2xx transactions completed by the origin server
+.10.22. ``[vhostMin]`` . ``[vhostIndex]``     http.res2xxTimeRes                    Integer    The average elapsed time until receiving 2xx response headers from the origin server(0.01ms)
+.10.23. ``[vhostMin]`` . ``[vhostIndex]``     http.res2xxTimeComplete               Integer    The average 2xx response HTTP Transaction completion time from the origin server(0.01ms)
+.10.24. ``[vhostMin]`` . ``[vhostIndex]``     http.res2xxCount                      Integer    The number of 2xx response sent by the origin server
+.10.25. ``[vhostMin]`` . ``[vhostIndex]``     http.res2xxCompleteCount              Integer    The number of 2xx transactions completed by the origin server
+.10.30. ``[vhostMin]`` . ``[vhostIndex]``     http.res3xxAverage                    Integer    The average number of 3xx responses sent by the origin server
+.10.31. ``[vhostMin]`` . ``[vhostIndex]``     http.res3xxCompleteAverage            Integer    The average number of 3xx transactions completed by the origin server
+.10.32. ``[vhostMin]`` . ``[vhostIndex]``     http.res3xxTimeRes                    Integer    The average elapsed time until receiving 3xx response headers from the origin server(0.01ms)
+.10.33. ``[vhostMin]`` . ``[vhostIndex]``     http.res3xxTimeComplete               Integer    The average 3xx response HTTP Transaction completion time from the origin server(0.01ms)
+.10.34. ``[vhostMin]`` . ``[vhostIndex]``     http.res3xxCount                      Integer    The number of 3xx response sent by the origin server
+.10.35. ``[vhostMin]`` . ``[vhostIndex]``     http.res3xxCompleteCount              Integer    The number of 3xx transactions completed by the origin server
+.10.40. ``[vhostMin]`` . ``[vhostIndex]``     http.res4xxAverage                    Integer    The average number of 4xx responses sent by the origin server
+.10.41. ``[vhostMin]`` . ``[vhostIndex]``     http.res4xxCompleteAverage            Integer    The average number of 4xx transactions completed by the origin server
+.10.42. ``[vhostMin]`` . ``[vhostIndex]``     http.res4xxTimeRes                    Integer    The average elapsed time until receiving 4xx response headers from the origin server(0.01ms)
+.10.43. ``[vhostMin]`` . ``[vhostIndex]``     http.res4xxTimeComplete               Integer    The average 4xx response HTTP Transaction completion time from the origin server(0.01ms)
+.10.44. ``[vhostMin]`` . ``[vhostIndex]``     http.res4xxCount                      Integer    The number of 4xx response sent by the origin server
+.10.45. ``[vhostMin]`` . ``[vhostIndex]``     http.res4xxCompleteCount              Integer    The number of 4xx transactions completed by the origin server
+.10.50. ``[vhostMin]`` . ``[vhostIndex]``     http.res5xxAverage                    Integer    The average number of 5xx responses sent by the origin server
+.10.51. ``[vhostMin]`` . ``[vhostIndex]``     http.res5xxCompleteAverage            Integer    The average number of 5xx transactions completed by the origin server
+.10.52. ``[vhostMin]`` . ``[vhostIndex]``     http.res5xxTimeRes                    Integer    The average elapsed time until receiving 5xx response headers from the origin server(0.01ms)
+.10.53. ``[vhostMin]`` . ``[vhostIndex]``     http.res5xxTimeComplete               Integer    The average 5xx response HTTP Transaction completion time from the origin server(0.01ms)
+.10.54. ``[vhostMin]`` . ``[vhostIndex]``     http.res5xxCount                      Integer    The number of 5xx response sent by the origin server
+.10.55. ``[vhostMin]`` . ``[vhostIndex]``     http.res5xxCompleteCount              Integer    The number of 5xx transactions completed by the origin server
+.10.60. ``[vhostMin]`` . ``[vhostIndex]``     http.connectTimeoutAverage            Integer    Average number of the origin server connection timeout
+.10.61. ``[vhostMin]`` . ``[vhostIndex]``     http.receiveTimeoutAverage            Integer    Average number of the origin server receive timeout
+.10.62. ``[vhostMin]`` . ``[vhostIndex]``     http.connectAverage                   Integer    Average number of successful connection to the origin server
+.10.63. ``[vhostMin]`` . ``[vhostIndex]``     http.dnsQueryTime                     Integer    Average DNS query required time for connecting origin server
+.10.64. ``[vhostMin]`` . ``[vhostIndex]``     http.connectTime                      Integer    Average required time to connect the origin server(0.01ms)
+.10.65. ``[vhostMin]`` . ``[vhostIndex]``     http.connectTimeoutCount              Integer    The number of origin server connection timeout
+.10.66. ``[vhostMin]`` . ``[vhostIndex]``     http.receiveTimeoutCount              Integer    The number of origin server receive timeout
+.10.67. ``[vhostMin]`` . ``[vhostIndex]``     http.connectCount                     Integer    The number of successful origin server connection
+.10.68. ``[vhostMin]`` . ``[vhostIndex]``     http.closeAverage                     Integer    The average number of closed sockets by the origin server during transmission
+.10.69. ``[vhostMin]`` . ``[vhostIndex]``     http.closeCount                       Integer    The number of closed sockets by the origin server during transmission
+.11                                           portbypass                            OID        Traffic information of the port bypassed origin server
+.11.1. ``[vhostMin]`` . ``[vhostIndex]``      portbypass.inbound                    Integer    Average traffic received from the origin server via port bypass(Bytes)
+.11.2. ``[vhostMin]`` . ``[vhostIndex]``      portbypass.outbound                   Integer    Average traffic sent to the origin server via port bypass(Bytes)
+.11.3. ``[vhostMin]`` . ``[vhostIndex]``      portbypass.sessionAverage             Integer    The average number of origin server sessions in port bypass.
+.11.4. ``[vhostMin]`` . ``[vhostIndex]``      portbypass.closedAverage              Integer    The average number of connection close by the origin server during port bypass
+.11.5. ``[vhostMin]`` . ``[vhostIndex]``      portbypass.connectTimeoutAverage      Integer    The average number of the port bypassed origin server connection timeout
+.11.6. ``[vhostMin]`` . ``[vhostIndex]``      portbypass.closedCount                Integer    The number of closed connection by the origin server during port bypass
+.11.7. ``[vhostMin]`` . ``[vhostIndex]``      portbypass.connectTimeoutCount        Integer    The number of port bypassed origin server connection timeout
 ============================================= ===================================== ========== =================================================================
 
 
