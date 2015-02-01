@@ -1112,7 +1112,7 @@ cache.view
 
    OID = 1.3.6.1.4.1.40001.1.4.11.1
 
-Provides identical information to the virtual host stats가상호스트 통계와 동일한 정보를 제공한다. 
+Provides identical information to the virtual host stats. 
 ``[viewIndex]`` value starts from 1 and reaches up to the number of View.
 
 - 1.3.6.1.4.1.40001.1.4.3 - Virtual host stats
