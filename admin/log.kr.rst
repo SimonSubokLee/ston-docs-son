@@ -1,18 +1,18 @@
 ﻿.. admin-log:
 
-17장. 로그
+Chapter 17. Log
 ******************
 
-이 장에서는 로그를 다룬다.
-서비스는 로그로 시작해서 로그로 끝난다.
+This chapter will explain about the log.
+A service begins with the log and ends with the log.
 로그는 금이며, 법이며, 분쟁지역의 평화유지군이다.
 
-로그는 전역과 가상호스트로 구분된다. 
-모든 로그는 기록여부를 설정할 수 있으며, 공통속성을 가진다. ::
+There are global and virtual host logs. 
+All logs can be turned on or off, and they have identical properties. ::
 
    <XXX Type="time" Unit="1440" Retention="10" Compression="OFF">ON</XXX>
 
--  ``Type (기본: time)`` , ``Unit (기본: 1440분)`` 로그 롤링조건을 설정한다.
+-  ``Type (default: time)`` , ``Unit (default: 1440 minutes)`` 로그 롤링조건을 설정한다.
 
    - ``time`` 설정된 ``unit`` 시간(단위: 분)마다 로그 파일을 롤링한다.
    - ``size`` 설정된 ``unit`` 크기(단위: MB)마다 로그 파일을 롤링한다.
