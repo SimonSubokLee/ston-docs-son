@@ -347,22 +347,22 @@ system.diskPerf
 
    OID = 1.3.6.1.4.1.40001.1.2.19.1
 
-디스크 성능상태를 제공한다.
+Provides disk performance status.
 
 ======================================== =========================== ========== ===============================
 OID                                      Name                        Type       Description
 ======================================== =========================== ========== ===============================
-.2. ``[diskMin]`` . ``[diskIndex]``      diskPerfReadCount           Integer    읽기 성공 횟수
-.3. ``[diskMin]`` . ``[diskIndex]``      diskPerfReadMergedCount     Integer    읽기가 병합된 횟수
-.4. ``[diskMin]`` . ``[diskIndex]``      diskPerfReadSectorsCount    Integer    읽은 섹터 수
-.5. ``[diskMin]`` . ``[diskIndex]``      diskPerfReadTime            Integer    읽기 소요시간(ms)
-.6. ``[diskMin]`` . ``[diskIndex]``      diskPerfWriteCount          Integer    쓰기 성공 횟수
-.7. ``[diskMin]`` . ``[diskIndex]``      diskPerfWriteMergedCount    Integer    쓰기가 병합된 횟수
-.8. ``[diskMin]`` . ``[diskIndex]``      diskPerfWriteSectorsCount   Integer    써진 섹터 수
-.9. ``[diskMin]`` . ``[diskIndex]``      diskPerfWriteTime           Integer    쓰기 소요시간(ms)
-.10. ``[diskMin]`` . ``[diskIndex]``     diskPerfIOProgressCount     Integer    진행 중인 IO개수
-.11. ``[diskMin]`` . ``[diskIndex]``     diskPerfIOTime              Integer    IO 소요시간(ms)
-.12. ``[diskMin]`` . ``[diskIndex]``     diskPerfIOTimeWeighted      Integer    IO 소요시간(ms, 가중치 적용)
+.2. ``[diskMin]`` . ``[diskIndex]``      diskPerfReadCount           Integer    Successful Read count
+.3. ``[diskMin]`` . ``[diskIndex]``      diskPerfReadMergedCount     Integer    Accumulated Read count
+.4. ``[diskMin]`` . ``[diskIndex]``      diskPerfReadSectorsCount    Integer    Total count of read sectors
+.5. ``[diskMin]`` . ``[diskIndex]``      diskPerfReadTime            Integer    Elapsed Read time(ms)
+.6. ``[diskMin]`` . ``[diskIndex]``      diskPerfWriteCount          Integer    Successful Write count
+.7. ``[diskMin]`` . ``[diskIndex]``      diskPerfWriteMergedCount    Integer    Accumulated Write count
+.8. ``[diskMin]`` . ``[diskIndex]``      diskPerfWriteSectorsCount   Integer    Total count of written sectors
+.9. ``[diskMin]`` . ``[diskIndex]``      diskPerfWriteTime           Integer    Elapsed Write time(ms)
+.10. ``[diskMin]`` . ``[diskIndex]``     diskPerfIOProgressCount     Integer    The number of IO in progress
+.11. ``[diskMin]`` . ``[diskIndex]``     diskPerfIOTime              Integer    IO elapsed time(ms)
+.12. ``[diskMin]`` . ``[diskIndex]``     diskPerfIOTimeWeighted      Integer    IO elapsed time(ms, weighted value applied)
 ======================================== =========================== ========== ===============================
 
 
@@ -376,32 +376,32 @@ global
 
    OID = 1.3.6.1.4.1.40001.1.3
 
-STON의 모든 모듈이 공통적으로 사용하는 자원정보(소켓, 이벤트 등)를 제공한다. 
+Global provides resource informations(sockets, events, etc) that are commonly used for all STON modules. 
 
 -  **ServerSocket**
    
-   클라이언트 ~ STON구간. STON이 클라이언트의 요청을 처리할 용도로 사용하는 소켓
+   A section from clients to STON. This socket is used by STON to process client requests.
    
 -  **ClientSocket**
 
-   STON ~ 원본서버구간. STON이 원본서버로 요청을 보내는 용도로 사용하는 소켓
+   A section from STON to the origin server. This socket is used by STON to send requests to the origin server.
 
 ===== =========================================== ========== ==================================================
 OID   Name                                        Type       Description
 ===== =========================================== ========== ==================================================
-.5    EQ. ``[globalMin]``                         Integer    STON Framework에서 아직 처리되지 않은 Event개수
-.6    RQ. ``[globalMin]``                         Integer    최근 서비스된 컨텐츠 참조 큐에 저장된 Event 개수
-.7    waitingFiles2Write. ``[globalMin]``         Integer    쓰기대기 중인 파일개수
-.10   ServerSocket.Total. ``[globalMin]``         Integer    전체 서버소켓 수
-.11   ServerSocket.Established. ``[globalMin]``   Integer    연결된 상태의 서버소켓 수
-.12   ServerSocket.Accepted. ``[globalMin]``      Integer    새롭게 연결된 서버소켓 수
-.13   ServerSocket.Closed. ``[globalMin]``        Integer    연결이 종료된 서버소켓 수
-.20   ClientSocket.Total. ``[globalMin]``         Integer    전체 클라이언트소켓 수
-.21   ClientSocket.Established. ``[globalMin]``   Integer    연결된 상태의 클라이언트소켓 수
-.22   ClientSocket.Accepted. ``[globalMin]``      Integer    새롭게 연결된 클라이언트소켓 수
-.23   ClientSocket.Closed. ``[globalMin]``        Integer    연결이 종료된 클라이언트소켓 수
-.30   ServiceAccess.Allow. ``[globalMin]``        Integer    ServiceAccess에 의해 허가(Allow)된 소켓 수
-.31   ServiceAccess.Deny. ``[globalMin]``         Integer    ServiceAccess에 의해 거부(Deny)된 소켓 수
+.5    EQ. ``[globalMin]``                         Integer    The number of unprocessed Events in the STON Framework
+.6    RQ. ``[globalMin]``                         Integer    The number of Events that are saved in recently serviced contents reference que
+.7    waitingFiles2Write. ``[globalMin]``         Integer    The number of write pending files
+.10   ServerSocket.Total. ``[globalMin]``         Integer    Total number of server sockets
+.11   ServerSocket.Established. ``[globalMin]``   Integer    Total number of connected server sockets
+.12   ServerSocket.Accepted. ``[globalMin]``      Integer    Total number of newly connected server sockets
+.13   ServerSocket.Closed. ``[globalMin]``        Integer    The number of closed server sockets
+.20   ClientSocket.Total. ``[globalMin]``         Integer    Total number of client sockets
+.21   ClientSocket.Established. ``[globalMin]``   Integer    Total number of connected client sockets
+.22   ClientSocket.Accepted. ``[globalMin]``      Integer    Total numbmer of newly connected client sockets
+.23   ClientSocket.Closed. ``[globalMin]``        Integer    The number of closed client sockets
+.30   ServiceAccess.Allow. ``[globalMin]``        Integer    The number of allowed(Allow) sockets by ServiceAccess
+.31   ServiceAccess.Deny. ``[globalMin]``         Integer    The number of denied(Deny) sockets by ServiceAccess
 ===== =========================================== ========== ==================================================
 
 
@@ -415,18 +415,18 @@ cache
    
     OID = 1.3.6.1.4.1.40001.1.4
 
-캐시 서비스의 통계는 가상호스트별로 상세하게 수집/제공된다.
+The stats of cache service are elaborately collected/provided for each virtual host.
 
 ====== ============== ========= ============================================================
 OID    Name           Type      Description
 ====== ============== ========= ============================================================
-.1     host           OID       호스트 (확장)
-.2     vhostCount     Integer   가상호스트 개수
-.3.1   vhost          OID       가상호스트별 통계
-.4     vhostIndexMax  Integer    ``[vhostIndex]``  최대 값. SNMPWalk는 이 수치를 기준으로 동작한다.
-.10    viewCount      Integer   View 개수
-.11.1  view           OID       View별 통계
-.12    viewIndexMax   Integer   [viewIndex] 최대 값. SNMPWalk는 이 수치를 기준으로 동작한다.
+.1     host           OID       Host (expansion)
+.2     vhostCount     Integer   The number of virtual host
+.3.1   vhost          OID       Stats for each virtual host
+.4     vhostIndexMax  Integer   Max value of ``[vhostIndex]``. SNMPWalk works based on this value.
+.10    viewCount      Integer   View count
+.11.1  view           OID       Stats by View
+.12    viewIndexMax   Integer   Max value of [viewIndex]. SNMPWalk works based on this value.
 ====== ============== ========= ============================================================
 
 
@@ -440,16 +440,16 @@ cache.host
 
    OID = 1.3.6.1.4.1.40001.1.4.1
 
-호스트(=모든 가상호스트)의 정보를 제공한다.
+Provides host(all virtual hosts) information.
 
 ===== ========= =========== =========================
 OID   Name      Type        Description
 ===== ========= =========== =========================
-.2    name      String      호스트 이름
-.3    status    String      "Healthy" 또는 "Inactive"
-.4    uptime    Integer     STON 실행시간 (초)
-.10   contents  OID         컨텐츠 정보 (확장)
-.11   traffic   OID         통계 (확장)
+.2    name      String      Host name
+.3    status    String      "Healthy" or "Inactive"
+.4    uptime    Integer     STON running time (second)
+.10   contents  OID         Contents information (expansion)
+.11   traffic   OID         Stats (expansion)
 ===== ========= =========== =========================
 
 
@@ -463,40 +463,40 @@ cache.host.contents
 
    OID = 1.3.6.1.4.1.40001.1.4.1.10
 
-호스트(=모든 가상호스트)가 서비스하는 컨텐츠 통계를 제공한다.
+Provides contents stats that are serviced by host(all virtual hosts).
 
 ====== ================ ========== ============================
 OID    Name             Type       Description
 ====== ================ ========== ============================
-.1     memory           Integer    메모리 캐싱 크기(KB)
-.2     filesTotalCount  Integer    서비스 중인 파일개수
-.3     filesTotalSize   Integer    서비스 중인 전체 파일량(MB)
-.10    filesCountU1KB   Integer    1KB미만 파일개수
-.11    filesCountU2KB   Integer    2KB미만 파일개수
-.12    filesCountU4KB   Integer    4KB미만 파일개수
-.13    filesCountU8KB   Integer    8KB미만 파일개수
-.14    filesCountU16KB  Integer    16KB미만 파일개수
-.15    filesCountU32KB  Integer    32KB미만 파일개수
-.16    filesCountU64KB  Integer    64KB미만 파일개수
-.17    filesCountU128KB Integer    128KB미만 파일개수
-.18    filesCountU256KB Integer    256KB미만 파일개수
-.19    filesCountU512KB Integer    512KB미만 파일개수
-.20    filesCountU1MB   Integer    1MB미만 파일개수
-.21    filesCountU2MB   Integer    2MB미만 파일개수
-.22    filesCountU4MB   Integer    4MB미만 파일개수
-.23    filesCountU8MB   Integer    8MB미만 파일개수
-.24    filesCountU16MB  Integer    16MB미만 파일개수
-.25    filesCountU32MB  Integer    32MB미만 파일개수
-.26    filesCountU64MB  Integer    64MB미만 파일개수
-.27    filesCountU128MB Integer    128MB미만 파일개수
-.28    filesCountU256MB Integer    256MB미만 파일개수
-.29    filesCountU512MB Integer    512MB미만 파일개수
-.30    filesCountU1GB   Integer    1GB미만 파일개수
-.31    filesCountU2GB   Integer    2GB미만 파일개수
-.32    filesCountU4GB   Integer    4GB미만 파일개수
-.33    filesCountU8GB   Integer    8GB미만 파일개수
-.34    filesCountU16GB  Integer    16GB미만 파일개수
-.35    filesCountO16GB  Integer    16GB이상 파일개수
+.1     memory           Integer    Memory caching size(KB)
+.2     filesTotalCount  Integer    The number of files in service
+.3     filesTotalSize   Integer    Total size of files in service(MB)
+.10    filesCountU1KB   Integer    The number of files smaller than 1KB
+.11    filesCountU2KB   Integer    The number of files smaller than 2KB
+.12    filesCountU4KB   Integer    The number of files smaller than 4KB
+.13    filesCountU8KB   Integer    The number of files smaller than 8KB
+.14    filesCountU16KB  Integer    The number of files smaller than 16KB
+.15    filesCountU32KB  Integer    The number of files smaller than 32KB
+.16    filesCountU64KB  Integer    The number of files smaller than 64KB
+.17    filesCountU128KB Integer    The number of files smaller than 128KB
+.18    filesCountU256KB Integer    The number of files smaller than 256KB
+.19    filesCountU512KB Integer    The number of files smaller than 512KB
+.20    filesCountU1MB   Integer    The number of files smaller than 1MB
+.21    filesCountU2MB   Integer    The number of files smaller than 2MB
+.22    filesCountU4MB   Integer    The number of files smaller than 4MB
+.23    filesCountU8MB   Integer    The number of files smaller than 8MB
+.24    filesCountU16MB  Integer    The number of files smaller than 16MB
+.25    filesCountU32MB  Integer    The number of files smaller than 32MB
+.26    filesCountU64MB  Integer    The number of files smaller than 64MB
+.27    filesCountU128MB Integer    The number of files smaller than 128MB
+.28    filesCountU256MB Integer    The number of files smaller than 256MB
+.29    filesCountU512MB Integer    The number of files smaller than 512MB
+.30    filesCountU1GB   Integer    The number of files smaller than 1GB
+.31    filesCountU2GB   Integer    The number of files smaller than 2GB
+.32    filesCountU4GB   Integer    The number of files smaller than 4GB
+.33    filesCountU8GB   Integer    The number of files smaller than 8GB
+.34    filesCountU16GB  Integer    The number of files smaller than 16GB
+.35    filesCountO16GB  Integer    The number of files bigger than 16GB
 ====== ================ ========== ============================
 
 
@@ -510,10 +510,10 @@ cache.host.traffic
 
    OID = 1.3.6.1.4.1.40001.1.4.1.11
 
-호스트(=모든 가상호스트)의 캐시 서비스와 트래픽 통계를 제공한다. 
-traffic의 모든 통계는 최대 60분까지의 평균으로 제공한다. 
-min은 '분'을 의미하며 최대 60까지의 값을 가진다. 
-min이 생략되거나 0이라면 실시간정보를 제공한다.
+Provides stats of cache service and traffic of host(all virtual hosts). 
+All traffic stats are averaged and provided up to 60 minutes. 
+The min stands for 'minute' and available up to 60. 
+If the min is omitted or set to 0, real time stats are provided.
 
 ===================== =============== ======= ==============================
 OID                   Name            Type    Description
@@ -522,8 +522,8 @@ OID                   Name            Type    Description
 .2. ``[vhostMin]``                            Request Hit Ratio(10000%)
 .3. ``[vhostMin]``    bytesHitRatio   Integer Bytes Hit Ratio(100%)
 .4. ``[vhostMin]``                            Bytes Hit Ratio(10000%)
-.10                   origin          OID     원본 트래픽 정보 (확장)
-.11                   client          OID     클라이언트 트래픽 정보 (확장)
+.10                   origin          OID     Origin traffic information (expansion)
+.11                   client          OID     Client traffic information (expansion)
 ===================== =============== ======= ==============================
 
 
@@ -537,74 +537,74 @@ cache.host.traffic.origin
    
     OID = 1.3.6.1.4.1.40001.1.4.1.11.10
 
-원본서버 트래픽 통계를 제공한다. 
-원본서버 트래픽은 HTTP트래픽과 Port바이패스 트래픽으로 구분한다.
+Provides origin server traffic statistics.. 
+Origin server traffics are divided into HTTP traffic and Port bypass traffic.
 
 ========================== =================================== ========== ===================================================================
 OID                        Name                                Type       Description
 ========================== =================================== ========== ===================================================================
-.1. ``[vhostMin]``         inbound                             Integer    원본서버로부터 받는 평균 트래픽(Bytes)
-.2. ``[vhostMin]``         outbound                            Integer    원본서버로 보내는 평균 트래픽(Bytes)
-.3. ``[vhostMin]``         sessionAverage                      Integer    전체 원본서버 평균 세션수
-.4. ``[vhostMin]``         activesessionAverage                Integer    전체 원본서버 세션수 중 전송 중인 평균 세션수
-.10                        http                                OID        원본서버 HTTP 트래픽 정보
-.10.1. ``[vhostMin]``      http.inbound                        Integer    원본서버로부터 받는 평균 HTTP 트래픽(Bytes)
-.10.2. ``[vhostMin]``      http.outbound                       Integer    원본서버로 보내는 평균 HTTP 트래픽(Bytes)
-.10.3. ``[vhostMin]``      http.sessionAverage                 Integer    원본서버 평균 HTTP세션 수
-.10.4. ``[vhostMin]``      http.reqHeaderSize                  Integer    원본서버로 보내는 평균 HTTP Header 트래픽(Bytes)
-.10.5. ``[vhostMin]``      http.reqBodySize                    Integer    원본서버로 보내는 평균 HTTP Body 트래픽(Bytes)
-.10.6. ``[vhostMin]``      http.resHeaderSize                  Integer    원본서버로부터 받는 평균 HTTP Header트래픽(Bytes)
-.10.7. ``[vhostMin]``      http.resBodySize                    Integer    원본서버로부터 받는 평균 HTTP Body트래픽(Bytes)
-.10.8. ``[vhostMin]``      http.reqAverage                     Integer    원본서버로 보낸 평균 HTTP요청 개수
-.10.9. ``[vhostMin]``      http.reqCount                       Integer    원본서버로 보낸 HTTP요청 개수
-.10.10. ``[vhostMin]``     http.resTotalAverage                Integer    원본서버가 보낸 전체 평균 HTTP응답 개수
-.10.11. ``[vhostMin]``     http.resTotalCompleteAverage        Integer    원본서버로부터 성공한 평균 HTTP트랜잭션 개수
-.10.12. ``[vhostMin]``     http.resTotalTimeRes                Integer    원본서버로부터 응답 헤더를 받을때까지 평균 소요시간(0.01ms)
-.10.13. ``[vhostMin]``     http.resTotalTimeComplete           Integer    원본서버로부터 응답 HTTP Transaction 평균 완료시간(0.01ms)
-.10.14. ``[vhostMin]``     http.resTotalCount                  Integer    원본서버가 보낸 전체 HTTP응답 개수
-.10.15. ``[vhostMin]``     http.resTotalCompleteCount          Integer    원본서버로부터 성공한 HTTP트랜잭션 개수
-.10.20. ``[vhostMin]``     http.res2xxAverage                  Integer    원본서버가 보낸 평균 2xx응답 개수
-.10.21. ``[vhostMin]``     http.res2xxCompleteAverage          Integer    원본서버로부터 성공한 평균 2xx 트랜잭션 개수
-.10.22. ``[vhostMin]``     http.res2xxTimeRes                  Integer    원본서버로부터 2xx응답 헤더를 받을때까지 평균 소요시간(0.01ms)
-.10.23. ``[vhostMin]``     http.res2xxTimeComplete             Integer    원본서버로부터 2xx응답 HTTP Transaction 평균 완료시간(0.01ms)
-.10.24. ``[vhostMin]``     http.res2xxCount                    Integer    원본서버가 보낸 2xx응답 개수
-.10.25. ``[vhostMin]``     http.res2xxCompleteCount            Integer    원본서버로부터 성공한 2xx 트랜잭션 개수
-.10.30. ``[vhostMin]``     http.res3xxAverage                  Integer    원본서버가 보낸 평균 3xx응답 개수
-.10.31. ``[vhostMin]``     http.res3xxCompleteAverage          Integer    원본서버로부터 성공한 평균 3xx 트랜잭션 개수
-.10.32. ``[vhostMin]``     http.res3xxTimeRes                  Integer    원본서버로부터 3xx응답 헤더를 받을때까지 평균 소요시간(0.01ms)
-.10.33. ``[vhostMin]``     http.res3xxTimeComplete             Integer    원본서버로부터 3xx응답 HTTP Transaction 평균 완료시간(0.01ms)
-.10.34. ``[vhostMin]``     http.res3xxCount                    Integer    원본서버가 보낸 3xx응답 개수
-.10.35. ``[vhostMin]``     http.res3xxCompleteCount            Integer    원본서버로부터 성공한 3xx 트랜잭션 개수
-.10.40. ``[vhostMin]``     http.res4xxAverage                  Integer    원본서버가 보낸 평균 4xx응답 개수
-.10.41. ``[vhostMin]``     http.res4xxCompleteAverage          Integer    원본서버로부터 성공한 평균 4xx 트랜잭션 개수
-.10.42. ``[vhostMin]``     http.res4xxTimeRes                  Integer    원본서버로부터 4xx응답 헤더를 받을때까지 평균 소요시간(0.01ms)
-.10.43. ``[vhostMin]``     http.res4xxTimeComplete             Integer    원본서버로부터 4xx응답 HTTP Transaction 평균 완료시간(0.01ms)
-.10.44. ``[vhostMin]``     http.res4xxCount                    Integer    원본서버가 보낸 4xx응답 개수
-.10.45. ``[vhostMin]``     http.res4xxCompleteCount            Integer    원본서버로부터 성공한 4xx 트랜잭션 개수
-.10.50. ``[vhostMin]``     http.res5xxAverage                  Integer    원본서버가 보낸 평균 5xx응답 개수
-.10.51. ``[vhostMin]``     http.res5xxCompleteAverage          Integer    원본서버로부터 성공한 평균 5xx 트랜잭션 개수
-.10.52. ``[vhostMin]``     http.res5xxTimeRes                  Integer    원본서버로부터 5xx응답 헤더를 받을때까지 평균 소요시간(0.01ms)
-.10.53. ``[vhostMin]``     http.res5xxTimeComplete             Integer    원본서버로부터 5xx응답 HTTP Transaction 평균 완료시간(0.01ms)
-.10.54. ``[vhostMin]``     http.res5xxCount                    Integer    원본서버가 보낸 5xx응답 개수
-.10.55. ``[vhostMin]``     http.res5xxCompleteCount            Integer    원본서버로부터 성공한 5xx 트랜잭션 개수
-.10.60. ``[vhostMin]``     http.connectTimeoutAverage          Integer    평균 원본서버 접속실패 횟수
-.10.61. ``[vhostMin]``     http.receiveTimeoutAverage          Integer    평균 원본서버 전송실패 횟수
-.10.62. ``[vhostMin]``     http.connectAverage                 Integer    평균 원본서버 접속성공 횟수
-.10.63. ``[vhostMin]``     http.dnsQueryTime                   Integer    원본서버 접속 시 평균 DNS쿼리 소요시간
-.10.64. ``[vhostMin]``     http.connectTime                    Integer    원본서버 평균 접속 소요시간(0.01ms)
-.10.65. ``[vhostMin]``     http.connectTimeoutCount            Integer    원본서버 접속실패 횟수
-.10.66. ``[vhostMin]``     http.receiveTimeoutCount            Integer    원본서버 전송실패 횟수
-.10.67. ``[vhostMin]``     http.connectCount                   Integer    원본서버 접속성공 횟수
-.10.68. ``[vhostMin]``     http.closeAverage                   Integer    전송 중 원본서버에서 먼저 소켓을 종료한 평균 횟수
-.10.69. ``[vhostMin]``     http.closeCount                     Integer    전송 중 원본서버에서 먼저 소켓을 종료한 횟수
-.11                        portbypass                          OID        Port바이패스 원본서버 트래픽 정보
-.11.1. ``[vhostMin]``      portbypass.inbound                  Integer    Port바이패스를 통해 원본서버로부터 받는 평균 트래픽(Bytes)
-.11.2. ``[vhostMin]``      portbypass.outbound                 Integer    Port바이패스를 통해 원본서버로 보내는 평균 트래픽(Bytes)
-.11.3. ``[vhostMin]``      portbypass.sessionAverage           Integer    Port바이패스 중인 평균 원본서버 세션 수
-.11.4. ``[vhostMin]``      portbypass.closedAverage            Integer    Port바이패스 중 원본서버가 연결을 종료한 평균 횟수
-.11.5. ``[vhostMin]``      portbypass.connectTimeoutAverage    Integer    Port바이패스 원본서버 평균 접속실패 횟수
-.11.6. ``[vhostMin]``      portbypass.closedCount              Integer    Port바이패스 중 원본서버가 연결을 종료한 횟수
-.11.7. ``[vhostMin]``      portbypass.connectTimeoutCount      Integer    Port바이패스 원본서버 접속실패 횟수
+.1. ``[vhostMin]``         inbound                             Integer    Average traffic received from the origin server(Bytes)
+.2. ``[vhostMin]``         outbound                            Integer    AVerage traffic sent to the origin server(Bytes)
+.3. ``[vhostMin]``         sessionAverage                      Integer    Average sessions in the entire origin servers
+.4. ``[vhostMin]``         activesessionAverage                Integer    Transmitting average sessions among entire origin server sessions
+.10                        http                                OID        HTTP traffic information of the origin server
+.10.1. ``[vhostMin]``      http.inbound                        Integer    Average HTTP traffic received from the origin server(Bytes)
+.10.2. ``[vhostMin]``      http.outbound                       Integer    Average HTTP traffic sent to the origin server(Bytes)
+.10.3. ``[vhostMin]``      http.sessionAverage                 Integer    The average number of HTTP sessions in the origin server
+.10.4. ``[vhostMin]``      http.reqHeaderSize                  Integer    Average HTTP Header traffic sent to the origin server(Bytes)
+.10.5. ``[vhostMin]``      http.reqBodySize                    Integer    Average HTTP Body traffic sent to the origin server(Bytes)
+.10.6. ``[vhostMin]``      http.resHeaderSize                  Integer    Average HTTP Header traffic received from the origin server(Bytes)
+.10.7. ``[vhostMin]``      http.resBodySize                    Integer    Average HTTP Body traffic received from the origin server(Bytes)
+.10.8. ``[vhostMin]``      http.reqAverage                     Integer    The average number of HTTP requests sent to the origin server
+.10.9. ``[vhostMin]``      http.reqCount                       Integer    The number of HTTP requests sent to the origin server
+.10.10. ``[vhostMin]``     http.resTotalAverage                Integer    Total number of average HTTP requests sent by the origin server
+.10.11. ``[vhostMin]``     http.resTotalCompleteAverage        Integer    The average number of successful HTTP transactions from the origin server
+.10.12. ``[vhostMin]``     http.resTotalTimeRes                Integer    Average elapsed time until receiving response header from the origin server(0.01ms)
+.10.13. ``[vhostMin]``     http.resTotalTimeComplete           Integer    Average complete time of HTTP transaction from the origin server(0.01ms)
+.10.14. ``[vhostMin]``     http.resTotalCount                  Integer    Total number of HTTP responses sent by the origin server
+.10.15. ``[vhostMin]``     http.resTotalCompleteCount          Integer    The number of successful HTTP transactions from the origin server
+.10.20. ``[vhostMin]``     http.res2xxAverage                  Integer    The number of average 2xx responses sent by the origin server
+.10.21. ``[vhostMin]``     http.res2xxCompleteAverage          Integer    The average number of successful 2xx transactions from the origin server
+.10.22. ``[vhostMin]``     http.res2xxTimeRes                  Integer    The average elapsed time until receiving 2xx responses header from the origin server(0.01ms)
+.10.23. ``[vhostMin]``     http.res2xxTimeComplete             Integer    The average complete time of 2xx response HTTP transactions from the origin server(0.01ms)
+.10.24. ``[vhostMin]``     http.res2xxCount                    Integer    The number of 2xx responses sent by the origin server
+.10.25. ``[vhostMin]``     http.res2xxCompleteCount            Integer    The number of successful 2xx transactions from the origin server
+.10.30. ``[vhostMin]``     http.res3xxAverage                  Integer    The average number of 3xx responses sent by the origin server
+.10.31. ``[vhostMin]``     http.res3xxCompleteAverage          Integer    The average number of successful 3xx transactions from the origin server
+.10.32. ``[vhostMin]``     http.res3xxTimeRes                  Integer    The average lapsed time until receiving 3xx response headers from the origin server(0.01ms)
+.10.33. ``[vhostMin]``     http.res3xxTimeComplete             Integer    The average complete time of 3xx response HTTP transactions from the origin server(0.01ms)
+.10.34. ``[vhostMin]``     http.res3xxCount                    Integer    The number of 3xx responses sent by the origin server
+.10.35. ``[vhostMin]``     http.res3xxCompleteCount            Integer    The number of successful 3xx transactions from the origin server
+.10.40. ``[vhostMin]``     http.res4xxAverage                  Integer    The average number of 4xx responses sent by the origin server
+.10.41. ``[vhostMin]``     http.res4xxCompleteAverage          Integer    The average number of successful 4xx transactions from the origin server
+.10.42. ``[vhostMin]``     http.res4xxTimeRes                  Integer    The average lapsed time until receiving 4xx response headers from the origin server(0.01ms)
+.10.43. ``[vhostMin]``     http.res4xxTimeComplete             Integer    The average complete time of 4xx response HTTP transactions from the origin server(0.01ms)
+.10.44. ``[vhostMin]``     http.res4xxCount                    Integer    The number of 4xx responses sent by the origin server
+.10.45. ``[vhostMin]``     http.res4xxCompleteCount            Integer    The number of successful 4xx transactions from the origin server
+.10.50. ``[vhostMin]``     http.res5xxAverage                  Integer    The average number of 5xx responses sent by the origin server
+.10.51. ``[vhostMin]``     http.res5xxCompleteAverage          Integer    The average number of successful 5xx transactions from the origin server
+.10.52. ``[vhostMin]``     http.res5xxTimeRes                  Integer    The average lapsed time until receiving 5xx response headers from the origin server(0.01ms)
+.10.53. ``[vhostMin]``     http.res5xxTimeComplete             Integer    The average complete time of 5xx response HTTP transactions from the origin server(0.01ms)
+.10.54. ``[vhostMin]``     http.res5xxCount                    Integer    The number of 5xx responses sent by the origin server
+.10.55. ``[vhostMin]``     http.res5xxCompleteCount            Integer    The number of successful 5xx transactions from the origin server
+.10.60. ``[vhostMin]``     http.connectTimeoutAverage          Integer    Average number of the origin server connection timeout
+.10.61. ``[vhostMin]``     http.receiveTimeoutAverage          Integer    Average number of the origin server receive timeout
+.10.62. ``[vhostMin]``     http.connectAverage                 Integer    Average number of successful connection to the origin server
+.10.63. ``[vhostMin]``     http.dnsQueryTime                   Integer    Average DNS query required time for connecting origin server
+.10.64. ``[vhostMin]``     http.connectTime                    Integer    Average required time to connect the origin server(0.01ms)
+.10.65. ``[vhostMin]``     http.connectTimeoutCount            Integer    The number of origin server connection timeout
+.10.66. ``[vhostMin]``     http.receiveTimeoutCount            Integer    The number of origin server receive timeout
+.10.67. ``[vhostMin]``     http.connectCount                   Integer    The number of successful origin server connection
+.10.68. ``[vhostMin]``     http.closeAverage                   Integer    The average number of closed sockets by the origin server during transmission
+.10.69. ``[vhostMin]``     http.closeCount                     Integer    The number of closed sockets by the origin server during transmission
+.11                        portbypass                          OID        Traffic information of the port bypassed origin server
+.11.1. ``[vhostMin]``      portbypass.inbound                  Integer    Average traffic received from the origin server via port bypass(Bytes)
+.11.2. ``[vhostMin]``      portbypass.outbound                 Integer    Average traffic sent to the origin server via port bypass(Bytes)
+.11.3. ``[vhostMin]``      portbypass.sessionAverage           Integer    The average number of origin server sessions in port bypass.
+.11.4. ``[vhostMin]``      portbypass.closedAverage            Integer    The average number of connection close by the origin server during port bypass
+.11.5. ``[vhostMin]``      portbypass.connectTimeoutAverage    Integer    The average number of the port bypassed origin server connection timeout
+.11.6. ``[vhostMin]``      portbypass.closedCount              Integer    The number of closed connection by the origin server during port bypass
+.11.7. ``[vhostMin]``      portbypass.connectTimeoutCount      Integer    The number of port bypassed origin server connection timeout
 ========================== =================================== ========== ===================================================================
 
 
