@@ -3,24 +3,24 @@
 Chapter 4. Caching Policy
 ******************
 
-This chapter will explain TTL(Time To Live), Caching-Key and expiration policy that are fundamental to the service.
-Stored contents are only available while TTL is valid.
+This chapter will explain the TTL(Time To Live), Caching-Key and expiration policy, which are fundamental to the service.
+Stored content is only available while the TTL is valid.
 Standard HTTP protocol specifies Cache-Control for setting the TTL.
 However, this is not mandatory. 
 Various TTL policies and :ref:`caching-purge` will improve service quality.
 
-HTTP has various standards that classify contents. 
-Also, there could be various Caching-Key as well. 
-Less frequently updating contents not only help reducing load on the origin server but also easy to scale up the service.
-In this chapter, several methods to establish optimized expiration policy for a service will be discussed.
+HTTP has various standards that classify content. 
+There could be various Caching-Keys as well. 
+Updating content less frequently not only helps reduce the load on the origin server, but also makes it easier to scale up the service.
+In this chapter, several methods to establish an optimized expiration policy for a service will be discussed.
 
-In order to use upcoming configuration as a default setting for all virtual hosts, place it under the ``<VHostDefault>``.
-On the contrary, to use the configuration for the specific virtual host, place it under the <Vhost> tag.
+In order to use the upcoming configuration as a default setting for all virtual hosts, place it under the ``<VHostDefault>``.
+On the contrary. To use the configuration for the specific virtual host, place it under the <Vhost> tag.
 
-**Caching-Key** is a unique value that distinguishes contents. 
-In a similar way, file system has a unique path for a file(eg. /usr/conf.txt).
-Occasionally people confuses Caching-Key with URL.
-However, depends on various functions in HTTP, identical URL could return different contents.
+The **Caching-Key** is a unique value that distinguishes contents. 
+In a similar way, a file system has a unique path for a file (e.g. /usr/conf.txt).
+Occasionally people confuse the Caching-Key with URL.
+However, depending on various functions of HTTP, identical URLs could return different content.
 
 
 .. toctree::
@@ -32,8 +32,8 @@ TTL (Time To Live)
 ====================================
 
 TTL stands for the expiration time of saved contents.
-Longer TTL setting reduces burden of the origin server, but modifications will be applied after TTL is expired.
-On the contrary, shorter TTL setting will increase load of the origin server because of frequent requests for modification check.
+Having a longer TTL setting reduces the burden on the origin server, but modifications will be applied after TTL expires.
+On the contrary, a shorter TTL setting will increase the load on the origin server due to frequent requests for modification check.
 The beauty of TTL management is to find an appropriate setting for reducing origin server load.
 Once TTL is set, it will not change until TTL is expired.
 The new TTL will be applied when the old TTL for the file is expired.
