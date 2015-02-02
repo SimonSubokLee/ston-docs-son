@@ -12,27 +12,27 @@ All logs can be turned on or off, and they have identical properties. ::
 
    <XXX Type="time" Unit="1440" Retention="10" Compression="OFF">ON</XXX>
 
--  ``Type (default: time)`` , ``Unit (default: 1440 minutes)`` 로그 롤링조건을 설정한다.
+-  ``Type (default: time)`` and ``Unit (default: 1440 minutes)`` set log rolling conditions.
 
-   - ``time`` 설정된 ``unit`` 시간(단위: 분)마다 로그 파일을 롤링한다.
-   - ``size`` 설정된 ``unit`` 크기(단위: MB)마다 로그 파일을 롤링한다.
-   - ``both`` 콤마(,)로 구분하여 시간과 크기를 동시에 설정한다.
-     예를 들어 Unit="1440, 100"인 경우 시간이 24시간(1440분) 또는 100MB 인 경우 로그 파일을 롤링한다.
+   - ``time`` Roll the log file for every configured ``unit`` time(unit: minute).
+   - ``size`` Roll the log file for every configured ``unit`` size(unit: MB).
+   - ``both`` By using a comma(,), time and size can be configured at the same time.
+     For example, Unit="1440, 100" configuration rolls the log file for every 24 hours(1440 minutes) or every 100MB.
      
--  ``Retention (기본: 10개)`` 단위 로그파일을 최대 n개 유지한다.
+-  ``Retention (default: 10 files)`` Keep the set number of log files.
 
--  ``Compression (기본: OFF)`` 로그가 롤링될 때 압축을 진행한다.
-   예를 들어 access_20140715_0000.log파일이 롤링되면 access_20140715_0000.log.gz로 압축되어 저장된다.
+-  ``Compression (default: OFF)`` Compress the log when rolling.
+   For example, when access_20140715_0000.log file is rolling, it is compressed and saved as access_20140715_0000.log.gz.
 
-``Type`` 이 "time" , ``Unit`` 이 10이면 로그는 매 10분에 롤링된다.
-예를 들어 서비스를 2:18분에 시작해도 로그는 매 10분인 2:20, 2:30, 2:40에 롤링된다. 
-마찬가지로 하루에 한번 매일 0시 0분에 롤링하려면 1440(60분 X 24시)으로 ``Unit`` 값으로 설정한다.
-``time`` 설정에서 로그는 하루에 한번 무조건 롤링되므로 ``Unit`` 의 최대값은 1440을 넘을 수 없다.
+If the ``Type`` is set to "time" and the ``Unit`` is set to 10, log is rolled for every multiple of 10 minutes.
+For example, even if the service started at 2:18, logs will be rolled at 2:20, 2:30, 2:40, and so on. 
+Likewise, if you want to roll the log once at midnight, you can set the ``Unit`` to 1440(60 minutes X 24 hours).
+In the ``time`` configuration, log will be rolled at least once a day, therefore the maximum value of ``Unit`` cannot exceed 1440.
 
 .. figure:: img/log_rolling1.jpg
    :align: center
    
-최대 값인 24시간(Unit=1440)시간마다 로그가 롤링되도록 설정했다면 다음 그림과 같이 로그가 기록된다.
+If you set the maximum value 1440 for Unit, log will be recorded as the below figure.
 
 .. figure:: img/log_rolling2.jpg
    :align: center
@@ -45,11 +45,11 @@ All logs can be turned on or off, and they have identical properties. ::
 
 .. admin-log-install:
 
-Install 로그
+Install Log
 ====================================
 
-설치/업데이트 시 모든 내용이 install.log에 기록된다.
-이 로그는 별도의 설정이 없다. ::
+Every details during installation/update will be recorded in the install.log.
+No extra configuration is needed for this log. ::
 
     #DownloadURL: http://foobar.com/ston/ston.2.0.0.rhel.2.6.32.x64.tar.gz
     #DownloadTime: 13 sec
@@ -109,62 +109,62 @@ Install 로그
 
 .. _admin-log-info:
 
-Info 로그
+Info Log
 ====================================
 
-Info로그는 전역설정(server.xml)에 설정한다. ::
+Info log can be configured in the global setting(server.xml). ::
 
    # server.xml - <Server><Cache>
    
    <InfoLog Type="size" Unit="1" Retention="5">ON</InfoLog>   
 
--  ``<InfoLog> (기본: ON, Type: size, Unit: 1)``   
-   STON의 동작과 설정변경에 대해 기록한다.
+-  ``<InfoLog> (default: ON, Type: size, Unit: 1)``   
+   Records operation and configuration changes of STON.
    
    
 .. _admin-log-deny:
 
-Deny 로그
+Deny Log
 ====================================
 
-Deny로그는 전역설정(server.xml)에 설정한다. ::
+Deny log is configured in the global setting(server.xml). ::
 
    # server.xml - <Server><Cache>
 
    <DenyLog Type="size" Unit="1" Retention="5">ON</DenyLog>   
 
--  ``<DenyLog> (기본: ON, Type: size, Unit: 1)``
+-  ``<DenyLog> (default: ON, Type: size, Unit: 1)``
 
-   :ref:`access-control-serviceaccess` 에 의해 접근차단된 IP를 기록한다. ::
+   Deny log records blocked IP addresses by :ref:`access-control-serviceaccess`. ::
    
       #Fields: date time c-ip deny
       2012.11.15 07:06:10 1.1.1.1 AP
       2012.11.15 07:06:26 2.2.2.2 GIN
       2012.11.15 07:06:30 3.3.3.3 3.3.3.1-255
       
-   모든 필드는 공백으로 구분되며 각 필드의 의미는 다음과 같다.
+   Each fields are distinguished by an empty space, and each field specifies the following.
    
-   - ``date`` 날짜
-   - ``time`` 시간
-   - ``c-ip`` 클라이언트 IP
-   - ``deny`` 차단조건
+   - ``date`` date
+   - ``time`` time
+   - ``c-ip`` client's IP
+   - ``deny`` denied condition
    
    
 .. _admin-log-originerror:
 
-OriginError 로그
+OriginError Log
 ====================================
 
-OriginError로그는 전역설정(server.xml)에 설정한다. ::
+OriginError log is configured in the global setting(server.xml). ::
 
    # server.xml - <Server><Cache>
    
    <OriginErrorLog Type="size" Unit="5" Retention="5" Warning="OFF">ON</OriginErrorLog>   
 
--  ``<OriginErrorLog> (기본: OFF, Type: size, Unit: 5, Warning: OFF)``
+-  ``<OriginErrorLog> (default: OFF, Type: size, Unit: 5, Warning: OFF)``
 
-   모든 가상호스트의 원본서버에서 발생한 장애만을 기록한다. 
-   장애는 접속장애와 전송장애를 의미하며 원본서버 배제/복구 결과가 기록된다. ::
+   OriginError log records errors only occured in the origin server of all virtual hosts. 
+   Errors consist of connection timeouts and receive timeouts, and exclusion/recovery results of the origin server are logged. ::
    
       #Fields: date time vhostname level s-domain s-ip cs-method cs-uri time-taken sc-error sc-resinfo
       2012.11.15 07:06:10 [example.com] [ERROR] 192.168.0.13 192.168.0.13 GET /Upload/ProductImage/stock/1716439_SM.jpg 20110 Connect-Timeout -
@@ -175,42 +175,42 @@ OriginError로그는 전역설정(server.xml)에 설정한다. ::
       #2012.11.15 07:11:11 [example.com] 192.168.0.13 recovered back in service
       #2012.11.15 07:11:12 [example.com] Origin server list: 192.168.0.13
    
-   모든 필드는 공백으로 구분되며 각 필드의 의미는 다음과 같다.
+   Each fields are distinguished by an empty space, and each field specifies the following.
    
-   - ``date`` 장애발생 날짜
-   - ``time`` 장애발생 시간
-   - ``vhostname`` [가상호스트]
-   - ``level`` [장애레벨(Error 또는 Warning)]
-   - ``s-domain`` 원본서버 도메인
-   - ``s-ip`` 원본서버 IP
-   - ``cs-method`` STON이 원본서버에게 보낸 HTTP Method
-   - ``cs-uri`` STON이 원본서버에게 보낸 URI
-   - ``time-taken`` 장애가 발생 할때 까지 소요된 시간
-   - ``sc-error`` 장애의 종류
-   - ``sc-resinfo`` 장애발생시 서버 응답 정보(","문자로 구분)
+   - ``date`` Date of error occurance
+   - ``time`` Time of error occurance
+   - ``vhostname`` [Virtual host]
+   - ``level`` [Error level(Error or Warning)]
+   - ``s-domain`` Origin server domain
+   - ``s-ip`` Origin server IP
+   - ``cs-method`` HTTP Method sent to the origin server from STON
+   - ``cs-uri`` URI sent to the origin server from STON
+   - ``time-taken`` Elapsed time to occur an error
+   - ``sc-error`` Types of error
+   - ``sc-resinfo`` Server response information at the error occurance(distinguished wih a comma)
    
-   ``Warning`` 속성이 ``ON`` 이라면 다음과 잘못된 HTTP통신이 발생한 경우에 기록한다. ::
+   If ``Warning`` property is set to ``ON``, the following erroneous HTTP communication will be logged. ::
    
       2012.11.15 07:09:03 [example.com] [WARNING] 10.10.10.10 121.189.63.219 GET /716439_SM.jpg 20110 PartialResponseOnNormalRequest Res=206,Len=2635
       2012.11.15 07:09:03 [example.com] [WARNING] 10.10.10.10 121.189.63.219 GET /716439_SM.jpg 20110 ClosedWithoutResponse -
       
-   잘못된 HTTP통신의 경우는 다음과 같다.
+   An erroneous HTTP communication occurs at the following cases.
    
-   - ``ClosedWithoutResponse`` 원본서버에 의한 연결종료. HTTP 응답을 받지 못했다.
-   - ``ClosedWhenDownloading`` 원본서버에 의한 연결종료. Content-Length 만큼 다운로드하지 못했다.
-   - ``NotPartialResponseOnRangeRequest`` Range요청을 했으나 응답코드가 206이 아니다.
-   - ``DifferentContentLengthOnRangeRequest`` 요청한 Range와 Content-Length가 다르다.
-   - ``PartialResponseOnNormalRequest`` Range요청이 아닌데 응답코드가 206이다.
+   - ``ClosedWithoutResponse`` Connection closed by the origin server. HTTP response is not returned.
+   - ``ClosedWhenDownloading`` Connection closed by the origin server. Desired Content-Length is not downloaded.
+   - ``NotPartialResponseOnRangeRequest`` Range request is not responded with 206 response code.
+   - ``DifferentContentLengthOnRangeRequest`` Content-Length is different from requested Range.
+   - ``PartialResponseOnNormalRequest`` Response code 206 is returned for non-Range request.
 
 
 
 .. admin-log-syslog:
 
-SysLog 전송
+SysLog Transfer
 ====================================
 
-`syslog <http://en.wikipedia.org/wiki/Syslog>`_ 프로토콜을 사용하여 로그를 UDP로 실시간 포워딩한다. 
-모든 로그에 대하여 syslog로 전송되도록 설정할 수 있다. ::
+Use `syslog <http://en.wikipedia.org/wiki/Syslog>`_ protocol to forward logs with UDP in real time. 
+All logs can be configured to be transferred to syslog. ::
 
    # server.xml - <Server><Cache>
    
@@ -220,11 +220,11 @@ SysLog 전송
     
 -  ``SysLog``
 
-   - ``OFF (기본)`` syslog를 사용하지 않는다.
+   - ``OFF (default)`` Does not use syslog.
    
-   - ``ON`` 이 태그 하위에 설정된 ``<SysLog>`` 로 로그를 전송한다.
+   - ``ON`` Transfer the log to ``<SysLog>`` that is configured underneath of current tag.
    
-다음은 ``<OriginErrorLog>`` 가 기록될 때 syslog를 설정하는 예제이다. ::
+The following is an example of configuring syslog when ``<OriginErrorLog>`` is being logged. ::
 
    # server.xml - <Server><Cache>
 
@@ -234,15 +234,15 @@ SysLog 전송
       <SysLog Priority="mail.debug" Dest="log.example.com" />
    </OriginErrorLog>
     
-1. ``<OriginErrorLog>`` 의 ``SysLog`` 속성을 ``ON`` 으로 설정한다.
-#. ``<OriginErrorLog>`` 의 하위에 ``<SysLog>`` 태그를 생성한다. n대의 서버로 동시에 전송가능하다.
-#. ``<SysLog>`` 의 ``Priority`` 속성을 설정한다. 
-   이 표현은 syslog의 `Facility Levels <http://en.wikipedia.org/wiki/Syslog#Facility_levels>`_ 과 
-   `Severity levels <http://en.wikipedia.org/wiki/Syslog#Severity_levels>`_ 의 조합으로 구성한다.
-#. ``<SysLog>`` 의 ``Dest`` 속성을 설정한다. syslog수신서버를 의미하며 수신포트가 514인 경우 생략가능하다.
+1. Set the property of ``SysLog`` in the ``<OriginErrorLog>``.
+#. Create the ``<SysLog>`` tag underneath of the ``<OriginErrorLog>``. The log can be transferred to configured number of servers at the same time.
+#. Configures the property of ``Priority`` in the ``<SysLog>``. 
+   The expression is consist of a combination of `Facility Levels <http://en.wikipedia.org/wiki/Syslog#Facility_levels>`_ in syslog and 
+   `Severity levels <http://en.wikipedia.org/wiki/Syslog#Severity_levels>`_.
+#. Configures the property of ``Dest`` in the ``<SysLog>``. The ``Dest`` stands for the syslog reception server, and if the reception port is 514, it can be omitted.
 
-위 설정으로 기록된 sys로그 예제는 다음과 같다. 
-syslog의 tag는 STON/{로그명}으로 기록된다. ::
+The below is a sys log example based on the above configurations. 
+the tag in the syslog is logged as STON/{log name}. ::
 
     Mar 12 11:24:24 192.168.0.1 STON/ORIGINERROR: 2013-03-12 14:09:20 [ERROR] [example.com] - 192.168.0.14 GET /1.gifd 1996 Connect-Timeout -
     Mar 12 11:24:24 192.168.0.1 STON/ORIGINERROR: 2013-03-12 14:09:22 [ERROR] [example.com] - 192.168.0.14 GET /favicon.ico 1995 Connect-Timeout -
@@ -252,28 +252,27 @@ syslog의 tag는 STON/{로그명}으로 기록된다. ::
     
 
 
-가상호스트별 로그저장
+Saving Log on Each Virtual Host
 ====================================
 
-가상호스트별로 로그는 별도로 기록된다. 
-로그가 ``OFF`` 로 설정되어 있어도 로컬파일에만 써지지 않을 뿐이므로 
-:ref:`api-monitoring-logtrace` 는 정상동작한다. ::
+Logs of each virtual host are recorded separately. 
+Even if the log is set to ``OFF``, :ref:`api-monitoring-logtrace` works as normal. ::
 
    # server.xml - <Server><VHostDefault>
    # vhosts.xml - <Vhosts><Vhost>
 
    <Log Dir="/cache_log">
-      ... (생략) ...
+      ... (skip) ...
    </Log>   
 
--  ``<Log>`` ``Dir`` 속성으로 로그가 기록될 디렉토리를 설정한다. 
-   로그는 설정한 디렉토리 하위의 가상호스트 디렉토리에 생성된다.
+-  ``<Log>`` Configure the directory with ``Dir`` attirbute where log will be recorded at. 
+   Log is created in the virtual host directory that is underneath of the configured directory.
    
 
 
 .. _admin-log-dns:
 
-DNS 로그
+DNS Log
 ====================================
 
 원본서버로 Domain으로 설정되었다면 Resolving결과를 기록한다. ::
