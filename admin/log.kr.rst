@@ -275,7 +275,7 @@ Even if the log is set to ``OFF``, :ref:`api-monitoring-logtrace` works as norma
 DNS Log
 ====================================
 
-원본서버로 Domain으로 설정되었다면 Resolving결과를 기록한다. ::
+If the origin server is set as a Domain, records the Resolving result. ::
 
    # server.xml - <Server><VHostDefault><Log>
    # vhosts.xml - <Vhosts><Vhost><Log>
@@ -295,25 +295,25 @@ DNS Log
    2014-07-30 12:24:38 example.com 152 173.194.127.23,173.194.127.24,173.194.127.31,173.194.127.15 4 9 success
    2014-07-30 12:25:03 example.com 127 173.194.127.31,173.194.127.15,173.194.127.23,173.194.127.24 4 15007 success
 
-모든 필드는 공백으로 구분되며 각 필드의 의미는 다음과 같다.
+Each fields are distinguished by an empty space, and each field specifies the following.
 
--  ``date`` 날짜
--  ``time`` 시간
--  ``domain`` 대상 Domain
--  ``ttl`` 레코드 유효시간(Time To Live)
--  ``ip-list`` IP 리스트
--  ``ip-count`` IP 개수
--  ``time-taken`` 수행시간
--  ``result`` success 또는 fail
+-  ``date`` Date
+-  ``time`` Time
+-  ``domain`` Target domain
+-  ``ttl`` Valid time of the record(Time To Live)
+-  ``ip-list`` IP list
+-  ``ip-count`` Number of IP
+-  ``time-taken`` Running time
+-  ``result`` success or fail
 
 
 .. _admin-log-access:
 
-Access 로그
+Access Log
 ====================================
 
-모든 클라이언트의 HTTP 트랜잭션을 기록한다. 
-로그 기록 시점은 HTTP 트랜잭션이 완료되는 시점이며 전송완료 또는 전송중단 시점을 의미한다. ::
+Records HTTP transactions of all clients. 
+Log is recorded when HTTP transaction is completed, and completed transaction means either transfer completion or transfer interruption. ::
 
    # server.xml - <Server><VHostDefault><Log>
    # vhosts.xml - <Vhosts><Vhost><Log>
@@ -322,20 +322,20 @@ Access 로그
     
 -  ``XFF``
 
-   - ``OFF (기본)`` 클라이언트 IP를 기록한다.
-   - ``ON`` 클라이언트가 보낸 X-Forwarded-For헤더 값을 기록한다. 없다면 ``OFF`` 와 같다.
+   - ``OFF (default)`` Records client IP.
+   - ``ON`` Records X-Fowarded-For header value sent from client. If the header value is not exist, this is identical to ``OFF``.
 
 -  ``Form``
    
-   - ``ston (기본)`` W3C표준 + 확장필드
-   - ``apache`` Apache 형식
-   - ``iis`` IIS 형식
+   - ``ston (default)`` W3C standard + expansion field
+   - ``apache`` Apache format
+   - ``iis`` IIS format
    - ``custom`` `admin-log-access-custom`
 
 -  ``Local``
 
-   - ``OFF (기본)`` 로컬통신(Loopback)은 기록하지 않는다.
-   - ``ON`` 로컬통신(Loopback)도 기록한다.
+   - ``OFF (default)`` Local communications(Loopback) are not logged.
+   - ``ON`` Local communications(Loopback) are logged.
   
 ::
 
@@ -344,49 +344,47 @@ Access 로그
     2012.06.27 16:52:26 220.134.10.5 GET /favicon.ico - 80 - 61.50.7.9 Chrome/19.0.1084.56 200 949 2 - - - TCP_HIT gzip+deflate 35 14875
     2012.06.27 17:00:06 220.168.0.13 GET /setup.Eexe - 80 - 61.168.0.102  Mozilla/5.0+(Windows+NT+6.1;+WOW64)+AppleWebKit/536.11+(KHTML,+like+Gecko)+Chrome/20.0.1132.57+Safari/536.11 206 20971800 7008 - - 398458880-419430399 TCP_HIT - 41 89764358
 
-모든 필드는 공백으로 구분되며 각 필드의 의미는 다음과 같다.
+Each fields are distinguished by an empty space, and each field specifies the following.
 
--  ``date`` HTTP 트랜잭션이 완료된 날짜
--  ``time`` HTTP 트랜잭션이 완료된 시간
--  ``s-ip`` 서버 IP
--  ``cs-method`` 클라이언트가 보낸 HTTP Method
--  ``cs-uri-stem`` 클라이언트가 보낸 URL중 QueryString을 제외한 부분
--  ``cs-uri-query`` 클라이언트가 보낸 URL중 QueryString
--  ``s-port`` 서버 포트
--  ``cs-username`` 클라이언트 username
--  ``c-ip`` 클라이언트 IP`` XFF설정이 "ON"이라면 X-Forwarded-For헤더 값을 기록한다.
--  ``cs(User-Agent)`` 클라이언트가 보낸 HTTP User-Agent
--  ``sc-status`` 서버 응답코드.
--  ``sc-bytes`` 서버가 보낸 Bytes (헤더 + 컨텐츠)
--  ``time-taken`` HTTP트랜잭션이 완료될 때까지 소요된 전체시간(밀리세컨드)
--  ``cs-referer`` 클라이언트가 보낸 HTTP Referer
--  ``sc-resinfo`` 부가 정보. "+"문자로 구분된다. 
-   인코딩된 컨텐츠를 서비스했다면 인코딩 옵션(gzip 또는 defalte)이 명시된다. 
-   보안 통신이라면 보안방식(SSL3 또는 TLS1)이 명시된다. 
-   바이패스한 통신이라면 "Bypass"가 명시된다.
+-  ``date`` Completed date of HTTP transaction
+-  ``time`` Completed time of HTTP transaction
+-  ``s-ip`` Server IP
+-  ``cs-method`` HTTP Method sent from the client
+-  ``cs-uri-stem`` QueryString excluded URL sent from the client
+-  ``cs-uri-query`` QueryString of the URL sent from the client
+-  ``s-port`` Server port
+-  ``cs-username`` Client username
+-  ``c-ip`` If the XFF configuration of client IP is set to "ON", records X-Forwarded-For header value.
+-  ``cs(User-Agent)`` HTTP User-Agent sent from the client
+-  ``sc-status`` Server response code.
+-  ``sc-bytes`` Bytes sent from the server(header + contents)
+-  ``time-taken`` Total elapsed time until HTTP transaction is completed(millisecond)
+-  ``cs-referer`` HTTP Referer sent from the client
+-  ``sc-resinfo`` Additional information. Distinguished by "+" character. 
+   If encoded contents are serviced, the encoding option(gzip or defalte) is specified. 
+   Also security method(SSL3 or TLS1) is specified for a secured communication. 
+   "Bypass" will be specified for a bypassed communication.
    
--  ``cs-range`` 클라이언트가 보낸 Range 헤더를 기록한다.
--  ``sc-cachehit`` 캐시 HIT결과.
--  ``cs-acceptencoding`` 클라이언트가 보낸 Accept-Encoding헤더.
--  ``session-id`` HTTP 클라이언트 세션 ID (unsigned int64)
--  ``sc-content-length`` 서버 응답 Content-Length 헤더 값
+-  ``cs-range`` Logs range header sent from the client.
+-  ``sc-cachehit`` Cache HIT result.
+-  ``cs-acceptencoding`` Accept-Encoding header sent from the client.
+-  ``session-id`` HTTP client session ID (unsigned int64)
+-  ``sc-content-length`` Server response Content-Length header value
 
-Access로그는 전송 성공/실패 여부에 상관없이 모든 HTTP 트랜잭션을 기록한다. 
-HTTP 트랜잭션은 클라이언트가 HTTP요청을 보낼 때 시작된다. 
-STON이 클라이언트에게 응답을 보내기 전에 HTTP연결이 종료된다면 HTTP 트랜잭션 역시 
-종료된 것으로 간주한다. 
-로그에는 ``sc-status`` 와 ``sc-bytes`` 가 0으로 기록된다. 
-주로 STON이 원본서버로부터 응답을 받기 전에 클라이언트가 연결을 종료하는 경우 이런 
-로그가 기록된다.
+Access log records all HTTP transactions regardless of success or failure of the transfer. 
+HTTP transaction starts when a client sends a HTTP request. 
+If HTTP connection is closed before STON sends a response to the client, corresponding HTTP transaction is also considered as completed. 
+For both ``sc-status`` and ``sc-bytes`` of the log will be recorded to 0. 
+This kind of log is recorded when the client closes the connection before STON receives a response from the origin server.
 
 
 
 .. _admin-log-access-custom:
 
-사용자정의 Access 로그포맷
+Custom Access Log Format
 ====================================
 
-Access 로그형식을 사용자정의 로그로 설정한다. ::
+Configures to use a customized Access log format. ::
 
    # server.xml - <Server><VHostDefault><Log>
    # vhosts.xml - <Vhosts><Vhost><Log>
@@ -394,11 +392,11 @@ Access 로그형식을 사용자정의 로그로 설정한다. ::
    <Access Form="custom">ON</Access>
    <AccessFormat>%a %A %b id=%{userid}C %f %h %H "%{user-agent}i" %m %P "%r" %s %t %T %X %I %O %R %e %S %K</AccessFormat>   
   
--  ``<Access>`` 의 ``Form`` 속성을 ``custom`` 으로 설정한다.
+-  ``Form`` attribute of the ``<Access>`` is set to ``custom``.
 
--  ``<AccessFormat>`` 사용자정의 로그 형식.
+-  ``<AccessFormat>`` Custom log format.
 
-위 예제의 경우 다음과 같이 Access로그가 기록된다. (#Fields는 기록하지 않는다.) ::
+The following Access log will be recorded for above configurations. (#Fields are not recorded.) ::
 
     192.168.0.88 192.168.0.12 163276 id=winesoft; image.jpg example.com HTTP "STON" GET 80 "GET /ston/image.jpg?type=png HTTP/1.1" 200 2014-04-03 21:21:54 1 C 204 163276 1 2571978 TCP_MISS HTTP/1.1
     192.168.0.88 192.168.0.12 63276 id=winesoft; vod.mp4 example.com HTTP "STON" POST 80 "GET /ston/vod.mp4?start=10 HTTP/1.1" 200 2014-04-03 21:21:54 12 C 304 363276 2 2571979 TCP_REFRESH_HIT HTTP/1.1
@@ -407,8 +405,8 @@ Access 로그형식을 사용자정의 로그로 설정한다. ::
     192.168.0.88 192.168.0.12 6276 id=ston; ui.js example.com HTTP "STON" GET 80 "GET /ui.js HTTP/1.1" 200 2014-04-03 21:21:54 1 X 233 63276 1 2571982 TCP_MISS HTTP/1.1
     192.168.0.88 192.168.0.12 626 id=winesoft; hls.m4u8 example.com HTTP "STON" GET 80 "GET /hls.m4u8 HTTP/1.1" 200 2014-04-03 21:21:54 2 X 124 6312333276 2 2571983 TCP_REFRESH_HIT HTTP/1.1
   
-`Apache로그 형식 <https://httpd.apache.org/docs/2.2/ko/mod/mod_log_config.html>`_ 을 
-기반으로 개발되었으며 일부 확장필드가 있다. 
+This is developed based on `Apache log format <https://httpd.apache.org/docs/2.2/ko/mod/mod_log_config.html>`_ and there are several expansion fields. 
+Each field
 각 필드의 구분자에는 제한이 없지만 Space를 사용할 경우, User-Agent처럼 Space가 포함될 
 수 있는 필드는 따옴표("...")로 묶어서 설정한다.
 
