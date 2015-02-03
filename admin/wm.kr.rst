@@ -1,132 +1,130 @@
 ﻿.. _wm:
 
-18장. WM (Web Management)
+Chapter 18. WM (Web Management)
 ******************
 
-이 장에서는 Web Management(이하 WM)를 소개한다.
-WM은 API를 기반으로 동작하는 Web 관리 툴이다. 
-WM을 통하여 직관적으로 서비스를 구성할 수 있을 뿐만 아니라 클러스터를 구성하여 많은 수의 STON을 통합관리 할 수 있다.
+This chapter introduces Web Management(WM).
+WM is a Web management tool based on API. 
+You can intuitively configure the service with WM as well as organizing clusters in order to manage large number of STON.
 
-STON을 설치하면 /usr/local/ston/wm 경로에 WM이 설치된다. 
-WM은 Apache 2.2.24 + PHP 5.3.24으로 구현되었다. 
-Apache를 사용하므로 /usr/local/ston/wm/conf/httpd.conf 파일을 편집하여 원하시는 
-구성(예를 들어 HTTPS)으로 변경이 가능하다.
-WM과 STON은 밀접한 연관을 가지지 않는다. 
-다음 그림처럼 WM은 STON의 설정파일과 API만을 사용하여 STON의 동작을 구성한다.
+WM is installed in the /usr/local/ston/wm directory when STON is installed. 
+WM is implemented with Apache 2.2.24 + PHP 5.3.24. 
+Since WM is using Apache, by editing /usr/local/ston/wm/conf/httpd.conf file, you can change the configuration(eg. HTTPS) as desired.
+WM and STON is not strongly connected. 
+WM configures STON operation only with STON configuration file and API as below figure.
 
 .. figure:: img/wm_compose.jpg
    :align: center
    
-   WM은 STON의 설정파일과 API를 사용한다.
+   WM uses STON configuration file and API.
    
-저희는 이와 유사한 방식으로 WM을 능가하는 더 나은 관리기법이 존재할 것이라 생각한다.
+There could be a better management method that exceeds WM.
 
 .. toctree::
    :maxdepth: 2
 
 
 
-접속
+Connection
 ====================================
 
-WM은 기본적으로 8500번 포트를 사용한다. 설치된 STON의 IP가 192.168.0.100이라면 
-WM접근 주소는 http://192.168.0.100:8500이 된다. 
-앞서 언급한 대로 httpd.conf 파일을 변경하면 고객사에 맞추어 커스터마이징이 가능하다.
+WM uses 8500 port as a default. If the IP of installed STON is 192.168.0.100, then WM access address will be http://192.168.0.100:8500. 
+Customization for each customer is available as aforementioned by editing httpd.conf file.
 
 .. figure:: img/wm_login.jpg
    :align: center
    
-   WM 접속초기화면
+   WM Start Page
    
 
-계정
+Account
 ====================================
 
-기본 계정은 [아이디: **admin** , 비밀번호: **ston** ] 이다. 
-로그인에 성공하면 STON의 전반적인상태를 확인할 수 있는 대쉬보드 페이지가 보여진다.
+The default account is set to [ID: **admin** , password: **ston** ]. 
+Dashboard main page that shows general status of STON will be displayed after the successful login.
 
 .. figure:: img/wm_main.jpg
    :align: center
    
-   WM 대쉬보드
+   WM Dashboard
    
 
 .. _wm-update:
 
-최신버전 업데이트
+Update to the Latest Version
 ====================================
 
-최신버전이 릴리스되면 다음과 같이 "새로운 업데이트가 있습니다" 메시지가 표시된다.
+If the latest version is released, the following " Update is Available" message will be displayed.
 
 .. figure:: img/wm_update_info.png
    :align: center
    
-   새로운 업데이트가 있습니다.
+   New Update is Available.
    
-메시지를 클릭하시면 최신버전으로 업데이트할 수 있는 페이지가 표시된다. 
-현재 서비스 상태에 따라 업데이트 안전도 여부가 표시된다.
+If you click the message, you will be brought to the page where you can update to the latest version. 
+Depends on the current service status, update safety status will be displayed.
 
 .. figure:: img/wm_update_page_alert.png
    :align: center
    
-   WM 업데이트하면 위험합니다.
+   WM Update could be hazardous.
    
-업데이트가 완료되면 모든 서비스가 자동으로 재시작 된다.
+When update is completed, all services are automatically restarted.
 
 
 
-메뉴 구성
+Menu Composition
 ====================================
 
-메뉴는 Mouse-Click에 따라 확장/축소가 되는 Drop Down메뉴로 구성된다. 
+Drop down menus can be expanded/shrunk with mouse clicks. 
 
 .. figure:: img/wm_menu.jpg
    :align: center
    
-   WM 메뉴
+   WM Menu
    
-1.  **전역설정**
+1.  **Global Setting**
 
-    전역설정(server.xml)에서 가상호스트 기본설정을 제외한 모든 기능을 설정한다.
+    All functions except the virtual host default setting can be configured in the global setting(server.xml).
+    
+#.  **Virtual Host Management**
+    
+    You can add/suspend/delete virtual hosts, and subscribe all virtual host statuses in service.
+    
+#.  **Cluster**
 
-#.  **가상호스트 관리**
+    You can compose/manage/destruct clusters, and all services in the cluster can be viewed by servers, and services.
     
-    가상호스트의 추가/중지/삭제를 할 수 있으며 서비스 중인 모든 가상호스트 상태를 한눈에 볼 수 있다.
-    
-#.  **클러스터**
+#.  **Contents Control**
 
-    클러스터를 구성/관리/파괴할 수 있으며 같은 클러스터의 모든 서비스를 서버별, 서비스별로 볼 수 있다.
+    You can have a control over the contents in service(eg. Purge).
     
-#.  **컨텐츠제어**
+#.  **Server Status**
 
-    Purge와 같이 서비스 중인 컨텐츠에 대하여 제어할 수 있다.
+    Monitors global resources such as system status. All graphs use global resource graphs.
     
-#.  **서버 상태**
+#.  **Service Status**
+    
+    Monitors service status of virtual host. All graphs use virtual host graphs.
+    
+#.  **File System**
 
-    시스템 상태와 같은 전역자원을 모니터링 한다. 모든 Graph는 전역자원 Graph를 사용한다.
-    
-#.  **서비스 상태**
-    
-    가상호스트의 서비스 상태를 모니터링 한다. 모든 Graph는 가상호스트 Graph를 사용한다.
-    
-#.  **파일 시스템**
-
-    STON을 Linux VFS에 Mount할 수 있다.
+    STON can be mounted on Linux VFS.
     
     
-전역설정
+Global Setting
 ====================================
 
-전역설정(server.xml)에서 가상호스트 기본설정을 제외한 모든 기능을 설정한다. 
+All functions except the virtual host default setting can be configured in the global setting(server.xml). 
 
 .. figure:: img/wm_conf_global1.png
    :align: center
    
-   WM 전역설정 - 일반
+   WM Global Setting - General
    
 
 
-가상호스트 관리
+Managing Virtual Host
 ====================================
 
 서비스하는 모든 가상호스트에 대하여 상세히 설정하며 신규 가상호스트를 추가한다. 
