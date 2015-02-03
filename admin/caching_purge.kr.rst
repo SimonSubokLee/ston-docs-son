@@ -181,4 +181,4 @@ An API invalidation can be called by POST as shown below. ::
  
    url=http://ston.winesoft.co.kr/sample.dat
     
-
+ 
