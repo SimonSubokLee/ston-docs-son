@@ -167,8 +167,8 @@ If the origin server intermittently produces an error response, it might be bett
 For example, the server may lose connection with the storage that saves content, or it might decide regular service is unavailable.
 The server will reply with a 4xx response(usually **404 Not Found**) for the former case, and it will reply with a 5xx response(usually **500 Internal Error**) for the latter case.
 
-On the other hand, if related contents are already saved in the storage,
-it would be more efficient to extend TTL to keep the service running rather than relying on responses from the origin server. ::
+On the other hand, if related content is already saved in the storage,
+it would be more efficient to extend the TTL to keep the service running rather than relying on responses from the origin server. ::
 
     # server.xml - <Server><VHostDefault><Options>
     # vhosts.xml - <Vhosts><Vhost><Options>
@@ -178,20 +178,19 @@ it would be more efficient to extend TTL to keep the service running rather than
 
 -  ``<TTLExtensionBy4xx>``
 
-   -  ``OFF (default)`` Update contents with 4xx reply.
+   -  ``OFF (default)`` Updates content with a 4xx reply.
    
-   -  ``ON`` React as if it received 304 not modified as a reply.
+   -  ``ON`` Reacts as if it received **304 Not Modified** as a reply.
    
-You should be aware of intended 4xx reponse.
+You should also be aware of the intended 4xx response.
        
 -  ``<TTLExtensionBy5xx>``
 
-   -  ``ON (default)`` React as if it received **304 Not Modified** as a reply.
+   -  ``ON (default)`` Reacts as if it received **304 Not Modified** as a reply.
    
-   -  ``OFF`` Update contents with 5xx reply.
+   -  ``OFF`` Updates content with a 5xx reply.
 
-A normal server does not return 5xx as a reply. 
-It is used for reducing the load of origin server by invalidating contents from temperary error of the server.
+A normal server does not return 5xx as a reply, as it is used for reducing the load on the origin server by invalidating contents from a temporary server error.
     
 
 .. _caching-policy-renew:
@@ -199,46 +198,46 @@ It is used for reducing the load of origin server by invalidating contents from 
 Renewal Policy
 ====================================
 
-TTL expired contents are serviced after checking modifications at the origin server.
+TTL expired content is serviced after modifications are checked at the origin server.
 
    .. figure:: img/perf_refreshexpired.jpg
       :align: center
       
       Reply after modification check
 
-1. TTL is valid. 
+1. The TTL is valid. 
    Reply immediately.
 
-#. TTL is expired and requests modification check(If-Modified-Since) to the origin server. 
-   Do not respond to the client until hear from the server.
+#. The TTL is expired and requests a modification check(If-Modified-Since) from the origin server. 
+   Does not respond to the client until hearing from the server.
    
-#. If the origin server replies, extend TTL or swap contents. 
+#. If the origin server replies, extend the TTL or swap content. 
    Respond to the client since the origin server confirmed.
    
-#. The contents that have been checked modification will be serviced immediately until the next TTL expiration period.
+#. The content that has been checked for modification will be serviced immediately until the next TTL expiration period.
 
-Services that emphasize transfer speed rather than reactivity such as high quality videos or games do not care about this service method.
-Bulk data will not care even if the origin server takes 10 seconds to respond for the modification check request because the entire transfer time is much longer.
-Therefore, the reactivity of origin server is not as important as other services.
-These contents rather need modification check because they are not accessed frequently.
+Services that emphasize transfer speed rather than reactivity, such as high quality videos or games, do not care about this service method.
+Bulk data will not care even if the origin server takes 10 seconds to respond to the modification check request because the entire transfer time is much longer.
+Therefore, the reactivity of the origin server is not as important as other services.
+Rather this content needs modification checks because it is not accessed frequently.
 
-On the other hand, online shopping malls are different. 
-The loading speeds of webpages are important more than anything else. 
-The webpage has to be fully loaded within few seconds. 
-In this case, reactivity is more important than trasnfer speed.
+Online shopping malls, on the other hand, are different. 
+The loading speeds of webpages are more important than anything else. 
+The webpage has to be fully loaded within a few seconds. 
+In this case, reactivity is more important than transfer speed.
 
-Huge delay could occur when a client opens a web page at the moment TTL is expired and requesting modification check. 
-Considering the fact that usual shopping malls service millions of contents simultaneously, it would be better to check modifications all the time.
-The worst cases are when the origin server fails or network is diconnected.
+A huge delay could occur when a client opens a web page at the moment the TTL expires and requests a modification check. 
+Considering the fact that most shopping malls service millions of content simultaneously, it would be better to check modifications all the time.
+The worst cases are when the origin server fails or the network is disconnected.
 
-What you want is to stably transfer cached contents regardless of any origin server error or delay.
+What you want is to stably transfer cached content regardless of any origin server error or delay.
 
    .. figure:: img/perf_refreshexpired2.jpg
       :align: center
       
       No fear of errors!
       
-These different requirments led to the development of background contents update. ::
+These different requirements leads to the development of a background content update. ::
 
     # server.xml - <Server><VHostDefault><Options>
     # vhosts.xml - <Vhosts><Vhost><Options>
@@ -247,30 +246,30 @@ These different requirments led to the development of background contents update
 
 -  ``<RefreshExpired>``
 
-   -  ``ON (default)`` Reply after modification check.
+   -  ``ON (default)`` Replies after a modification check
    
-   -  ``OFF`` Reply without the response of modification check.
-      When the new content download is completed, swap with the old content.
+   -  ``OFF`` Replies without the response of a modification check
+      When the new content download is completed, the new content swaps with the old content.
 
-``OFF`` This option is more generally used because contents are not frequently modified.
+``OFF`` This option is generally used because content is not frequently modified.
 
    .. figure:: img/perf_refreshexpired5.jpg
       :align: center
       
-      If the contents are not sensitive to modifications, it'll not wait for the response from the origin server.
+      If the content is not sensitive to modifications, it will not wait for a response from the origin server.
 
-In the above figure, contents update of the origin server is running on the background, so cached contents can be serviced to clients immediately.
-If the origin server replies **304 Not Modified** then simply TTL is extended.
-If the origin server replies 200 OK due to file update, the file is seamlessly replaced after the download is completed.
-Clients who were downloading previous contents(green bar) will not have any problems even if the contents have been updated. 
-Clients who access to the updated contents(yellow bar) will be serviced with new contents. 
-Contents updates are always running on the background, the service does not affected by any hiccups such as contents update, network failure and origin server error. 
+In the above figure, the content update of the origin server is running in the background, so cached content can be serviced to clients immediately.
+If the origin server replies **304 Not Modified** then the TTL is simply extended.
+If the origin server replies 200 OK due to a file update, the file is seamlessly replaced after the download is completed.
+Clients who were downloading previous content (green bar) will not have any problems even if the content has been updated. 
+Clients who access  the updated content (yellow bar) will be served with new content. 
+Because content updates are always running in the background, the service is not affected by any hiccups such as contents updates, network failures and origin server errors. 
 
 
-TTL Expiration when no-cache Requested by Clients
+TTL Expiration When No-cache is Requested by Clients
 ---------------------
 
-If there is at least one no-cache setting in the client HTTP request, related contents can be expired right away. ::
+If there is at least one no-cache setting in the client HTTP request, related content can be expired right away. ::
 
     GET /logo.jpg HTTP/1.1
     ...
@@ -287,9 +286,9 @@ If there is at least one no-cache setting in the client HTTP request, related co
 
 -  ``<NoCacheRequestExpire>``
 
-   -  ``OFF (default)`` Ignores.
+   -  ``OFF (default)`` Ignores
    
-   -  ``ON`` Expires TTL right away.
+   -  ``ON`` Expires the TTL right away
    
 Expired contents abide by the `Expiration Policy`_.
 
@@ -297,14 +296,14 @@ Expired contents abide by the `Expiration Policy`_.
 Accept-Encoding Header
 ====================================
 
-Even if there is a HTTP request for identical URL, the existence of Accept-Ending header affects which contents to be cached.
-When STON sends a request to the origin server, it does not have information whether the file is compressed or not.
-Even if the STON received any compressed information, the information cannot be compared for every requests.
+Even if there is an HTTP request for identical URLs, the existence of an Accept-Ending header affects which content will be cached.
+When STON sends a request to the origin server, STON does not have information about whether the file is compressed or not.
+Even if STON received compressed information, the information cannot be compared for every request.
 
    .. figure:: img/acceptencoding.png
       :align: center
 
-      It is hard to expect the reply from the origin server.
+      It is hard to expect a reply from the origin server.
 
 ::
 
@@ -315,11 +314,11 @@ Even if the STON received any compressed information, the information cannot be 
 
 -  ``<AcceptEncoding>``
 
-   -  ``ON (default)`` Recognize Accept-Ending header from the HTTP client.
+   -  ``ON (default)`` Recognizes the Accept-Ending header from the HTTP client
    
-   -  ``OFF`` Ignore Accept-Ending header from the HTTP client.
+   -  ``OFF`` Ignores the Accept-Ending header from the HTTP client
     
-If the origin server does not support compression or bulk file that does not require compression, it is recommended to set ``<AcceptEnding>`` to ``OFF``.
+If the origin server does not support compression or a bulk file that does not require compression, it is recommended to set ``<AcceptEnding>`` to ``OFF``.
 
 
 .. _caching-policy-casesensitive:
@@ -327,12 +326,12 @@ If the origin server does not support compression or bulk file that does not req
 Identifying Upper / Lower Case Letters
 ====================================
 
-The STON cannot identify whether the origin server recognizes upper or lower case letters.
+STON cannot identify whether the origin server recognizes upper or lower case letters.
 
    .. figure:: img/casesensitive.png
       :align: center
 
-      They might be the same contents or else 404 error will occur.
+      It might be the same content or else a 404 Error will occur.
    
 ::
 
@@ -353,13 +352,13 @@ The STON cannot identify whether the origin server recognizes upper or lower cas
 Identifying QueryString
 ====================================
 
-Identifying the queryString is not necessary unless the contents is dynamically created by the querystring.
-If a URL contains a meaningless random value or a constantly changing time value, it will cause huge load on the origin server.
+Identifying the query string is not necessary unless the content is dynamically created by the query string.
+If a URL contains a meaningless random value or a constantly changing time value, it will cause a huge load on the origin server.
 
    .. figure:: img/querystring.png
       :align: center
 
-      Most likely they are identical contents unless it is not a dynamic contents.
+      Most likely it is identical content unless it is not dynamic content.
    
 ::
 
@@ -370,26 +369,26 @@ If a URL contains a meaningless random value or a constantly changing time value
 
 -  ``<ApplyQueryString>``
 
-   -  ``ON (default)`` Identifies queryString. If exception condition is met, querystring will be ignored.
+   -  ``ON (default)`` Identifies query strings. If the exception condition is met, the query string will be ignored.
    
-   -  ``OFF`` Ignores queryString. If exception condition is met, querystring will be identified.
+   -  ``OFF`` Ignores query strings. If the exception condition is met, query strings will be identified.
     
-QueryString exceptions are saved at /svc/{virtual host name}/querystring.txt. ::
+Query string exceptions are saved at /svc/{virtual host name}/querystring.txt. ::
 
     # ./svc/www.example.com/querystring.txt
     
     /private/personal.jsp?login=ok*
     /image/ad.jpg
 
-Please be aware that the exception can be either ignored or accepted depends on the ``<ApplyQueryString>`` setting. 
-Distinctive or patterned URL(* is only allowed) can be used in the configuration.
+Please be aware that whether the exception is ignored or accepted depends on the ``<ApplyQueryString>`` setting. 
+Distinctive or patterned URLs (* is only allowed) can be used in the configuration.
 
 
-Vary Header
+Vary Header (재검토 대상)
 ====================================
 
-Contents are identified by the Vary header. 
-In most cases Vary header causes huge performance drop of cache server. ::
+Content is identified by the Vary header. (재번역 요망: 의미가 다릅니다. 같은 컨텐츠라도 다른 vary 헤더가 붙어서 오면 다른 컨텐츠로 인식될 수 있습니다. 자세히 풀어서 말하면 이렇습니다. STON이 컨텐츠를 원본에서 받아 사용자에게 전달하죠? 원본에서 컨텐츠를 받을 때 같이 오는 Vary 헤더들 중에 사용자에게 전달할지 씹을지를 구분한다는 말입니다. 같은 컨텐츠라도 vary 헤더에 따라 다른 컨텐츠로 받아 들여질 수 있습니다 )
+In most cases the Vary header causes a huge performance drop of the cache server. ::
 
     # server.xml - <Server><VHostDefault><Options>
     # vhosts.xml - <Vhosts><Vhost><Options>
@@ -398,21 +397,21 @@ In most cases Vary header causes huge performance drop of cache server. ::
     
 -  ``<VaryHeader>``
 
-   Configure the header list to support among Vary headers that the origin server responded.
+   Configures the supported header list from Vary headers that the origin server responded.
    Comma(,) is used as an identifier.
 
-For example, even if the origin server sent the following Vary header, it will be ignored if ``<VaryHeader>`` is not configured. ::
+For example, even if the origin server sends the following Vary header, it will be ignored if ``<VaryHeader>`` is not configured. ::
 
     Vary: Accept-Encoding, Accept, User-Agent
 
-In order to identify Accept-Encoding and Accept header except User-Agent, set as belows. ::
+In order to identify Accept-Encoding and Accept headers (except the User-Agent header, set as shown below. ::
 
     # server.xml - <Server><VHostDefault><Options>
     # vhosts.xml - <Vhosts><Vhost><Options>
     
     <VaryHeader>Accept-Encoding, Accept</VaryHeader>    
     
-In order to identify all Vary header from the origin server, set as belows. ::
+In order to identify all Vary headers from the origin server, set as shown below. ::
 
     # server.xml - <Server><VHostDefault><Options>
     # vhosts.xml - <Vhosts><Vhost><Options>
@@ -423,8 +422,8 @@ In order to identify all Vary header from the origin server, set as belows. ::
 POST Request
 ====================================
 
-Configure to cache POST request. 
-POST request has an identical URL with different Body data. ::
+The following explains the configuration to cache a POST request. 
+A POST request has an identical URL with different Body data. ::
 
     # server.xml - <Server><VHostDefault><Options>
     # vhosts.xml - <Vhosts><Vhost><Options>
@@ -433,34 +432,34 @@ POST request has an identical URL with different Body data. ::
 
 -  ``<PostRequest>``
 
-   -  ``OFF (default)`` Terminate the session when POST request is received.
+   -  ``OFF (default)`` Terminates the session when a POST request is received
    
-   -  ``ON`` Cache POST request.
+   -  ``ON`` Caches POST requests.
    
 Most POST request processing cases use Body data as a Caching-Key.
 Detailed configuration is available with ``BodySensitive`` property and exceptions.
 
 -  ``BodySensitive``
 
-    -  ``ON (default)`` Identifies Body data as a Caching-Key.
-       Maximum length will be limited by ``MaxContentLength (default: 102400 Bytes)`` property.
-       If exception is met, Body data will be ignored.
+    -  ``ON (default)`` Identifies Body data as a Caching-Key
+       Maximum length will be limited by the ``MaxContentLength (default: 102400 Bytes)`` property.
+       If the exception is met, Body data will be ignored.
     
-    -  ``OFF`` Ignore Body data. 
-       If exception is met, identifies Body data.
+    -  ``OFF`` Ignores Body data 
+       If the exception is met, identifies Body data.
    
-POST request exception is saved at /svc/{virtual host name}/postbody.txt. ::
+A POST request exception is saved at /svc/{virtual host name}/postbody.txt. ::
     
     # /svc/www.example.com/postbody.txt
     
     /bigsale/*.php?nocache=*
     /goods/search.php
     
-Please be aware that the exception can be either ignored or accepted depends on the ``<BodySensitive>`` setting.
-Distinctive or patterned URL(* is only allowed) can be used in the configuration. 
+Please be aware that whether the exception is ignored or accepted depends on the ``<BodySensitive>`` setting.
+Distinctive or patterned URLs (* is only allowed) can be used in the configuration. 
   
 .. note::
 
-    If ``MaxContentLength`` value is set to high, more memory will be required for managing the Caching-Key.
+    If the ``MaxContentLength`` value is set too high, more memory will be required for managing the Caching-Key.
     It is recommended to set it as small as possible.
 
