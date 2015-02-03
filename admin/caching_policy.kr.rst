@@ -33,9 +33,9 @@ TTL (Time To Live)
 
 TTL stands for the expiration time of saved contents.
 Having a longer TTL setting reduces the burden on the origin server, but modifications will be applied after TTL expires.
-On the contrary, a shorter TTL setting will increase the load on the origin server due to frequent requests for modification check.
-The beauty of TTL management is to find an appropriate setting for reducing origin server load.
-Once TTL is set, it will not change until TTL is expired.
+On the contrary, a shorter TTL setting will increase the load on the origin server due to frequent requests for modification checks.
+The beauty of TTL management is that it finds an appropriate setting for reducing the load on origin server.
+Once the TTL is set, it will not change until the TTL is expired.
 The new TTL will be applied when the old TTL for the file is expired.
 Administrator can change TTL setting by using these APIs, :ref:`api-cmd-purge` , :ref:`api-cmd-expire` , :ref:`api-cmd-expireafter` , :ref:`api-cmd-hardpurge`.
 
@@ -45,10 +45,10 @@ Administrator can change TTL setting by using these APIs, :ref:`api-cmd-purge` ,
 Default TTL
 ---------------------
 
-TTL is set according to the response of the origin server.
-Until TTL is expired, saved contents will be serviced.
-When TTL expires, send a check request for modified contents to the origin server( **If-Modified-Since** or **If-None-Match** ).
-TTL will be extended if the origin server replies **304 Not Modified** for the request. ::
+The TTL is set according to the response of the origin server.
+Until the TTL is expired, saved content will be serviced.
+When the TTL expires, send a check request for modified content to the origin server( **If-Modified-Since** or **If-None-Match** ).
+The TTL will be extended if the origin server replies **304 Not Modified** to the request. ::
 
     # server.xml - <Server><VHostDefault><Options>
     # vhosts.xml - <Vhosts><Vhost><Options>
@@ -64,16 +64,16 @@ TTL will be extended if the origin server replies **304 Not Modified** for the r
         <OriginBusy>3</OriginBusy>
     </TTL>    
     
-Except ``Ratio`` (0~100), all units are in second.
+Except ``Ratio`` (0~100), all units are in seconds.
 
 -  ``<Res2xx> (default: 1800 seconds, Ratio: 20, Max=86400)``
    If the origin server returns "200 OK", set the TTL.
-   When saving contents, expiration period is set to ``<Res2xx>`` seconds. 
-   (After TTL expired)If the origin server replies that the contents have not been changed(304 NOt Modified), TTL is extended according to the ``Ratio`` value(0~100).
-   TTL can be extended up to ``Max`` seconds.
+   When saving content, expiration period is set to ``<Res2xx>`` seconds. 
+   (After the TTL expires)If the origin server replies that the content has not been changed(304 Not Modified), the TTL can be extended according to the ``Ratio`` value(0~100).
+   The TTL can be extended up to ``Max`` seconds.
 
 -  ``<NoCache> (default: 5 seconds, Ratio: 0, Max=5, MaxAge=0)``
-   This function works just like ``<Res2xx>``, but only used when the origin server replies with "no-cache". ::
+   This function works just like ``<Res2xx>``, but is only used when the origin server replies with "no-cache". ::
 
       cache-control: no-cache or private or must-revalidate
     
@@ -85,35 +85,35 @@ Except ``Ratio`` (0~100), all units are in second.
       Files are cached to the client for Max-Age seconds.
 
 -  ``<Res3xx> (default: 300 seconds)``
-   Set TTL when the origin server replies with "3xx".
+   Set the TTL when the origin server replies with "3xx".
    This function is frequently used for redirect.
    
 -  ``<Res4xx> (default: 30 seconds)``
-   Set TTL when the origin server replies with "4xx".
+   Set the TTL when the origin server replies with "4xx".
    In most cases replies are **404 Not Found**.
    
 -  ``<Res5xx> (default: 30 seconds)``
-   Set TTL when the origin server replies with "5xx".
+   Set the TTL when the origin server replies with "5xx".
    This case usually comes with an internal error of the origin server.
    
 -  ``<ConnectTimeout> (default: 3 seconds)``
-   When the origin server is unable to reach, set TTL.
-   If contents are already saved, prolong TTL for ``<ConnectTimeout>`` seconds.
-   If contents are not saved, keep the error status for ``<ConnectTimeout>`` seconds.
-   This remedy is to reduce burdens of the origin server that might be in a failed status rather than serving failed contents.
+   When the origin server is unable to be reached, set the TTL.
+   If content is already saved, prolong the TTL for ``<ConnectTimeout>`` seconds.
+   If content is not saved, keep the error status for ``<ConnectTimeout>`` seconds.
+   This remedy is to reduce burden on the origin server that might be in a failed status rather than serving failed content.
    
 -  ``<ReceiveTimeout> (default: 3 seconds)``
-   Set TTL when the connection is successful, but data acquisition is failing.
+   Set the TTL when the connection is successful, but data acquisition is failing.
    This is similar to ``<ConnectTimeout>`` in its intention.
 
 -  ``<OriginBusy> (default: 3 seconds)``
-   If :ref:`origin-busysessioncount` condition is satisfied, prolong TTL of expired contents by configured amount of time without requesting to the origin server.
+   If :ref:`origin-busysessioncount` condition is satisfied, prolong the TTL of expired contents by configured amount of time without requesting to the origin server.
    In this way, the origin server can avoid workload.
    
 .. note::
 
-   If 0 is set for TTL, contents will be expired as soon as they are serviced.
-   Bypass is recommended if the origin server needs to reply all requests.
+   If 0 is set for the TTL content will expire as soon as it is serviced.
+   A bypass is recommended if the origin server needs to reply to all requests.
    
 
 .. _caching-policy-customttl:
@@ -122,8 +122,8 @@ Custom TTL
 ---------------------
 
 This section explains how to set separate TTLs for each URL.
-Specific TTL can be set for matching contents of specified URL or patterned URL.
-Configuration is saved at /svc/{virtual host name}/ttl.txt. ::
+Specific TTLs can be set for matching content of specified URLs or patterned URLs.
+The configuration is saved at /svc/{virtual host name}/ttl.txt. ::
 
     # /svc/www.example.com/ttl.txt
     # An identifier is comman(,), and the unit of time is second.
@@ -135,8 +135,8 @@ Configuration is saved at /svc/{virtual host name}/ttl.txt. ::
     /image/ad.jpg, 1800
     
 
-Even if you added *.html in order to set separate TTLs for all pages(html, php, jsp etc), TTL will not be set for the first page(/). 
-HTTP protocol cannot identify which page(eg. index.php, default.jsp etc) is set as the first page by the origin server.
+Even if you add *.html in order to set separate TTLs for all pages(html, php, jsp, etc.), the TTL will not be set for the first page(/). 
+The HTTP protocol cannot identify which page(i.e. index.php, default.jsp, etc.) is set as the first page by the origin server.
 Therefore, in order to set the separate TTL for each page, you should add "/".
 
     
@@ -152,20 +152,20 @@ This section explains how to decide which TTL configuration is applied first. ::
         ... (skipped) ...
     </TTL>    
     
-The priority can be configured in the ``Priority (default: cc_nocache, custom, cc_maxage, rescode)`` item of ``<TTL>`` tag.
+The priority can be configured in the ``Priority (default: cc_nocache, custom, cc_maxage, rescode)`` item of the ``<TTL>`` tag.
 
 - ``cc_nocache`` When the origin server replies "Cache-Control: no-cache"
 - ``custom`` `caching-policy-customttl`
 - ``cc_maxage`` When the origin server specifies maxage in Cache-Control
-- ``rescode`` Default TTL related to the response code of the origin server
+- ``rescode`` The default TTL related to the response code of the origin server
 
 
 Abnormal TTL Extension
 ---------------------
 
-When the origin server intermittently responses under the error situation, it could be much better if it just totally fails.
-For example, the server loses connection with the storage that saves contents or it might decide regular service is unavailable.
-The server will reply 4xx response(usually **404 Not Found**) for the former case, and it will reply 5xx response(usually **500 Internal Error**) for the latter case.
+If the origin server intermittently produces an error response, it might be better if it just totally fails.
+For example, the server may lose connection with the storage that saves content, or it might decide regular service is unavailable.
+The server will reply with a 4xx response(usually **404 Not Found**) for the former case, and it will reply with a 5xx response(usually **500 Internal Error**) for the latter case.
 
 On the other hand, if related contents are already saved in the storage,
 it would be more efficient to extend TTL to keep the service running rather than relying on responses from the origin server. ::
