@@ -406,49 +406,48 @@ The following Access log will be recorded for above configurations. (#Fields are
     192.168.0.88 192.168.0.12 626 id=winesoft; hls.m4u8 example.com HTTP "STON" GET 80 "GET /hls.m4u8 HTTP/1.1" 200 2014-04-03 21:21:54 2 X 124 6312333276 2 2571983 TCP_REFRESH_HIT HTTP/1.1
   
 This is developed based on `Apache log format <https://httpd.apache.org/docs/2.2/ko/mod/mod_log_config.html>`_ and there are several expansion fields. 
-Each field
-각 필드의 구분자에는 제한이 없지만 Space를 사용할 경우, User-Agent처럼 Space가 포함될 
-수 있는 필드는 따옴표("...")로 묶어서 설정한다.
+Specifiers in each field does not have any restrictions, but when you are using a space as a specifier,
+you should use double quotation marks for items that could include space such as User-Agent.
 
--  ``%...a`` 클라이언트 IP ::
+-  ``%...a`` Client IP ::
 
       192.168.0.66
       
--  ``%...A`` 서버IP 주소 :: 
+-  ``%...A`` Server IP address :: 
 
       192.168.0.14
       
--  ``%...b`` HTTP헤더를 제외한 전송 바이트수 ::
+-  ``%...b`` Size of transferred bytes except the HTTP header ::
 
       1024
       
--  ``%...{foobar}C`` 서버가 수신한 요청의 Foobar 쿠키의 내용  ::
+-  ``%...{foobar}C`` Contents of Foobar cookie of the request that the server received  ::
 
-      %{id=}c 로 입력하면 Cookie 에서 id=에 해당하는 값을 기록
+      If %{id=}c format is used, then log the id value of the Cookie
       
--  ``%...D`` 요청을 처리하는데 걸린 시간(MS) ::
+-  ``%...D`` Elapsed time to process the request(millisecond) ::
 
       3000
       
--  ``%...f`` 파일명 ::
+-  ``%...f`` File name ::
 
-      /mp4/iu.mp4 라면 iu.mp4를 기록
+      If the file name is /mp4/iu.mp4, log iu.mp4
       
 -  ``%...h`` HostName ::
 
       example.com
       
--  ``%...H`` 요청 프로토콜 ::
+-  ``%...H`` Request protocol ::
 
-      http 또는 https
+      http or https
       
--  ``%...{foobar}i`` 서버가 수신한 요청에서 foobar: 헤더의 내용 ::
+-  ``%...{foobar}i`` Contents of foobar: header of the request that the server received ::
 
-      %{User-Agent}i 로 입력 할 경우 User-Agent의 값을 기록
+      If %{User-Agent}i format is used, log the User-Agent value
       
--  ``%...m`` 요청 Method ::
+-  ``%...m`` Request Method ::
 
-      GET 또는 POST 또는 HEAD
+      GET or POST or HEAD
       
 -  ``%...P`` Server PORT ::
 
@@ -458,23 +457,23 @@ Each field
 
       Id=10&value=20
       
--  ``%...r`` 요청의 첫번째 줄(Request Line) ::
+-  ``%...r`` The first line of the request(Request Line) ::
 
       GET /img.jpg HTTP/1.1
       
--  ``%...s`` 응답코드 ::
+-  ``%...s`` Response code ::
 
       200
       
--  ``%...t`` STON 기본 시간형식	::
+-  ``%...t`` STON default time format	::
 
       2014-01-01 15:27:02
 
--  ``%...{format}t`` Format에 정의된 날짜 형식 ::
+-  ``%...{format}t`` Date format defined in the Format ::
 
-      %{%Y-%m-%d %H:%M:%S}T 로 입력하면 2014-08-07 06:12:23으로 기록.
+      If %{%Y-%m-%d %H:%M:%S}T format is used, 2014-08-07 06:12:23 form will be logged.
 
--  ``%...T`` TimeTaken(초단위) ::
+-  ``%...T`` TimeTaken(second) ::
 
       10
 
@@ -482,24 +481,24 @@ Each field
 
       /img/img.jpg
 
--  ``%...X`` 트랜잭션이 완료되었을 때의 상태
+-  ``%...X`` Status when the transaction is completed
    
-   - ``X`` 응답이 완료되기 전에 종료
-   - ``C`` 응답이 완료 되었음
+   - ``X`` Terminated before the response is completed
+   - ``C`` Response is completed
    
    ::
    
       C
     
--  ``%...I`` 요청헤더를 포함한 수신바이트 ::
+-  ``%...I`` Received bytes including the request header ::
     
       2048
     
--  ``%...O`` 응답헤더를 포함한 송신바이트 ::
+-  ``%...O`` Transmitted bytes including the response header ::
       
       2048
       
--  ``%...R`` 응답시간(MS) ::
+-  ``%...R`` Response time(millisecond) ::
 
       2
       
@@ -507,26 +506,25 @@ Each field
 
       1
       
--  ``%...S`` 캐싱 HIT 결과 ::
+-  ``%...S`` Caching HIT result ::
 
       TCP_HIT
       
--  ``%...K`` 요청 HTTP 버전	::
+-  ``%...K`` Request HTTP version	::
 
       HTTP/1.1
   
-설정한 필드의 값이 존재하지 않으면 - 로 표기한다. 
-형식이 잘못되었다면 STON 기본 포맷(Form="ston")으로 동작한다.
+If the configured field value is not existed, then marked as "-". 
+If the format is wrong, default format of STON(Form="ston") is adopted.
   
-위 표에서 각 필드의 ...에는 (e.g. “%h %U %r %b) 아무것도 명시하지 않거나, 
-기록 조건을 명시할 수 있다(조건을 만족하지 않으면 - 로 기록). 
-조건은 HTTP 상태코드 목록으로 설정하거나 !로 NOT 조건을 설정할 수 있다. 
+From the above table, you can leave empty spaces("...") in each field(eg. "%h %U %r %b) as blanks or specify record condition (if not satisfied, "-" is logged). 
+The condition can be configured with HTTP status code list or NOT condition can be set with an exclamation mark(!). 
 
-다음 예제는 400(Bad Request) 오류 또는 501(Not Implemented) 오류 일 때만 User-agent를 기록한다. ::
+The following example only logs User-agent when there is a 400(Bad Request) error or a 501(Not Implemented) error. ::
 
     "%400,501{User-agent}i" 
   
-다음 예제는 정상적인 상태가 아닌 모든 요청에 대해 Referer를 로그에 남긴다. ::
+The following example logs Referers of all abnormal requests. ::
   
     "%!200,304,302{Referer}i"
 
@@ -534,11 +532,11 @@ Each field
 
 .. _admin-log-origin:
 
-Origin 로그
+Origin Log
 ====================================
 
-원본서버의 모든 HTTP 트랜잭션을 기록한다. 
-기록 시점은 HTTP 트랜잭션이 완료되는 시점이며 전송완료 또는 전송중단 시점을 의미한다. ::
+This logs all HTTP transaction in the origin server. 
+Log is recorded when the HTTP transaction is completed such as at the moment of transfer completion or transfer interruption. ::
 
    # server.xml - <Server><VHostDefault><Log>
    # vhosts.xml - <Vhosts><Vhost><Log>
@@ -556,36 +554,36 @@ Origin 로그
     2012.06.27 17:40:00 357 901 192.168.0.13 GET i.example.com /exB2.jpg 115.71.9.136 200 - - - 8150 189 273 8150 13 0 0 9 4 - no-cache 80 - 35 cache
     2012.06.27 17:40:00 357 901 192.168.0.13 GET i.example.com /exB3.jpg 115.71.9.136 200 - - - 8150 189 273 8150 13 0 0 9 4 - - 80 - 35 cache
 
-원본서버에 장애가 발생했다면 #[ERROR:xx]로 시작하는 에러 로그가 기록된다. 
-모든 필드는 공백으로 구분되며 각 필드의 의미는 다음과 같다.
+If there is an origin server failure, an error log starting with #[ERROR:xx] is recorded. 
+Each fields are distinguished by an empty space, and each field specifies the following.
 
 .. figure:: img/time_taken.jpg
    :align: center
    
-   원본 시간측정 구간
+   Time measurement section of the origin
 
--  ``date`` HTTP 트랜잭션이 완료된 날짜
--  ``time`` HTTP 트랜잭션이 완료된 시간
--  ``cs-sid`` 세션의 고유ID. 같은 세션을 통해 처리된(재사용된) HTTP 트랜잭션은 같은 값을 가진다.
--  ``cs-tcount`` 트랜잭션 카운트. 이 HTTP 트랜잭션이 현재 세션에서 몇 번째로 처리된 트랜잭션인지 기록한다. 같은 ``cs-sid`` 값을 가지는 트랜잭션이라면 이 값은 중복될 수 없다.
--  ``c-ip`` STON의 IP
--  ``cs-method`` 원본서버에게 보낸 HTTP Method
--  ``s-domain`` 원본서버 도메인
--  ``cs-uri`` 원본서버에게 보낸 URI
--  ``s-ip`` 원본서버 IP
--  ``sc-status`` 원본서버 HTTP 응답코드
--  ``cs-range`` 원본서버에게 보낸 Range요청 값
--  ``sc-sock-error`` 소켓 에러코드(1=전송실패, 2=전송지연, 3=연결종료)
--  ``sc-http-error`` 원본서버가 4xx 또는 5xx응답을 줬을 때 응답코드를 기록
--  ``sc-content-length`` 원본서버가 보낸 Content Length
--  ``cs-requestsize (단위: Bytes)`` 원본서버로 보낸 HTTP 요청 헤더 크기
--  ``sc-responsesize (단위: Bytes)`` 원본서버가 응답한 HTTP 헤더 크기
--  ``sc-bytes (단위: Bytes)`` 수신한 컨텐츠 크기(헤더 제외)
--  ``time-taken (단위: ms)`` HTTP 트랜잭션이 완료될 때까지 소요된 전체시간. 세션 재사용이 아니라면 소켓 접속시간까지 포함한다.
--  ``time-dns (단위: ms)`` DNS쿼리에 소요된 시간
--  ``time-connect (단위: ms)`` 원본서버와 소켓 Established까지 소요된 시간
--  ``time-firstbyte (단위: ms)`` 요청을 보내고 응답이 올때까지 소요된 시간
--  ``time-complete (단위: ms)`` 첫 응답부터 완료될 때까지 소요된 시간
+-  ``date`` HTTP transaction completed date
+-  ``time`` HTTP transaction completed time
+-  ``cs-sid`` Unique ID of the session. HTTP transactions that are processed(recycled) with the same session have the same value.
+-  ``cs-tcount`` Transaction count. This value counts how many HTTP transactions are processed in this session. Transactions with an identical ``cs-sid`` cannot have the same value.
+-  ``c-ip`` IP of STON
+-  ``cs-method`` HTTP Method sent to the origin server
+-  ``s-domain`` The origin server domain
+-  ``cs-uri`` URI sent to the origin server
+-  ``s-ip`` IP of the origin server
+-  ``sc-status`` HTTP response code of the origin server
+-  ``cs-range`` Range request value sent to the origin server
+-  ``sc-sock-error`` Socket error code(1=Transfer timeout, 2=Transfer delay, 3=connection close)
+-  ``sc-http-error`` Log the response code when the origin server returns either 4xx or 5xx responses
+-  ``sc-content-length`` Content Length sent by the origin server
+-  ``cs-requestsize (unit: Bytes)`` The size of HTTP request header sent to the origin server
+-  ``sc-responsesize (unit: Bytes)`` The size of HTTP header that the origin server responsed
+-  ``sc-bytes (unit: Bytes)`` Received contents size(header excluded)
+-  ``time-taken (unit: ms)`` Total elapsed time until the HTTP transaction is completed. If the session is not recycled, socket connection time will be added up
+-  ``time-dns (unit: ms)`` Time spent on DNS query
+-  ``time-connect (unit: ms)`` Time spent for establishing socket with the origin server
+-  ``time-firstbyte (unit: ms)`` Elapsed time from request transmit to response reception
+-  ``time-complete (unit: ms)`` Elapsed time from the first response to completion
 -  ``cs-reqinfo`` 부가 정보. "+"문자로 구분한다. 바이패스한 통신이라면 "Bypass", Private바이패스라면 "PrivateBypass"로 기록된다.
 -  ``cs-acceptencoding`` 원본서버에 압축된 컨텐츠를 요청하면 "gzip+deflate"로 기록된다.
 -  ``sc-cachecontrol`` 원본서버가 보낸 cache-control헤더
