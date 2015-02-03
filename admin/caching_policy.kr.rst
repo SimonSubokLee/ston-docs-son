@@ -22,7 +22,7 @@ In a similar way, a file system has a unique path for a file (e.g. /usr/conf.txt
 Occasionally people confuse the Caching-Key with URL.
 However, depending on various functions of HTTP, identical URLs could return different content.
 
-
+ 
 .. toctree::
    :maxdepth: 2
 
