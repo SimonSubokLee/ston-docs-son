@@ -384,11 +384,10 @@ Please be aware that whether the exception is ignored or accepted depends on the
 Distinctive or patterned URLs (* is only allowed) can be used in the configuration.
 
 
-Vary Header (재검토 대상)
+Vary Header
 ====================================
 
-Content is identified by the Vary header. (재번역 요망: 의미가 다릅니다. 같은 컨텐츠라도 다른 vary 헤더가 붙어서 오면 다른 컨텐츠로 인식될 수 있습니다. 자세히 풀어서 말하면 이렇습니다. STON이 컨텐츠를 원본에서 받아 사용자에게 전달하죠? 원본에서 컨텐츠를 받을 때 같이 오는 Vary 헤더들 중에 사용자에게 전달할지 씹을지를 구분한다는 말입니다. 같은 컨텐츠라도 vary 헤더에 따라 다른 컨텐츠로 받아 들여질 수 있습니다 )
-In most cases the Vary header causes a huge performance drop of the cache server. ::
+Content could be identified by the Vary header. In most cases the Vary header causes a huge performance drop of the cache server. ::
 
     # server.xml - <Server><VHostDefault><Options>
     # vhosts.xml - <Vhosts><Vhost><Options>
@@ -397,7 +396,7 @@ In most cases the Vary header causes a huge performance drop of the cache server
     
 -  ``<VaryHeader>``
 
-   Configures the supported header list from Vary headers that the origin server responded.
+   Configures the Vary headers to support, from the ones that the origin server responded. 
    Comma(,) is used as an identifier.
 
 For example, even if the origin server sends the following Vary header, it will be ignored if ``<VaryHeader>`` is not configured. ::
