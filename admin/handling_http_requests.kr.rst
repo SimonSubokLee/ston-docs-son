@@ -5,8 +5,8 @@ Chapter 6. Handling HTTP Requests
 
 This chapter explains methods to handle HTTP client sessions and requests.
 The contents in this chapter are not critical for the service.
-Some of the contents might be difficult to understand if you don't have basic understanding of HTTP.
-In this case, you can simply use default setting as it will not affect to the quality of service at all.
+Some content might be difficult to follow, if you don't have a basic understanding of HTTP.
+In this case, you can simply use the default setting as it will not affect the quality of service at all.
 
 
 .. toctree::
@@ -17,7 +17,7 @@ Session Management
 ====================================
 
 An HTTP session is created when an HTTP client is connected to the STON server.
-The client is service through the HTTP session with various contents that are saved in the server.
+The client is serviced through the HTTP session with a variety of contents saved on the server.
 **HTTP transaction** stands for the procedure from request to response.
 The HTTP session handles multiple HTTP transactions in order. ::
 
@@ -29,31 +29,31 @@ The HTTP session handles multiple HTTP transactions in order. ::
    <KeepAliveHeader Max="0">ON</KeepAliveHeader>   
     
 -  ``<ConnectionHeader> (default: keep-alive)``    
-   Configures Connection header(``keep-alive`` or ``close``) of HTTP response that will be sent to clients.
+   Configures the Connection header(``keep-alive`` or ``close``) of the HTTP response that will be sent to clients.
     
 
 -  ``<ClientKeepAliveSec> (default: 10 seconds)``
-   Terminates session when there is no transaction with the client session for the set amount of time.
-   If you set longer time for this option, there will be more alive sessions that are not transacting with clients.
-   Having too many sessions will increase load of the system.
+   Terminates a session when there is no transaction with the client session for the set amount of time.
+   If you set a longer time for this option, there will be more alive sessions that are not transacting with clients.
+   Having too many sessions will increase the load on the system.
 
 -  ``<KeepAliveHeader>``
 
-    - ``ON (default)`` Specifies Keep-Alive header in the HTTP response.
-      ``Max (default: 0)`` If this option is set to greater than 0, ``Max`` value will be used for Keep-Alive header.
-      Every HTTP transaction will decrease the value by 1.
+    - ``ON (default)`` Specifies the Keep-Alive header in the HTTP response
+      ``Max (default: 0)`` If this option is set greater than 0, the ``Max`` value will be used for the Keep-Alive header.
+      Every HTTP transaction will decrease the value by one.
    
-   - ``OFF`` Omitts Keep-Alive header in the HTTP response.
+   - ``OFF`` Omits the Keep-Alive header in the HTTP response.
 
 
 HTTP Session Maintenance Policies
 ---------------------
 
-STON preferably abides by policies of Apache.
-Especially session maintenance policy varies by HTTP header values.
-The followings are the items that affect HTTP session maintenance policy.
+STON preferably abides by the policies of Apache.
+Especially, session maintenance policy varies depending upon HTTP header values.
+The followings are items that affect the HTTP session maintenance policy.
 
-- The connection header that is specified in the client HTTP request ("ep-Alive" or "Close").
+- The connection header that is specified in the client HTTP request ("ep-Alive" or "Close")
 - Virtual host ``<Connection>`` setting
 - Virtual host session Keep-Alive time setting
 - Virtual host ``<Keep-Alive>`` setting
@@ -65,8 +65,8 @@ The followings are the items that affect HTTP session maintenance policy.
       ...(skip)...
       Connection: Close
     
-   For the HTTP request like this, "Connection: Close" will be returned regardless of the virtual host configuration. 
-   Keep-Alive header will not be specified. ::
+   For an HTTP request like this, "Connection: Close" will be returned regardless of the virtual host configuration. 
+   The Keep-Alive header will not be specified. ::
 
       HTTP/1.1 200 OK
       ...(skip)...
@@ -75,22 +75,22 @@ The followings are the items that affect HTTP session maintenance policy.
    When this HTTP transaction is completed, disconnect the HTTP connection.
    
 
-2. When ``<ConnectionHeader>`` is set to ``Close`` ::
+2. When the ``<ConnectionHeader>`` is set to ``Close`` ::
 
       # server.xml - <Server><VHostDefault><Options>
       # vhosts.xml - <Vhosts><Vhost><Options>
       
       <ConnectionHeader>Close</ConnectionHeader>      
     
-   "Connection: Close" will be returned regardless of the HTTP request from clients. 
-   Keep-Alive header will not be specified. ::
+   "Connection: Close" will be returned regardless of clients' HTTP requests. 
+   The Keep-Alive header will not be specified. ::
 
       HTTP/1.1 200 OK
       ...(skip)...
       Connection: Close
       
 
-3. When ``<KeepAliveHeader>`` is set to ``OFF`` ::
+3. When the ``<KeepAliveHeader>`` is set to ``OFF`` ::
 
       # server.xml - <Server><VHostDefault><Options>
       # vhosts.xml - <Vhosts><Vhost><Options>
@@ -98,7 +98,7 @@ The followings are the items that affect HTTP session maintenance policy.
       <ConnectionHeader>Keep-Alive</ConnectionHeader>
       <KeepAliveHeader>OFF</KeepAliveHeader>
     
-   Kepp-Alive header will not be specified. HTTP session can be reused. ::
+   The Keep-Alive header will not be specified. The HTTP session can be reused. ::
 
       HTTP/1.1 200 OK
       ...(skip)...
@@ -114,8 +114,8 @@ The followings are the items that affect HTTP session maintenance policy.
       <ClientKeepAliveSec>10</ClientKeepAliveSec>
       <KeepAliveHeader>ON</KeepAliveHeader>      
     
-   Keep-Alive header will be specified.
-   Keep-Alive value of the session will be used for timeout. ::
+   The Keep-Alive header will be specified.
+   The Keep-Alive value of the session will be used for timeout. ::
 
       HTTP/1.1 200 OK
       ...(skip)...
@@ -126,13 +126,13 @@ The followings are the items that affect HTTP session maintenance policy.
 
       < ``<Keep-Alive>`` and ``<ClientKeepAliveSec>`` >
     
-      ``<Keep-Alive>`` setting refers to ``<ClientKeepAliveSec>`` that has more fundamental purpose.
-      One of the most important issues to keep high performance and more available resources is determining when to terminate idle sessions(sessions that does not generate HTTP transactions).
-      HTTP header setting can be changed dynamically or omitted, but terminating idle sessions is more complicated issue. 
-      Thereore, ``<ClientKeepAliveSec>`` is separated from ``<KeepAliveHeader>``.
+      The ``<Keep-Alive>`` setting refers to ``<ClientKeepAliveSec>`` that has a more fundamental purpose.
+      One of the most important issues with maintaining high performance and having more available resources is determining when to terminate idle sessions(sessions that do not generate HTTP transactions).
+      The HTTP header setting can be changed dynamically or omitted, but terminating idle sessions is a more complicated issue. 
+      Therefore, ``<ClientKeepAliveSec>`` is separated from ``<KeepAliveHeader>``.
 
 
-5. When ``<KeepAliveHeader>`` includes ``Max`` property ::
+5. When the ``<KeepAliveHeader>`` includes ``Max`` property ::
 
       # server.xml - <Server><VHostDefault><Options>
       # vhosts.xml - <Vhosts><Vhost><Options>
@@ -141,8 +141,8 @@ The followings are the items that affect HTTP session maintenance policy.
       <ClientKeepAliveSec>10</ClientKeepAliveSec>
       <KeepAliveHeader Max="50">ON</KeepAliveHeader>      
     
-   Max value will be specified in the Keep-Alive header. 
-   This session can be used for the number of times set by ``Max`` property, and every HTTP transaction will decrease the value by 1. ::
+   The max value will be specified in the Keep-Alive header. 
+   This session can be used for the number of times set by ``Max`` property, and every HTTP transaction will decrease the value by one. ::
     
       HTTP/1.1 200 OK
       ...(skip)...
@@ -152,15 +152,15 @@ The followings are the items that affect HTTP session maintenance policy.
 
 6. When the max value of Keep-Alive is consumed ::
 
-   If max value is set from the above configuration, the value will be gradually diminished by 1 as below. ::
+   If the max value is set from the above configuration, the value will be gradually diminished by one as shown below. ::
 
       HTTP/1.1 200 OK
       ...(skip)...
       Connection: Keep-Alive
       Keep-Alive: timeout=10, max=1
     
-   The above response means one last HTTP transaction is available for current session. 
-   If there is another HTTP request for this session, "Connection: Close" will be returned as below. ::
+   The above response above means one last HTTP transaction is available for the current session. 
+   If there is another HTTP request for this session, "Connection: Close" will be returned as shown below. ::
     
       HTTP/1.1 200 OK
       ...(skip)...
@@ -171,12 +171,12 @@ The followings are the items that affect HTTP session maintenance policy.
 Client Cache-Control
 ====================================
 
-This section explains the configuration regarding to the client cache-control.
+This section explains the configuration regarding client cache-control.
 
 Age Header
 ---------------------
 
-Age header stands for the elapsed time(in second) from cached moment, and calculated by `RFC2616 - 13.2.3 Age Calculations <http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html#sec13.2.3>`_. ::
+Age header stands for the elapsed time (in seconds) from a cached moment and is calculated by `RFC2616 - 13.2.3 Age Calculations <http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html#sec13.2.3>`_. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -193,7 +193,7 @@ Age header stands for the elapsed time(in second) from cached moment, and calcul
 Expires Header
 ---------------------
 
-The following will refresh Expires header. ::
+The following will refresh the Expires header. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -202,17 +202,17 @@ The following will refresh Expires header. ::
     
 -  ``<RefreshExpiresHeader>``
     
-   -  ``OFF (default)`` Specifies Expires header that is returned from the origin server to the client.
-      If Expires header is omitted in the origin server, it will also be omitted in the client response.
+   -  ``OFF (default)`` Specifies the Expires header that the origin server returns to the client.
+      If the Expires header is omitted in the origin server, it will also be omitted in the client response.
    
-   -  ``ON``  Expires condition will be reflected to the Expires header.
-      Any contents that do not meet the condition will be applied ``OFF (default)`` setting.
+   -  ``ON``  The Expires condition will be reflected in the Expires header.
+      The ``OFF (default)`` setting will be applied for any content that does not meet the condition.
    
-The Expires condition is identical to `mod_expires <http://httpd.apache.org/docs/2.2/mod/mod_expires.html>`_ of Apache. 
-You can also configure Expires header and Cache-Control value of contents with special conditions(URL or MIME Type). 
-The max-age value of the Cache-Control is equals to the value of Expires time subtracted by requested time. 
+The Expires condition is identical to the `mod_expires <http://httpd.apache.org/docs/2.2/mod/mod_expires.html>`_ of Apache. 
+You can also configure the Expires header and Cache-Control value of content with special conditions(URL or MIME Type). 
+The max-age value of the Cache-Control is equals to the value of the Expires time subtracted from the requested time. 
 
-Expires condition is saved at /svc/{virtual host name}/expires.txt. ::
+The Expires condition is saved at /svc/{virtual host name}/expires.txt. ::
 
    # /svc/www.exmaple.com/expires.txt
    # The identifier is a comma(,), and {condition},{time},{criteria} format is used.
@@ -230,20 +230,20 @@ Expires condition is saved at /svc/{virtual host name}/expires.txt. ::
 
    URL and MIME Type can be used. 
    $URL[...] is used for URL, and $MIME[...] is used for MIME Type. 
-   Patterned expression is also available and if $ omitted, it is recognized as a URL.
+   Patterned expression is also available and if $ is omitted, it is recognized as a URL.
 
 -  **Time**
 
    Set the Expires expiration time. 
-   General units of time are supported, and if the unit is not specified, second will be used.
+   General units of time are supported, and if the unit is not specified, seconds will be used.
 
 -  **Criterion**
 
-   Configures reference time of expiration time of Expires. 
+   Configures the reference time of the expiration time of Expires. 
    If the reference time is not specified, Access will be used for the reference time. 
-   Access refers current time. 
-   The following is an example of configuring Expires header value. 
-   If MIME Type accesses image/gif file, Expire header will be set as 1 day and 12 hours. ::
+   Access refers to the current time. 
+   The following configuration is an example for an Expires header value. 
+   If MIME Type accesses an image/gif file, Expire header will be set as 1 day and 12 hours. ::
     
       $MIME[image/gif], 1 day 12 hours, access
       
@@ -252,8 +252,8 @@ Expires condition is saved at /svc/{virtual host name}/expires.txt. ::
     
       *.jpg, 30min, modification
         
-   In case of Modification, if calculated Expires value is older than current time, adjust it as current time.
-   If origin server does not provide Last-Modified header, Expires header will not be sent.
+   In the case of Modification, if a calculated Expires value is older than the current time, adjust it to the current time.
+   If the origin server does not provide a Last-Modified header, an Expires header will not be sent.
 
 
 ETag Header
@@ -270,7 +270,7 @@ This section explains how to specify an ETag header in the HTTP resonse sent to 
     
    -  ``ON (default)`` Specifies ETag header.
    
-   -  ``OFF``  Omitts ETag header.
+   -  ``OFF``  Omits ETag header.
    
    
 
@@ -281,7 +281,7 @@ Response Headers
 HTTP Request / Response Header Modification
 ---------------------
 
-This section explains how to modify the client HTTP request and response based on specific condition. ::
+This section explains how to modify a client's HTTP request and response based on specific conditions. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -292,15 +292,15 @@ This section explains how to modify the client HTTP request and response based o
     
    -  ``OFF (default)`` Does not modify.
    
-   -  ``ON`` Modifies header regard to the header modification condition.
+   -  ``ON`` Modifies the header with regard to the header modification condition.
    
 You should be able to identify the moment when the header has to be modified.
 
 -  **HTTP Request Header Modification Point**
 
    You should modify the header when the client HTTP request is initially identified. 
-   If header has been modified, it will be processed in the cache module as it is.
-   However, Host header and URI cannot be modulated.
+   If the header has been modified, it will be processed in the cache module as it is.
+   However, the Host header and URI cannot be modulated.
 
 -  **HTTP Response Header Modification Point**
 
@@ -308,9 +308,9 @@ You should be able to identify the moment when the header has to be modified.
    However, the Content-Length cannot be modified.   
 
       
-Modify condition of header is saved at /svc/{virtual host name}/headers.txt. 
-The header allows multiple configurations as long as it fits to the condition. 
-All modification will be applied at the same time. 
+The modify condition of a header is saved at /svc/{virtual host name}/headers.txt. 
+The header allows multiple configurations as long as each fits to the condition. 
+All modifications will be applied at the same time. 
 
 If you wish to modify the first condition only, set the ``FirstOnly`` property to ``ON``.
 When different conditions try to modify an identical header, it'll be either Last-Win or specifically appended. ::
@@ -341,10 +341,10 @@ When different conditions try to modify an identical header, it'll be either Las
    $URL[/source/*], $RES[cache-control: no-cache], set, 404
    /secure/*.dat, $RES[x-custom], unset, 200
     
-IP, GeoIP, Header and URL form can be used for {Match} configuration.
+IP, GeoIP, Header and URL forms can be used for a {Match} configuration.
 
 -  **IP**
-   $IP[...] format is used, and supports IP, IP Range, Bitmask and Subnet formats.
+   $IP[...] format is used and supports IP, IP Range, Bitmask and Subnet formats.
 
 -  **GeoIP**
    $IP[...] format is used and :ref:`access-control-geoip` must be predefined.
@@ -353,33 +353,33 @@ IP, GeoIP, Header and URL form can be used for {Match} configuration.
 -  **Header**
    $HEADER[Key : Value] format is used. 
    Value supports specific expressions and patterns. 
-   When the ``Value`` is omitted, the existence of header that is corresponding to the ``Key`` will be the condition to make a decision.
+   When the ``Value`` is omitted, the existence of the header that is corresponding to the ``Key`` will be the condition used to make a decision.
     
 -  **URL**
    $URL[...] format is used and can be omitted. Specific expressions and patterns will be recognized.
     
 {$REQ} and {$RES} configure how to modify the header.
-Generally ``set`` and ``append`` use {Key: Value} for configuration, and if the Value is omitted, empty value("") will be inserted. 
-For ``unset``, only {Key} value is required.
+Generally ``set`` and ``append`` use {Key: Value} for configuration, and if the Value is omitted, an empty value("") will be inserted. 
+For ``unset``, only the {Key} value is required.
 
 ``set`` , ``unset`` , ``append`` can be used for {Action}.
 
--  ``set``  Add Key and Value that are defined in the request/response header to the header. 
-   If an identical Key exists, overwrites the previous value.    
+-  ``set``  Adds the Key and Value that are defined in the request/response header to the header. 
+   If an identical Key exists, set overwrites the previous value.    
 
--  ``unset`` Discard the header related to the Key that is defined in the request/response header.
+-  ``unset`` Discards the header related to the Key that is defined in the request/response header
 
--  ``append``  This is similar to ``set``, while this setting uses comma(,) to combine previous Value with configured Value when related Key is found.
+-  ``append``  This is similar to ``set``, while this setting uses a comma(,) to combine the previous Value with the configured Value when a related Key is found.
 
-{Condition} identifies response code families such as 2xx, 3xx, 4xx and 5xx instead of specific response codes such as 200 and 304.
-If {Condition} is not matching, modification will not be reflected even if {Match} is matching.
-If {Condition} is omitted, response code will not be examined.
+{Condition} identifies response code families--such as 2xx, 3xx, 4xx and 5xx--instead of specific response codes--such as 200 and 304.
+If {Condition} is not matching, a modification will not be reflected, even if {Match} is matching.
+If {Condition} is omitted, a response code will not be examined.
 
 
 Original Header
 ---------------------
 
-In order to keep the decent performance, only standard header will be selectively identified from headers that origin server transmit. ::
+In order to maintain decent performance, only a standard header will be selectively identified from headers that the origin server transmits. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -388,16 +388,16 @@ In order to keep the decent performance, only standard header will be selectivel
     
 -  ``<OriginalHeader>``
 
-   -  ``OFF (default)`` Ignores if the header is not a standard. 
+   -  ``OFF (default)`` Ignores if the headers are not a standard. 
    
-   -  ``OFF``  Saves non-standard header and transfer it to the client.
+   -  ``OFF``  Saves non-standard headers and transfers them to the client.
       However, this option will consume more memory and storage.
 
 
 Via Header
 ---------------------
 
-This section explains how to configure whether to specify Via header or not in the HTTP response that will be sent to the client. ::
+This section explains how to configure HTTP responses that will be sent to a client that either specify the Via header or not. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -406,18 +406,18 @@ This section explains how to configure whether to specify Via header or not in t
     
 -  ``<ViaHeader>``
     
-   - ``ON (default)`` Specifies Via header as below.
+   - ``ON (default)`` Specifies the Via header as shown below.
      ::
       
         Via: STON/2.0.0
    
-   - ``OFF``  Omits Via header.
+   - ``OFF``  Omits the Via header
    
    
 Server Header
 ---------------------
  
-This section explains how to configure whether to specify Server header or not in the HTTP response that will be sent to the client. ::
+This section explains how to configure HTTP responses that will be sent to the client that either specify the Server header or not. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -426,26 +426,26 @@ This section explains how to configure whether to specify Server header or not i
     
 -  ``<ServerHeader>``
     
-   -  ``ON (default)`` Specifies Server header of the origin server. ::
+   -  ``ON (default)`` Specifies the Server header of the origin server ::
    
-   -  ``OFF``  Omits Server header.
+   -  ``OFF``  Omits the Server header
 
 
 
 URL Preprocessing
 ====================================
 
-`Regular expression <http://en.wikipedia.org/wiki/Regular_expression>`_ is used to modify requested URL. 
-If URL preprocessing is defined, all client requests(HTTP or File I/O) should pass the URL Rewriter.
+`Regular expression <http://en.wikipedia.org/wiki/Regular_expression>`_ is used to modify requested URLs. 
+If URL preprocessing is defined, all client requests(HTTP or File I/O) should pass through the URL Rewriter.
 
 .. figure:: img/urlrewrite1.png
    :align: center
       
-   After passing the URL Rewriter, virtual host can be accessed.
+   After passing through the URL Rewriter, the virtual host can be accessed.
    
-If an approaching Host name has been modified by URL Rewriter, it is considered that the Host header of client HTTP request has been modified.
+If an approaching Host name has been modified by the URL Rewriter, it is considered that the Host header of client HTTP request has been modified.
 URL preprocessing is configured at the virtual host setting(vhosts.xml).
-Most configurations are subordinated to the virtual host, but URL preprocessing can modify Host name that a client requested so it should be configured in the same block as virtual host. ::
+Most configurations are subordinated to the virtual host, but URL preprocessing can modify the Host name that a client requested, so it should be configured in the same block as the virtual host. ::
 
    # vhosts.xml
    
@@ -468,15 +468,15 @@ Multiple configurations are allowed, and regular expression will be checked in o
 -  ``<URLRewrite>``
 
    Configures URL preprocessing.
-   ``AccessLog (default: Replace)`` attribute configures URLs that will be recorded in the Access log. 
-   ``Replace`` records preprocessed URL(/logo.jpg), whereas ``Pattern`` records unprocessed URL(/baseball/logo.jpg) to the Access log.
+   The ``AccessLog (default: Replace)`` attribute configures URLs that will be recorded in the Access log. 
+   ``Replace`` records preprocessed URLs (/logo.jpg), whereas ``Pattern`` records unprocessed URLs (/baseball/logo.jpg) to the Access log.
    
    -  ``<Pattern>`` configures patterns to be matched. 
-      A single pattern is expressed with parenthesis(eg. ( )).
+      A single pattern is expressed with parenthesis (e.g. ( )).
    
    -  ``<Replace>`` configures convert format. 
-      Identical pattern can use expressions like #1, #2. #0 stands for the entire URL that is requested. 
-      Maximum 9 patternes(#9) can be configured.
+      Identical patterns can use expressions like #1 and #2. #0 stands for the entire URL that is requested. 
+      A maximum of nine patternes (#9) can be configured.
       
 :ref:`monitoring_stats` provides throughput, and :ref:`api-graph-urlrewrite` can be used as well. 
 URL preprocessing simplifies expressions with other functions such as :ref:`media-trimming` and :ref:`media-hls`. ::
