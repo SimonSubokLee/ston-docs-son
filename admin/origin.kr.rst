@@ -255,7 +255,7 @@ If the server is already overloaded, renewal is postponed to keep low origin loa
 
 .. _origin-balancemode:
 
-Origin Selection
+Origin Selection (검수중)
 ====================================
 
 When the origin server consists of multiple addresses(at least 2 addresses), configure the origin sever selection policy. ::
