@@ -127,190 +127,187 @@ All functions except the virtual host default setting can be configured in the g
 Managing Virtual Host
 ====================================
 
-서비스하는 모든 가상호스트에 대하여 상세히 설정하며 신규 가상호스트를 추가한다. 
-모든 가상호스트는 따로 명시적으로 설정을 변경하지 않는 이상 기본 
-가상호스트(VHostDefault)의 설정을 사용한다. 
-이는 객체지향의 상속(Inheritance)과 같은 개념이다. 
-서비스 가상호스트는 대부분의 항목을 재정의(Overriding)할 수 있다.
+This configures details of all virtual hosts in service as well as adding a new virtual host. 
+As long as all virtual hosts do not change configurations explicitly, they use default virtual host configurations(VHostDefault). 
+This is an identical concept of the inheritance in object-oriented method. 
+Service virtual host can reconfigure(Overriding) almost all items.
 
 
-신규
+New
 ---------------------
 
-새롭게 서비스할 가상호스트를 생성한다. 
-클러스터가 설정되어 있는 경우 모든 서버에 가상호스트를 동시생성 할 수 있다. 
-모든 가상호스트는 기본 가상호스트(VHostDefault)를 상속받으므로 가상호스트명과 
-원본서버 주소만 설정하면 곧바로 서비스 투입이 가능하다. 
-8가지의 하위 설정이 있으며 **펼쳐보기** 버튼을 눌러 상세 설정으로 확장할 수 있다. 
+This creates a new virtual host for service. 
+If cluster is configured, then multiple virtual hosts can be created in every server at the same time. 
+All virtual hosts inherits default virtual host(VHostDefault), 
+therefore setting the origin server address and the virtual host name will allow the virtual host to be deployed for the service. 
+There are total 8 different sub options, and they can be expanded to detail settings by clicking the **Unfold** button. 
 
 .. figure:: img/wm_vhost_new1.png
    :align: center
    
-   WM 가상호스트 관리 - 신규
+   WM Virtual host management - New
    
    
-목록
+List
 ---------------------
 
-서비스 중인 모든 가상호스트 상태를 모니터링할 수 있다. 
-가상호스트별로 시작/중지가 가능하다. 
-클러스터가 설정되어 있다면 모든 서버의 가상호스트를 동시에 제어할 수 있다. 
-또한 기본가상호스트를 선택할 수 있다.
+You can monitor all virtual host statuses in service. 
+In addition, you can start/stop each virtual host. 
+If cluster is configured, then you can control all virtual hosts in the entire server at the same time. 
+You can also select the default virtual host.
 
 .. figure:: img/wm_vhost_list.png
    :align: center
    
-   WM 가상호스트 관리 - 목록
+   WM Virtual host management - List
    
    
-상세설정
+Detail Configuration
 ---------------------
 
-기본 가상호스트(VHostDefault)와 개별 가상호스트에 대해 설정한다. 
-좌측상단의 콤보박스를 선택하여 가상호스트를 선택할 수 있다. 
-**"Default 가상호스트"** 는 모든 가상호스트가 상속받는 기본 설정이다. 
-그러므로 별도로 재정의하지 않은 설정의 경우 "Default 가상호스트"를 변경하면 변경된 설정이 반영된다.
+This configures default virtual host(VHostDefault) and separate virtual host. 
+With the combo box on the top left corner, you can select a virtual host. 
+**"Default Virtual Host"** is the default configuration that all virtual hosts inherits. 
+Therefore, an configuration that wasn't overrided will be affected by the change of the "Default Virtual Host".
 
 .. figure:: img/wm_vhost_conf1.png
    :align: center
    
-   WM 가상호스트 설정 - 상단메뉴
+   WM Virtual Host Configuration - Top Menu
    
-위 그림처럼 많은 하위메뉴가 제공되며 현재 선택된 하위메뉴가 붉은 색으로 표시된다. 
-각 메뉴 클릭시 아래 그림처럼 상세설정 페이지가 제공된다. 
-모든 설정은 "적용" 또는 "Cluster전체적용" 버튼을 눌러야 반영된다.
+A dozen of sub menus are provided like the above figure, and currently selected sub menu is emphasized with the red background color. 
+By clicking each menu, detail configuration page is loaded as below figure. 
+All configurations are reflected after clicking "Apply" or "Apply to All Clusters".
 
 .. figure:: img/wm_vhost_conf_sub1.png
    :align: center
    
-   WM 가상호스트 설정 - 원본서버
+   WM Virtual Host Configuration - Origin Server
    
-여기서 설정하는 거의 모든 항목은 재정의될 수 있는 설정이므로 이에 대한 명확한 이해가 필요하다. 
-예를 들어 기본 가상호스트의 TTL값이 60으로 설정된 경우 모든 가상호스트는 이 값을 상속받는다. 
-하지만 명확하게 이 값을 재정의 하는 경우 해당 가상호스트에 한하여 재정의된 값을 사용하게 된다.
+Almost all items configured in this section can be overrided so you should have a thorough understanding for the each configuration. 
+For example, if the TTL value of default virtual host is set to 60, all virtual hosts are inherited this value. 
+However, if the TTL value is specifically redefined, then the corresponding virtual host will use overrided TTL value.
 
 .. figure:: img/wm_vhost_conf_sub_ttl.png
    :align: center
    
-다음과 같이 3가지 경우가 존재할 수 있다.
+There could be 3 different possibilities as belows.
 
--  **다른 값으로 재정의**
+-  **Override with another value**
 
-   A의 경우처럼 기본 값은 60이지만 180으로 재정의할 경우 A사용자는 180으로 서비스된다. 
-   기본 가상호스트 설정이 변경되어도 영향을 받지 않는다.
+   From the above illustration, when the default TTL is 60, the user A will be served with 180 if the TTL value is the overrided with 180. 
+   The default virtual host is not affected with the overrided configuration.
    
--  **같은 값으로 재정의** 
+-  **Override with the same value** 
 
-   B의 경우처럼 기본 값과 같은 값으로 설정하여도 재정의로 판단하여 B사용자는 60으로 서비스된다. 
-   추후 기본 가상호스트의 TTL값이 30으로 변경되더라도 재정의가 되어 있으므로 B사용자의 설정(60)은 
-   영향을 받지 않는다.
+   If you override the TTL with the default value, it is considered as an override and the user B will be served with 60 TTL. 
+   If the TTL of default virtual host is changed to 30, overrided value will not be affected and the user B will be keep servicing with 60 TTL.
    
--  **재정의하지 않음**
+-  **Do not override**
 
-   C의 경우처럼 생략된 경우 기본 가상호스트 설정을 상속받아 C사용자는 60으로 서비스된다. 
-   추후 기본 가상호스트의 TTL값이 30으로 변경되면 C사용자도 30으로 서비스된다.
+   The user C will inherit the TTL of default virtual host, and if the default value is updated to 30, the user C will be served with changed default TTL of 30.
 
-WM에서는 색으로 재정의를 구분한다. 
-기본 가상호스트의 설정을 그대로 사용하는 경우 흰색배경으로 표시된다. 
-재정의된 값은 살구색으로 표시되어 기본값과 구분된다. 
-모든 재정의 설정의 우측에는 X버튼이 제공된다. 
-이 버튼을 클릭하여 재정의를 해지한다.
+In the WM, colors are used to identify override states. 
+White background identiifies inheritance of the default virtual host configuration. 
+Apricot background identifies overrided configuration. 
+All override configurations have an X button on the right. 
+If you click on this button, all overrided configurations will be removed.
    
    
 
-클러스터
+Cluster
 ====================================
 
-여러 대의 STON을 하나의 클러스터로 통합하여 일괄적으로 관리/운영할 수 있다. 
-모든 STON은 동등한 관계로 설정되기 때문에 클러스터에 포함된 어떤 STON으로 로그인 하여도 
-클러스터 전체를 관리할 수 있다.
+Multiple STONs can be merged into one cluster for integrated management/opreation. 
+All STONs are configured to have an equal authority, which STON you may log in within the cluster, you can manage the entire cluster.
 
 
-구성
+Composition
 ---------------------
 
-클러스터를 생성하거나 이미 존재하는 클러스터에 다른 서버를 추가할 수 있다. 
-클러스터 추가에는 WM계정의 인증절차가 필요하다. 
-만약 같은 계정(아이디와 비밀번호)으로 WM이 구성되어 있다면 인증절차는 생략된다.
+You can create a cluster or add another server in the existing cluster. 
+In order to create a cluster, authentication procedure of the WM account is required. 
+If a WM is configured with the identical account(ID and password), the authentication procedure will be skipped.
 
 .. figure:: img/wm_cluseter1.png
    :align: center
    
-   신규 클러스터 생성
+   Creating a new cluster
    
    
 .. figure:: img/wm_cluseter2.png
    :align: center
    
-   클러스터 목록
+   Cluster list
    
-클러스터가 구성되면 가상호스트 관리시 "Cluster전체적용" 버튼으로 일괄설정이 가능하다. 
-또한 클러스터에 소속된 서버끼리 간편하게 모든 설정을 복제할 수 있다. 
-특정 서버를 다른 클러스터에 참여시키고 싶으면 탈퇴 후 재구성해야 한다.
+When a cluster is composed, you can perform a batch configuration with "Apply to All Clusters" when managing virtual hosts. 
+In addition, you can duplicate and apply configuration from one server to another server in the cluster. 
+If a specific server needs to participate in another cluster, the corresponding server have to leave the cluster and recompose.
 
 
-서버 상태
+Server Status
 ---------------------
 
-클러스터에 소속된 모든 STON서버의 상태와 서비스 현황을 확인할 수 있다. 
-서버 목록을 구성하는 각 항목을 클릭하면 보다 상세한 정보를 확인하실 수 있다.
+Statuses and service reports of cluster affiliated STON servers can be checked. 
+If you click each item that consists server list, detailed information can be acquired.
 
 .. figure:: img/wm_cluseter3_2.png
    :align: center
    
-   서버별 상태
+   Each server status
    
    
-가상호스트 상태
+Virtual Host Status
 ---------------------
 
-클러스터에서 서비스하는 모든 가상호스트의 MRTG를 종합하여 확인할 수 있다. 
-클러스터의 모든 가상호스트를 동시에 시작/중지할 수 있다. 
-가상호스트 목록을 구성하는 각 항목을 클릭하면 보다 상세한 정보를 확인하실 수 있다.
+MRTG of all virtual hosts in the cluster are put together in one screen. 
+You can also start/stop all virtual hosts in the cluster at the same time. 
+If you click each item that consists server list, detailed information can be acquired.
 
 .. figure:: img/wm_cluseter4.png
    :align: center
    
-   가상호스트 서비스별 상태
+   Status of each virtual host
    
    
-컨텐츠 제어
+Contents Control
 ====================================
 
-서비스 중인 컨텐츠를 열람/제어하거나 클린업을 수행할 수 있다. 
-클러스터 구성이 되어있다면 모든 STON의 컨텐츠를 동시에 열람하거나 제어할 수 있다.
+You can browse/control currently servicing contents or perform cleanup. 
+If the cluster is configured, you can browse or control contents in all STON server at the same time.
 
 .. figure:: img/wm_ctrl2.png
    :align: center
    
-   Caching상태 확인
+   Caching status check
    
    
 .. figure:: img/wm_ctrl3.png
    :align: center
    
-   Purge등 API호출
+   API call
    
       
-서버 상태
+Server Status(위에도 "서버 상태"가 있습니다??)서버 상태
 ====================================
 
+(이 내용은 Contents Control과 중복됩니다??)
 서비스 중인 컨텐츠를 열람/제어하거나 클린업을 수행할 수 있다. 
 클러스터 구성이 되어있다면 모든 STON의 컨텐츠를 동시에 열람하거나 제어할 수 있다.
 
 .. figure:: img/wm_gstat1.png
    :align: center
    
-   하드웨어 정보
+   Hardware information
    
    
-서비스 상태
+Service Status
 ====================================
 
-가상호스트별로 서비스 상태를 모니터링 한다.
+Monitors service status of each virtual host.
 
 .. figure:: img/wm_vstat3.png
    :align: center
    
-   가상호스트 서비스상태
+   Service status of virtual host
    
