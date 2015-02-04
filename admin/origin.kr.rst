@@ -5,13 +5,11 @@ Chapter 7. Origin Server
 
 This chapter will explain the relationship between STON and the origin server.
 The origin server generally stands for the web server that abides by HTTP standard.
-Administrator should have thorough understanding about the contents in this chapter in order to protect the origin server.
-After understanding this chapter, you can establish durable and flexible service that can resist from the origin server error.
+In order to protect the origin server, administrators should have a thorough understanding of the contents in this chapter.
+Doing so will also enable you to establish a durable and flexible service that can resist errors in the origin server.
 
-The origin server has to be protected.
-There are variety of plans for dealing with various errors.
-Proper protection policy for the origin server will let you have relaxed server inspection.
-
+There are many plans for dealing with the various errors that may occur, but the bottom line is that the origin server must be protected. 
+Having a proper protection policy for the origin server will make your server inspection procedure worry free. 
 
 .. toctree::
    :maxdepth: 2
@@ -23,7 +21,7 @@ Proper protection policy for the origin server will let you have relaxed server 
 Error Detection and Recovery
 ====================================
 
-If failure occurs to the origin server during caching, the server will be automatically excluded.
+If an origin server failure occurs during caching, the server will be automatically excluded.
 When the server is recovered, it'll be utilized for the service. ::
 
    # server.xml - <Server><VHostDefault><OriginOptions>
@@ -36,33 +34,33 @@ When the server is recovered, it'll be utilized for the service. ::
 
 -  ``<ConnectTimeout> (default: 3 seconds)``
    
-   If the origin server is not connected within the set amount of second, it is considered as a connection failure.
+   If the origin server is not connected within the set amount of seconds, it is considered as a connection failure.
 
 -  ``<ReceiveTimeout> (default: 10 seconds)``
    
-   If the origin server does not reply HTTP response for the set amount of second for a normal HTTP request, it is considered as transaction failure.
+   If the origin server does not reply HTTP response within the set amount of second for a normal HTTP request, it is considered as transaction failure.
 
 -  ``<Exclusion> (default: 3 times)``
    
-   If the set amount of consecutive failures( ``<ConnectTimeout>`` or ``<ReceiveTimeout>`` ) occur in the origin server, related server will be excluded from the available server list. 
+   If the set amount of consecutive failures( ``<ConnectTimeout>`` or ``<ReceiveTimeout>`` ) occur in the origin server, the related server will be excluded from the available server list. 
    This value will be reset to 0 if a successful communication occurs before exclusion.
 
 -  ``<Recovery> (default: 5 times)``
    
-   Request with ``Uri`` in very ``Cycle``, and if the origin server replies ``ResCode`` for the set amount of consecutive times, then recover related server.
+   Request with ``Uri`` in every ``Cycle``, and if the origin server replies ``ResCode`` for the set amount of consecutive times, then the connection to the origin server is recovered.
    Setting this value to 0 will not recover the server.   
    
-   -  ``Cycle (default: 10 seconds)`` Try request every configured seconds.
+   -  ``Cycle (default: 10 seconds)`` Tries a new request every configured amount seconds.
    
-   -  ``Uri (default: /)`` Uri to send request.
+   -  ``Uri (default: /)`` Sets Uri to send a request.
    
-   -  ``ResCode (default: 0)`` Response code that will be identified as a normal response.
+   -  ``ResCode (default: 0)`` The response code that will be identified as a normal response.
       Setting this value to 0 will regard any reply as a success.
-      For example, setting this value to 200 will only process 200 response as a success.
-      Multiple valid response codes can be configured by using comma(,).
-      For example, 200, 206, 404 value will regard one of these responses as a success.
+      For example, setting this value to 200 will process only 200 response as a success.
+      Multiple valid response codes can be configured by using a comma(,).
+      For example, each one of the numbers listed in the configuration "200, 206, 404" value will be regarded as a success.
 
-   -  ``Log (default: ON)`` Record HTTP Transaction that was used for recovery to :ref:`admin-log-origin`.
+   -  ``Log (default: ON)`` Records the HTTP Transaction that was used for recovery to :ref:`admin-log-origin`.
       
       
 
@@ -71,9 +69,9 @@ When the server is recovered, it'll be utilized for the service. ::
 Health-Checker
 ====================================
 
-`Error Detection and Recovery`_ responds to the failure during Caching process.
-``<Recovery>`` terminates HTTP Transaction as soon as receiving a response code.
-However, Health-Checker checks for a successful HTTP Transaction. ::
+`Error Detection and Recovery`_ responds to failures during the caching process.
+``<Recovery>`` terminates an HTTP transaction as soon as a response code is received.
+However, Health-Checker checks for a successful HTTP transaction. ::
 
    # vhosts.xml - <Vhosts><Vhost>
    
@@ -88,21 +86,21 @@ However, Health-Checker checks for a successful HTTP Transaction. ::
 -  ``<HealthChecker> (default: /)``
 
    Configures Health-Checker. Multiple configurations are allowed.
-   Use Uri as a value, and CDATA is used for XML exception characters.
+   Uri is used as a value, and CDATA is used for XML exception characters.
    
-   -  ``ResCode (default: 0)`` Correct response codes (Multiple configurations are allowed with commas(,))
+   -  ``ResCode (default: 0)`` Correct response codes. Multiple configurations are allowed with commas(,) used to separate each code
    
-   -  ``Timeout (default: 10 seconds)`` A valid time from socket connection till complete HTTP Transaction.
+   -  ``Timeout (default: 10 seconds)`` A valid time, from the socket connection untill the HTTP transaction is complete.
 
    -  ``Cycle (default: 10 seconds)`` An execution period.
    
-   -  ``Exclusion (default: 3 times)`` A number of times to fail before excluding related server.
+   -  ``Exclusion (default: 3 times)`` The specified number of times to fail before excluding the related server.
    
-   -  ``Recovery (default: 5 times)`` A number of consecutive successes before deploying the server.
+   -  ``Recovery (default: 5 times)`` The number of consecutive successes before deploying the server.
    
-   -  ``Log (default: ON)`` Records HTTP Transaction to :ref:`admin-log-origin` .
+   -  ``Log (default: ON)`` Records an HTTP transaction to :ref:`admin-log-origin` .
 
-Health-Checker can have multiple configurations, and executed independently regardless of client requests.
+Health-Checker can have multiple configurations, and can be executed independently regardless of client requests.
 It does not share information with the `Error Detection and Recovery`_ or other Health-Checkers to decide exclusion and deployment.
 
 
@@ -111,43 +109,43 @@ It does not share information with the `Error Detection and Recovery`_ or other 
 Origin Address Use Policy
 ====================================
 
-The usage of Origin address(IP) is determined according to the following elements.
+The usage of the Origin address(IP) is determined according to the following elements.
 
--  :ref:`env-vhost-activeorigin` Address format(IP or Domain) and stanby address
+-  :ref:`env-vhost-activeorigin` Address format(IP or Domain) and standby address
 -  `Error Dectection and Recovery`_
 -  `Health-Checker`_
 
 The origin address is frequently excluded/recovered when running a service.
-STON uses IP table based origin address, and information be accessed by `origin-status`_ API.
+STON uses an IP table-based origin address, and information can be accessed by an `origin-status`_ API.
 
 If you set the origin address with an IP, the setting is much simpler than using a domain. 
 
--  Nothing will modify IP list unless you change the configuration.
--  IP address will not be expired by TTL.
--  Exclusion/recovery works based on IP address.
+-  Nothing will modify the IP list unless you change the configuration.
+-  The IP address will not be expired by TTL.
+-  Exclusion/recovery works based on the IP address.
 
-If the origin address is set as a domain, you have to use Resolving to acquire IP.
+If the origin address is set as a domain, you have to resolve it to acquire an IP.
 ( recorded in :ref:`admin-log-dns` .)
-IP list can be changed dynamically, and all IPs are only valid for valid TTL.
+An IP list can be changed dynamically, and all IPs are only valid for the valid TTL.
 
--  Domain is periodically Resolving(1~10 seconds).
--  Organize IP table to use from Resolving result.
--  All IPs are valid as long as TTL is valid, and IPs will not be used if TTL is expired.
--  If an identical IP is Revolving, renew TTL.
--  IP table should not be cleared. (Even if TTL is expired) Latest IPs are not discarded.
+-  The domain is periodically resolved (1~10 seconds).
+-  Organize an IP table based upon the resolution.
+-  All IPs are valid as long as the TTL is valid. IPs will not be used if the TTL is expired.
+-  If an identical IP is resolved, renew the TTL.
+-  The IP table should not be cleared even if the TTL is expired. The most recent IPs will not be discarded.
 
-Even if you set the origin address as a domain, error/recovery features work based on IP address.
-DNS client(STON) can not identify changes of IP addresses in the domain. 
-However, if the domain consists of unknown IP addresses, server failure cannot properly processed.
+Even if you set the origin address as a domain, the error/recovery features work based on the IP address.
+The DNS client (which is STON) can not identify changes of IP addresses in the domain. 
+However, if the domain consists of unavailable IP addresses, server failure cannot be properly processed.
 
-Error/Recovery policies of the domain address are listed in the below.
+Domain address error/recovery policies are listed below:
 
--  If all known IP addresses for a domain are inactivated, related domain address will also be inactive.
+-  If all known IP addresses for a domain are inactivated, the related domain address will also be inactive.
 -  If a new IP is resolved to the inactive domain, the IP will be inactivated.
--  If TTL of all IPs are expired, inactive domain will not be reactivated.
--  At least one of IP addresses of the inactive domain should be recovered in order to reactivate the domain.
+-  If the TTLs of all the IPs are expired, the inactive domain will not be reactivated.
+-  At least one of the IP addresses of the inactive domain should be recovered in order to reactivate the domain.
 
-It could be quite difficult to understand, but `origin-status`_ API will help you to understand more about the service operation status.
+It might be quite difficult to understand, but the `origin-status`_ API will help you to get to know more about the service operation status.
 
 
 
@@ -156,7 +154,7 @@ It could be quite difficult to understand, but `origin-status`_ API will help yo
 Origin Status Monitoring
 ====================================
 
-API is used to monitor the origin status of vitual host. ::
+An API is used to monitor the origin status of the virtual host. ::
 
    http://127.0.0.1:10040/monitoring/origin       // All virtual hosts
    http://127.0.0.1:10040/monitoring/origin?vhost=www.example.com
@@ -203,22 +201,22 @@ The result will be returned in JSON format. ::
        ]
    }
     
--  ``VirtualHost`` Virtual host name
+-  ``VirtualHost`` The virtual host name
 
 -  ``Address`` :ref:`env-vhost-activeorigin` .
-   ``Active`` will be returned if configured address is in use, and ``Inactive`` will be returned when the address is not in use due to an error.
+   ``Active`` will be returned if the configured address is in use, and ``Inactive`` will be returned when the address is not in use due to an error.
 
 -  ``Address2`` :ref:`env-vhost-standbyorigin` .
-   ``Active`` will be returned if configured address is in use, otherwise ``Inactive`` will be returned.
+   ``Active`` will be returned if the configured address is in use, otherwise ``Inactive`` will be returned.
 
--  ``ActiveIP`` IP list and TTL that are in use. 
-   If the origin server is set by IP address, an identical IP of ``Address`` with TTL value of 0 will be returned.
+-  ``ActiveIP`` the IP list and TTL that are in use. 
+   If the origin server is set by IP address, an identical IP ``Address`` with a TTL value of 0 will be returned.
    If it is set by domain, the return value depends on the Resolving result.
    Various IPs and TTLs are used.
    
--  ``InactiveIP`` IP list and TTL that are not in use.
+-  ``InactiveIP`` The IP list and TTL that are not in use.
    Even though the IP is not in use, it could be in a recovery status or be managed by HealthChecker.
-   If the address is not recovered wihtin TTL, it'll be removed.
+   If the address is not recovered wihtin the TTL, it'll be removed.
    
 
     
@@ -227,8 +225,8 @@ The result will be returned in JSON format. ::
 Origin Status Reset
 ====================================
 
-API is used to reset the origin server exclusion/recovery of virtual host. 
-Also, current session will not be reused, but a new connection will be created instead. ::
+An API is used to reset the origin server exclusion/recovery of the virtual host. 
+Also, the current session will not be reused, as a new connection will be created instead. ::
 
    http://127.0.0.1:10040/command/resetorigin       // All virtual hosts
    http://127.0.0.1:10040/command/resetorigin?vhost=www.example.com   
@@ -240,8 +238,8 @@ Also, current session will not be reused, but a new connection will be created i
 Overload Judgement
 ====================================
 
-The contents that are requested for the first time, they must always request to the origin server.
-On the other hand, if the contents are already cached, the request can be more flexibly responded.
+Content that is requested for the first time, must always be retrieved from the origin server.
+On the other hand, if the content is already cached, the request can be more flexibly responded to.
 If the server is already overloaded, renewal is postponed to keep low origin load. ::
 
    # server.xml - <Server><VHostDefault><OriginOptions>
