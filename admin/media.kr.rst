@@ -146,11 +146,9 @@ Regardless of the location of MP4 file header, real time conversion to .m3u8/.ts
 ..  note::
 
     MP4HLS is not a transcoding that converts elementary streams(Video or Audio). 
+    Therefore, encoded MP4 files that only follows HLS format can be played on the mobile devices without a problem.
     If the file is not properly encoded, the file might not played properly.
     Current(2014.2.20) video/audio encoding format by Apple is shown as below.
-    그러므로 HLS에 적합한 형식으로 인코딩된 MP4파일에 한해서 원활한 단말 재생(단말 재생?? 단말기/모바일기기에서 재생??: 네 단말 기기에서의 재생을 말합니다.)이 가능하다. 
-    인코딩이 적합하지 않을 경우 화면이나 깨지거나 소리가 재생되지 않을 수 있다. 
-    현재(2014.2.20) Apple에서 밝히고 있는 Video/Audio 인코딩 규격은 다음과 같다.
 
     What are the specifics of the video and audio formats supported?
     Although the protocol specification does not limit the video and audio formats, the current Apple implementation supports the following formats:
@@ -404,8 +402,6 @@ This function is helpful when applying watermark on the image.. ::
           
     -  ``Geometry (default: +0+0)`` Based on the ``Gravity``, ``Geometry`` decides where the composite image is located at. 
        {+-}x{+-}y. The red dots are reference points that stands for +0+0 of the ``Gravity`` attribute.
-       붉은색 원은 Gravity속성에 따라 +0+0이 의미하는 기준점으로 +x+y의 
-       값이 커질수록 이미지 안쪽으로 배치된다(??값이 커질수록 이미지 안쪽으로 배치되는 것 같지않아 혼동되어 생략했습니다).
        The green arrow stands for increasing x axis, and the purple one stands for increasing y axis. 
        Using -x-y will locate the composite image outside of the boundary and will be invisible in the result image. 
        This method looks quite complicated, but it automatically calculates the size of image so results are consistent. 
