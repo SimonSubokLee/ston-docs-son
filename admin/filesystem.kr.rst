@@ -80,7 +80,7 @@ The Host header in the HTTP request helps to find virtual host. ::
     GET /ston.jpg HTTP/1.1
     host: example.com
     
-File System에서는 첫 번째 경로로 이 문제(무엇이 문제인지 명시되지 않았음??)를 해결한다. 
+File System에서는 첫 번째 경로로 이 문제(무엇이 문제인지 명시되지 않았음??: 첫번째 경로 이름을 가상호스트명으로 사용하여 도메인이 아닌 파일시스템에서의 적용을 가능하게 한다는 뜻입니다.)를 해결한다. 
 For example, if the STON is mounted to the /cachefs path, the below path can be used to access local files. ::
 
     /cachefs/example.com/ston.jpg
@@ -283,7 +283,7 @@ All you have to do is configuring a STON mounted path as a file path of the Wowz
 **2. [STON - Virtual host] file system access permission & response code configuration**
 
   This section explains how to activate the file system access of the virtual host. 
-  원본서버 응답코드에 따른 파일/디렉토리 결정도 설정한다.(응답코드를 보고 요청된 URL이 파일 인지 디렉토리인지를 결정??) 
+  원본서버 응답코드에 따른 파일/디렉토리 결정도 설정한다.(응답코드를 보고 요청된 URL이 파일 인지 디렉토리인지를 결정??:네 그 조건을 설정합니다.) 
   The following takes the virtual host default setting(server.xml) as an example, but each virtual hosts(vhosts.xml) can have independent configurations. ::
   
      # server.xml - <Server><VHostDefault><Options>
