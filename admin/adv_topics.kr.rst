@@ -18,7 +18,7 @@ First of all, you should understand how HTTP requests from clients are processed
 Cache processing results are using TCP_* format just like that of Squid, and each expression stands for the process method.
 
 -  ``TCP_HIT`` The requested resource(not expired) is already cached and responded immediately.
--  ``TCP_IMS_HIT`` The requested resource with IMS(If-Modified-Since) header is not expired and still cached, so 304 NOT MODIFIED is responded. TTLExtensionBy4xx, TTLExtensionBy5xx설정에 해당하는 경우(TTLExtensionBy4xx/5xx의 어떤 설정에 어떻게 해당되어야 304 NOT MODIFIED 응답이 나오는지??)에도 이에 해당함.
+-  ``TCP_IMS_HIT`` The requested resource with IMS(If-Modified-Since) header is not expired and still cached, so 304 NOT MODIFIED is responded. TTLExtensionBy4xx, TTLExtensionBy5xx설정에 해당하는 경우(TTLExtensionBy4xx/5xx의 어떤 설정에 어떻게 해당되어야 304 NOT MODIFIED 응답이 나오는지??:설정은 On/Off니까 On일때를 말합니다)에도 이에 해당함.
 -  ``TCP_REFRESH_HIT`` The requested resource is expired and needs to check the origin server(origin not modified, 304 NOT MODIFIED) to respond. Resource expiration is extended.
 -  ``TCP_REF_FAIL_HIT`` When the confirmation from the origin server during TCP_REFRESH_HIT process fails due to connection failure or transfer delay, respond with expired contents.
 -  ``TCP_NEGATIVE_HIT`` The requested resource is cached in an abnormal status(origin server connection/transfer failure, 4xx response, 5xx response), then respond with corresponding status.
