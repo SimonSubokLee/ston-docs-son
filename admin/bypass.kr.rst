@@ -3,18 +3,18 @@
 Chapter 8. Bypass
 ******************
 
-This chapter explains how to set a bypass that is delegating client request handling to the origin server.
-Bypass is distinguished from caching with conditions and reactions thereof.
+This chapter explains how to set a bypass that will delegate client request handling to the origin server.
+Bypassing is distinguished from caching by the conditions and reactions thereof.
 
-Bypass has a priority to the Caching policy.
-A service that was not considered to adopt the Edge from design stage, most likely it cannot delicately distinguish static resources and dynamic resources.
-In this case, configure to bypass all client requests and only cache the contents that are frequently requested based on the log.
-Usually a few hours of log can dramatically decrease the origin server load.
-:ref:`monitoring_stats` provides real time status in order to help tuning the service in real time.
+Bypass has priority over the caching policy.
+If a service did not adopt the Edge from design stage, it most likely cannot distinguish between static resources and dynamic resources.
+In this case, configure to bypass all client requests and only cache the content that is frequently requested based on the log.
+Usually a few hours of logging can dramatically decrease the origin server load.
+:ref:`monitoring_stats` provides real time status in order to help tune the service in real time.
 
-Bypass is fast and acts as an HTTP transactions basis.
-Even if the web site is personalized, mostly main page(.html) changes dynamically and the rest of 99% is made up of static resources.
-Bypass version of :ref:`origin-httprequest` is provided in order to return the identical response with the intention of origin server.
+A bypass is fast and acts as an HTTP transactions basis.
+Even if the web site is personalized, mostly just the main page(.html) changes dynamically and the remaining of 99% is made up of static resources.
+A bypass version of :ref:`origin-httprequest` is provided in order to return identical responses that relay the origin server's intention.
 
 
 .. toctree::
@@ -39,14 +39,14 @@ If a client sends no-cache request, bypass the request. ::
     
 -  ``<BypassNoCacheRequest>``
 
-   - ``OFF (default)`` Cache module handles the request.
+   - ``OFF (default)`` The cache module handles the request.
    
-   - ``ON`` Bypass the request to the origin server.
+   - ``ON`` Bypasses the request to the origin server.
    
 .. note::
 
-    This configuration is judged by client's action(probably ``ctrl`` + ``F5`` ).
-    Therefore, excessive number of bypass might increase origin load.
+    This configuration is judged by the client's action(probably ``ctrl`` + ``F5`` ).
+    Therefore, an excessive number of bypasses might increase origin load.
     
 
 .. _bypass-getpost:    
@@ -54,7 +54,7 @@ If a client sends no-cache request, bypass the request. ::
 GET/POST Bypass
 ====================================
 
-Bypass can be set a default reaction for GET/POST requests.
+A bypass can be set as a default reaction for GET/POST requests.
 The default reaction of the two requests might be different as GET and POST have different usages. ::
 
    # server.xml - <Server><VHostDefault><Options>
@@ -65,7 +65,7 @@ The default reaction of the two requests might be different as GET and POST have
     
 -  ``<BypassPostRequest>``
 
-   - ``ON (default)`` Bypass POST requests to the origin server.
+   - ``ON (default)`` Bypasses POST requests to the origin server.
    
    - ``OFF`` STON handles POST requests.
    
@@ -73,18 +73,18 @@ The default reaction of the two requests might be different as GET and POST have
 
    - ``OFF (default)`` STON handles GET requests.
 
-   - ``ON`` Bypass GET requests to the origin server.
+   - ``ON`` Bypasses GET requests to the origin server.
 
-Supports all condition as :ref:`access-control-vhost_acl`.
-Exception for bypass is saved at /svc/{virtual host name}/bypass.txt. ::
+A bypass supports all conditions as :ref:`access-control-vhost_acl`.
+An exception for bypass is saved at /svc/{virtual host name}/bypass.txt. ::
 
    # /svc/www.example.com/bypass.txt
    $IP[192.168.2.1-255]
    /index.html   
     
-If cache or bypass condition has not been specified, the opposite setting of default condition will be applied.
-For example, if ``<BypassGetRequest>`` is set to ``ON``, the exceptional condition is a Caching list.
-If this is confusing, you can use second parameter to make the condition more clear. ::
+If a cache or bypass condition has not been specified, the opposite setting of the default condition will be applied.
+For example, if ``<BypassGetRequest>`` is set to ``ON``, the exceptional condition is a caching list.
+If this is confusing, you can use a second parameter to make the condition more clear. ::
 
    # /svc/www.winesoft.co.kr/bypass.txt
    
@@ -93,7 +93,7 @@ If this is confusing, you can use second parameter to make the condition more cl
    !HEADER[referer] & !HEADER[user-agent], bypass  // Always bypass
    $URL[/source/public.zip]                        // Depends on the default setting
 
-The priority will be as below.
+The priority of actions is listed below:
 
 1. No-Cache bypass
 2. Bypass is stated in bypass.txt
@@ -115,18 +115,18 @@ The origin server affinity can be configured in the `GET/POST Bypass`_ property.
 
 -  ``OriginAffinity``
 
-   - ``ON (default)`` This setting guarantees to bypass client requests to an identical server. 
-     But, it might not be an identical socket. 
+   - ``ON (default)`` This setting guarantees that client requests will be bypassed to an identical server. 
+     However, it might not be an identical socket. 
      
-     The origin server and all connected sockets could lose connections.
-     In this case, new socket connections will be requested to the relative server.
+     The origin server and all connected sockets may lose connection.
+     In this case, new socket connections will be requested from the relative server.
      
      .. figure:: img/private_bypass3.jpg
         :align: center
       
         Requests are always bypassed to the same server.
      
-     If bypassed origin server is inactive due to errors or excluded from DNS, another server will be used for bypass.
+     If a bypassed origin server is inactive due to errors or exclusion from DNS, another server will be used for the bypass.
    
    - ``OFF`` This setting does not guarantee which server will be used for client requests.
    
@@ -140,14 +140,14 @@ The origin server affinity can be configured in the `GET/POST Bypass`_ property.
 Origin Session Affinity
 ====================================
 
-Each client socket use 1:1 bypass session with the origin server. 
+Each client socket uses a 1:1 bypass session with the origin server. 
 
 .. figure:: img/private_bypass2.jpg
    :align: center
       
-   Client owns origin session.
+   The client owns the origin session.
 
-Origin session can be fixed with `GET/POST Bypass`_ property. ::
+The origin session can be fixed with the `GET/POST Bypass`_ property. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -157,27 +157,27 @@ Origin session can be fixed with `GET/POST Bypass`_ property. ::
     
 -  ``Private``
 
-   - ``OFF (default)`` This setting let client session use a dedicated origin server session.
+   - ``OFF (default)`` This setting allows for a client session to use a dedicated origin server session.
      Requests are always bypassed to the same server.
-     Either client or origin server terminates the session, other party's session will be also closed.
+     Either the client or the origin server terminates the session. Other parties' sessions will also be closed.
         
    - ``OFF`` This setting does not use a dedicated session.
 
 Just like the origin server keeps client's login information based on the session, 
-it is useful when the client request must be handled with the same socket.
+it is useful if the system is set up so that client requests must be handled by/within the same socket.
 
 .. note::
 
-   If too many requests are bypassed with ``Private``, the origin server could be loaded as much as the number of client.  
-   Also, these origin sessions are owned by clients and this could endanger the server from melicious attacks.
+   If too many requests are bypassed with ``Private``, the origin server could be loaded with as much as the number of clients.  
+   Also, these origin sessions are owned by clients and this could endanger the server to malicious attacks.
    
 
 Timeout
 -----------------------
 
-Bypass usually responds a result that is dynamically processed from the origin server.
-Therefore, the processing speed is slower than static contents.
-Setting a ``Timeout`` only for bypass is recommended to prevent hastily assuming as an error condition. ::
+A bypass usually responds with a result that is dynamically processed from the origin server.
+Therefore, the processing speed is slower than static content.
+Setting a ``Timeout`` specifically, for bypasses is recommended in order to prevent hastily assuming an error condition. ::
 
    # server.xml - <Server><VHostDefault><OriginOptions>
    # vhosts.xml - <Vhosts><Vhost><OriginOptions>
@@ -190,14 +190,14 @@ Setting a ``Timeout`` only for bypass is recommended to prevent hastily assuming
 
 
 -  ``<BypassReceiveTimeout> (default: 5 seconds)``
-   If the origin server does not respond for the set amount of tiem during bypass, it is handled as a receive timeout.
+   If the origin server does not respond for the set amount of time during a bypass, it is handled as a receive timeout.
    
    
 
 Bypass Header
 ====================================
 
-Configure whether to apply the bypass setting of :ref:`origin-httprequest`. ::
+A bypass header configures whether or not to apply the bypass setting of :ref:`origin-httprequest`. ::
 
    # server.xml - <Server><VHostDefault><OriginOptions>
    # vhosts.xml - <Vhosts><Vhost><OriginOptions>
@@ -208,9 +208,9 @@ Configure whether to apply the bypass setting of :ref:`origin-httprequest`. ::
     
 -  ``Bypass`` Property
 
-   - ``ON`` Specifies configured header.
+   - ``ON`` Specifies a configured header.
         
-   - ``OFF`` Specifies relative header from clients.
+   - ``OFF`` Specifies relative headers for clients.
 
 
 .. _bypass-port:
@@ -218,8 +218,8 @@ Configure whether to apply the bypass setting of :ref:`origin-httprequest`. ::
 Port Bypass
 ====================================
 
-Bypasses all packets of a specific TCP port to the origin server.
-This setting is exclusive for virtual host. ::
+A port bypass all packets of a specific TCP port to the origin server.
+This setting is exclusive to virtual hosts. ::
 
    # vhosts.xml - <Vhosts>
       
@@ -230,14 +230,14 @@ This setting is exclusive for virtual host. ::
 
 -  ``<PortBypass>``   
    Bypasses all packets from a designated port to the same port of the origin server.
-   ``Dest`` property will configure the origin server port.
+   The ``Dest`` property will configure the origin server port.
 
-For example,if you are bypassing 443 port, the result is similar to establishing a direct SSL connection between the client and origin server. 
-The port that is being bypassed can never have redundant setting. 
+For example,if you are bypassing a 443 port, the result is similar to establishing a direct SSL connection between the client and the origin server. 
+The port that is being bypassed can never have a redundant setting. 
 
 .. note::
    
-   Structurally port bypass is handled in a TCP Layer that is lower than HTTP. 
-   The reason of configuring a port bypass under a specific virtual host is that a subject to collect statistics is required.
+   Structurally, a port bypass is handled in a TCP Layer that is lower than the HTTP. 
+   The reason for configuring a port bypass under a specific virtual host is that a subject to collect statistics is required.
    
 
