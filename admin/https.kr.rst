@@ -4,10 +4,10 @@ Chapter 9. HTTPS
 ******************
 
 This chapter explains how to configure HTTPS.
-HTTPS supports SSL 3.0, TLS 1.0 and TLS 1.1, but for a security reason, SSL 2.0 is allowed only for upgrade.
+HTTPS supports SSL 3.0, TLS 1.0 and TLS 1.1; however for security reasons, SSL 2.0 is allowed only for upgrades.
 HTTPS is only used in between clients and STON. 
 STON does not use HTTPS to communicate with the origin server.
-In terms of security and performance, it will be inappropriate if STON relays HTTPS.
+In terms of security and performance, it would be inappropriate for STON to relay.
 If HTTPS has to be used for communicating with the origin server, using :ref:`bypass-port` is recommended.
 
 
@@ -19,7 +19,7 @@ If HTTPS has to be used for communicating with the origin server, using :ref:`by
 Service Configuration
 ====================================
 
-As long as specific IP or port is not designated, default binding service address is "*:443".
+As long as a specific IP or port is not designated, the default binding service address is "*:443".
 This can be configured in the global configuration(server.xml). ::
 
    # server.xml - <Server>
@@ -46,20 +46,20 @@ This can be configured in the global configuration(server.xml). ::
    
    -  ``<Cert>`` A server certification
    
-   -  ``<Key>`` A private key of server certification. Encrypted format is not supported.
+   -  ``<Key>`` A private key for a server certification. Encrypted formatting is not supported.
    
    -  ``<CA>`` CA(Certificate Authority) Chain certification
   
-Even if the same port is being serviced, more specific expression has a priority. 
+Even if the same port is being serviced, more specific expressions have priority. 
 
-For example, if there are multiple NIC like the above example, 
+For example, if there are multiple NICs like the example above, 
 the client that came through 1.1.1.1:443 will be serviced with a specific certification, 
 and the client that came through 1.1.1.4:443 will be serviced with a general certification.
 Even if you overwrite a certification with an existing file name, it'll be reflected when reloading.
 
 .. note::
 
-   Cerification format is PEM(Privacy Enhanced Mail), and only supports RSA asymmetric key algorithm.
+   The cerification format is PEM(Privacy Enhanced Mail), which only supports the RSA asymmetric key algorithm.
 
 
 .. _https-aes-ni:
@@ -68,12 +68,12 @@ SSL/TLS Acceleration
 ====================================
 
 SSL/TLS is accelerated by CPU(AES-NI).
-A CPU that supports AES-NI, SSL/TLS will preferentially choose AES algorithm.
+A CPU that supports AES-NI, SSL/TLS will preferentially choose an AES algorithm.
 If AES-NI is recognized, the following will be recorded in the Info.log file. ::
 
    AES-NI : ON (SSL/TLS accelerated)
    
-Administrator can select whether to use AES-NI or not. ::
+Administrators can select whether to use AES-NI or not. ::
 
    # server.xml - <Server><Cache>
 
@@ -88,7 +88,7 @@ Administrator can select whether to use AES-NI or not. ::
 CipherSuite Selection
 ====================================
 
-The followings are supported CipherSuites.
+The followings are supported CipherSuites;
 
 - RSA_WITH_RC4_SHA
 - RSA_WITH_RC4_MD5
@@ -108,16 +108,16 @@ You can choose which CipherSuite to use by configuring ``CipherSuite`` property 
       <CA>/usr/ssl/CA.pem</CA>
    </Https>   
 
--  ``CipherSuite`` Abides by `SSL CipherSuite expression of Apache mode_ssl <http://httpd.apache.org/docs/2.2/mod/mod_ssl.html#sslciphersuite>`_.
+-  ``CipherSuite`` Abides by the `SSL CipherSuite expression of Apache mode_ssl <http://httpd.apache.org/docs/2.2/mod/mod_ssl.html#sslciphersuite>`_.
 
 
 
 .. _https-ciphersuite-query:
 
-CipherSuit Inquiry
+Viewing CipherSuites
 ====================================
 
-Inquiries CipherSuite configuration result. 
+Shows CipherSuite configuration. 
 CipherSuite expression abides by `OpenSSL 1.0.0E <https://www.openssl.org/docs/apps/ciphers.html>`_. ::
 
    http://127.0.0.1:10040/monitoring/ssl?ciphersuite=...
@@ -154,8 +154,8 @@ The result is returned in JSON format. ::
 Multi Domain Configuration
 ====================================
 
-SSL configuration can cause problems when running multiple services simultaneously with one server.
-Most Web/Cache servers decide which virtual host will be used for the service by examining Host header in the HTTP request 
+SSL configurations can cause problems when running multiple services simultaneously with one server.
+Most Web/Cache servers decide which virtual host will be used for the service by examining the Host header in the HTTP request 
 
 .. figure:: img/ssl_alert.png
    :align: center
@@ -163,17 +163,17 @@ Most Web/Cache servers decide which virtual host will be used for the service by
    General HTTPS Communication
    
 Generally SSL identifies the domain(winesoft.co.kr) of the server that a client(Browser) is trying to access by confirming a certificate. 
-When the certificate is rejected for identification(wrong certificate, expired certificate, etc), user will be asked whether to trust website or not(sometimes the website might be blocked). 
+When the certificate is rejected (wrong certificate, expired certificate, etc), the user will be asked whether to trust the website or not(sometimes the website might be blocked). 
 If the client decides to trust the website, SSL communication will be established without a proper identification.
 
 .. figure:: img/faq_ssl1.jpg
    :align: center
       
-   Client will decide whether to trust website or not.
+   Clients will decide whether to trust website or not.
    
-It will not be a problem if there is only one virtual host that uses SSL in the server. 
-However, a server that runs multiple virtual hosts at the same time could be an issue. 
-The problem occurs when the server transmits the certificate to a client("2. Certificate Transmission" of the "General HTTPS Communication")
+It will not be a problem if there is only one virtual host that uses SSL on the server. 
+However, a server that runs multiple virtual hosts at the same time could face issues. 
+A problem may occur when the server transmits the certificate to a client("2. Certificate Transmission" of the "General HTTPS Communication")
 because the server does not know which Host the client is trying to reach. 
 
 The following shows typical solutions for this issue.
@@ -191,25 +191,25 @@ Multi NIC	        Works with server configuration(most popular)    NIC and addit
 SNI (Server Name Indication)
 --------------------------
 
-This method uses `SNI(Server Name Indication) <http://en.wikipedia.org/wiki/Server_Name_Indication>`_ expansion field of SSL/TLS. 
-When the client requests SSL connection to the server, target virtual host should be specified like the Host header of HTTP request. 
+This method uses the `SNI(Server Name Indication) <http://en.wikipedia.org/wiki/Server_Name_Indication>`_ expansion field of SSL/TLS. 
+When the client requests an SSL connection from the server, the target virtual host should be specified like the Host header of an HTTP request. 
 This is the most delicate method, but there are some compatibility issues. 
-The followings are the client list that does not support SNI.
+The following lists clients that does not support SNI.
 (source: `Wikipedia - Server Name Indication <http://en.wikipedia.org/wiki/Server_Name_Indication#Client_side>`_ ).
 
 - Internet Explorer (any version) on Windows XP or Internet Explorer 6 or earlier
 - Safari on Windows XP
 - BlackBerry Browser
-- Windows Mobile up to 6.5
+- Windows Mobile before 6.5
 - Android default browser on Android 2.x[34] (Fixed in Honeycomb for tablets and Ice Cream Sandwich for phones)
 - wget before 1.14
 - Java before 1.7
 
-SNI is unavailable in reality, therefore STON does not support SNI.
+SNI is impractical in reality, therefore STON does not support SNI.
 
 
 
-Multi Certificate
+Multi-Certificate
 --------------------------
 
 Multiple domains or a wildcard(eg. *.winesoft.co.kr) is specified in the certificate to identify multiple domains with a single certificate.
@@ -219,8 +219,8 @@ Multiple domains or a wildcard(eg. *.winesoft.co.kr) is specified in the certifi
       
    Multiple domains can be identified with a single certificate.
    
-This method is effective if subjects of the service are the same, otherwise this method is realistically unavailable. 
-Replacing certificates will work for this method, therefore you don't need to configure anything from STON.
+This method is effective if the subjects of the service are the same, otherwise this method is realistically unavailable. 
+Replacing certificates will work for this method; therefore, you don't need to configure anything for STON.
 [ Refer `DigiCert <http://www.digicert.com/wildcard-ssl-certificates.htm>`_].
 
 
@@ -228,13 +228,13 @@ Replacing certificates will work for this method, therefore you don't need to co
 Multi Port
 --------------------------
 
-SSL basically use 443 port.
-If you configure the SSL port that is not overlapping, you can install multiple certificates. 
-Client can enable SSL communication by specifying port as below. ::
+SSL basically uses the 443 port.
+If you configure an SSL port that is not overlapping, you can install multiple certificates. 
+Clients can enable SSL communication by specifying a port as shown below. ::
 
     https://winesoft.co.kr:543/
     
-STON can configure multiple certificates by specifying port in the Listen property as below. ::
+STON can configure multiple certificates by specifying a port in the Listen property, as shown below. ::
 
    # server.xml - <Server>
 
@@ -242,15 +242,15 @@ STON can configure multiple certificates by specifying port in the Listen proper
    <Https Listen="*:543"> ..B Company Certificate.. </Https>  
    <Https Listen="*:544"> ..C Company Certificate.. </Https>
     
-This method is economically effective, but every web page link has to be specified with HTTPS port.
+This method is economically effective, but every web page link has to be specified with an HTTPS port.
 
 
-Multi NIC
+Multi-NIC
 --------------------------
 
 If there are multiple server NICs, different IPs can be assigned to each NIC. 
-Therefore, each server IP can have separate certificates in order to decide which certificate to use based on the server IP that a client is connected. 
-The following shows how to configure multiple certificates by specifying IP in the Listen property. ::
+Each server IP can have a separate certificate. The purpose is to decide which certificate to use based on the server IP that a client is connected to. 
+The following shows how to configure multiple certificates by specifying an IP in the Listen property. ::
 
    # server.xml - <Server>
 
