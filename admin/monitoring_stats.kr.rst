@@ -258,8 +258,7 @@ An identical stats are provided in JSON and XML formats. ::
       
    The RequestHitRatio of the File I/O that is accessed via Apache becomes 0%.
    HTTP server, on the other hand, has 100% RequestHitRatio because it accesses cached files via File I/O. 
-   ByteHitRatio is calculated from the ratio of the origin inbound to Http outbound and File I/O outbound.
-   (무엇과 무엇을 비교하는건지 모호함??: HTTP 서버를 원본으로 쓸때와 파일시스템 적용시 각각 계산된다는 뜻입니다.)ByteHitRatio의 경우 원본 Inbound대비 Http outbound, File I/O outbound로 각각 계산된다.
+   ByteHitRatio is calculated by the ratio of the origin inbound to either Http outbound(when the HTTP server is used as the origin) or File I/O outbound(when the filesystem is applied).
    
 -  ``ByteHitRatio (unit: 0.01%, average)`` The transfer ratio of the origin server to the client. ::
 
@@ -640,7 +639,7 @@ Provides statistics of the disk that the virtual host uses. ::
 Session Statistics
 ------------------------------
 
-(디스크 통계와 같은 문장인것 같습니다??: 세션 통계가 맞겠네요 정정해주시면 됩니다.)가상호스트가 사용하는 디스크통계를 제공한다. ::
+Provides statistics of the disk that the session stattistics uses. ::
 
    "Session":                                   <Session            
    {                                              Client="30"       
@@ -810,7 +809,7 @@ Provides traffic stats via ``<PortBypass>``. ::
 Client Statistics
 ------------------------------
 
-(멀티로 표현된다는 의미???: 디렉토리별 여러개로의 표현을 뜻합니다)클라이언트 트래픽은 디렉토리별 통계설정 여부에 의해 "Traffic"이 멀티로 표현된다. 
+Client traffic is stated as multiple "Traffic" based on the stats configuration for each directory.
 All traffics are counted in the root(/) if stats for each directory have not been set. 
 If directory stats have been set, only the root(/) and directories invloved with traffic will be counted. ::
 
