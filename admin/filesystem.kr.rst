@@ -74,13 +74,13 @@ In order to achieve best performance, you should thoroughly understand each step
 Searching for a Virtual Host
 ====================================
 
-The first step is searching for a virtual host to access. 
-The Host header in the HTTP request helps to find virtual host. ::
+The first step is searching for the virtual host to access. 
+The Host header in the HTTP request helps to find the virtual host. ::
 
     GET /ston.jpg HTTP/1.1
     host: example.com
     
-File System에서는 첫 번째 경로로 이 문제(무엇이 문제인지 명시되지 않았음??: 첫번째 경로 이름을 가상호스트명으로 사용하여 도메인이 아닌 파일시스템에서의 적용을 가능하게 한다는 뜻입니다.)를 해결한다. 
+File System uses the first path as the virtual host name, thus the host name can be used in the file system as well. 
 For example, if the STON is mounted to the /cachefs path, the below path can be used to access local files. ::
 
     /cachefs/example.com/ston.jpg
@@ -283,7 +283,7 @@ All you have to do is configuring a STON mounted path as a file path of the Wowz
 **2. [STON - Virtual host] file system access permission & response code configuration**
 
   This section explains how to activate the file system access of the virtual host. 
-  원본서버 응답코드에 따른 파일/디렉토리 결정도 설정한다.(응답코드를 보고 요청된 URL이 파일 인지 디렉토리인지를 결정??:네 그 조건을 설정합니다.) 
+  You can also configure whether to identify the URL as a file or a directory based on the response code from the origin server.
   The following takes the virtual host default setting(server.xml) as an example, but each virtual hosts(vhosts.xml) can have independent configurations. ::
   
      # server.xml - <Server><VHostDefault><Options>
