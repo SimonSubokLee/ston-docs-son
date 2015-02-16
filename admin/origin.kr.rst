@@ -255,10 +255,10 @@ If the server is already overloaded, renewal is postponed to keep low origin loa
 
 .. _origin-balancemode:
 
-Origin Selection (검수중)
+Origin Selection
 ====================================
 
-When the origin server consists of multiple addresses(at least 2 addresses), configure the origin sever selection policy. ::
+When the origin server consists of multiple addresses(at least two addresses), configure the origin sever selection policy. ::
 
    # server.xml - <Server><VHostDefault><OriginOptions>
    # vhosts.xml - <Vhosts><Vhost><OriginOptions>
@@ -272,8 +272,8 @@ When the origin server consists of multiple addresses(at least 2 addresses), con
       Connected idle session is only used when a request is need to the related server.
    
    -  ``Session``      
-      If there is any reusable sessions, make use of them. 
-      If new session is required, use Round-Robin to allocate session to the server.
+      If there are any reusable sessions, make use of them. 
+      If new session are required, use Round-Robin to allocate sessions to the server.
       
 =========== =================================================================== =====================================================
 /           RoundRobin                                                          Session
@@ -289,9 +289,8 @@ Session Recycle
 ====================================
 
 If the origin server supports Keep-Alive, connected sessions are always recycled.
-However, the origin server can unilaterally close the connection for the request from recycled session.
-Therefore, reestablishing the connection might cause a delay in user reactivity.
-The session that has not been reused for a long time, especially, have more possibility for reactivity issue.
+However, the origin server can unilaterally close the connection for a request from a recycled session.
+Therefore, reestablishing the connection might cause a delay in user reactivity, especially for sessions that have not been reused for a long time.
 The following configuration will close the connection of unrecycled session for n seconds. ::
 
    # server.xml - <Server><VHostDefault><OriginOptions>
@@ -309,8 +308,8 @@ The following configuration will close the connection of unrecycled session for 
 Range Request
 ====================================
 
-Configure the size of contents to download.
-The contents like video clips that are usually consumed from the head of file, unnecessary origin traffic can be reduced by restricting download size. ::
+Configure the size of content to download.
+For content that is usually consumed from the head of file (like video clips), restrict the download size to reduce unnecessary origin traffic. ::
 
    # server.xml - <Server><VHostDefault><OriginOptions>
    # vhosts.xml - <Vhosts><Vhost><OriginOptions>
@@ -318,20 +317,20 @@ The contents like video clips that are usually consumed from the head of file, u
    <PartSize>0</PartSize>   
 
 -  ``<PartSize> (default: 0 MB)``
-   If this value is greater than 0, configured size will be downloaded with using Range request from the location where client requested.   
+   If this value is greater than 0, the configured size will be downloaded by using a range request from the client's location.   
 
 
-``<PartSize>`` can also help saving disk space.
-Ston generates a same-sized file to the original file in the disk.
+``<PartSize>`` can also help save disk space.
+STON generates a same-sized file as the original file in the disk.
 If ``<PartSize>`` is not 0, downloaded files will be partitioned and saved.
 
-For example, if a client watches first 1 minute(10MB) of the 1 hour(600MB) video clip, only 10MB of disk space is used.
-This option will save disk space, but partitioning a file will increase disk load a bit.
+For example, if a client watches the first minute(10MB) of one hour(600MB) video clip, only 10MB of disk space is used.
+This option will save disk space, where partitioning a file will increase disk load a bit.
 
 .. note::
 
-   When the STON downloads contents for the first time, ``Content-Length`` is unknown so the ``Range`` cannot be requested.
-   If ``<PartSize>`` is configured for the contents, only configured size of contents will be downloaded before connection is closed.
+   When STON downloads content for the first time, ``Content-Length`` is unknown so the ``Range`` cannot be requested.
+   If ``<PartSize>`` is configured for the contents, only the configured size of contents will be downloaded before the connection is closed.
    
       
 
@@ -339,22 +338,22 @@ This option will save disk space, but partitioning a file will increase disk loa
 Initializing Entire Range
 ====================================
 
-When the STON for the first time  downloads or checks modification from the origin server, the simple form of ``GET`` request is sent. ::
+When STON downloads or checks modifications from the origin server for the first time, the simple form of ``GET`` request is sent. ::
 
     GET /file.dat HTTP/1.1
     
-However, if the origin server is configured to modulate files for general ``GET`` requests, this could be an issue because original file cannot be cached.
+However, origin servers configured to modulate files for general ``GET`` requests may have issues because the original file cannot be cached.
 
 One of the most common examples is that the Apache web server embeds external modules such as mod_h.264_streaming. 
-Apache web server always response to ``GET`` requests via mod_h.264_streaming module.
-Client(STON, in this case) is being serviced with modulated file by mod_h.264_streaming module.
+The Apache web server always responds to ``GET`` requests via a mod_h.264_streaming module.
+Below, a client(STON, in this case) is being serviced with a modulated file by a mod_h.264_streaming module.
 
    .. figure:: img/conf_origin_fullrangeinit1.png
       :align: center
       
-      mod_h.264_streaming module always modulate original files.
+      The mod_h.264_streaming module always modulates original files.
 
-Range request bypasses the module and downloads original files. ::
+A range request bypasses the module and downloads original files. ::
 
    # server.xml - <Server><VHostDefault><OriginOptions>
    # vhosts.xml - <Vhosts><Vhost><OriginOptions>
@@ -363,18 +362,18 @@ Range request bypasses the module and downloads original files. ::
 
 -  ``<FullRangeInit>``
 
-   - ``OFF (default)`` Transmit general HTTP request.
+   - ``OFF (default)`` Transmits a general HTTP request.
    
-   - ``ON`` Transmit the Range request that starts from 0. 
-     Apache will bypass modules if Range header is specified. ::
+   - ``ON`` Transmits Range requests that starts from 0. 
+     Apache will bypass modules if a Range header is specified. ::
       
         GET /file.dat HTTP/1.1
         Range: bytes=0-
     
-     When caching file for the first time, Full-Range(starting from 0) will be requested because the Range of contents is unknown.
+     When caching a file for the first time, Full-Range(starting from 0) will be requested because the content's Range is unknown.
      You should check whether the origin server responds to the ``Range`` request with normal response(206 OK).
 
-When contents are being modified, **If-Modified-Since** header will be specified as below.
+When content is being modified, an **If-Modified-Since** header will be specified as shown below.
 The origin server must properly reply with **304 Not Modified**. ::
 
    GET /file.dat HTTP/1.1
@@ -383,7 +382,7 @@ The origin server must properly reply with **304 Not Modified**. ::
     
 .. note::
 
-   The list of web server that ``<FullRangeInit>`` is working correctly.
+   ``<FullRangeInit>`` works best with the following web servers.
     
    - Microsoft-IIS/7.5
    - nginx/1.4.2
@@ -399,8 +398,8 @@ Origin Request Header
 Host Header
 ---------------------
 
-Configure the Host header of HTTP request that will be sent to the origin server.
-If not configured, virtual host name will be specified. ::
+Configure the Host header of an HTTP request that will be sent to the origin server.
+If not configured, the virtual host name will be specified. ::
 
    # server.xml - <Server><VHostDefault><OriginOptions>
    # vhosts.xml - <Vhosts><Vhost><OriginOptions>
@@ -408,8 +407,8 @@ If not configured, virtual host name will be specified. ::
    <Host />   
 
 -  ``<Host>``
-   Configure the Host header that will be sent to the origin server.
-   If the origin server is using some other port than 80, you should also specify the port number. ::
+   Configures the Host header that will be sent to the origin server.
+   If the origin server is using a port than 80, you should also specify the port number. ::
    
       # server.xml - <Server><VHostDefault><OriginOptions>
       # vhosts.xml - <Vhosts><Vhost><OriginOptions>
@@ -437,8 +436,8 @@ Configure the User-Agent header of HTTP request that will e sent to the origin s
 XFF(X-Forwarded-For) Header
 ---------------------
 
-If STON is placed in between the client and the origin server, the origin server cannot obtain client's IP address.
-Therefore, STON specifes X-Forwarded-For header to all HTTP requests that are sent to the origin server. ::
+If STON is placed in between the client and the origin server, the origin server cannot obtain the client's IP address.
+Therefore, STON specifies an X-Forwarded-For header to all HTTP requests that are sent to the origin server. ::
 
    # server.xml - <Server><VHostDefault><OriginOptions>
    # vhosts.xml - <Vhosts><Vhost><OriginOptions>
@@ -447,12 +446,12 @@ Therefore, STON specifes X-Forwarded-For header to all HTTP requests that are se
 
 -  ``<XFFClientIPOnly>``
    
-   - ``OFF (default)`` Append client's IP to the XFF header that is received from the client(IP: 128.134.9.1).
-     If the client did not send XFF header, only the client IP will be specified. ::
+   - ``OFF (default)`` Appends the client's IP to the XFF header that is received from the client(IP: 128.134.9.1).
+     If the client did not send an XFF header, only the client IP will be specified. ::
       
         X-Forwarded-For: 220.61.7.150, 61.1.9.100, 128.134.9.1
    
-   - ``ON`` Send the first address of XFF header to the origin server. ::
+   - ``ON`` Send the first address of the XFF header to the origin server. ::
    
         X-Forwarded-For: 220.61.7.150
 
@@ -460,7 +459,7 @@ Therefore, STON specifes X-Forwarded-For header to all HTTP requests that are se
 Identifying ETag Header
 ---------------------
 
-The following shows hot to configure whether or not to recognize the ETag that will be responded by the origin server. ::
+The following shows how to configure whether or not to recognize the ETag that the origin server will respond to. ::
 
    # server.xml - <Server><VHostDefault><OriginOptions>
    # vhosts.xml - <Vhosts><Vhost><OriginOptions>
@@ -471,13 +470,13 @@ The following shows hot to configure whether or not to recognize the ETag that w
    
    - ``OFF (default)`` Ignores the ETag header.
    
-   - ``ON`` Identifies ETag and append If-None-Match header when updating contents.
+   - ``ON`` Identifies the ETag and appends an If-None-Match header when updating contents.
 
    
 Redirect Tracking
 ====================================
 
-If the origin server replies with Redirect responses(301, 302, 303, 307), tracks Location header and requests contents. 
+If the origin server replies with Redirect responses(301, 302, 303, 307), it tracks the Location header and requests content. 
 
    .. figure:: img/conf_redirectiontrace.png
       :align: center
@@ -493,9 +492,9 @@ If the origin server replies with Redirect responses(301, 302, 303, 307), tracks
 
 -  ``<RedirectionTrace>``
 
-   - ``OFF (default)`` Saved as 3xx response.
+   - ``OFF (default)`` Saves as a 3xx response.
    
-   - ``ON`` Download contents from the address in Location header.
-     If the format of redirection response is incorrect or the Location header is missing, tracking will not work.
-     In order to prevent infinite rediretion, the STON only tracks once.
+   - ``ON`` Downloads content from the address in the Location header.
+     If the format of the redirection response is incorrect or the Location header is missing, tracking will not work.
+     In order to prevent infinite redirection, the STON only tracks once.
 
