@@ -112,7 +112,7 @@ Origin Address Use Policy
 The usage of the Origin address(IP) is determined according to the following elements.
 
 -  :ref:`env-vhost-activeorigin` Address format(IP or Domain) and standby address
--  `Error Dectection and Recovery`_
+-  `Error Detection and Recovery`_
 -  `Health-Checker`_
 
 The origin address is frequently excluded/recovered when running a service.
