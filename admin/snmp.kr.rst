@@ -40,7 +40,7 @@ These values are specified as ``[diskIndex]``.
       
    From the above configuration with 3 disks, the ``[diskIndex]`` of /cache1 becomes 1, and the ``[diskIndex]`` of /cache3 becomes 3. 
    For example, OID of /cache1 is system.diskInfo.diskInfoTotalSize.1 (1.3.6.1.4.1.40001.1.2.18.1.3.1) and the last .1 refers to the first disk.
-   (OID가 system.diskInfo.diskInfoTotalSize.1인가요 아님 1.3.6.1.4.....3.1인가요?? 괄호가 닫혀있지 않아서 헷갈립니다)
+   (OID가 system.diskInfo.diskInfoTotalSize.1인가요 아님 1.3.6.1.4.....3.1인가요?? 괄호가 닫혀있지 않아서 헷갈립니다: 1.3.6.1.4.....3.1이 OID입니다)
    예를 들어 /cache1의 전체용량에 해당하는 OID는 
    system.diskInfo.diskInfoTotalSize.1(1.3.6.1.4.1.40001.1.2.18.1.3.1이 된다. 
    마지막 .1은 첫번째 디스크를 의미한다.
