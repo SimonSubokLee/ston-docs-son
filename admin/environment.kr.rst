@@ -65,7 +65,7 @@ It is an XML format text file. ::
     </Server>
     
 This section will cover the structure of global configuration and simple functions.
-:ref:`access-control` or :ref:`snmp` is located in the global configuration, but these major functions will be elaborated upon in each chapter. 
+:ref:`access-control` or :ref:`snmp` is located in the global configuration, but these major functions will be elaborated upon in respective chapters. 
 
 .. toctree::
    :maxdepth: 2
@@ -76,7 +76,7 @@ This section will cover the structure of global configuration and simple functio
 Administrator Settings
 ------------------------------------
 
-The following explains hot to configure administrator settings. ::
+The following explains how to configure administrator settings. ::
 
     # server.xml - <Server>
     
@@ -117,7 +117,7 @@ The following explains hot to configure administrator settings. ::
     
       - ``ON (default)`` :ref:`api-etc-httpmethod` checks ACL when the API is called.
       
-      - ``OFF`` :ref:`api-etc-httpmethod` doesn't do ACL check when the API is called.
+      - ``OFF`` :ref:`api-etc-httpmethod` doesn't do an ACL check when the API is called.
     
     - ``UploadMultipartName`` configures variable names of :ref:`api-conf-upload`.
 
@@ -211,7 +211,7 @@ Configure the maximum available memory and BodyRatio(the ratio of loaded data in
    
          The allocated system memory ratio can be configured with the BodyRatio option.
          
-   In the case of game contents, while the amount of content is large, there are not many files.
+   In the case of game content, while the amount of content is large, there are not many files.
    These services usually have a significant File I/O burden.
    Using a higher value for the ``<BodyRatio>`` enables more content data to reside in the memory.
 
