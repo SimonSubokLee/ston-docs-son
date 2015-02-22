@@ -7,14 +7,14 @@ This chapter explains how to set a bypass that will delegate client request hand
 Bypassing is distinguished from caching by the conditions and reactions thereof.
 
 Bypass has priority over the caching policy.
-If a service did not adopt the Edge from design stage, it most likely cannot distinguish between static resources and dynamic resources.
-In this case, configure to bypass all client requests and only cache the content that is frequently requested based on the log.
+If a service did not adopt the Edge during its design stage, it most likely cannot distinguish between static resources and dynamic resources.
+In this case, configure to bypass all client requests and only cache the content that is frequently requested according to the log.
 Usually a few hours of logging can dramatically decrease the origin server load.
 :ref:`monitoring_stats` provides real time status in order to help tune the service in real time.
 
 A bypass is fast and acts as an HTTP transactions basis.
 Even if the web site is personalized, mostly just the main page(.html) changes dynamically and the remaining of 99% is made up of static resources.
-A bypass version of :ref:`origin-httprequest` is provided in order to return identical responses that relay the origin server's intention.
+A bypass version of :ref:`origin-httprequest` is provided in order to make the origin request header to be identified by the origin server..
 
 
 .. toctree::
@@ -24,7 +24,7 @@ A bypass version of :ref:`origin-httprequest` is provided in order to return ide
 No-Cache Request Bypass
 ====================================
 
-If a client sends no-cache request, bypass the request. ::
+If a client sends a no-cache request, bypass the request. ::
 
    GET / HTTP/1.1
    cache-control: no-cache or cache-control:max-age=0
@@ -76,7 +76,7 @@ The default reaction of the two requests might be different as GET and POST have
    - ``ON`` Bypasses GET requests to the origin server.
 
 A bypass supports all conditions as :ref:`access-control-vhost_acl`.
-An exception for bypass is saved at /svc/{virtual host name}/bypass.txt. ::
+An exception for a bypass is saved at /svc/{virtual host name}/bypass.txt. ::
 
    # /svc/www.example.com/bypass.txt
    $IP[192.168.2.1-255]
