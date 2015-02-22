@@ -52,12 +52,12 @@ Administrators can configure a few policies as shown below. ::
 
 .. warning:
 
-   Other than some specific URLs, pattern or directory can be purged as well.
-   However, until the command is executed, number of target item is unclear.
+   Other than some specific URLs, a patterned URL or directory can be purged as well.
+   However, until the command is executed, the number of targeted item is remain uncertain.
    For this reason, administrator might select too many targets without intention, and it will occupy too much CPU resource and causes performance drop.
 
-   Therefore, it is strongly recommended to use a specific URL during the service.
-   Pattern or directory representation is only used as an administrative purpose when the service is not running.
+   Therefore, it is strongly recommended to use a specific URL while the service is running.
+   A patterned URL or directory representation is only used as an administrative purpose when the service is not running.
 
 
 .. toctree::
@@ -70,7 +70,7 @@ Purge
 ====================================
 
 Invalidates target content to induce downloading the content from the origin server.
-Content will be cached when accessing the content for the first time after Purge.
+Content will be cached when accessing the content for the first time after a Purge.
 If content is not available from the origin server due to error situations, STON retrieves invalidated content in order to keep the service continually available.
 Retrieved content is renewed after the time set by ConnectTimeout. ::
 
@@ -126,7 +126,7 @@ ExpireAfter
 ====================================
 
 Set the TTL expiration time of targeted contents to the entered period (in seconds) from the moment of an API call.
-The ExpireAfter command can advance the expiration time so the content can be renewed earlier, 
+The ExpireAfter command can advance the expiration time so that content can be renewed earlier, 
 or it can reduce the load on the origin server by extending the expiration time. :: 
 
    http://127.0.0.1:10040/command/expireafter?sec=86400&url=...
