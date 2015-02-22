@@ -38,7 +38,7 @@ When the server is recovered, it'll be utilized for the service. ::
 
 -  ``<ReceiveTimeout> (default: 10 seconds)``
    
-   If the origin server does not reply HTTP response within the set amount of second for a normal HTTP request, it is considered as transaction failure.
+   If the origin server does not reply HTTP response within the set amount of seconds for a normal HTTP request, it is considered as transaction failure.
 
 -  ``<Exclusion> (default: 3 times)``
    
@@ -57,10 +57,10 @@ When the server is recovered, it'll be utilized for the service. ::
    -  ``ResCode (default: 0)`` The response code that will be identified as a normal response.
       Setting this value to 0 will regard any reply as a success.
       For example, setting this value to 200 will process only 200 response as a success.
-      Multiple valid response codes can be configured by using a comma(,).
+      Multiple valid response codes can be configured by using a comma(,) to separate each code.
       For example, each one of the numbers listed in the configuration "200, 206, 404" value will be regarded as a success.
 
-   -  ``Log (default: ON)`` Records the HTTP Transaction that was used for recovery to :ref:`admin-log-origin`.
+   -  ``Log (default: ON)`` Records the HTTP transaction that was used for recovery to :ref:`admin-log-origin`.
       
       
 
@@ -88,9 +88,9 @@ However, Health-Checker checks for a successful HTTP transaction. ::
    Configures Health-Checker. Multiple configurations are allowed.
    Uri is used as a value, and CDATA is used for XML exception characters.
    
-   -  ``ResCode (default: 0)`` Correct response codes. Multiple configurations are allowed with commas(,) used to separate each code
+   -  ``ResCode (default: 0)`` Correct response codes. Multiple configurations are allowed with commas(,) used to separate each code.
    
-   -  ``Timeout (default: 10 seconds)`` A valid time, from the socket connection untill the HTTP transaction is complete.
+   -  ``Timeout (default: 10 seconds)`` A valid time, from the socket connection untill the HTTP transaction is completed.
 
    -  ``Cycle (default: 10 seconds)`` An execution period.
    
@@ -129,9 +129,9 @@ If the origin address is set as a domain, you have to resolve it to acquire an I
 An IP list can be changed dynamically, and all IPs are only valid for the valid TTL.
 
 -  The domain is periodically resolved (1~10 seconds).
--  Organize an IP table based upon the resolution.
+-  Organize an IP table based upon the resolved result.
 -  All IPs are valid as long as the TTL is valid. IPs will not be used if the TTL is expired.
--  If an identical IP is resolved, renew the TTL.
+-  If an identical IP is resolved, the TTL will be renewed.
 -  The IP table should not be cleared even if the TTL is expired. The most recent IPs will not be discarded.
 
 Even if you set the origin address as a domain, the error/recovery features work based on the IP address.
@@ -141,7 +141,7 @@ However, if the domain consists of unavailable IP addresses, server failure cann
 Domain address error/recovery policies are listed below:
 
 -  If all known IP addresses for a domain are inactivated, the related domain address will also be inactive.
--  If a new IP is resolved to the inactive domain, the IP will be inactivated.
+-  Even if a new IP is acquired from the resolving process, if the domain is inactive, the IP will also be inactivated.
 -  If the TTLs of all the IPs are expired, the inactive domain will not be reactivated.
 -  At least one of the IP addresses of the inactive domain should be recovered in order to reactivate the domain.
 
@@ -240,7 +240,7 @@ Overload Judgement
 
 Content that is requested for the first time, must always be retrieved from the origin server.
 On the other hand, if the content is already cached, the request can be more flexibly responded to.
-If the server is already overloaded, renewal is postponed to keep low origin load. ::
+If the server is already overloaded, renewal is postponed to maintain low origin load. ::
 
    # server.xml - <Server><VHostDefault><OriginOptions>
    # vhosts.xml - <Vhosts><Vhost><OriginOptions>
@@ -248,8 +248,8 @@ If the server is already overloaded, renewal is postponed to keep low origin loa
    <BusySessionCount>100</BusySessionCount>   
 
 -  ``<BusySessionCount> (default: 100)``
-   If the number of HTTP transaction in progress with the origin server exceeds certain a number, it will be judged as a overload.
-   In order to block any contents renewal requests to the origin server during the overload status, extend TTL for ``<OriginBusy>`` from :ref:`caching-policy-ttl`.
+   If the number of HTTP transactions in progress with the origin server exceeds a certain number, it will be judged as a overload.
+   In order to block any contents renewal requests to the origin server during the overload status, extend the TTL for ``<OriginBusy>`` from :ref:`caching-policy-ttl`.
    You can set a very large value for this option to forward all requests unconditionally to the origin server.
    
 
@@ -258,7 +258,7 @@ If the server is already overloaded, renewal is postponed to keep low origin loa
 Origin Selection
 ====================================
 
-When the origin server consists of multiple addresses(at least two addresses), configure the origin sever selection policy. ::
+When the origin server consists of multiple addresses(two or more addresses), configure the origin sever selection policy. ::
 
    # server.xml - <Server><VHostDefault><OriginOptions>
    # vhosts.xml - <Vhosts><Vhost><OriginOptions>
@@ -268,8 +268,8 @@ When the origin server consists of multiple addresses(at least two addresses), c
 -  ``<BalanceMode> (default: RoundRobin)``
 
    -  ``RoundRobin (default)`` 
-      Round-Robin is applied so that all origin servers can equally get requests.
-      Connected idle session is only used when a request is need to the related server.
+      Round-Robin is applied so that all origin servers have equal access to requests.
+      Connected Idle session is only used when a request is need to the related server.
    
    -  ``Session``      
       If there are any reusable sessions, make use of them. 
@@ -291,7 +291,7 @@ Session Recycle
 If the origin server supports Keep-Alive, connected sessions are always recycled.
 However, the origin server can unilaterally close the connection for a request from a recycled session.
 Therefore, reestablishing the connection might cause a delay in user reactivity, especially for sessions that have not been reused for a long time.
-The following configuration will close the connection of unrecycled session for n seconds. ::
+The following configuration will close the connection of unrecycled sessions for n seconds. ::
 
    # server.xml - <Server><VHostDefault><OriginOptions>
    # vhosts.xml - <Vhosts><Vhost><OriginOptions>
@@ -299,7 +299,7 @@ The following configuration will close the connection of unrecycled session for 
    <ReuseTimeout>60</ReuseTimeout>   
 
 -  ``<ReuseTimeout> (default: 60 seconds)`` 
-   Close an origin session that has not been used for the set amount time.
+   Closes an origin session that has not been used for the set amount time.
    Setting this value to 0 will not reuse the origin server session.
    
    
@@ -309,7 +309,7 @@ Range Request
 ====================================
 
 Configure the size of content to download.
-For content that is usually consumed from the head of file (like video clips), restrict the download size to reduce unnecessary origin traffic. ::
+In cases of content that are usually consumed from the head of file (like video clips), restricting the download size can reduce unnecessary origin traffic. ::
 
    # server.xml - <Server><VHostDefault><OriginOptions>
    # vhosts.xml - <Vhosts><Vhost><OriginOptions>
@@ -324,8 +324,8 @@ For content that is usually consumed from the head of file (like video clips), r
 STON generates a same-sized file as the original file in the disk.
 If ``<PartSize>`` is not 0, downloaded files will be partitioned and saved.
 
-For example, if a client watches the first minute(10MB) of one hour(600MB) video clip, only 10MB of disk space is used.
-This option will save disk space, where partitioning a file will increase disk load a bit.
+For example, if a client watches the first minute(10MB) of a one-hour(600MB) video clip, only 10MB of disk space is used.
+This option will save disk space, while partitioning a file will increase the disk load a bit.
 
 .. note::
 
@@ -371,9 +371,9 @@ A range request bypasses the module and downloads original files. ::
         Range: bytes=0-
     
      When caching a file for the first time, Full-Range(starting from 0) will be requested because the content's Range is unknown.
-     You should check whether the origin server responds to the ``Range`` request with normal response(206 OK).
+     You should check whether the origin server responds to the ``Range`` request with a normal response(206 OK).
 
-When content is being modified, an **If-Modified-Since** header will be specified as shown below.
+When content is being modified, an **If-Modified-Since** header will be specified, as shown below.
 The origin server must properly reply with **304 Not Modified**. ::
 
    GET /file.dat HTTP/1.1
@@ -408,7 +408,7 @@ If not configured, the virtual host name will be specified. ::
 
 -  ``<Host>``
    Configures the Host header that will be sent to the origin server.
-   If the origin server is using a port than 80, you should also specify the port number. ::
+   If the origin server is using a port other than 80, you should also specify the port number. ::
    
       # server.xml - <Server><VHostDefault><OriginOptions>
       # vhosts.xml - <Vhosts><Vhost><OriginOptions>
@@ -476,12 +476,12 @@ The following shows how to configure whether or not to recognize the ETag that t
 Redirect Tracking
 ====================================
 
-If the origin server replies with Redirect responses(301, 302, 303, 307), it tracks the Location header and requests content. 
+If the origin server replies with Redirect responses(301, 302, 303, 307), the Location header is tracked to request content. 
 
    .. figure:: img/conf_redirectiontrace.png
       :align: center
       
-      Clients does not know whether they are redirected or not.
+      Clients do not know whether they are redirected or not.
 
 ::
 
