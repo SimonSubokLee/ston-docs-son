@@ -34,7 +34,7 @@ The Expansion of Service
 
 Usually a test or pilot service starts with a couple of servers. As the service begins to grow, the number of servers also increases accordingly. Content renewal is meticulously carried out on one server at a time. It might be a laborious task, but managing the system is not a big deal at this point.
 
-As the service begins to expand with even more users and data, managing each server one by one becomes more difficult. Hence, high cost storage for collecting data in one system should be introduced (NAS, SAN, DAS, etc). High priced but reliable storage systems make content renewal easier because servers can automatically acquire updated content from the storage.
+As the service begins to expand with even more users and data, managing each server one by one becomes more difficult. Thus, high cost storage for collecting data in one system should be introduced (NAS, SAN, DAS, etc). High priced but reliable storage systems make content renewal easier because servers can automatically acquire updated content from the storage.
 
 Now, what about when the service is exploding? An increased number of servers requires more data from storage and causes data transfer overload on the storage. In order to resolve the data transfer overload issue, extremely expensive storage that can support higher bandwidth should be considered. However, investing an excessive amount of the budget on storage may be questioned.
 
@@ -96,7 +96,7 @@ The STON edge server is the software that aims for an unrestricted and unconditi
 
 **CPU:** Optimized for Many-Core. Throughput is proportional to the number of CPU cores
 
-**Memory:** A larger memory means faster processing and saved Disk I/O. 
+**Memory:** A larger memory enables a faster processing and saves Disk I/O as well. 
 
 **Disk:** Evenly distributed I/O for caching more data
 
@@ -122,7 +122,7 @@ Advantages of adopting the edge server are listed in the following application e
 Games
 ----------------------------
 
-Traditionally, game services require excessive bandwidth. In addition, there are various categories in the game service, from Masterpiece games to casual games. Explosive growth in smartphone games and the proliferation thereof diversified the game service form.
+Traditionally, game services require excessive bandwidth. In addition, there are various categories in the game service, from capitalized Masterpiece games to casual games. Explosive growth in smartphone games and the proliferation thereof diversified the game service form.
 
 .. figure:: img/icons_game.png
    :align: center
@@ -256,7 +256,7 @@ There are several interesting points to check out on websites that have a signif
 File Based Server
 ----------------------------
 
-The edge server builds on the Reverse-Proxy structure. The fundamental concept of Reverse-Proxy is to copy/modify/manage files from the remote server to local storage. If qualified, STON can interwork with a service server, storage centralization and synchronization issues can be resolved. In addition, both time reduction and service reliability improvement can be attained.
+The edge server builds on the Reverse-Proxy structure. The fundamental concept of Reverse-Proxy is to copy/modify/manage files from the remote server to local storage. If qualified, STON can interwork with a service server, storage centralization and synchronization issues can be resolved. In addition, both service development time reduction and service reliability improvement can be attained.
 
 .. figure:: img/icons_file.png
    :align: center
@@ -286,7 +286,7 @@ The edge server builds on the Reverse-Proxy structure. The fundamental concept o
   ``STON`` can limit the use of memory and disks. In addition, when STON is mounted as a disk, all functions work in the same manner, so complicated services can be configured with a minimal solution.
 
 
-STON is growing up with the following services that actively utilize these attributes.
+STON is being developed alongside the following services that actively utilize these attributes.
 
 .. figure:: img/intro_reference.png
    :align: center
