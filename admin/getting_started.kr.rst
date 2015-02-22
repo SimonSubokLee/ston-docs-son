@@ -18,7 +18,7 @@ It is very important to help customers to select the appropriate equipments beca
 Server Components
 ====================================
 
-When configuring a general server, CPU, memory and storage are major components to consider.
+When configuring a general server, major components such as CPU, memory and storage have to be considered.
 Especially for a service that requires a high performance like 10Gbps, each component should meet the requirement in order to reach the desired service performance.
 
 -  **CPU**
@@ -57,7 +57,7 @@ Especially for a service that requires a high performance like 10Gbps, each comp
    
    Usually the STON is installed on the OS disk.
    The log is also configured on the identical disk where OS is installed.
-   However, the log is recording real time service status, the disk is always suffered from write load.
+   The log records real time service status, thus, it causes write load.
    
    STON utilizes disks in the RAID 0 setting.
    Depending on the required performance of the client's service, RAID may or may not be adopted.
@@ -177,7 +177,7 @@ When the updated version is released, use the stonu command to update STON to th
 Run
 ====================================
 
-The following is the default directory where STON is usually installed ::
+The following is the default directory where STON is usually installed. ::
 
     /usr/local/ston/
 
@@ -234,7 +234,7 @@ Run STON
 
       [root@localhost ~]# service ston start
 
-   In order to stop STON, use stop the command.  ::
+   In order to stop STON, use the stop command. ::
 
       [root@localhost ~]# service ston stop
 
@@ -296,7 +296,7 @@ In order to fix these issues, follow the steps below.
       
 **2. RRD Manual Installation**
 
-   If yum fails to install RRDtool, the administrator should `download <http://pkgs.repoforge.org/rrdtool/>`_ 
+   If YUM fails to install the RRDtool, the administrator should `download <http://pkgs.repoforge.org/rrdtool/>`_ 
    the proper package for installeing the OS version and manually proceed with installation.
    
 ======================================== =================== ======= ============================
@@ -348,7 +348,7 @@ example.com/account/dir	       example.com
 example.com:8080/account/dir   example.com:8080
 ============================== ==========================
 
-As long as the host header is not specified in the :ref:`origin-httprequest`, the host header from above the table above will be transmitted. ::
+As long as the host header is not specified in the :ref:`origin-httprequest`, the host header from the table above will be transmitted. ::
 
     <Vhosts>
         <Vhost Name="www.example.com">
@@ -358,7 +358,7 @@ As long as the host header is not specified in the :ref:`origin-httprequest`, th
         </Vhost>
     </Vhosts>
 
-For example, the  setting above will request the host header below as an origin server. ::
+For example, the setting above will request the host header below as an origin server. ::
 
    GET / HTTP/1.1
    Host: origin.com:8888
@@ -374,7 +374,7 @@ For example, the  setting above will request the host header below as an origin 
 Standby Origin Server Address
 ------------------------------------------------
 
-Configure the standby origin server, as shown below ::
+Configure the standby origin server, as shown below. ::
 
     <Vhosts>
         <Vhost Name="www.example.com">
