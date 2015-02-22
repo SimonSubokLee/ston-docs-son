@@ -240,10 +240,10 @@ This section configures other caching service options. ::
 
 -  ``<Cleanup>``
     The server runs the system optimization once a day.
-    Most optimization procedures include a disk cleanup application that causes I/O load.
+    Most optimization procedures include a disk cleanup application cause I/O load.
     In order to prevent service quality degradation, optimization is gradually performed.
 
-    - ``<Time> (default: AM 2)`` This option sets the cleanup execution time. A 24-hour format is used, for instance, 11:10 pm should be written as 23:10.
+    - ``<Time> (default: AM 2)`` This option sets the cleanup execution time. When a 24-hour format is used, for instance, 11:10 pm should be written as 23:10.
     
     - ``<Age> (default: 0, unit: day)`` If this value is greater than 0, content that has not been accessed during the period is discarded.
       This option helps reducing the possibility of insufficient disk space during the service by securing available space on the disk.
@@ -343,7 +343,7 @@ There can be an unlimited number of virtual hosts. ::
 Create/Remove Virtual Host
 ------------------------------------
 
-Virtual host ``<Vhost>`` can be configured under  ``<Vhosts>``. ::
+Virtual host ``<Vhost>`` can be configured under ``<Vhosts>``. ::
 
     # vhosts.xml - <Vhosts>
     
@@ -387,7 +387,7 @@ If one virtual host needs to be serviced with different names, use the ``<Alias>
 
    This option configures an alias of the virtual host.
    An unlimited number of aliases can be created with this option.
-   Aliases can be configured for both specific domain names, such as www2.example.com and patterned domain names such as *.sub.example.com are supported for alias.
+   Aliases can be configured for both specific domain names, such as www2.example.com and patterned domain names such as *.sub.example.com.
    For patterned domain names, a simple format with an asterisk as a domain prefix is supported.
 
 
@@ -468,7 +468,7 @@ During the service, there are some cases when the following exceptions should be
 
 These exceptions will not be configured in the XML. 
 All virtual hosts have independent exception settings, and the settings are saved as TXT files under ./svc/virtualhost/  directory.
-Exceptions will be explained more in the relevant functions.
+Exceptions will be explained more in the relevant sections.
 
 
 Checking the Virtual Host List
@@ -548,7 +548,7 @@ In order to quickly review the latest history, using the /conf/latest option is 
 -  ``id`` Unique identification number (Reload will result +1)
 -  ``conf-date`` Configuration modified date
 -  ``conf-time`` Configuration modified time
--  ``type`` How a modified setting is applied
+-  ``type`` How a modified setting is applied. There are four options as below.
    - ``loaded`` When STON is loaded
    - ``modified`` When a configuration is modified (by administrator or WM)
    - ``uploaded`` When a configuration is uploaded via API
@@ -562,7 +562,7 @@ In order to quickly review the latest history, using the /conf/latest option is 
 Restore Configuration
 ====================================
 
-This section explains how to restore a configuration of the time when a hash value or an id is created.
+This section explains how to restore a configuration of the time when a hash value or an id was created.
 If both the hash value and id are stated in the command, the hash value takes priority over the id.
 "200 OK" will be returned when the configuration is successfully rolled back, and "500 Internal Error" will be returned for any failures. ::
 
