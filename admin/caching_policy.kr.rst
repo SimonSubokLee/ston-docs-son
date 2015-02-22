@@ -34,7 +34,7 @@ TTL (Time To Live)
 TTL stands for the expiration time of saved contents.
 Having a longer TTL setting reduces the burden on the origin server, but modifications will be applied after TTL expires.
 On the contrary, a shorter TTL setting will increase the load on the origin server due to frequent requests for modification checks.
-The beauty of TTL management is that it finds an appropriate setting for reducing the load on origin server.
+The beauty of TTL management is that it finds an appropriate setting for reducing the load on the origin server.
 Once the TTL is set, it will not change until the TTL is expired.
 The new TTL will be applied when the old TTL for the file is expired.
 Administrator can change TTL setting by using these APIs, :ref:`api-cmd-purge` , :ref:`api-cmd-expire` , :ref:`api-cmd-expireafter` , :ref:`api-cmd-hardpurge`.
@@ -46,7 +46,7 @@ Default TTL
 ---------------------
 
 The TTL is set according to the response of the origin server.
-Until the TTL is expired, saved content will be serviced.
+Until the TTL expires, saved content will be serviced.
 When the TTL expires, send a check request for modified content to the origin server( **If-Modified-Since** or **If-None-Match** ).
 The TTL will be extended if the origin server replies **304 Not Modified** to the request. ::
 
@@ -68,8 +68,8 @@ Except ``Ratio`` (0~100), all units are in seconds.
 
 -  ``<Res2xx> (default: 1800 seconds, Ratio: 20, Max=86400)``
    If the origin server returns "200 OK", set the TTL.
-   When saving content, expiration period is set to ``<Res2xx>`` seconds. 
-   (After the TTL expires)If the origin server replies that the content has not been changed(304 Not Modified), the TTL can be extended according to the ``Ratio`` value(0~100).
+   When saving content, the expiration period is set to ``<Res2xx>`` seconds. 
+   After the TTL expiration, if the origin server replies that the content has not been changed(304 Not Modified), the TTL can be extended according to the ``Ratio`` value(0~100).
    The TTL can be extended up to ``Max`` seconds.
 
 -  ``<NoCache> (default: 5 seconds, Ratio: 0, Max=5, MaxAge=0)``
@@ -100,7 +100,7 @@ Except ``Ratio`` (0~100), all units are in seconds.
    When the origin server is unable to be reached, set the TTL.
    If content is already saved, prolong the TTL for ``<ConnectTimeout>`` seconds.
    If content is not saved, keep the error status for ``<ConnectTimeout>`` seconds.
-   This remedy is to reduce burden on the origin server that might be in a failed status rather than serving failed content.
+   This remedy is used to reduce the burden on the origin server that might be in a failed status rather than serving failed content.
    
 -  ``<ReceiveTimeout> (default: 3 seconds)``
    Set the TTL when the connection is successful, but data acquisition is failing.
@@ -137,13 +137,13 @@ The configuration is saved at /svc/{virtual host name}/ttl.txt. ::
 
 Even if you add *.html in order to set separate TTLs for all pages(html, php, jsp, etc.), the TTL will not be set for the first page(/). 
 The HTTP protocol cannot identify which page(i.e. index.php, default.jsp, etc.) is set as the first page by the origin server.
-Therefore, in order to set the separate TTL for each page, you should add "/".
+Therefore, in order to set a separate TTL for each page, you should add "/".
 
     
 TTL Priority
 ---------------------
 
-This section explains how to decide which TTL configuration is applied first. ::
+This section explains how to decide which TTL configuration will be applied first. ::
 
     # server.xml - <Server><VHostDefault><Options>
     # vhosts.xml - <Vhosts><Vhost><Options>
@@ -209,7 +209,7 @@ TTL expired content is serviced after modifications are checked at the origin se
    Reply immediately.
 
 #. The TTL is expired and requests a modification check(If-Modified-Since) from the origin server. 
-   Does not respond to the client until hearing from the server.
+   Does not respond to the client until heard from the server.
    
 #. If the origin server replies, extend the TTL or swap content. 
    Respond to the client since the origin server confirmed.
@@ -237,7 +237,7 @@ What you want is to stably transfer cached content regardless of any origin serv
       
       No fear of errors!
       
-These different requirements leads to the development of a background content update. ::
+These different requirements lead to the development of a background content update. ::
 
     # server.xml - <Server><VHostDefault><Options>
     # vhosts.xml - <Vhosts><Vhost><Options>
@@ -353,7 +353,7 @@ Identifying QueryString
 ====================================
 
 Identifying the query string is not necessary unless the content is dynamically created by the query string.
-If a URL contains a meaningless random value or a constantly changing time value, it will cause a huge load on the origin server.
+If a URL contains a meaningless random value or a constantly changing time value, it will increase the load on the origin server.
 
    .. figure:: img/querystring.png
       :align: center
@@ -396,14 +396,14 @@ Content could be identified by the Vary header. In most cases the Vary header ca
     
 -  ``<VaryHeader>``
 
-   Configures the Vary headers to support, from the ones that the origin server responded. 
+   Configures the list of supported Vary headers from the ones that the origin server responded. 
    Comma(,) is used as an identifier.
 
 For example, even if the origin server sends the following Vary header, it will be ignored if ``<VaryHeader>`` is not configured. ::
 
     Vary: Accept-Encoding, Accept, User-Agent
 
-In order to identify Accept-Encoding and Accept headers (except the User-Agent header, set as shown below. ::
+In order to identify Accept-Encoding and Accept headers (except the User-Agent header), set as shown below. ::
 
     # server.xml - <Server><VHostDefault><Options>
     # vhosts.xml - <Vhosts><Vhost><Options>
@@ -440,11 +440,11 @@ Detailed configuration is available with ``BodySensitive`` property and exceptio
 
 -  ``BodySensitive``
 
-    -  ``ON (default)`` Identifies Body data as a Caching-Key
+    -  ``ON (default)`` Identifies Body data as a Caching-Key.
        Maximum length will be limited by the ``MaxContentLength (default: 102400 Bytes)`` property.
        If the exception is met, Body data will be ignored.
     
-    -  ``OFF`` Ignores Body data 
+    -  ``OFF`` Ignores Body data. 
        If the exception is met, identifies Body data.
    
 A POST request exception is saved at /svc/{virtual host name}/postbody.txt. ::
