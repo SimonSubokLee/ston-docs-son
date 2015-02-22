@@ -17,7 +17,7 @@ Session Management
 ====================================
 
 An HTTP session is created when an HTTP client is connected to the STON server.
-The client is serviced through the HTTP session with a variety of contents saved on the server.
+The client is serviced through the HTTP session with a variety of content that is saved on the server.
 **HTTP transaction** stands for the procedure from request to response.
 The HTTP session handles multiple HTTP transactions in order. ::
 
@@ -105,7 +105,7 @@ The followings are items that affect the HTTP session maintenance policy.
       Connection: Keep-Alive
 
 
-4. When ``<KeepAliveHeader>`` is set to ``ON`` ::
+4. When the ``<KeepAliveHeader>`` is set to ``ON`` ::
 
       # server.xml - <Server><VHostDefault><Options>
       # vhosts.xml - <Vhosts><Vhost><Options>
@@ -152,15 +152,15 @@ The followings are items that affect the HTTP session maintenance policy.
 
 6. When the max value of Keep-Alive is consumed ::
 
-   If the max value is set from the above configuration, the value will be gradually diminished by one as shown below. ::
+   If the max value is set from the above configuration, the value will be gradually diminished by one, as shown below. ::
 
       HTTP/1.1 200 OK
       ...(skip)...
       Connection: Keep-Alive
       Keep-Alive: timeout=10, max=1
     
-   The above response above means one last HTTP transaction is available for the current session. 
-   If there is another HTTP request for this session, "Connection: Close" will be returned as shown below. ::
+   The response above means one last HTTP transaction is available for the current session. 
+   If there is another HTTP request for this session, "Connection: Close" will be returned, as shown below. ::
     
       HTTP/1.1 200 OK
       ...(skip)...
@@ -243,7 +243,7 @@ The Expires condition is saved at /svc/{virtual host name}/expires.txt. ::
    If the reference time is not specified, Access will be used for the reference time. 
    Access refers to the current time. 
    The following configuration is an example for an Expires header value. 
-   If MIME Type accesses an image/gif file, Expire header will be set as 1 day and 12 hours. ::
+   If MIME Type accesses an image/gif file, the Expires header will be set as 1 day and 12 hours. ::
     
       $MIME[image/gif], 1 day 12 hours, access
       
@@ -259,7 +259,7 @@ The Expires condition is saved at /svc/{virtual host name}/expires.txt. ::
 ETag Header
 ---------------------
 
-This section explains how to specify an ETag header in the HTTP resonse sent to the client. ::
+This section explains how to specify an ETag header in the HTTP response sent to the client. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -406,7 +406,7 @@ This section explains how to configure HTTP responses that will be sent to a cli
     
 -  ``<ViaHeader>``
     
-   - ``ON (default)`` Specifies the Via header as shown below.
+   - ``ON (default)`` Specifies the Via header, as shown below.
      ::
       
         Via: STON/2.0.0
@@ -417,7 +417,7 @@ This section explains how to configure HTTP responses that will be sent to a cli
 Server Header
 ---------------------
  
-This section explains how to configure HTTP responses that will be sent to the client that either specify the Server header or not. ::
+This section explains how to configure HTTP responses that will be sent to the client that either specifies the Server header or not. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -443,7 +443,7 @@ If URL preprocessing is defined, all client requests(HTTP or File I/O) should pa
       
    After passing through the URL Rewriter, the virtual host can be accessed.
    
-If an approaching Host name has been modified by the URL Rewriter, it is considered that the Host header of client HTTP request has been modified.
+If an approaching Host name has been modified by the URL Rewriter, it is considered that the clinet's HTTP request Host header has been modified.
 URL preprocessing is configured at the virtual host setting(vhosts.xml).
 Most configurations are subordinated to the virtual host, but URL preprocessing can modify the Host name that a client requested, so it should be configured in the same block as the virtual host. ::
 
