@@ -14,7 +14,7 @@ Usually a few hours of logging can dramatically decrease the origin server load.
 
 A bypass is fast and acts as an HTTP transactions basis.
 Even if the web site is personalized, mostly just the main page(.html) changes dynamically and the remaining of 99% is made up of static resources.
-A bypass version of :ref:`origin-httprequest` is provided in order to make the origin request header to be identified by the origin server..
+A bypass version of :ref:`origin-httprequest` is provided in order to make the origin request header be identified by the origin server.
 
 
 .. toctree::
@@ -159,7 +159,7 @@ The origin session can be fixed with the `GET/POST Bypass`_ property. ::
 
    - ``OFF (default)`` This setting allows for a client session to use a dedicated origin server session.
      Requests are always bypassed to the same server.
-     Either the client or the origin server terminates the session. Other parties' sessions will also be closed.
+     Either the client or the origin server can terminate the session, at which point Other parties' sessions will also be closed.
         
    - ``OFF`` This setting does not use a dedicated session.
 
@@ -168,7 +168,7 @@ it is useful if the system is set up so that client requests must be handled by/
 
 .. note::
 
-   If too many requests are bypassed with ``Private``, the origin server could be loaded with as much as the number of clients.  
+   If too many requests are bypassed with ``Private``, the origin server could be loaded with the corresponding number of clients.  
    Also, these origin sessions are owned by clients and this could endanger the server to malicious attacks.
    
 
@@ -177,7 +177,7 @@ Timeout
 
 A bypass usually responds with a result that is dynamically processed from the origin server.
 Therefore, the processing speed is slower than static content.
-Setting a ``Timeout`` specifically, for bypasses is recommended in order to prevent hastily assuming an error condition. ::
+Setting a ``Timeout`` specifically for bypasses is recommended in order to prevent hastily assuming an error condition. ::
 
    # server.xml - <Server><VHostDefault><OriginOptions>
    # vhosts.xml - <Vhosts><Vhost><OriginOptions>
@@ -190,7 +190,7 @@ Setting a ``Timeout`` specifically, for bypasses is recommended in order to prev
 
 
 -  ``<BypassReceiveTimeout> (default: 5 seconds)``
-   If the origin server does not respond for the set amount of time during a bypass, it is handled as a receive timeout.
+   If the origin server does not respond for the set amount of time during a bypass, it is handled as a reception timeout.
    
    
 
@@ -218,7 +218,7 @@ A bypass header configures whether or not to apply the bypass setting of :ref:`o
 Port Bypass
 ====================================
 
-A port bypass all packets of a specific TCP port to the origin server.
+A port bypass bypasses all packets of a specific TCP port to the origin server.
 This setting is exclusive to virtual hosts. ::
 
    # vhosts.xml - <Vhosts>
@@ -238,6 +238,5 @@ The port that is being bypassed can never have a redundant setting.
 .. note::
    
    Structurally, a port bypass is handled in a TCP Layer that is lower than the HTTP. 
-   The reason for configuring a port bypass under a specific virtual host is that a subject to collect statistics is required.
-   
+   The reason for configuring a port bypass under a specific virtual host is to use the virtual host as a subject when collecting a statistics.
 
