@@ -3,11 +3,12 @@
 Chapter 10. Access Control
 ******************
 
-This chapter explains how to deny unwanted client accesses.
-Normally ACL(Access Control List) saves block list for access deny, but for the convenience of configuration, allowed list might be used.
+This chapter explains how to deny access to unwanted clients. 
+Normally an ACL (Access Control List) saves a block list for denying access to specified clients, 
+but an allowed list can be used for a more convenient configuration.
 
-Access control is divided into server access control that is excuted during connection stage and virtual host access control that is configured for each virtual host.
-You will have to decide efficient time to block access.
+Access control is divided into server access control, which is executed during the connection stage, and virtual host access control, which is configured for each virtual host. 
+You will have to decide on an efficient time frame to block access. 
 All access control is logged.
 
 .. toctree::
@@ -19,9 +20,9 @@ All access control is logged.
 Server Access Control
 ====================================
 
-At the moment a client accesses to the server, the server dicides whether to block the connection or not based on the IP address.
-This occurs during the connection stage, it is the most certain and quick method.
-This is configured in the global setting(server.xml) and has the highest priority. ::
+At the moment a client accesses the server, the server decides whether to block the connection or not based on the IP address. 
+This process occurs during the connection stage and is the quickest, most certain method. 
+It is configured in the global setting (server.xml) and has the highest priority. ::
 
    # server.xml - <Server><Host>
 
@@ -31,12 +32,12 @@ This is configured in the global setting(server.xml) and has the highest priorit
    </ServiceAccess>
 
 -  ``<ServiceAccess>``   
-   This tag configures ACL based on IP and supports 4 formats(IP, IP Range, Bitmask, Subnet).
-   This is sequence sensitive and the configuration on top has priority. 
-   ``Default (default: Allow)`` property is adopted when there is no matching condition.
-   If you set this property to ``Deny``, you should specify allowed conditions in ``<Allow>``.
+   This tag configures an ACL based on the IP address and supports four formats(IP, IP Range, Bitmask, and Subnet).
+   It is sequence sensitive and the configuration on top has priority. 
+   The ``Default (default: Allow)`` property is adopted when there is no matching condition.
+   If you set this property to ``Deny``, you should specify any allowed conditions in ``<Allow>``.
    
-Blocked IP is logged at :ref:`admin-log-deny`.
+Blocked IP addresses are logged at :ref:`admin-log-deny`.
 
 
 .. _access-control-geoip:
@@ -44,9 +45,9 @@ Blocked IP is logged at :ref:`admin-log-deny`.
 GeoIP
 ====================================
 
-GeoIP can be used to deny accesses from pre-populated regional selection. 
+GeoIP can be used to deny access from pre-populated regional selection. 
 Binary Databases of `GeoIP Databases <http://dev.maxmind.com/geoip/legacy/downloadable/>`_
-is linked to `GEOIP_MEMORY_CACHE and GEOIP_CHECK_CACHE <http://dev.maxmind.com/geoip/legacy/benchmarks/>`_ to apply changes in real time. ::
+are linked to `GEOIP_MEMORY_CACHE and GEOIP_CHECK_CACHE <http://dev.maxmind.com/geoip/legacy/benchmarks/>`_ to apply changes in real time. ::
 
    # server.xml - <Server><Host>
 
@@ -55,18 +56,18 @@ is linked to `GEOIP_MEMORY_CACHE and GEOIP_CHECK_CACHE <http://dev.maxmind.com/g
       <Deny>GIN</Deny>
    </ServiceAccess>
     
-GeoIP Databases path is configured in the ``GeoIP`` property of ``<ServiceAccess>``.
+GeoIP Databases paths are configured in the ``GeoIP`` property of ``<ServiceAccess>``.
 `ISO 3166-1 alpha-2 <http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2>`_ and 
 `ISO 3166-1 alpha-3 <http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3>`_ country codes are supported.
 
 .. note::
 
-   GeoIP has a reserved file name, saved local directory must be used. 
-   Also, changes are automatically reflected to the service, there is no need to reload configuraion.
+   Since the GeoIP has a reserved file name, you have to configure to use a pre-defined path. 
+   Also, because service changes are automatic, reloading the configuration is unnecessary.
    
    
-If GeoIP is configured, check the files in the related directory. 
-If GeoIP is not configured, 404 NOT FOUND is returned. ::
+If a GeoIP is configured, check the files in the related directory. 
+If a GeoIP is not configured, a 404 NOT FOUND response will be returned. ::
    
    http://127.0.0.1:10040/monitoring/geoiplist
    
@@ -99,9 +100,9 @@ The result is returned in JSON format. ::
 Virtual Host Access Control
 ====================================
 
-Each virtual hosts control accesses.
-When a client sends HTTP request, virtual hosts decide whether to deny access or not.
-Because if HTTP request is not sent, virtual host cannot be found. ::
+Each virtual host controls access.
+When a client sends an HTTP request, virtual hosts decide whether to deny access or not.
+If an HTTP request is not sent, a virtual host cannot be found. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -110,12 +111,12 @@ Because if HTTP request is not sent, virtual host cannot be found. ::
     
 -  ``<AccessControl>``
    
-   - ``OFF (default)`` ACL is inactivated. All client requests are allowed.
+   - ``OFF (default)`` An ACL is inactivated. All client requests are allowed.
     
-   - ``ON`` ACL is activated. 
-     For denied requests, response code that is configured in ``DenialCode`` property will be returned.
-     ``Default (default: Allow)`` If the property is set to ``Allow``, ACL is used as block list. 
-     Otherwise, if it is set to ``Deny``, ACL is used as allowed list.
+   - ``ON`` An ACL is activated. 
+     For denied requests, the response code configured in the ``DenialCode`` property will be returned.
+     ``Default (default: Allow)`` If the property is set to ``Allow``, an ACL is used as a block list. 
+     Otherwise, if it is set to ``Deny``, an ACL is used as an allowed list.
      
 Denied requests are logged at :ref:`admin-log-access` as TCP_DENY.
 
@@ -125,10 +126,10 @@ Denied requests are logged at :ref:`admin-log-access` as TCP_DENY.
 Virtual Host ACL
 ---------------------
 
-Judges whether to allow/deny/redirect for the HTTP requests from all clients.
+A virtual host ACL judges whether to allow/deny/redirect HTTP requests from all clients.
 Different response codes can be configured for each condition.
 For redirected requests, reply with **302 Moved temporarily**. 
-ACL is saved at /svc/{virtual host name}/acl.txt. ::
+An ACL is saved at /svc/{virtual host name}/acl.txt. ::
 
    # /svc/www.example.com/acl.txt
    # Comma(,) is an identifier, and {condition},{keyword = allow | deny | redirect} format is used.
@@ -153,25 +154,24 @@ ACL is saved at /svc/{virtual host name}/acl.txt. ::
    /profile.zip, deny, 500
    /secure/*.dat
    
-IP, GeoIP, Header, URL can be used as conditions.
+IPs, GeoIPs, Headers, and URLs can be used as conditions when..
 
 -  **IP**
-   $IP[...] format is used, and IP, IP Range, Bitmask, Subnet forms are supported.
+   $IP[...] format is used, IP, IP Range, Bitmask, and Subnet forms are supported.
 
 -  **GeoIP**
-   $IP[...] format is used, and GeoIP has to be configured in order to use. 
+   $IP[...] format is used, GeoIP must be configured. 
      
 -  **Header**
-   $HEADER[Key : Value] format is used. 
-   Value recognizes specific and patterned expressions. 
-   An identifier exists like $HEADER[Key:], but if the Value is an empty string, this stands for empty header value. 
-   If the ``Key`` is only specified without an identifier like $HEADER[Key], the condition is used to judge existence of header for ``Key``.
+   $HEADER[Key : Value] format is used, specific and patterned expressions are recognized. 
+   If an identifier exists, like $HEADER[Key:], but the Value is an empty string, it means an empty header value. 
+   If the ``Key`` is only specified without an identifier, like $HEADER[Key], the ``condition`` is used to judge the existence of a header for ``Key``.
     
 -  **URL**
-   $URL[...] format is used and can be omitted. This recognizes specific and patterend expressions.
+   $URL[...] format is used and this attribute can be omitted. This attribute recognizes specific and patterned expressions.
     
 $ means "If it meets the condition, do~", but ! means "If it doesn't meet the condition, do~". 
-The below negated conditions are supported. ::
+The negated conditions shown below are supported. ::
 
    # If the country is not KOR, deny.
    !IP[KOR], deny
