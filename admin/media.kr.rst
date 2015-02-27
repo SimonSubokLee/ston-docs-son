@@ -4,9 +4,9 @@ Chapter 12. Media
 ******************
 
 This chapter explains how to intelligently service media.
-In many cases, contents are processed to various formats due to various client environments and diversity of service.
-Therefore, identical contents exist in the origin server in various formats.
-This method wastes processing time and storage, and moreover, it is difficult to maintain.
+In many cases, content is processed in various formats due to various client environments and the diversity of service.
+Therefore, identical content exists in the origin server in various formats.
+This method wastes processing time and storage; moreover, it is difficult to maintain.
 
 
 .. toctree::
@@ -17,12 +17,12 @@ This method wastes processing time and storage, and moreover, it is difficult to
 Changing MP4/M4A Header Position
 ====================================
 
-Usually MP4 format, the header cannot be completed during encoding process, it will be attached at the end of file when encoding is done. 
+Usually in MP4 format, the header cannot be completed during the encoding process; instead, it will be attached at the end of the file when encoding is done. 
 In order to change the header position, an extra process is required.
-If the header is located at the end of file, a player that does not support this format cannot Pseudo-Streaming the file.
-However, simply changing header position will support Pseudo-Streaming.
+If the header is located at the end of the file, a player that does not support this format cannot Pseudo-Stream the file.
+However, simply changing the header position will support Pseudo-Streaming.
 
-The change of header position only occurs during the transfer procedure without modifying original format.
+This change of a header position only occurs during the transfer procedure and will not modify the original format.
 Also, it does not consume additional storage. ::
 
    # server.xml - <Server><VHostDefault><Media>
@@ -33,23 +33,22 @@ Also, it does not consume additional storage. ::
 
 -  ``<UpfrontMP4Header>``
    
-   - ``OFF (default)`` nothing happens.
+   - ``OFF (default)`` Nothing happens.
    
-   - ``ON`` If the extension is .mp4 and the header is located at the end of file, bring the header to the front of file before transfer.
+   - ``ON`` If the extension is .mp4 and the header is located at the end of the file, the header will be removed to the front of file before transfer.
 
 -  ``<UpfrontM4AHeader>``
 
-   - ``OFF (default)`` nothing happens.
+   - ``OFF (default)`` Nothing happens.
    
-   - ``ON`` If the extension is .m4a and the header is located at the end of file, bring the header to the front of file before transfer.
+   - ``ON`` If the extension is .m4a and the header is located at the end of file, the header will be moved to the front of file before transfer.
 
-If the header of first requested contents needs to be moved to the front, preferentially download necessary part.
-This is very intelligent and fast method.
-Regardless of complicated processes in the server, clients are being serviced with a complete file that the header is located in front of file.
+If the header of the content that was requested first needs to be moved to the front, preferentially download the necessary part.
+This is a smart and fast method because clients are being serviced with a complete file, regardless of complicated processes in the server.
 
 .. note::
 
-   If the file is unable to analyze or damaged, it will be serviced as it is.
+   If the file is damaged or unable to analyze, it will be serviced as it is.
 
 
 .. _media-trimming:
@@ -57,8 +56,8 @@ Regardless of complicated processes in the server, clients are being serviced wi
 Trimming
 ====================================
 
-Trimming extracts desired section based on time value.
-It only trims at the transfer stage without modifying the original format.
+Trimming extracts desired sections based on a time value.
+It only trims during the transfer stage without modifying the original format.
 Also, it does not consume additional storage. ::
 
    # server.xml - <Server><VHostDefault><Media>
@@ -70,68 +69,68 @@ Also, it does not consume additional storage. ::
 
 -  ``<MP4Trimming>`` ``<MP3Trimming>`` ``<M4ATrimming>``
    
-   - ``OFF (default)`` nothing happens.
+   - ``OFF (default)`` Nothing happens.
    
-   - ``ON`` If the extention is matching with one of these (.mp4, .mp3, .m4a), trim the file to service desired section.
-     Trimming section can be configured with ``StartParam`` and ``EndParam`` attributes.
+   - ``ON`` If the extension is mp4, .mp3, or .m4a, the file will be trimmed to the desired section..
+     Configure which sections to be trimmed with ``StartParam`` and ``EndParam`` attributes.
      
    - ``AllTracks`` attribute
    
-     - ``OFF (default)`` trims only Audio/Video track. (Mod-H264 format)
+     - ``OFF (default)`` Trims only Audio/Video tracks. (Mod-H264 format)
      
-     - ``ON`` trims all tracks. Player compatibility must be check before setting this.
+     - ``ON`` Trims all tracks. Before using this setting, player compatibility must be checked.
      
-Parameters can be fed via client QueryString.     
-For example, if you want to trim a certain section of 10-minute video clip(/video.mp4), desired time(unit in second) can be specified in the QueryString. ::
+Parameters can be fed via the client QueryString.     
+For example, if you want to trim a certain section of a 10-minute video clip(/video.mp4), the desired time(units in second) can be specified in the QueryString. ::
 
    http://vod.wineosoft.co.kr/video.mp4                // 10 minutes : trim entire video clip
    http://vod.wineosoft.co.kr/video.mp4?end=60         // 1 minute : trim from 0 to 60 second section
    http://vod.wineosoft.co.kr/video.mp4?start=120      // 8 minutes : trim from 0 to 120 second section
    http://vod.wineosoft.co.kr/video.mp4?start=3&end=13 // 10 seconds : trim from 3 second to 13 second section
 
-If ``StartParam`` value is larger than ``EndParam`` value, it is considered as undefined section.
-This feature is developed to support skip function of a video player that is based on HTTP Pseudo-Streaming. 
-Therefore, STON recognizes keyframe and time to extract section from the original file so the video can be played properly
-instead of trimming the original file based on the offset like when the Range request is processed. 
+If the ``StartParam`` value is larger than the ``EndParam`` value, it is considered as an undefined section.
+This feature is developed to support the skip function of a video player that is based on HTTP Pseudo-Streaming. 
+STON recognizes the keyframe and the time to extract the section from the original file so the video can be played properly
+instead of trimming the original file based on the offset, like when a Range request is processed. 
 
-The file that will be relayed to the client is the complete form of MP4 file that has a recreated MP4 header as below.
+The file that will be relayed to the client is in the complete form of an MP4 file that has a recreated MP4 header, as shown below.
 
 .. figure:: img/conf_media_mp4trimming.png
    :align: center
       
-   Complete form of file is transferred.
+   The complete form of the file is transferred.
 
-The extracted section is recognized as a separate file, therefore, 200 OK will be responded. 
-If the Range header is specified as below, Range will be calculated from extracted file to respond **206 Particial Content**.
+The extracted section is recognized as a separate file; therefore, the response 200 OK will be given. 
+If the Range header is specified as shown below, the Range will be calculated from the extracted file to respond **206 Partial Content**.
 
 .. figure:: img/conf_media_mp4trimming_range.png
    :align: center
       
-   It is processed just like general Range request.
+   It is processed just like a general Range request.
    
-QueryString expression is used for trimming parameters so there could be a confusion with :ref:`caching-policy-applyquerystring`. 
-If ``<ApplyQueryString>`` is set to ``ON``, all querystrings of client request URL are recognized, but ``StartParam`` and ``Endparam`` are removed. ::
+A QueryString expression is used for trimming parameters so there could possibly be confusion with :ref:`caching-policy-applyquerystring`. 
+If the ``<ApplyQueryString>`` is set to ``ON``, all QueryStrings of a client request URL are recognized, but ``StartParam`` and ``Endparam`` are removed. ::
 
    GET /video.mp4?start=30&end=100
    GET /video.mp4?tag=3277&start=30&end=100&date=20130726
     
-From above example, if **start** and **end** are entered for ``StartParam`` and ``EndParam`` respectively,
-these values are only used when extracting section and will be removed when creating Caching-Key or sending a request to the origin server. 
-Above examples are recognized as below. ::
+In the above example, if **start** and **end** are entered for ``StartParam`` and ``EndParam`` respectively.
+These values are only used when extracting a section and will be removed when creating a Caching-Key or sending a request to the origin server. 
+The above examples are recognized as indicated below. ::
 
    GET /video.mp4
    GET /video.mp4?tag=3277&date=20130726
     
-Also, QueryString parameters can be differ by expansion modules or CDN solutions. 
+Also, QueryString parameters can differ by expansion modules or CDN solutions. 
 
 .. figure:: img/conf_media_mp4trimming_range.png
    :align: center
    
-   Module/CDN references that are provided from JW Player
+   Module/CDN references that are provided from the JW Player
    
 In addition, both `ngx_http_mp4_module <http://nginx.org/en/docs/http/ngx_http_mp4_module.html>`_ of nginx and 
 `Mod-H264-Streaming-Testing-Version2 <http://h264.code-shop.com/trac/wiki/Mod-H264-Streaming-Testing-Version2>`_ of lighttpd
-use **start** as QueryString.
+use **start** as a QueryString.
 
 
 .. _media-hls:
@@ -141,17 +140,17 @@ HLS (HTTP Live Streaming)
 
 MP4 files are serviced with HLS(HTTP Live Streaming). 
 The origin server does not need to split files for HLS service any more. 
-Regardless of the location of MP4 file header, real time conversion to .m3u8/.ts occurs when downloading the file. 
+Regardless of the location of the MP4 file header, real time conversion to .m3u8/.ts occurs when downloading the file. 
 
 ..  note::
 
-    MP4HLS is not a transcoding that converts elementary streams(Video or Audio). 
+    MP4HLS is not a transcoding that converts elementary streams(video or audio). 
     Therefore, encoded MP4 files that only follows HLS format can be played on the mobile devices without a problem.
-    If the file is not properly encoded, the file might not played properly.
-    Current(2014.2.20) video/audio encoding format by Apple is shown as below.
+    If the file is not properly encoded, the file might not play properly.
+    The current(2014.2.20) video/audio encoding format by Apple is shown below.
 
-    What are the specifics of the video and audio formats supported?
-    Although the protocol specification does not limit the video and audio formats, the current Apple implementation supports the following formats:
+    What are the specifics of the video and audio formats that are supported?
+    Although the protocol specification does not limit video and audio formats, the current Apple implementation supports only the following formats:
     
     [Video]
     H.264 Baseline Level 3.0, Baseline Level 3.1, Main Level 3.1, and High Profile Level 4.1.
@@ -161,10 +160,10 @@ Regardless of the location of MP4 file header, real time conversion to .m3u8/.ts
     MP3 (MPEG-1 Audio Layer 3) 8 kHz to 48 kHz, stereo audio
     AC-3 (for Apple TV, in pass-through mode only)
     
-    Note: iPad, iPhone 3G, and iPod touch (2nd generation and later) support H.264 Baseline 3.1. If your app runs on older versions of iPhone or iPod touch, however, you should use H.264 Baseline 3.0 for compatibility. If your content is intended solely for iPad, Apple TV, iPhone 4 and later, and Mac OS X computers, you should use Main Level 3.1.	
+    Note: iPad, iPhone 3G, and iPod touch (2nd generation and later) support H.264 Baseline 3.1. If your app runs on older iPhone or iPod touch versions, however, you should use H.264 Baseline 3.0 for compatibility. If your content is intended solely for iPad, Apple TV, iPhone 4 and later, and Mac OS X computers, you should use Main Level 3.1.	
    
 
-Existing method requires original files for Pseudo-Streaming and HLS as below. 
+The existing method requires original files for Pseudo-Streaming and HLS, as shown below. 
 In this case, STON also duplicates original files to service clients. 
 However, as the play time gets longer, more derived files will be created, and it will get harder to manage.
 
@@ -181,7 +180,7 @@ However, as the play time gets longer, more derived files will be created, and i
    Intelligent HLS
 
 All .m3u8/.ts files are derived from original files and do not consume additional storage. 
-The file is temporarily created on the memory when it is being serviced, and automatically discarded when it is not serviced. ::
+The file is temporarily created in memory when it is being serviced and automatically discarded when discarded thereafter. ::
 
    # server.xml - <Server><VHostDefault><Media>
    # vhosts.xml - <Vhosts><Vhost><Media>
@@ -193,19 +192,19 @@ The file is temporarily created on the memory when it is being serviced, and aut
    </MP4HLS>   
     
 -  ``<MP4HLS>``   
-   is activated when ``Status`` attribute is ``Active``.
+   is activated when the ``Status`` attribute is ``Active``.
 
-For example, if the service address is following, Pseudo-Streaming can be processed to the address. ::
+For example, if the service address is as follows, Pseudo-Streaming can be processed to the address. ::
 
     http://www.example.com/video.mp4
     
-Virtual host recognizes ``Keyword`` string that is defined in the ``<MP4HLS>`` in order to proceed HLS service. 
-If the following URL is called, index.m3u8 file is created from /video.mp4 file. 
+The virtual host recognizes the ``Keyword`` string that is defined in the ``<MP4HLS>`` in order to proceed with the HLS service. 
+If the following URL is called, an index.m3u8 file is created from the /video.mp4 file. 
 The index file name can be configured with a string in the ``<Index>``. ::
 
    http://www.example.com/video.mp4/mp4hls/index.m3u8
     
-Generated index.m3u8 looks like below. ::
+A generated index.m3u8 looks like the example below. ::
 
    #EXTM3U
    #EXT-X-TARGETDURATION: 10
@@ -226,26 +225,26 @@ Generated index.m3u8 looks like below. ::
    #EXT-X-ENDLIST
     
 #EXT-X-TARGETDURATION can be configured with ``<Duration>``.
-The original file can only be splited by KeyFrame of Video.
-The following four cases can exist.
+The original file can only be split by a KeyFrame of Video.
+The following four cases can exist:
 
 -  The **KeyFrame** interval is smaller than the ``<Duration>`` value.   
    If the KeyFrame is 3 seconds and the ``<Duration>`` is 20 seconds,
-   the largest multiple of 3(KeyFrame) that does not exceeding 20(Duration) will be used to split the video (18 seconds in this case).
+   the largest multiple of 3(KeyFrame) that does not exceed 20(Duration) will be used to split the video (18 seconds in this case).
    
 -  The **KeyFrame** interval is close to the ``<Duration>`` value.   
    If the KeyFrame is 9 seconds and the ``<Duration>`` is 10 seconds,
    the largest multiple of 9(KeyFrame) within 10(Duration) will be used to split the video (9 seconds in this case).
    
 -  The **KeyFrame** interval is bigger than the ``<Duration>`` value.
-   The video is splitted using KeyFrame.
+   The video is split using the KeyFrame.
    
--  **Video** is not exist.
+-  **Video** does not exist.
    ``<Duration>`` is used to split the video.
    
-#EXT-X-MEDIA-SEQUENCE defines starting number of .ts file and configured with ``<Sequence>``.
+#EXT-X-MEDIA-SEQUENCE defines the starting number of the .ts file and configures with ``<Sequence>``.
 
-Let's take a look at the following client request and see how STON responses to it. ::
+Let's take a look at the following client request and see how STON would respond. ::
 
    GET /video.mp4/mp4hls/99.ts HTTP/1.1
    Range: bytes=0-512000
@@ -253,11 +252,11 @@ Let's take a look at the following client request and see how STON responses to 
 
 1.	``STON`` Initial loading. (Nothing has been cached yet.)
 #.	``Client`` HTTP Range request. (Requests the first 500KB of 100th file.)     
-#.	``STON`` creates caching object of /video.mp4 file.
-#.	``STON`` downloads necessary portion from the origin server to analyze /video.mp4 file.
-#.	``STON`` downloads necessary portion from the origin server to service 100th(99.ts) file.
-#.	``STON`` creates 100th(99.ts) file and proceed Range service.
-#.	``STON`` discards the 99.ts file after completing service.
+#.	``STON`` creates a caching object of the /video.mp4 file.
+#.	``STON`` downloads the necessary portion from the origin server to analyze the /video.mp4 file.
+#.	``STON`` downloads the necessary portion from the origin server to service the 100th(99.ts) file.
+#.	``STON`` creates the 100th(99.ts) file and proceeds with the Range service.
+#.	``STON`` discards the 99.ts file after completing the service.
 
 
 
