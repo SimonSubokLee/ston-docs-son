@@ -3,26 +3,26 @@
 Chapter 15. Monitoring & Statistics
 ******************
 
-This chapter explains about the monitoring and the statistics.
-They are somewhat different in their usage, but they are similar in the way that they use numbers to notify.
+This chapter explains monitoring and statistics.
+While somewhat different in their usage, they are similar in the way that they use numbers to notify.
 
-Real time update is very important in monitoring service.
-Waiting for 5 minutes is too long for you.
+Real time updates are very important in monitoring service.
+Waiting for five minutes is too long.
 You have to see the change of service status in real time.
-You must observe whether the policies are taking effects when they are applied.
+You must observe whether the policies are taking effect when they are applied.
 All statistics are collected every second.
 
-Statistics are collected on each virtual host and provided every second and 5 minute average. 
-In order to help customer to analyze and process stats more easily, JSON and XML format is used. ::
+Statistics are collected on each virtual host and provided every second and an average is taken very five minutes. 
+In order to help customers analyze and process stats more easily, JSON and XML format is used. ::
 
     http://127.0.0.1:10040/monitoring/realtime?type=[JSON or XML]
     http://127.0.0.1:10040/monitoring/average?type=[JSON or XML]
     
 -  ``realtime`` 
-   Provides prior 1 second service status.
+   Provides the service status of one second prior.
 
 -  ``average`` 
-   Provides the average of 5 minutes statistics.
+   Provides the average of five minutes of statistics.
 
 
 .. toctree::
@@ -48,7 +48,7 @@ Configures the range of data to be collected. ::
     
 -  ``<DirDepth> (default: 0)`` 
    
-   Collect statistics of each directory. 
+   Collects statistics of each directory. 
    If this is set to 0, all statistics are collected in the root(/) directory. 
    If this is set to 1, statistics are collected in every first depth directory. 
    
@@ -58,57 +58,57 @@ Configures the range of data to be collected. ::
    
 -  ``<DirDepthAccum>`` 
 
-   Configures whether to accumulate statistics to upper directory when collecting stats of each directory.
+   Configures whether to accumulate statistics in the upper directory when collecting stats of each directory.
    This will be ignored if ``<DirDepth>`` is set to 0.
    
-   - ``OFF (default)`` does not accumulate stats to upper directory.
+   - ``OFF (default)`` Does not accumulate stats in the upper directory.
    
-   - ``ON`` accumulates stats to upper directory.
+   - ``ON`` Accumulates stats in the upper directory.
    
-   Let's assume that ``<DirDepth>`` is set to 2 and all directories equally have 10 traffics. 
-   If ``<DirDepthAccum>`` is set to ``OFF``, the stats are collected in each directory where traffics are occuring as the left figure.
-   On the other hand, if it is set to ``ON``, all stats from subdirectories are accumulated to upper directories as the right figure.
+   Let's assume that ``<DirDepth>`` is set to 2 and all directories have 10 lines of traffic. 
+   If ``<DirDepthAccum>`` is set to ``OFF``, the stats are collected in each directory where traffic is occurring, as shown in the figure on the left below.
+   On the other hand, if it is set to ``ON``, all stats from subdirectories are accumulated in the upper directories, as shown in the figure on the right.
    
    .. figure:: img/stats_dirdepth.jpg
       :align: center
           
-      Accumulated Statistics of Upper Directory
+      Accumulated Statistics in the Upper Directory
    
-   For instance, summation of accumulated traffics from subdirectories and traffic from /img directory will be 30.
-   This statistic value is accumulated to upper directory.
+   For instance, the summation of accumulated traffic from the subdirectories and traffic from the /img directory will be 30.
+   This statistical value is accumulated in the upper directory.
 
 -  ``<HttpsTraffic>`` 
 
-   - ``OFF (default)`` collects HTTPS traffics only with SSL stats.
+   - ``OFF (default)`` Collects HTTPS traffic only with SSL stats.
    
-   - ``ON`` collects HTTPS traffics with both SSL and HTTP stats. 
+   - ``ON`` Collects HTTPS traffic with both SSL and HTTP stats. 
    
-   When the traffic passes through the SSL layer, it will be collected to a separate SSL stats.
-   HTTPS is processed as HTTP in the upper protocol, therefore more detailed stats can be collected. 
-   However, there are redundancy in SSL and HTTP stats, it is recommended to trust HTTP stats.
+   When traffic passes through the SSL layer, it will be collected in a separate SSL stats.
+   HTTPS is processed as HTTP in the upper protocol; therefore, more detailed stats can be collected. 
+   However, if there are redundancies in the SSL and HTTP stats, it is recommended to trust the HTTP stats.
 
 -  ``<ClientLocal>`` 
 
-   Count the traffic between Loopback client and STON as a statistics.
+   Takes statistical counts of the traffic between Loopback client and STON.
 
-   - ``OFF (default)`` does not count the traffic.
+   - ``OFF (default)`` Does not count the traffic.
    
-   - ``ON`` count the traffic.
+   - ``ON`` Counts the traffic.
 
 -  ``<OriginLocal>`` 
 
-   Count the traffic between STON and Loopback origin server as a statistics.
+   Takes statistical counts the traffic between STON and Loopback origin server.
 
-   - ``OFF (default)`` does not count the traffic.
+   - ``OFF (default)`` Does not count the traffic.
    
-   - ``ON`` count the traffic.
+   - ``ON`` Counts the traffic.
    
 
 Host Comprehensive Statistics
 ====================================
 
-Host stats is the generic concept among stats and aggregates stats of all virtual host in service. 
-An identical stats are provided in JSON and XML formats. ::
+Host stats are the aggregate stats of all virtual hosts in the service. 
+Identical stats are provided in JSON and XML formats. ::
 
    {                                            <Host                                    
      "Host":                                      Version="2.0.0"                       
@@ -203,52 +203,52 @@ An identical stats are provided in JSON and XML formats. ::
    }
    
 -  ``Version`` STON version
--  ``Name`` Host name. If not defined, system name will be stated.
+-  ``Name`` The host name. If not defined, the system name will be stated.
 -  ``State`` Service status. (Healthy=Normal service, Inactive=Inactive license, Emergency)
--  ``Uptime (unit: second)`` Running time of the service
--  ``OriginSession`` The number of origin session
--  ``OriginActiveSession`` The number of transmitting origin session
--  ``OriginInbound (unit: Bytes, average)`` The amount of received data from the origin server
+-  ``Uptime (unit: seconds)`` The running time of the service
+-  ``OriginSession`` The number of origin sessions
+-  ``OriginActiveSession`` The number of transmitting origin sessions
+-  ``OriginInbound (unit: Bytes, average)`` The amount of data received from the origin server
 -  ``OriginReqCount (average)`` The number of requests sent to the origin server
 -  ``OriginOutbound (unit: Bytes, average)`` The amount of transmitted data to the origin server
 -  ``OriginResTotalCount (average)`` The number of responses from the origin server
--  ``OriginResTotalTimeRes (unit: 0.01ms, average)`` Response time of the origin server (HTTP request ~ First HTTP response)
--  ``OriginResTotalTimeComplete (unit: 0.01ms, average)`` HTTP transaction completion time of the origin server (transfer HTTP request ~ complete HTTP response)
+-  ``OriginResTotalTimeRes (unit: 0.01ms, average)`` The response time of the origin server (HTTP request ~ First HTTP response)
+-  ``OriginResTotalTimeComplete (unit: 0.01ms, average)`` The HTTP transaction completion time of the origin server (transfer HTTP request ~ complete HTTP response)
 -  ``OriginRes2xxCount (average)`` The number of 2xx responses of the origin server
 -  ``OriginRes2xxTimeRes (unit: 0.01ms, average)`` The 2xx response time of the origin server
--  ``OriginRes2xxTimeComplete (unit: 0.01ms, average)`` 2xx transaction completion time of the origin server
+-  ``OriginRes2xxTimeComplete (unit: 0.01ms, average)`` The 2xx transaction completion time of the origin server
 -  ``OriginRes3xxCount (average)`` The number of 3xx responses of the origin server
 -  ``OriginRes3xxTimeRes (unit: 0.01ms, average)`` The 3xx response time of the origin server
--  ``OriginRes3xxTimeComplete (unit: 0.01ms, average)`` 3xx transaction completion time of the origin server
+-  ``OriginRes3xxTimeComplete (unit: 0.01ms, average)`` The 3xx transaction completion time of the origin server
 -  ``OriginRes4xxCount (average)`` The number of 4xx responses of the origin server
 -  ``OriginRes4xxTimeRes (unit: 0.01ms, average)`` The 4xx response time of the origin server
--  ``OriginRes4xxTimeComplete (unit: 0.01ms, average)`` 4xx transaction completion time of the origin server
+-  ``OriginRes4xxTimeComplete (unit: 0.01ms, average)`` The 4xx transaction completion time of the origin server
 -  ``OriginRes5xxCount (average)`` The number of 5xx responses of the origin server
 -  ``OriginRes5xxTimeRes (unit: 0.01ms, average)`` The 5xx response time of the origin server
--  ``OriginRes5xxTimeComplete (unit: 0.01ms, average)`` 5xx transaction completion time of the origin server
--  ``ClientSession`` The number of client session
--  ``ClientActiveSession`` The number of transmitting client session
+-  ``OriginRes5xxTimeComplete (unit: 0.01ms, average)`` The 5xx transaction completion time of the origin server
+-  ``ClientSession`` The number of client sessions
+-  ``ClientActiveSession`` The number of transmitting client sessions
 -  ``ClientInbound (unit: Bytes, average)`` The amount of inbound data from clients
 -  ``ClientOutbound (unit: Bytes, average)`` The amount of outbound data to clients
--  ``ClientReqCount (average)`` The number of request from clients
--  ``ClientResTotalCount (average)`` The number of response from clients
--  ``ClientResTotalTimeRes (unit: 0.01ms, average)`` Client response time (HTTP request reception ~ transfer HTTP response)
+-  ``ClientReqCount (average)`` The number of client requests
+-  ``ClientResTotalCount (average)`` The number of client responses
+-  ``ClientResTotalTimeRes (unit: 0.01ms, average)`` Client response times (HTTP request reception ~ transfer HTTP response)
 -  ``ClientResTotalTimeComplete (unit: 0.01ms, average)`` Client HTTP transaction completion time (HTTP request reception ~ complete HTTP response)
--  ``ClientRes2xxCount (average)`` The number of 2xx responses of the client
+-  ``ClientRes2xxCount (average)`` The number of client 2xx responses
 -  ``ClientRes2xxTimeRes (unit: 0.01ms, average)`` The 2xx response time of the origin server
--  ``ClientRes2xxTimeComplete (unit: 0.01ms, average)`` 2xx transaction completion time of the client
--  ``ClientRes3xxCount (average)`` The number of 3xx responses of the client
+-  ``ClientRes2xxTimeComplete (unit: 0.01ms, average)`` The 2xx transaction completion time of the client
+-  ``ClientRes3xxCount (average)`` The number of client 3xx responses
 -  ``ClientRes3xxTimeRes (unit: 0.01ms, average)`` The 3xx response time of the origin server
--  ``ClientRes3xxTimeComplete (unit: 0.01ms, average)`` 3xx transaction completion time of the client
--  ``ClientRes4xxCount (average)`` The number of 4xx responses of the client
+-  ``ClientRes3xxTimeComplete (unit: 0.01ms, average)`` The 3xx transaction completion time of the client
+-  ``ClientRes4xxCount (average)`` The number of client 4xx responses
 -  ``ClientRes4xxTimeRes (unit: 0.01ms, average)`` The 4xx response time of the origin server
--  ``ClientRes4xxTimeComplete (unit: 0.01ms, average)`` 4xx transaction completion time of the client
--  ``ClientRes5xxCount (average)`` The number of 5xx responses of the client
+-  ``ClientRes4xxTimeComplete (unit: 0.01ms, average)`` The 4xx transaction completion time of the client
+-  ``ClientRes5xxCount (average)`` The number of client 5xx responses
 -  ``ClientRes5xxTimeRes (unit: 0.01ms, average)`` The 4xx response time of the origin server
--  ``ClientRes5xxTimeComplete (unit: 0.01ms, average)`` 5xx transaction completion time of the client
+-  ``ClientRes5xxTimeComplete (unit: 0.01ms, average)`` The 5xx transaction completion time of the client
 -  ``RequestHitRatio (unit: 0.01%, average)`` Hit ratio. 
    If a caching object is created and the corresponding object is initialized, then it is considered as a Hit. 
-   On the other hand, the caching object is missing or the object is not initialized from the origin server, it does not count as a Hit. 
+   On the other hand, if the caching object is missing or the object is not initialized from the origin server, it does not count as a Hit. 
    The response code does not have to do with the hit ratio.
    
    .. figure:: img/stat_filesystem1.png
@@ -257,34 +257,34 @@ An identical stats are provided in JSON and XML formats. ::
       HTTP and File I/O share the virtual host.
       
    The RequestHitRatio of the File I/O that is accessed via Apache becomes 0%.
-   HTTP server, on the other hand, has 100% RequestHitRatio because it accesses cached files via File I/O. 
+   The HTTP server, on the other hand, has a 100% RequestHitRatio because it accesses cached files via File I/O. 
    ByteHitRatio is calculated by the ratio of the origin inbound to either Http outbound(when the HTTP server is used as the origin) or File I/O outbound(when the filesystem is applied).
    
 -  ``ByteHitRatio (unit: 0.01%, average)`` The transfer ratio of the origin server to the client. ::
 
-      (Client Outbound - Orign server Inbound) / Client Outbound
+      (Client Outbound - Origin server Inbound) / Client Outbound
       
-   Even if the origin server has much faster transfer speed, the client session closes quickly, the total ratio becomes a negative value.
+   Even if the origin server has a much faster transfer speed, the client session closes quickly, and the total ratio becomes a negative value.
    
--  ``FileSystem`` A separate FileSystem stats that does not accumulated with other stat values.
+-  ``FileSystem`` A separate FileSystem of stats that do not accumulate with other stat values.
 
-   - ``RequestHitRatio (unit: 0.01%, average)`` Hit ratio via File I/O
-   - ``ByteHitRatio (unit: 0.01%, average)`` Transfer ratio of the origin server to the File I/O
-   - ``Outbound (unit: Bytes, average)`` Outbound data size via File I/O
-   - ``Session (average)`` The number of thread in File I/O process
+   - ``RequestHitRatio (unit: 0.01%, average)`` Requests the hit ratio via File I/O
+   - ``ByteHitRatio (unit: 0.01%, average)`` Transfers the ratio of the origin server to File I/O
+   - ``Outbound (unit: Bytes, average)`` Requests the outbound data size via File I/O
+   - ``Session (average)`` The number of threads in the File I/O process
       
 .. note::
 
-   Items that are only provided in 5 minute statistics.
+   Items that are only provided statistics in five minute increments.
    
-   -  ``HttpCountSum`` The total number of HTTP transaction   
-   -  ``HttpRequestHitSum`` Cache HIT result
+   -  ``HttpCountSum`` The total number of HTTP transactions   
+   -  ``HttpRequestHitSum`` The cache HIT result
    
    
 System Statistics
 ====================================
 
-The stats of system and global resources are provided with JSON and XML formats. ::
+The stats of system and global resources are provided in JSON and XML formats. ::
 
     "System":                                   <System>                                          
     {                                             <CPU                                            
@@ -382,69 +382,69 @@ The stats of system and global resources are provided with JSON and XML formats.
    - ``Kernel`` CPU(Kernel) usage
    - ``User`` CPU(User) usage
    - ``Idle`` Idle CPU
-   - ``ProcKernel`` CPU(Kernel) usage of the STON
-   - ``ProcUser`` CPU(User) usage of the STON
-   - ``Nice`` niced processes executing in user mode
-   - ``IOWait`` waiting for I/O to complete
-   - ``IRQ`` servicing interrupts
-   - ``SoftIRQ`` servicing softirqs
-   - ``Steal`` involuntary wait
+   - ``ProcKernel`` STON's CPU(Kernel) usage
+   - ``ProcUser`` STON's CPU(User) usage
+   - ``Nice`` Processes executing in user mode
+   - ``IOWait`` Waits for I/O to complete
+   - ``IRQ`` Interrupts service
+   - ``SoftIRQ`` Services softIRQs
+   - ``Steal`` An involuntary wait
 
 -  ``Mem (unit: Bytes)`` Memory usage.
-   - ``Free`` The size of free Memory of system.
-   - ``STON`` Memory usage of the STON
+   - ``Free`` The size of free Memory in the system.
+   - ``STON`` STON's memory usage
    
 -  ``Disk`` Disk performance stats
 
    - ``Path`` Disk path
-   - ``Status`` Disk status (Normal: normal, Invalid: excluded due to failure, Unmounted: unmounted by administrator)
-   - ``Read`` The number of successful read
-   - ``ReadMerged`` The number of accumulated ``Read``
-   - ``ReadSectors`` The number of read sector
-   - ``ReadTime (unit: ms)`` Elapsed time for read
-   - ``Write`` The number of successful write
-   - ``WriteMerged`` The number of accumulated ``Write``
-   - ``WriteSectors`` The number of written sector
-   - ``WriteTime (unit: ms)`` Elapsed time for write
-   - ``IOProgress`` The number of progressing IO
-   - ``IOTime (unit: ms)`` Elapsed time for IO
-   - ``IOWeightedTime (unit: ms)`` Elapsed time for IO(Weight applied)
+   - ``Status`` Disk status (Normal: normal, Invalid: excluded due to failure, Unmounted: unmounted by the administrator)
+   - ``Read`` The number of successful reads
+   - ``ReadMerged`` The number of accumulated read
+   - ``ReadSectors`` The number of read sectors
+   - ``ReadTime (unit: ms)`` The elapsed time per read
+   - ``Write`` The number of successful writes
+   - ``WriteMerged`` The number of accumulated write
+   - ``WriteSectors`` The number of written sectors
+   - ``WriteTime (unit: ms)`` The elapsed time per write
+   - ``IOProgress`` The number of progressing IOs
+   - ``IOTime (unit: ms)`` The elapsed time per IO
+   - ``IOWeightedTime (unit: ms)`` The elapsed time per IO(Weight applied)
       
--  ``ServerSocket`` Server socket(between client and STON) information
+-  ``ServerSocket`` Server socket(between clients and STON) information
 
-   - ``Total`` Total number of server socket
-   - ``Established`` The number of connected server socket
-   - ``Accepted`` The number of newly connected server socket
-   - ``Closed`` The number of closed server socket
+   - ``Total`` The total number of server sockets
+   - ``Established`` The number of connected server sockets
+   - ``Accepted`` The number of newly connected server sockets
+   - ``Closed`` The number of closed server sockets
    
 -  ``ClientSocket`` Client socket(between STON and the origin server) information
 
-   - ``Total`` Total number of client socket
-   - ``Established`` The number of connected client socket
-   - ``Connected`` The number of newly connected client socket
-   - ``Closed`` The number of closed client socket
+   - ``Total`` The total number of client sockets
+   - ``Established`` The number of connected client sockets
+   - ``Connected`` The number of newly connected client sockets
+   - ``Closed`` The number of closed client sockets
    
--  ``TCPSocket`` TCP status information provided by system(OS)
+-  ``TCPSocket`` TCP status information provided by the system(OS)
 
-   - ``Established`` The number of established status TCP connection
-   - ``Timewait`` The number of TIME_WAIT status TCP connection
+   - ``Established`` The number of established status TCP connections
+   - ``Timewait`` The number of TIME_WAIT status TCP connections
    - ``Orphan`` The number of TCP connections that have not been attached to the file handle
-   - ``Alloc`` Allocated TCP connection
-   - ``Mem`` undocumented
+   - ``Alloc`` An allocated TCP connection
+   - ``Mem`` An undocumented TCP connection
    
--  ``EQ`` The number of unprocessed event in STON Framework
--  ``RQ`` The number of events that are saved in the recently serviced contents reference que
+-  ``EQ`` The number of unprocessed events in the STON Framework
+-  ``RQ`` The number of events that are saved in the recently serviced content reference queue
 -  ``WaitingFiles2Write`` The number of disk write pending files
--  ``ServiceAccess`` The number of allowed(Allow), denied(Deny) sockets by the ServiceAccess
--  ``SystemLoadAverage`` 1/5/15 minute average of the System Load Average
--  ``URLRewrite`` The number of successful conversion by the URL preprocessor
+-  ``ServiceAccess`` The number of allowed(Allow) and denied(Deny) sockets by ServiceAccess
+-  ``SystemLoadAverage`` The 1/5/15 minute average of the System Load Average
+-  ``URLRewrite`` The number of successful conversions made by the URL preprocessor
     
     
 Virtual Host Statistics
 ====================================
 
 Each virtual host provides statistics. 
-There are four virtual host statistics; HTTP transfer(per directory), URL bypass, port bypass and SSL. ::
+There are four types of virtual host statistics: HTTP transfer(per directory), URL bypass, port bypass and SSL. ::
 
    "VirtualHost":                               <VirtualHost                                              
    [                                                Name="image.11st.co.kr"                               
@@ -526,29 +526,29 @@ There are four virtual host statistics; HTTP transfer(per directory), URL bypass
 
    ※ Items from Name to FileSystem are identical to those from the host statistics.
    
--  ``Memory (unit: Bytes)`` The amount of contents that are loaded on the memory
--  ``SecuredMemory (unit: Bytes)`` The amount of contents that are discarded from the memory
+-  ``Memory (unit: Bytes)`` The amount of content that is loaded into the memory
+-  ``SecuredMemory (unit: Bytes)`` The amount of content that is discarded from memory
 -  ``Disk`` Disk information
 -  ``Session`` Session information
--  ``FileTotal`` The number of total files
+-  ``FileTotal`` The total number of files
 -  ``FileOpened`` The number of opened local files
 -  ``FileInstance`` The number of caching files
 -  ``Cached`` Caching information
--  ``CacheFileEvent`` Caching file event
--  ``WaitingFiles2Delete`` The number of pending delete files
+-  ``CacheFileEvent`` A caching file event
+-  ``WaitingFiles2Delete`` The number of files pending deletion
 -  ``ClientHttpReqBypass`` The number of bypassed client HTTP requests
 -  ``ClientHttpReqDenied`` The number of denied HTTP requests
--  ``OriginTraffic`` Stats of the origin server traffic
--  ``PortBypass`` Stats of the port bypass traffic
--  ``ClientTraffic`` Stats of the client traffic
+-  ``OriginTraffic`` Origin server traffic stats
+-  ``PortBypass`` Port bypass traffic stats
+-  ``ClientTraffic`` Client traffic stats
 -  ``UrlBypass`` HTTP traffic stats that are bypassed to the origin server via URL matching or ``<BypassNoCacheRequest>``
 
 .. note::
 
-   Items that are only provided in 5 minute statistics.
+   Items that are only provided statistics in five minute increments.
    
-   -  ``ClientHttpReqBypassSum`` The number of total bypassed HTTP requests   
-   -  ``ClientHttpReqDeniedSum`` Total number of denied HTTP requests
+   -  ``ClientHttpReqBypassSum`` The total number of bypassed HTTP requests   
+   -  ``ClientHttpReqDeniedSum`` The total number of denied HTTP requests
 
 
 Disk Statistics
@@ -602,9 +602,9 @@ Provides statistics of the disk that the virtual host uses. ::
 -  ``Create`` The number of created local files
 -  ``Open`` The number of opened local files
 -  ``Delete`` The number of deleted local files
--  ``ReadCount`` The mumber of Read in the local file
+-  ``ReadCount`` The number of times that a local file is read
 -  ``ReadSize (unit: Bytes)`` The total size of read local files
--  ``WriteCount`` The number of Write in the local file
+-  ``WriteCount`` The number of times that a local file is written
 -  ``WriteSize (unit: Bytes)`` The total size of written local files
 -  ``Distribution`` Distribution of local files based on the size
 
@@ -652,14 +652,14 @@ Provides statistics of the disk that the session stattistics uses. ::
 -  ``Client`` The number of total HTTP client sessions
 -  ``ActiveClient`` The number of transmitting sessions among HTTP clients
 -  ``Origin`` The number of total origin server sessions
--  ``ActiveOrigin`` The number of transmitting sessions among origin server sessions.
+-  ``ActiveOrigin`` The number of transmitting sessions among origin server sessions
 
 
 
-The Origin Server Statistics
+Origin Server Statistics
 ------------------------------
 
-Provides traffic stats between STON and the origin server. ::
+Provides stats for traffic between STON and the origin server. ::
 
    "OriginTraffic":                             <OriginTraffic>                                  
    {                                              <HttpReqCount Sum="600">2</HttpReqCount>       
@@ -732,39 +732,39 @@ Provides traffic stats between STON and the origin server. ::
    },
 
 -  ``HttpReqCount`` The number of HTTP requests sent to the origin server
--  ``HttpReqHeaderSize (unit: Bytes)`` The size of HTTP header sent to the origin server
--  ``HttpReqBodySize (unit: Bytes)`` The size of HTTP Body sent to the origin server
--  ``HttpResHeaderSize (unit: Bytes)`` The size of HTTP header received at the origin server
--  ``HttpResBodySize (unit: Bytes)`` The size of HTTP Body received at the origin server
--  ``Response`` The resonse from the origin server (ResXXX)
+-  ``HttpReqHeaderSize (unit: Bytes)`` The size of the HTTP header sent to the origin server
+-  ``HttpReqBodySize (unit: Bytes)`` The size of the HTTP Body sent to the origin server
+-  ``HttpResHeaderSize (unit: Bytes)`` The size of the HTTP header received by the origin server
+-  ``HttpResBodySize (unit: Bytes)`` The size of the HTTP Body received by the origin server
+-  ``Response`` The response from the origin server (ResXXX)
 
    -  ``Count`` The number of responses
    -  ``Completed`` The number of completely transferred HTTP transactions
-   -  ``TimeRes`` HTTP resonse time
-   -  ``TimeComplete`` Completed time of the HTTP transaction
+   -  ``TimeRes`` The HTTP response time
+   -  ``TimeComplete`` The completion time of the HTTP transaction
 
 -  ``Response`` Origin server connection error
    
-   -  ``ConnectTimeout`` Connection failure
-   -  ``ReceiveTimeout`` Transmission delay
-   -  ``Close`` Origin server closed socket during transfer
+   -  ``ConnectTimeout`` A connection failure
+   -  ``ReceiveTimeout`` A transmission delay
+   -  ``Close`` The origin server closed socket during the transfer
    
 -  ``Connect`` Origin server connection stats
 
    -  ``Count`` The number of connections
-   -  ``AvgDNSQueryTime (unit: 0.01ms)`` Average DNS query time
-   -  ``AvgConnTime (unit: 0.01ms)`` Average connection time (TCP SYN transmittion ~ TCP SYN ACK reception)
+   -  ``AvgDNSQueryTime (unit: 0.01ms)`` The average DNS query time
+   -  ``AvgConnTime (unit: 0.01ms)`` The average connection time (TCP SYN transmission ~ TCP SYN ACK reception)
    
 .. note::
 
-   Items that are only provided in 5 minute statistics.
+   Items that are only provided statistics in five minute increments.
    
-   -  ``HttpReqCountSum`` Total number of HTTP requests
-   -  ``CountSum`` Total number of HTTP responses
-   -  ``CompletedSum`` Total number of completed HTTP transactions
-   -  ``ConnectTimeoutSum`` Total number of the origin server connection failures
-   -  ``ReceiveTimeoutSum`` Total number of the origin server transmission delays
-   -  ``CloseSum`` Total number of connection close by the origin server
+   -  ``HttpReqCountSum`` The total number of HTTP requests
+   -  ``CountSum`` The total number of HTTP responses
+   -  ``CompletedSum`` The total number of completed HTTP transactions
+   -  ``ConnectTimeoutSum`` The total number of origin server connection failures
+   -  ``ReceiveTimeoutSum`` The total number of origin server transmission delays
+   -  ``CloseSum`` The total number of connections closed by the origin server
       
    
 
@@ -792,14 +792,14 @@ Provides traffic stats via ``<PortBypass>``. ::
    ],
    
    
--  ``SrcPort/DestPort`` Bypassed STON port/origin server port
--  ``Session`` Total number of connected sessions
+-  ``SrcPort/DestPort`` Bypassed the STON port/origin server port
+-  ``Session`` The total number of connected sessions
 -  ``Hit`` Bypass connection stats
 
-   -  ``Established`` Total number of established connections
-   -  ``ClientClosed`` Total number of connection closed by clients
-   -  ``OriginClosed`` Total number of connection closed by the origin server
-   -  ``OriginCT`` Total number of origin server connection failures
+   -  ``Established`` The total number of established connections
+   -  ``ClientClosed`` The total number of connections closed by clients
+   -  ``OriginClosed`` The total number of connections closed by the origin server
+   -  ``OriginCT`` The total number of origin server connection failures
 
 -  ``ClientTraffic (unit: Bytes)`` Client traffic (In=Inbound, Out=Outbound)
 -  ``OriginTraffic (unit: Bytes)`` Origin server traffic (In=Inbound, Out=Outbound)
@@ -810,8 +810,8 @@ Client Statistics
 ------------------------------
 
 Client traffic is stated as multiple "Traffic" based on the stats configuration for each directory.
-All traffics are counted in the root(/) if stats for each directory have not been set. 
-If directory stats have been set, only the root(/) and directories invloved with traffic will be counted. ::
+If stats for each directory have not been set, all traffic is counted in the root(/). 
+If directory stats have been set, only the root(/) and directories involved with the traffic will be counted. ::
 
    "ClientTraffic":                             <ClientTraffics Depth="0" Accum="OFF" HttpsTraffic="OFF">
    {                                              <TrafficCount>1</TrafficCount>                         
@@ -971,50 +971,50 @@ If directory stats have been set, only the root(/) and directories invloved with
    }
    
 -  ``Depth`` The directory depth to collect stats
--  ``Accum`` If directory stats is set, then accumulate the stats of subdirectory to the stats of upper directory
--  ``HttpsTraffic`` Allow redundant accumulation of HTTPS traffics as HTTP traffics
--  ``TrafficCount`` Aggregated traffic count
--  ``Traffic`` Stats per each directory. Root(/) always have traffic.
+-  ``Accum`` If directory stats are set, then all subdirectory stats will be accumulated in the upper directory
+-  ``HttpsTraffic`` Allows redundant accumulation of HTTPS traffic as HTTP traffic
+-  ``TrafficCount`` The aggregated traffic count
+-  ``Traffic`` Stats per each directory. Roots(/) always have traffic.
 
-   -  ``Path`` Service directory
-   -  ``HttpReqCount(unit: Bytes)`` Total number of HTTP requests sent by clients
+   -  ``Path`` The service directory
+   -  ``HttpReqCount(unit: Bytes)`` The total number of HTTP requests sent by clients
    -  ``HttpReqHeaderSize(unit: Bytes)`` The size of HTTP request headers sent by clients
    -  ``HttpReqBodySize(unit: Bytes)`` The size of HTTP request Body sent by clients
-   -  ``HttpResHeaderSize(unit: Bytes)`` The size of HTTP response headers sent by the STON
-   -  ``HttpResBodySize(unit: Bytes)`` The size of HTTP response Body sent by the STON
-   -  ``Response`` Responses sent by the STON
+   -  ``HttpResHeaderSize(unit: Bytes)`` The size of HTTP response headers sent by STON
+   -  ``HttpResBodySize(unit: Bytes)`` The size of HTTP response Body sent by STON
+   -  ``Response`` Responses sent by STON
    
       -  ``Count`` Response counts
-      -  ``Completed`` Total number of completed transferred HTTP transactions
-      -  ``TimeRes`` HTTP response time
-      -  ``TimeComplete`` Completed time of the HTTP transaction
+      -  ``Completed`` The total number of completed transferred HTTP transactions
+      -  ``TimeRes`` The HTTP response time
+      -  ``TimeComplete`` The completion time of the HTTP transaction
         
 -  ``SSL(unit: Bytes)`` HTTPS traffic (RecvSize=received size, SendSize=transmitted size)
 -  ``RequestHit`` Cache HIT result
 -  ``FileSystem`` FileSystem access
 
-   -  ``GetAttr`` getattr function call count and response time. (FileCount: File response, DirCount: Dir response, FailCount: failure response)
-   -  ``Open`` open function call count and response time
-   -  ``Read`` read function call count and reponse time, requested size(BufferSize) and reponse size(BufferFilled)
-   -  ``RequestHit`` (File I/O access) Cache HIT result
+   -  ``GetAttr`` The getattr function call count and response time. (FileCount: File response, DirCount: Dir response, FailCount: failure response)
+   -  ``Open`` Opens the function call count and response time
+   -  ``Read`` Reads the function call count and response time, requested size(BufferSize) and response size(BufferFilled)
+   -  ``RequestHit`` (File I/O access) The cache HIT result
 
 
 .. note::
 
-   Items that are only provided in 5 minute statistics.
+   Items that are only provided statistics in five minute increments.
    
-   -  ``HttpReqCountSum`` Total number of the HTTP requests
-   -  ``CountSum`` Total number of HTTP responses
-   -  ``CompletedSum`` Total number of completed HTTP transactions
-   -  ``RequestHitSum`` Cache HIT result
+   -  ``HttpReqCountSum`` The total number of HTTP requests
+   -  ``CountSum`` The total number of HTTP responses
+   -  ``CompletedSum`` The total number of completed HTTP transactions
+   -  ``RequestHitSum`` The cache HIT result
    
 
 View
 ====================================
 
-View extracts statistics from multiple virtual hosts 
-The concept of View came from the View that deals with multiple Tables in a Database. 
-The structure is as simple as below. ::
+Extracts statistics from multiple virtual hosts. 
+The concept came from the View that deals with multiple Tables in a Database. 
+The structure is simple, as shown below. ::
 
    # vhosts.xml
 
@@ -1038,13 +1038,13 @@ The structure is as simple as below. ::
    </Vhosts>
    
 The View can even include a virtual host that does not exist. 
-The following is the stats provided by View. ::
+The following shows the stats provided by View. ::
 
 -  Realtime XML/JSON
 -  SNMP - cache(1.3.6.1.4.1.40001.1.4).10 ~ 12
 
-In order to help your understanding, let's take an example that View can be adopted. 
-There are three administrators who are running their favorite sport communities. ::
+Let's explore a scenario where View could be adopted. 
+There are three administrators who are running their favorite sport communities(baseball.com, basketball.com, and football.com). ::
 
    # vhosts.xml
 
@@ -1054,18 +1054,18 @@ There are three administrators who are running their favorite sport communities.
      <Vhost Name="football.com"> ... </Vhost>
    </Vhosts>
    
-Now, they decided to run a comprehensive sports community service. 
-The sprots.com domain is considered because it can include three sports in the same category. 
-Development/management team have to resolve following issues.
+Now, they decide to run a comprehensive sports community service. 
+The sports.com domain is considered because it can include three sports in the same category. 
+The development/management team has to resolve the following issues:
 
-- The service is provided through sports.com.
-- Previous domains and services have to be kept the same for previous users.
-- Merge development teams. Merge management teams.
-- Only the first page is newly built. Previous services will be provided via links.
-- There are not enough budget, manpower, time.
-- All purchase procedures are completed.
+- Provide the service through sports.com
+- Keep previous domains and services the same for previous users
+- Merge development teams. Merge management teams
+- Build only the first page and provide all previous services via links
+- Manage without enough budget, manpower, or time
+- Complete all purchase procedures
 
-In order to reasonably meet all of the above requirements, development team decided to specify previous domains in the first directory as below. ::
+In order to reasonably meet all of the above requirements, the development team decides to specify previous domains in the first directory, as shown below. ::
 
    # Previous services
    http://baseball.com/standing/list.html
@@ -1091,8 +1091,8 @@ This can be configured easily with the URL preprocessor. ::
      </URLRewrite>  
    </Vhosts>
    
-Newly merged management team now has to monitor not only each service but also integrated service such as traffics, sessions and response codes. 
-Most administrators are familiar with SNMP, and in order to acquire integrated index, the View can be configured as below.
+The newly merged management team now has to monitor not only each service but also integrated services such as traffic, sessions, and response codes. 
+Most administrators are familiar with SNMP. In order to acquire an integrated index, the View can be configured as shown below.
 
 .. figure:: img/view1.png
    :align: center
@@ -1122,7 +1122,7 @@ As you can see from the above example, the combination of URL Rewrite and View i
 View Statistics
 ----------------------------
 
-View statistics provides identical stats of the virtual host, except the following different tag names. ::
+Provides identical stats for the virtual host, except the following different tag names. ::
 
    "View":                                  <View ...>        
    [                                           ...            
@@ -1136,7 +1136,7 @@ View statistics provides identical stats of the virtual host, except the followi
 Virtual Host List Inquiry
 ====================================
 
-This inquiries the list of virtual hosts. ::
+This requests the list of virtual hosts. ::
 
     http://127.0.0.1:10040/monitoring/vhostslist
     
@@ -1159,13 +1159,13 @@ The result is returned in JSON format. ::
 Caching Information
 ====================================
 
-This monitors file status of being cached. 
-Generally, files are distinguished by URLs, but there could be multiple files when a URL has other options(eg. Accept-Encoding). ::
+Monitors the status of files being cached. 
+Generally, files are distinguished by URLs, but there could be multiple files when a URL has other options(e.g. Accept-Encoding). ::
 
     http://127.0.0.1:10040/monitoring/fileinfo?url=example.com/sample.dat
     
 The result is returned in JSON format.
-The following is the result of /sample.dat file inquiry. ::
+The following is the result of a /sample.dat file inquiry. ::
 
     {
         "version": "2.0.0",
@@ -1211,38 +1211,38 @@ The following is the result of /sample.dat file inquiry. ::
         ]
     }
     
--  ``URI`` File URI
+-  ``URI`` The file URI
 -  ``Accept-Encoding`` ("Y" or "N") If Accept-Encoding is supported, then "Y"
--  ``RefCount`` File reference count
--  ``Size`` (Bytes) File size
--  ``Disk-Index`` (starting from 0) Saved disk index
--  ``FID`` File ID
--  ``LocalPath`` Local path
+-  ``RefCount`` The file reference count
+-  ``Size`` (Bytes) The file size
+-  ``Disk-Index`` (starting from 0) The saved disk index
+-  ``FID`` The file ID
+-  ``LocalPath`` The local path
 -  ``File-Opened`` ("Y" or "N") If a local file is opened, then "Y"
--  ``File-Updating`` If a file is being updated, specify the pointer of the updated object
--  ``Downloader-Count`` Total number of sessions that are downloading corresponding file from the origin server
--  ``LastAccess`` (Last accessed time, last accessed time - current time) [ 2012.09.03 14:29:50, -2 ] means that the file is accessed at 2012.09.03 14:29:50 and it is 2 seconds before.
+-  ``File-Updating`` If a file is being updated, File-Updating specifies the pointer of the updated object
+-  ``Downloader-Count`` The total number of sessions that are downloading a corresponding file from the origin server
+-  ``LastAccess`` (Last accessed time, last accessed time - current time) [ 2012.09.03 14:29:50, -2 ] Means that the file was accessed two seconds prior to 2012.09.03 14:29:50
 -  ``UpdateTime`` (Modified time, modified time - current time) The time when the file is modified. 304 Not Modified will also update the time.
--  ``TTL-Left`` (Expiration time, expiration time - current time) Expiration time of the contents. If TTL is left, the value is positive, otherwise a negative is returned.
--  ``ResponseCode`` Origin server response code
+-  ``TTL-Left`` (Expiration time, expiration time - current time) Expiration time of the content. If there is TTL left, the value is positive, otherwise a negative value is returned.
+-  ``ResponseCode`` The origin server response code
 -  ``ContentType`` MIME Type
--  ``LastModifiedTime`` (Last Modified Time, Last Modified Time`` current time) Last Modified Time sent from the origin server. If the origin server didn't send this value, 0 will be returned.
--  ``ExpireTime`` (Expire Time, Expire Time`` current time) Expire Time sent from the origin server. If the origin server didn't send this value, 0 will be returned.
--  ``CacheControl`` ("no-cache" or "not-specified" or (Integer)) Cache-Contorl value sent from the origin server.
--  ``ETag`` ETag created by STON
--  ``CustomTTL`` Custom TTL. If not configured, 0 will be returned.
+-  ``LastModifiedTime`` (Last Modified Time, Last Modified Time - current time) The last Modified Time sent from the origin server. If the origin server didn't send this value, 0 will be returned.
+-  ``ExpireTime`` (Expire Time, Expire Time - current time) The expire Time sent from the origin server. If the origin server didn't send this value, 0 will be returned.
+-  ``CacheControl`` ("no-cache" or "not-specified" or (Integer)) The cache-Control value sent from the origin server.
+-  ``ETag`` An ETag created by STON
+-  ``CustomTTL`` A custom TTL. If not configured, 0 will be returned.
 -  ``NoMoreExist`` ("Y" or "N") If the file is pending for discard, then "Y"
--  ``LocalFileExist`` ("Y" or "N") If the file is exist in the local, then "Y" (Files that are not 200 OK will always return "Y")
+-  ``LocalFileExist`` ("Y" or "N") If the file exist locally, then "Y" (Files that are not 200 OK will always return "Y")
 -  ``SmallFile`` ("Y" or "N") If the file is considered as a small file, then "Y" (development purpose)
--  ``State`` ("Not Init" or "Cached" or "Error") File status
+-  ``State`` ("Not Init" or "Cached" or "Error") The file status
 -  ``Deleted`` ("Y" or "N") If the file is deleted, then "Y" (development purpose)
--  ``AddedSize`` ("Y" or "N") If the file size is reflected to the stats, then "Y" (development purpose)
+-  ``AddedSize`` ("Y" or "N") If the file size is reflected in the stats, then "Y" (development purpose)
 -  ``TransferEncoding`` ("Y" or "N") If Transfer-Encoding is supported, then "Y"
--  ``Compression`` Compression method
+-  ``Compression`` The compression method
 -  ``Purge`` ("Y" or "N") If the file is purged, then "Y"
--  ``Ignore-IMS`` ("Y" or "N") When the file is being updated, if the setting does not send If-Modified-Since header, then "Y"
--  ``Redirect-Location`` Location header value
--  ``Content-Disposition`` Content-Disposition header value
+-  ``Ignore-IMS`` ("Y" or "N") When the file is being updated, if the setting does not send an If-Modified-Since header, then "Y"
+-  ``Redirect-Location`` The location header value
+-  ``Content-Disposition`` The Content-Disposition header value
 -  ``NoCache`` ("Y" or "N") If the origin server replied no-cache, then "Y"
 
 
@@ -1253,7 +1253,7 @@ Log Trace
 ====================================
 
 Subscribes log in real time. 
-Access, Origin, Monitoing logs have to specify virtual host(vhost). ::
+Access, Origin, and Monitoring logs have to specify a virtual host(vhost). ::
 
     http://127.0.0.1:10040/monitoring/logtrace/info
     http://127.0.0.1:10040/monitoring/logtrace/deny
