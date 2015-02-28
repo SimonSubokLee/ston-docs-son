@@ -265,18 +265,18 @@ Let's take a look at the following client request and see how STON would respond
 DIMS
 ====================================
 
-DIMS(Dynamic Image Management System) function processes an original image to various forms. 
+The DIMS(Dynamic Image Management System) function processes an original image into various forms. 
 DIMS is an expansion based on `mod_dims <https://code.google.com/p/moddims/wiki/WebserviceApi>`_. 
-Total 6 forms(crop, thumbnail, resize, reformat, quality, composite) are available, and these forms can be complexed.
+A total of six forms(crop, thumbnail, resize, reformat, quality, and composite) are available, and these forms can be combined.
 
 .. figure:: img/dims.png
    :align: center
    
    Various dynamic image processing
 
-Dynamically generated image is called by pre-defined keywords and process options after the URL of original image. 
-Processed image is cached as it is until the image of the origin server is modified. 
-For example, the following expressions can process /img.jpg file in the origin server. 
+A dynamically generated image is called by pre-defined keywords and process options after the URL of an original image. 
+The processed image is cached as it is until the image in the origin server is modified. 
+For example, the following expressions can process an /img.jpg file in the origin server. 
 (Let's say "12AB" is a pre-defined keyword.) ::
 
    http://image.example.com/img.jpg    // Original image
@@ -293,8 +293,8 @@ If ``<Dims>`` is not configured, it is inactivated. ::
 
 -  ``<Dims>``
 
-   - ``Status`` activates DIMS ( ``Active`` or ``Inactive`` )   
-   - ``Keyword`` distinguishes the original and DIMS   
+   - ``Status`` Activates DIMS ( ``Active`` or ``Inactive`` )   
+   - ``Keyword`` Distinguishes the original and DIMS   
    - ``Port`` WM connection port
    
 In order to utilize ``<Dims>``, :ref:`wm` must be running.
@@ -303,9 +303,8 @@ In order to utilize ``<Dims>``, :ref:`wm` must be running.
 Crop
 -----------------------
 
-Crop desired section of an image from top left corner. 
-Section is specified by **widthxheight{+-}x{+-}y{%}** format. 
-The following example crops 100(width) by 200(height) section of image from x=20, y=30. ::
+To crop the desired section of an image from the top left corner, the section is specified by the **widthxheight{+-}x{+-}y{%}** format. 
+The following example crops a 100(width) by 200(height) section of an image from x=20, y=30. ::
 
    http://image.example.com/img.jpg/dims/crop/100x300+20+30/
     
@@ -315,21 +314,21 @@ Generating Thumbnails
 
 This section explains how to generate thumbnails. 
 The size and option can be expressed with **widthxheight{%} {@} {!} {<} {>}**.
-Normally, maximum value is applied for width and height of the image. 
+Normally, a maximum value is applied for the width and height of the image. 
 Even if the image is stretched or shrunk, the width and height ratio is maintained. 
-If the image has to have a specific size, an exclamation mark(!) is added at the end of the expression. 
-**640X480!** expression will generate 640x480 size thumbnail image. 
-If either width or height is specified only, the omitted value is automatically determined by the width and height ratio. 
+If the image has be a specific size, an exclamation mark(!) is added at the end of the expression. 
+A **640X480!** expression will generate a 640x480 size thumbnail image. 
+If either the width or height is specified only, the omitted value is automatically determined by the width and height ratio. 
 
-For example, **/thumbnail/100/** expression will determine the height of thumbnail with the width attribute, 
-and **/thumbnail/x200/** expression will determine the width of thumbnail by the height attribute. 
-The size of thumbnail can be expressed with percentage(%) of the original image. 
+For example, the **/thumbnail/100/** expression will determine the height of the thumbnail based upon the width attribute, 
+and the **/thumbnail/x200/** expression will determine the width of thumbnail based upon the height attribute. 
+The thumbnail size can be expressed with a percentage(%) of the original image. 
 In order to stretch the image, use a value that exceeds 100(eg. 125%). 
 Likewise, in order to shrink the image, use a value less than 100.
-You should be aware that the URL encoding rule encodes % character as %25. 
+You should be aware that the URL encoding rule encodes the % character as %25. 
 
-For example, 50% expression will be encoded as 50%25. 
-The below is an example that generates a thumbnail of width=78 and height=110. ::
+For example, a 50% expression will be encoded as 50%25. 
+Below is an example that generates a thumbnail with the dimensions of width=78 and height=110. ::
 
    http://image.example.com/img.jpg/dims/thumbnail/78x110/
     
@@ -337,10 +336,10 @@ The below is an example that generates a thumbnail of width=78 and height=110. :
 Resizing
 -----------------------
 
-This function resizes the image size. 
-The size of image is expressed with **width x height** format. 
+This function resizes the image. 
+The size of an image is expressed in the **width x height** format. 
 The ratio will be kept the same after the resizing. 
-The below is an example that resizes an original image to width=200 and height=200. ::
+Below is an example that resizes an original image to width=200 and height=200. ::
 
    http://image.example.com/img.jpg/dims/resize/200x200/
 
@@ -350,7 +349,7 @@ Converting Format
 
 This function converts the image format. 
 Supported formats are "png", "jpg", "gif". 
-The following is an example that converts JPG to PNG. ::
+The following is an example that converts "jpg" to "png". ::
 
    http://image.example.com/img.jpg/dims/format/png/
 
@@ -359,9 +358,9 @@ Adjusting Image Quality
 -----------------------
 
 This function adjusts the image quality. 
-It is useful as it can reduce the volume of transferring image. 
+It is useful as it can reduce the volume of the transferring image. 
 Effective values are from 0 to 100. 
-The following example will adjust the quality of image to 25%. ::
+The following example will adjust the quality of an image to 25%. ::
 
    http://image.example.com/img.jpg/dims/quality/25/
   
@@ -369,9 +368,9 @@ The following example will adjust the quality of image to 25%. ::
 Image Synthesis
 -----------------------
 
-This function systhesize two images.
-Not like the previous functions, the image composite condition has to be pre-determined. 
-This function is helpful when applying watermark on the image.. ::
+This function synthesizes two images.
+Unlike the previous functions, the image composite condition has to be pre-determined. 
+This function is helpful when applying a watermark on the image.. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -384,31 +383,31 @@ This function is helpful when applying watermark on the image.. ::
     
 -  ``<Composite>``
 
-    Configure the image composite condition. The condition is determined by attributes.
+    Configures the image composite condition, which is determined by attributes.
     
-    -  ``Name`` designates a name to be called. 
-       '/' character cannot be used. 
-       This option is located behind the "/composite/" of URL.
+    -  ``Name`` Designates what the image will be called. 
+       The "/" character cannot be used. 
+       This option is located behind the "/composite/" of the URL.
        
-    -  ``File`` designates a path of the image to be synthesized. 
+    -  ``File`` Designates a path for the image to be synthesized. 
     
-    -  ``Gravity (default: c)`` There are 9 composite points (nw, n, ne, w, c, e, sw, s, se).
+    -  ``Gravity (default: c)`` There are nine composite points (nw, n, ne, w, c, e, sw, s, and se).
        
        .. figure:: img/conf_dims2.png
           :align: center
        
-          Gavity Reference Points
+          Gravity Reference Points
           
-    -  ``Geometry (default: +0+0)`` Based on the ``Gravity``, ``Geometry`` decides where the composite image is located at. 
-       {+-}x{+-}y. The red dots are reference points that stands for +0+0 of the ``Gravity`` attribute.
-       The green arrow stands for increasing x axis, and the purple one stands for increasing y axis. 
-       Using -x-y will locate the composite image outside of the boundary and will be invisible in the result image. 
-       This method looks quite complicated, but it automatically calculates the size of image so results are consistent. 
+    -  ``Geometry (default: +0+0)`` Based on the ``Gravity``, ``Geometry`` decides where the composite image should be located. 
+       {+-}x{+-}y. The red dots are reference points that stand for +0+0 of the ``Gravity`` attribute.
+       The green arrow stands for the increasing x-axis, and the purple one stands for the increasing y-axis. 
+       Using -x-y will locate the composite image outside of the boundary, but it will be invisible in the result image. 
+       This method looks quite complicated, but it automatically calculates the size of the image so that results are consistent. 
        In addition, you can use a percentage option(%) like +x%+y% to locate the image.
 
-    -  ``Dissolve (default: 50)`` Transparency of the image to be synthesized(0~100).
+    -  ``Dissolve (default: 50)`` The level of transparency of the image to be synthesized(0~100).
 
-If you configure the ``<Composite>``, ``Name`` property can be used to synthesize image. ::
+If you configure the ``<Composite>``, the ``Name`` property can be used to synthesize the image. ::
 
     http://image.example.com/img.jpg/dims/composite/water1/
 
@@ -417,9 +416,9 @@ If you configure the ``<Composite>``, ``Name`` property can be used to synthesiz
 Conditional Process of Original Image
 -----------------------
 
-You can dynamically apply different processing options based on the condition of original image. 
+You can dynamically apply different processing options based on the condition of the original image. 
 For example, if you want to decrease the image quality by 50% for images that are smaller than 1024 X 768, 
-and resize the image to 1024 X 768 for images that are bigger than 1024 X 768, ``<ByOriginal>`` can be used as below. ::
+and resize the image to 1024 X 768 for images that are bigger than 1024 X 768, ``<ByOriginal>`` can be used, as shown below. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -432,24 +431,24 @@ and resize the image to 1024 X 768 for images that are bigger than 1024 X 768, `
    </Dims>   
 
 -  ``<ByOriginal>``
-   can be called by ``Name`` attribute. 
-   Various ``<Condition>`` can be configured.
+   Can be called by the ``Name`` attribute. 
+   Various ``<Condition>`` configurations can be made.
    
 -  ``<Condition>``
-   When condition is met, apply configured value. 
-   ("상관없음"으로 판단한다는게 무슨뜻인지??)설정하는 속성은 "상관없음"으로 판단한다.
+   When a condition is met, apply the configured value. 
 
    -  ``Width`` The condition is met if the width is smaller than this value.   
    -  ``Heigth`` The condition is met if the height is smaller than this value.
+   If a condition is not specified, the conversion will occur regardless of the original image size.
 
-``<Condition>`` is applied in the order. 
-Therefore specific conditions have to come first.
-The function can be called as following. ::
+``<Condition>`` is applied in order. 
+Therefore, specific conditions have to come first.
+The function can be called as follows. ::
 
    http://image.example.com/img.jpg/dims/byoriginal/size1/
     
-Different ``<Composite>`` conditions can be applied based on the size of image.
-The following example shows how to set various pre-defined ``Name`` in ``<Composite>``. ::
+Different ``<Composite>`` conditions can be applied based on the size of the image.
+The following example shows how to set various pre-defined ``Name`` creations in a ``<Composite>``. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -465,7 +464,7 @@ The following example shows how to set various pre-defined ``Name`` in ``<Compos
       </ByOriginal>
    </Dims>   
     
-The following expression will generate composite image based on the size of original image. ::
+The following expression will generate a composite image based on the size of original image. ::
 
    http://image.example.com/img.jpg/dims/byoriginal/size_water/
 
@@ -474,23 +473,23 @@ The following expression will generate composite image based on the size of orig
 ETC
 -----------------------
 
-Combining above functions will allow you to generate complex image. 
-For example, generating thumbnail(78x110), JPG format converting to PNG, and 50% image quality options can be processed with a single call. ::
+Combining the above functions will allow you to generate a acomplex image. 
+For example, a single call can generate a thumbnail(78x110), convert JPG format to PNG, and create 50% image quality options. ::
 
    http://image.example.com/img.jpg/dims/thumbnail/78x110/format/png/quality/50/
     
-DIMS uses URL for image processing. 
-Therefore, you should be careful for other options that might affect to the URL to avoid any unexpected result.
+DIMS uses a URL for image processing. 
+Therefore, in order to avoid any unexpected results, you should be leery of other options that might affect the URL.
 
 -  If :ref:`caching-policy-applyquerystring` is set to ``OFF``, the QueryString prior to the keyword will be ignored. ::
    
       http://image.example.com/img.jpg?session=5234&type=37/dims/resize/200x200/
       
    The above example will be identified as it is if the attribute is ``ON``.
-   However, if the attribute is ``OFF``, the above URL will be identified as below. ::
+   However, if the attribute is ``OFF``, the above URL will be identified as shown below. ::
       
       http://image.example.com/img.jpg/dims/resize/200x200/
       
--  If :ref:`caching-policy-casesensitive` is set to ``OFF``, all characters in the URL will be converted to lower characters.
-   Therefore, upper characters are included in the DIMS keyword, the keyword will not be recognized. 
-   Using lower characters for the keyword is recommended.
+-  If :ref:`caching-policy-casesensitive` is set to ``OFF``, all characters in the URL will be converted to lowercase characters.
+   Therefore, using lowercase characters for the keyword is recommended.
+   When uppercase characters are included in the DIMS keyword, the keyword will not be recognized. 
