@@ -3,9 +3,9 @@
 Chapter 17. Log
 ******************
 
-This chapter will explain about the log.
+This chapter will explain the log.
 A service begins with the log and ends with the log.
-The log is most valuable asset, and a legislation, and a arbitrator of system failure.
+The log is the most valuable asset to keep, and a legislation to obey, and an arbitrator of system failure.
 
 There are global and virtual host logs. 
 All logs can be turned on or off, and they have identical properties. ::
@@ -14,25 +14,25 @@ All logs can be turned on or off, and they have identical properties. ::
 
 -  ``Type (default: time)`` and ``Unit (default: 1440 minutes)`` set log rolling conditions.
 
-   - ``time`` Roll the log file for every configured ``unit`` time(unit: minute).
-   - ``size`` Roll the log file for every configured ``unit`` size(unit: MB).
+   - ``time`` Rolls the log file for every configured ``unit`` of time (unit: minute).
+   - ``size`` Rolls the log file for every configured ``unit`` of size (unit: MB).
    - ``both`` By using a comma(,), time and size can be configured at the same time.
-     For example, Unit="1440, 100" configuration rolls the log file for every 24 hours(1440 minutes) or every 100MB.
+     For example, the Unit="1440, 100" configuration rolls the log file every 24 hours (1,440 minutes) or every 100MB.
      
--  ``Retention (default: 10 files)`` Keep the set number of log files.
+-  ``Retention (default: 10 files)`` Keeps the set number of log files.
 
--  ``Compression (default: OFF)`` Compress the log when rolling.
-   For example, when access_20140715_0000.log file is rolling, it is compressed and saved as access_20140715_0000.log.gz.
+-  ``Compression (default: OFF)`` Compresses the log when rolling.
+   For example, when the access_20140715_0000.log file is rolling, it is compressed and saved as access_20140715_0000.log.gz.
 
-If the ``Type`` is set to "time" and the ``Unit`` is set to 10, log is rolled for every multiple of 10 minutes.
+If the ``Type`` is set to "time" and the ``Unit`` is set to 10, the log is rolled for every multiple of 10 minutes.
 For example, even if the service started at 2:18, logs will be rolled at 2:20, 2:30, 2:40, and so on. 
-Likewise, if you want to roll the log once at midnight, you can set the ``Unit`` to 1440(60 minutes X 24 hours).
-In the ``time`` configuration, log will be rolled at least once a day, therefore the maximum value of ``Unit`` cannot exceed 1440.
+Likewise, if you want to roll the log once at midnight, you can set the ``Unit`` to 1,440 (60 minutes X 24 hours).
+In the ``time`` configuration, the log will be rolled at least once a day; therefore, the maximum value of ``Unit`` cannot exceed 1,440.
 
 .. figure:: img/log_rolling1.jpg
    :align: center
    
-If you set the maximum value 1440 for Unit, log will be recorded as the below figure.
+If you set the maximum value of 1,440 for "Unit", the log will be recorded as shown in the figure below.
 
 .. figure:: img/log_rolling2.jpg
    :align: center
@@ -48,7 +48,7 @@ If you set the maximum value 1440 for Unit, log will be recorded as the below fi
 Install Log
 ====================================
 
-Every details during installation/update will be recorded in the install.log.
+All details during installation/update will be recorded in the install.log.
 No extra configuration is needed for this log. ::
 
     #DownloadURL: http://foobar.com/ston/ston.2.0.0.rhel.2.6.32.x64.tar.gz
@@ -112,14 +112,14 @@ No extra configuration is needed for this log. ::
 Info Log
 ====================================
 
-Info log can be configured in the global setting(server.xml). ::
+The Info log can be configured in the global setting(server.xml). ::
 
    # server.xml - <Server><Cache>
    
    <InfoLog Type="size" Unit="1" Retention="5">ON</InfoLog>   
 
 -  ``<InfoLog> (default: ON, Type: size, Unit: 1)``   
-   Records operation and configuration changes of STON.
+   Records operation and configuration changes in STON.
    
    
 .. _admin-log-deny:
@@ -127,7 +127,7 @@ Info log can be configured in the global setting(server.xml). ::
 Deny Log
 ====================================
 
-Deny log is configured in the global setting(server.xml). ::
+The Deny log is configured in the global setting(server.xml). ::
 
    # server.xml - <Server><Cache>
 
@@ -135,19 +135,19 @@ Deny log is configured in the global setting(server.xml). ::
 
 -  ``<DenyLog> (default: ON, Type: size, Unit: 1)``
 
-   Deny log records blocked IP addresses by :ref:`access-control-serviceaccess`. ::
+   The deny log records blocked IP addresses by :ref:`access-control-serviceaccess`. ::
    
       #Fields: date time c-ip deny
       2012.11.15 07:06:10 1.1.1.1 AP
       2012.11.15 07:06:26 2.2.2.2 GIN
       2012.11.15 07:06:30 3.3.3.3 3.3.3.1-255
       
-   Each fields are distinguished by an empty space, and each field specifies the following.
+   Each field is distinguished by an empty space, and each specifies the following:
    
-   - ``date`` date
-   - ``time`` time
-   - ``c-ip`` client's IP
-   - ``deny`` denied condition
+   - ``date`` Date
+   - ``time`` Time
+   - ``c-ip`` Client's IP
+   - ``deny`` Denied condition
    
    
 .. _admin-log-originerror:
@@ -155,7 +155,7 @@ Deny log is configured in the global setting(server.xml). ::
 OriginError Log
 ====================================
 
-OriginError log is configured in the global setting(server.xml). ::
+The OriginError log is configured in the global setting(server.xml). ::
 
    # server.xml - <Server><Cache>
    
@@ -163,7 +163,7 @@ OriginError log is configured in the global setting(server.xml). ::
 
 -  ``<OriginErrorLog> (default: OFF, Type: size, Unit: 5, Warning: OFF)``
 
-   OriginError log records errors only occured in the origin server of all virtual hosts. 
+   The OriginError log records only the errors that occur in the origin server of all virtual hosts. 
    Errors consist of connection timeouts and receive timeouts, and exclusion/recovery results of the origin server are logged. ::
    
       #Fields: date time vhostname level s-domain s-ip cs-method cs-uri time-taken sc-error sc-resinfo
@@ -175,32 +175,32 @@ OriginError log is configured in the global setting(server.xml). ::
       #2012.11.15 07:11:11 [example.com] 192.168.0.13 recovered back in service
       #2012.11.15 07:11:12 [example.com] Origin server list: 192.168.0.13
    
-   Each fields are distinguished by an empty space, and each field specifies the following.
+   Each field is distinguished by an empty space, and field specifies the following:
    
-   - ``date`` Date of error occurance
-   - ``time`` Time of error occurance
+   - ``date`` Date of error occurrence
+   - ``time`` Time of error occurrence
    - ``vhostname`` [Virtual host]
    - ``level`` [Error level(Error or Warning)]
    - ``s-domain`` Origin server domain
    - ``s-ip`` Origin server IP
    - ``cs-method`` HTTP Method sent to the origin server from STON
    - ``cs-uri`` URI sent to the origin server from STON
-   - ``time-taken`` Elapsed time to occur an error
-   - ``sc-error`` Types of error
-   - ``sc-resinfo`` Server response information at the error occurance(distinguished wih a comma)
+   - ``time-taken`` Amount of time that elapsed until the system error
+   - ``sc-error`` Type of error
+   - ``sc-resinfo`` Information of response from the server when error occurred (distinguished with a comma)
    
-   If ``Warning`` property is set to ``ON``, the following erroneous HTTP communication will be logged. ::
+   If the ``Warning`` property is set to ``ON``, the following erroneous HTTP communication will be logged. ::
    
       2012.11.15 07:09:03 [example.com] [WARNING] 10.10.10.10 121.189.63.219 GET /716439_SM.jpg 20110 PartialResponseOnNormalRequest Res=206,Len=2635
       2012.11.15 07:09:03 [example.com] [WARNING] 10.10.10.10 121.189.63.219 GET /716439_SM.jpg 20110 ClosedWithoutResponse -
       
-   An erroneous HTTP communication occurs at the following cases.
+   An erroneous HTTP communication occurs in the following cases:
    
    - ``ClosedWithoutResponse`` Connection closed by the origin server. HTTP response is not returned.
    - ``ClosedWhenDownloading`` Connection closed by the origin server. Desired Content-Length is not downloaded.
-   - ``NotPartialResponseOnRangeRequest`` Range request is not responded with 206 response code.
-   - ``DifferentContentLengthOnRangeRequest`` Content-Length is different from requested Range.
-   - ``PartialResponseOnNormalRequest`` Response code 206 is returned for non-Range request.
+   - ``NotPartialResponseOnRangeRequest`` Range request is not returned by 206 response code.
+   - ``DifferentContentLengthOnRangeRequest`` Content-Length is not matching with the requested Range.
+   - ``PartialResponseOnNormalRequest`` Response code 206 is returned for a non-Range requests.
 
 
 
@@ -209,7 +209,7 @@ OriginError log is configured in the global setting(server.xml). ::
 SysLog Transfer
 ====================================
 
-Use `syslog <http://en.wikipedia.org/wiki/Syslog>`_ protocol to forward logs with UDP in real time. 
+Use the `syslog <http://en.wikipedia.org/wiki/Syslog>`_ protocol to forward logs with UDP in real time. 
 All logs can be configured to be transferred to syslog. ::
 
    # server.xml - <Server><Cache>
@@ -222,7 +222,7 @@ All logs can be configured to be transferred to syslog. ::
 
    - ``OFF (default)`` Does not use syslog.
    
-   - ``ON`` Transfer the log to ``<SysLog>`` that is configured underneath of current tag.
+   - ``ON`` Transfer the log to ``<SysLog>`` that is configured underneath the current tag.
    
 The following is an example of configuring syslog when ``<OriginErrorLog>`` is being logged. ::
 
@@ -234,15 +234,15 @@ The following is an example of configuring syslog when ``<OriginErrorLog>`` is b
       <SysLog Priority="mail.debug" Dest="log.example.com" />
    </OriginErrorLog>
     
-1. Set the property of ``SysLog`` in the ``<OriginErrorLog>``.
-#. Create the ``<SysLog>`` tag underneath of the ``<OriginErrorLog>``. The log can be transferred to configured number of servers at the same time.
-#. Configures the property of ``Priority`` in the ``<SysLog>``. 
-   The expression is consist of a combination of `Facility Levels <http://en.wikipedia.org/wiki/Syslog#Facility_levels>`_ in syslog and 
+1. Set ``Syslog`` properties in the ``<OriginErrorLog>``.
+#. Create the ``<SysLog>`` tag underneath the ``<OriginErrorLog>``. The log can be transferred to a configured number of servers at the same time.
+#. Configure the ``Priority`` properties in the ``<SysLog>``. 
+   The expression consists of a combination of `Facility Levels <http://en.wikipedia.org/wiki/Syslog#Facility_levels>`_ in syslog and 
    `Severity levels <http://en.wikipedia.org/wiki/Syslog#Severity_levels>`_.
-#. Configures the property of ``Dest`` in the ``<SysLog>``. The ``Dest`` stands for the syslog reception server, and if the reception port is 514, it can be omitted.
+#. Configure the ``Dest`` properties in the ``<SysLog>``. ``Dest`` stands for the syslog reception server. If the reception port is 514, it can be omitted.
 
-The below is a sys log example based on the above configurations. 
-the tag in the syslog is logged as STON/{log name}. ::
+The configuration below is a sys log example based on the above configurations. 
+The tag in the syslog is logged as STON/{log name}. ::
 
     Mar 12 11:24:24 192.168.0.1 STON/ORIGINERROR: 2013-03-12 14:09:20 [ERROR] [example.com] - 192.168.0.14 GET /1.gifd 1996 Connect-Timeout -
     Mar 12 11:24:24 192.168.0.1 STON/ORIGINERROR: 2013-03-12 14:09:22 [ERROR] [example.com] - 192.168.0.14 GET /favicon.ico 1995 Connect-Timeout -
@@ -252,10 +252,10 @@ the tag in the syslog is logged as STON/{log name}. ::
     
 
 
-Saving Log on Each Virtual Host
+Saving Virtual Host Logs
 ====================================
 
-Logs of each virtual host are recorded separately. 
+Each virtual host's logs are recorded separately. 
 Even if the log is set to ``OFF``, :ref:`api-monitoring-logtrace` works as normal. ::
 
    # server.xml - <Server><VHostDefault>
@@ -265,8 +265,8 @@ Even if the log is set to ``OFF``, :ref:`api-monitoring-logtrace` works as norma
       ... (skip) ...
    </Log>   
 
--  ``<Log>`` Configure the directory with ``Dir`` attirbute where log will be recorded at. 
-   Log is created in the virtual host directory that is underneath of the configured directory.
+-  ``<Log>`` Configures the directory with the ``Dir`` attribute where the log will be recorded. 
+   The log is created in the virtual host directory that is underneath the configured directory.
    
 
 
@@ -275,7 +275,7 @@ Even if the log is set to ``OFF``, :ref:`api-monitoring-logtrace` works as norma
 DNS Log
 ====================================
 
-If the origin server is set as a Domain, records the Resolving result. ::
+If the origin server is set as a Domain, the DNS log records the Resolving result. ::
 
    # server.xml - <Server><VHostDefault><Log>
    # vhosts.xml - <Vhosts><Vhost><Log>
@@ -295,16 +295,16 @@ If the origin server is set as a Domain, records the Resolving result. ::
    2014-07-30 12:24:38 example.com 152 173.194.127.23,173.194.127.24,173.194.127.31,173.194.127.15 4 9 success
    2014-07-30 12:25:03 example.com 127 173.194.127.31,173.194.127.15,173.194.127.23,173.194.127.24 4 15007 success
 
-Each fields are distinguished by an empty space, and each field specifies the following.
+Each field is distinguished by an empty space, and each specifies the following:
 
 -  ``date`` Date
 -  ``time`` Time
 -  ``domain`` Target domain
--  ``ttl`` Valid time of the record(Time To Live)
+-  ``ttl`` (Time To Live) Valid time of the record
 -  ``ip-list`` IP list
 -  ``ip-count`` Number of IP
 -  ``time-taken`` Running time
--  ``result`` success or fail
+-  ``result`` Success or failure
 
 
 .. _admin-log-access:
@@ -313,7 +313,7 @@ Access Log
 ====================================
 
 Records HTTP transactions of all clients. 
-Log is recorded when HTTP transaction is completed, and completed transaction means either transfer completion or transfer interruption. ::
+This log is recorded when an HTTP transaction--either a transfer completion or transfer interruption--is completed. ::
 
    # server.xml - <Server><VHostDefault><Log>
    # vhosts.xml - <Vhosts><Vhost><Log>
@@ -322,8 +322,8 @@ Log is recorded when HTTP transaction is completed, and completed transaction me
     
 -  ``XFF``
 
-   - ``OFF (default)`` Records client IP.
-   - ``ON`` Records X-Fowarded-For header value sent from client. If the header value is not exist, this is identical to ``OFF``.
+   - ``OFF (default)`` Records client IPs.
+   - ``ON`` Records X-Fowarded-For header values sent from clients. If the header value does not exist, this is identical to ``OFF``.
 
 -  ``Form``
    
@@ -334,8 +334,8 @@ Log is recorded when HTTP transaction is completed, and completed transaction me
 
 -  ``Local``
 
-   - ``OFF (default)`` Local communications(Loopback) are not logged.
-   - ``ON`` Local communications(Loopback) are logged.
+   - ``OFF (default)`` Local communications (Loopback) are not logged.
+   - ``ON`` Local communications (Loopback) are logged.
   
 ::
 
@@ -344,37 +344,37 @@ Log is recorded when HTTP transaction is completed, and completed transaction me
     2012.06.27 16:52:26 220.134.10.5 GET /favicon.ico - 80 - 61.50.7.9 Chrome/19.0.1084.56 200 949 2 - - - TCP_HIT gzip+deflate 35 14875
     2012.06.27 17:00:06 220.168.0.13 GET /setup.Eexe - 80 - 61.168.0.102  Mozilla/5.0+(Windows+NT+6.1;+WOW64)+AppleWebKit/536.11+(KHTML,+like+Gecko)+Chrome/20.0.1132.57+Safari/536.11 206 20971800 7008 - - 398458880-419430399 TCP_HIT - 41 89764358
 
-Each fields are distinguished by an empty space, and each field specifies the following.
+Each field is distinguished by an empty space, and each field specifies the following:
 
 -  ``date`` Completed date of HTTP transaction
 -  ``time`` Completed time of HTTP transaction
 -  ``s-ip`` Server IP
 -  ``cs-method`` HTTP Method sent from the client
--  ``cs-uri-stem`` QueryString excluded URL sent from the client
+-  ``cs-uri-stem`` A URL (excluding the QueryString) sent from the client
 -  ``cs-uri-query`` QueryString of the URL sent from the client
 -  ``s-port`` Server port
 -  ``cs-username`` Client username
--  ``c-ip`` If the XFF configuration of client IP is set to "ON", records X-Forwarded-For header value.
+-  ``c-ip`` If the XFF configuration of the client IP is set to "ON", records X-Forwarded-For header value
 -  ``cs(User-Agent)`` HTTP User-Agent sent from the client
--  ``sc-status`` Server response code.
--  ``sc-bytes`` Bytes sent from the server(header + contents)
--  ``time-taken`` Total elapsed time until HTTP transaction is completed(millisecond)
+-  ``sc-status`` Server response code
+-  ``sc-bytes`` Bytes sent from the server (header + contents)
+-  ``time-taken`` Total elapsed time until an HTTP transaction is completed (in milliseconds)
 -  ``cs-referer`` HTTP Referer sent from the client
--  ``sc-resinfo`` Additional information. Distinguished by "+" character. 
-   If encoded contents are serviced, the encoding option(gzip or defalte) is specified. 
-   Also security method(SSL3 or TLS1) is specified for a secured communication. 
+-  ``sc-resinfo`` Additional information, distinguished by the "+" character. 
+   If encoded content is serviced, the encoding option(gzip or defalte) is specified. 
+   Also the security method (SSL3 or TLS1) is specified for a secured communications. 
    "Bypass" will be specified for a bypassed communication.
    
--  ``cs-range`` Logs range header sent from the client.
--  ``sc-cachehit`` Cache HIT result.
--  ``cs-acceptencoding`` Accept-Encoding header sent from the client.
+-  ``cs-range`` Logs range header sent from the client
+-  ``sc-cachehit`` Cache HIT results
+-  ``cs-acceptencoding`` Accept-Encoding header sent from the client
 -  ``session-id`` HTTP client session ID (unsigned int64)
 -  ``sc-content-length`` Server response Content-Length header value
 
-Access log records all HTTP transactions regardless of success or failure of the transfer. 
-HTTP transaction starts when a client sends a HTTP request. 
-If HTTP connection is closed before STON sends a response to the client, corresponding HTTP transaction is also considered as completed. 
-For both ``sc-status`` and ``sc-bytes`` of the log will be recorded to 0. 
+The access log records all HTTP transactions regardless of the success or failure of the transfer. 
+An HTTP transaction starts when a client sends an HTTP request. 
+If the HTTP connection is closed before STON sends a response to the client, the corresponding HTTP transaction is still considered complete. 
+Both the ``sc-status`` and ``sc-bytes`` of the log will be recorded as 0. 
 This kind of log is recorded when the client closes the connection before STON receives a response from the origin server.
 
 
@@ -384,7 +384,7 @@ This kind of log is recorded when the client closes the connection before STON r
 Custom Access Log Format
 ====================================
 
-Configures to use a customized Access log format. ::
+The following configurations enables the use of the customized access log format. ::
 
    # server.xml - <Server><VHostDefault><Log>
    # vhosts.xml - <Vhosts><Vhost><Log>
@@ -392,11 +392,11 @@ Configures to use a customized Access log format. ::
    <Access Form="custom">ON</Access>
    <AccessFormat>%a %A %b id=%{userid}C %f %h %H "%{user-agent}i" %m %P "%r" %s %t %T %X %I %O %R %e %S %K</AccessFormat>   
   
--  ``Form`` attribute of the ``<Access>`` is set to ``custom``.
+-  The ``Form`` attribute of ``<Access>`` is set to ``custom``.
 
 -  ``<AccessFormat>`` Custom log format.
 
-The following Access log will be recorded for above configurations. (#Fields are not recorded.) ::
+The following Access log will be recorded for the above configurations (#Fields are not recorded). ::
 
     192.168.0.88 192.168.0.12 163276 id=winesoft; image.jpg example.com HTTP "STON" GET 80 "GET /ston/image.jpg?type=png HTTP/1.1" 200 2014-04-03 21:21:54 1 C 204 163276 1 2571978 TCP_MISS HTTP/1.1
     192.168.0.88 192.168.0.12 63276 id=winesoft; vod.mp4 example.com HTTP "STON" POST 80 "GET /ston/vod.mp4?start=10 HTTP/1.1" 200 2014-04-03 21:21:54 12 C 304 363276 2 2571979 TCP_REFRESH_HIT HTTP/1.1
@@ -405,9 +405,9 @@ The following Access log will be recorded for above configurations. (#Fields are
     192.168.0.88 192.168.0.12 6276 id=ston; ui.js example.com HTTP "STON" GET 80 "GET /ui.js HTTP/1.1" 200 2014-04-03 21:21:54 1 X 233 63276 1 2571982 TCP_MISS HTTP/1.1
     192.168.0.88 192.168.0.12 626 id=winesoft; hls.m4u8 example.com HTTP "STON" GET 80 "GET /hls.m4u8 HTTP/1.1" 200 2014-04-03 21:21:54 2 X 124 6312333276 2 2571983 TCP_REFRESH_HIT HTTP/1.1
   
-This is developed based on `Apache log format <https://httpd.apache.org/docs/2.2/ko/mod/mod_log_config.html>`_ and there are several expansion fields. 
-Specifiers in each field does not have any restrictions, but when you are using a space as a specifier,
-you should use double quotation marks for items that could include space such as User-Agent.
+This configuration is developed based on `Apache log format <https://httpd.apache.org/docs/2.2/ko/mod/mod_log_config.html>`_ and there are several expansion fields. 
+Specifiers in each field do not have any restrictions, but when you are using a space as a specifier,
+you should use double quotation marks for items that could include space, such as a User-Agent.
 
 -  ``%...a`` Client IP ::
 
@@ -417,15 +417,15 @@ you should use double quotation marks for items that could include space such as
 
       192.168.0.14
       
--  ``%...b`` Size of transferred bytes except the HTTP header ::
+-  ``%...b`` Size of transferred bytes, excluding the HTTP header ::
 
       1024
       
--  ``%...{foobar}C`` Contents of Foobar cookie of the request that the server received  ::
+-  ``%...{foobar}C`` The Foobar cookie content in the request that the server received  ::
 
-      If %{id=}c format is used, then log the id value of the Cookie
+      If %{id=}c format is used, then the id value of the Cookie will be logged.
       
--  ``%...D`` Elapsed time to process the request(millisecond) ::
+-  ``%...D`` Elapsed time to process the request (in milliseconds) ::
 
       3000
       
@@ -441,9 +441,9 @@ you should use double quotation marks for items that could include space such as
 
       http or https
       
--  ``%...{foobar}i`` Contents of foobar: header of the request that the server received ::
+-  ``%...{foobar}i`` Foobar content: header of the request that the server received ::
 
-      If %{User-Agent}i format is used, log the User-Agent value
+      If %{User-Agent}i format is used, then the User-Agent value will be logged
       
 -  ``%...m`` Request Method ::
 
@@ -469,11 +469,11 @@ you should use double quotation marks for items that could include space such as
 
       2014-01-01 15:27:02
 
--  ``%...{format}t`` Date format defined in the Format ::
+-  ``%...{format}t`` Date format defined in Format ::
 
-      If %{%Y-%m-%d %H:%M:%S}T format is used, 2014-08-07 06:12:23 form will be logged.
+      If %{%Y-%m-%d %H:%M:%S}T format is used, the date will be recorded as 2014-08-07 06:12:23 in the log.
 
--  ``%...T`` TimeTaken(second) ::
+-  ``%...T`` TimeTaken (in seconds) ::
 
       10
 
@@ -490,15 +490,15 @@ you should use double quotation marks for items that could include space such as
    
       C
     
--  ``%...I`` Received bytes including the request header ::
+-  ``%...I`` Received bytes, including the request header ::
     
       2048
     
--  ``%...O`` Transmitted bytes including the response header ::
+-  ``%...O`` Transmitted bytes, including the response header ::
       
       2048
       
--  ``%...R`` Response time(millisecond) ::
+-  ``%...R`` Response time (in milliseconds) ::
 
       2
       
@@ -514,13 +514,13 @@ you should use double quotation marks for items that could include space such as
 
       HTTP/1.1
   
-If the configured field value is not existed, then marked as "-". 
-If the format is wrong, default format of STON(Form="ston") is adopted.
+"-" indicates that the configured field value does not exist. 
+If the format is wrong, the STON default format (Form="ston") will be adopted.
   
-From the above table, you can leave empty spaces("...") in each field(eg. "%h %U %r %b) as blanks or specify record condition (if not satisfied, "-" is logged). 
-The condition can be configured with HTTP status code list or NOT condition can be set with an exclamation mark(!). 
+As shown in the above table, you can leave empty spaces ("...") in each field (e.g. "%h %U %r %b) as blanks or specify a record condition (if not satisfied, "-" is logged). 
+The condition can be configured with an HTTP status code list or a NOT condition can be set with an exclamation mark (!). 
 
-The following example only logs User-agent when there is a 400(Bad Request) error or a 501(Not Implemented) error. ::
+The following example only logs the User-agent when there is a 400 (Bad Request) error or a 501 (Not Implemented) error. ::
 
     "%400,501{User-agent}i" 
   
@@ -535,8 +535,8 @@ The following example logs Referers of all abnormal requests. ::
 Origin Log
 ====================================
 
-This logs all HTTP transaction in the origin server. 
-Log is recorded when the HTTP transaction is completed such as at the moment of transfer completion or transfer interruption. ::
+This logs all HTTP transactions in the origin server. 
+A log is recorded when an HTTP transaction, such as a transfer completion or transfer interruption, is completed. ::
 
    # server.xml - <Server><VHostDefault><Log>
    # vhosts.xml - <Vhosts><Vhost><Log>
@@ -554,8 +554,8 @@ Log is recorded when the HTTP transaction is completed such as at the moment of 
     2012.06.27 17:40:00 357 901 192.168.0.13 GET i.example.com /exB2.jpg 115.71.9.136 200 - - - 8150 189 273 8150 13 0 0 9 4 - no-cache 80 - 35 cache
     2012.06.27 17:40:00 357 901 192.168.0.13 GET i.example.com /exB3.jpg 115.71.9.136 200 - - - 8150 189 273 8150 13 0 0 9 4 - - 80 - 35 cache
 
-If there is an origin server failure, an error log starting with #[ERROR:xx] is recorded. 
-Each fields are distinguished by an empty space, and each field specifies the following.
+If there is an origin server failure, an error log starting with #[ERROR:xx] will be recorded. 
+Each field is distinguished by an empty space, and each field specifies the following:
 
 .. figure:: img/time_taken.jpg
    :align: center
@@ -564,30 +564,30 @@ Each fields are distinguished by an empty space, and each field specifies the fo
 
 -  ``date`` HTTP transaction completed date
 -  ``time`` HTTP transaction completed time
--  ``cs-sid`` Unique ID of the session. HTTP transactions that are processed(recycled) with the same session have the same value.
--  ``cs-tcount`` Transaction count. This value counts how many HTTP transactions are processed in this session. Transactions with an identical ``cs-sid`` cannot have the same value.
+-  ``cs-sid`` Unique ID of the session. HTTP transactions that are processed (recycled) with the same session will have the same value.
+-  ``cs-tcount`` Transaction count. This value counts how many HTTP transactions are processed during a session. Transactions with an identical ``cs-sid`` cannot have the same value.
 -  ``c-ip`` IP of STON
 -  ``cs-method`` HTTP Method sent to the origin server
--  ``s-domain`` The origin server domain
+-  ``s-domain`` Origin server domain
 -  ``cs-uri`` URI sent to the origin server
--  ``s-ip`` IP of the origin server
--  ``sc-status`` HTTP response code of the origin server
+-  ``s-ip`` Origin server IP
+-  ``sc-status`` Origin server HTTP response code
 -  ``cs-range`` Range request value sent to the origin server
--  ``sc-sock-error`` Socket error code(1=Transfer timeout, 2=Transfer delay, 3=connection close)
--  ``sc-http-error`` Log the response code when the origin server returns either 4xx or 5xx responses
+-  ``sc-sock-error`` Socket error code (1=Transfer timeout, 2=Transfer delay, 3=Connection close)
+-  ``sc-http-error`` Logs the response code when the origin server returns either 4xx or 5xx responses
 -  ``sc-content-length`` Content Length sent by the origin server
--  ``cs-requestsize (unit: Bytes)`` The size of HTTP request header sent to the origin server
--  ``sc-responsesize (unit: Bytes)`` The size of HTTP header that the origin server responsed
--  ``sc-bytes (unit: Bytes)`` Received contents size(header excluded)
--  ``time-taken (unit: ms)`` Total elapsed time until the HTTP transaction is completed. If the session is not recycled, socket connection time will be added up
+-  ``cs-requestsize (unit: Bytes)`` The size of the HTTP request header sent to the origin server
+-  ``sc-responsesize (unit: Bytes)`` The size of HTTP header that the origin server replied
+-  ``sc-bytes (unit: Bytes)`` Received content size (header excluded)
+-  ``time-taken (unit: ms)`` Total elapsed time before the HTTP transaction is completed. If the session is not recycled, the socket connection time will be added up
 -  ``time-dns (unit: ms)`` Time spent on DNS query
--  ``time-connect (unit: ms)`` Time spent for establishing socket with the origin server
--  ``time-firstbyte (unit: ms)`` Elapsed time from request transmit to response reception
+-  ``time-connect (unit: ms)`` Time spent for establishing a socket with the origin server
+-  ``time-firstbyte (unit: ms)`` Elapsed time from request transmission to response reception
 -  ``time-complete (unit: ms)`` Elapsed time from the first response to completion
--  ``cs-reqinfo`` Additional information. Distinguished by "+" character.  "Bypass" will be logged for a bypass communication, and "PrivateBypass" will be logged for private bypass communication.
--  ``cs-acceptencoding`` If compressed contents are requested to the origin server, "gzip+deflate" will be logged.
--  ``sc-cachecontrol`` cache-control header sent from the origin server
--  ``s-port`` The origin server port
+-  ``cs-reqinfo`` Additional information, distinguished by the "+" character.  "Bypass" will be logged for a bypass communication, and "PrivateBypass" will be logged for a private bypass communication.
+-  ``cs-acceptencoding`` If compressed content is requested to the origin server, "gzip+deflate" will be logged.
+-  ``sc-cachecontrol`` Cache-control header sent from the origin server
+-  ``s-port`` Origin server port
 -  ``sc-contentencoding`` Content-Encoding header sent from the origin server
 -  ``session-id`` The HTTP client session ID(unsigned int64) that caused the origin server request
 -  ``session-type`` Session type requested to the origin server
@@ -602,14 +602,14 @@ Each fields are distinguished by an empty space, and each field specifies the fo
 Monitoring Log
 ====================================
 
-Logs average stats of last 5 minutes. ::
+Logs average stats of the last five minutes. ::
 
    # server.xml - <Server><VHostDefault><Log>
    # vhosts.xml - <Vhosts><Vhost><Log>
 
    <Monitoring Type="size" Unit="10" Retention="10" Form="json">ON</Monitoring>
   
--  ``Form`` Specifies log format. ( ``json`` or ``xml`` )
+-  ``Form`` Specifies the log format. ( ``json`` or ``xml`` )
 
 
 
@@ -626,7 +626,7 @@ Logs all File I/O transactions generated by the :ref:`filesystem`. ::
    <FileSystem Type="time" Unit="1440" Retention="10">ON</FileSystem>
   
 FileSystem is logged when the File I/O transaction is completed. 
-The transaction completion point is differ by the type of cs-method. ::
+The transaction completion point differs based upon the type of cs-method. ::
 
     #Fields: date time cs-method cs-path sc-status sc-bytes response-time time-taken sc-cachehit attr session-id
     2012.06.27 16:52:24 ATTR /t 200 0 100 100 TCP_HIT FOLDER 1
@@ -634,16 +634,16 @@ The transaction completion point is differ by the type of cs-method. ::
     2012.06.27 16:52:24 OPEN /file.txt 200 0 100 2000 TCP_HIT FILE 2
     2012.06.27 16:52:24 READ /file.txt 200 1024768 100 2000 TCP_HIT FILE 2
     
--  ``date`` File I/O transaction completed date
--  ``time`` File I/O transaction completed time
--  ``cs-method`` File I/O access type. One of the followings are used.
+-  ``date`` File I/O transaction completion date
+-  ``time`` File I/O transaction completion time
+-  ``cs-method`` File I/O access type. One of the following can be used:
 
-   -  ``ATTR`` getattr function call. Records to the log when the function is returned
-   -  ``OPEN`` File opened without READ. Records to the log when the file is closed
-   -  ``READ`` File opened with READ. Records to the log when the file is closed
+   -  ``ATTR`` getattr function call. Logs when the function is returned
+   -  ``OPEN`` File opened without READ. Logs when the file is closed
+   -  ``READ`` File opened with READ. Logs when the file is closed
    
 -  ``cs-path`` Access path
--  ``sc-status`` Response code. The followings except the normal service(200) are failure codes.
+-  ``sc-status`` Response code. The following, except the normal service (200), are failure codes:
 
    -  ``200`` Normal service
    -  ``301`` Bypass required
@@ -653,7 +653,7 @@ The transaction completion point is differ by the type of cs-method. ::
    -  ``401`` Unable to find the virtual host
    -  ``402`` Initialization failure from the origin server
    -  ``500`` Object initialization failure
-   -  ``501`` Object Open failure
+   -  ``501`` Object open failure
    -  ``502`` Generating save path failure
    -  ``503`` Memory initialization failure
    -  ``504`` Emergency status
@@ -661,14 +661,14 @@ The transaction completion point is differ by the type of cs-method. ::
    -  ``601`` Timeout during file data service standby
    -  ``602`` File initialization failure during file service standby
    -  ``603`` Data initialization failure during file data service standby
-   -  ``701`` Invalid Offset
+   -  ``701`` Invalid offset
    -  ``702`` Specific file section load failure
    -  ``703`` Not enough memory
    -  ``704`` Generating origin session failure
    
 -  ``sc-bytes`` Read byte size
--  ``response-time`` Time elapsed from function call to connecting service object
--  ``time-taken`` Time elapsed from function call to completing File I/O Transaction.
+-  ``response-time`` Time elapsed between the function call and connection to the service object
+-  ``time-taken`` Time elapsed between the function call and the completion to the File I/O Transaction.
 -  ``sc-cachehit`` Cache HIT result.
 -  ``attr`` FILE or FOLDER
 -  ``session-id`` File I/O session ID (unsigned int64)
@@ -677,7 +677,7 @@ The transaction completion point is differ by the type of cs-method. ::
    
       ``session-id`` is allocated when the Client(HTTP or File I/O) Context is generated. 
       In the general process of Open -> Read -> Close, the Client Context is created at Open and destructed at Close. 
-      On the other hand, the getattr function is an atomic funcion that Client Context is created/destructed all the time, so it always assigned with a new session-id.
+      On the other hand, the getattr function is an "atomic function", wherein the Client Context is constantly created/destructed, so it is always assigned with a new session-id.
 
   
   
@@ -686,7 +686,7 @@ The transaction completion point is differ by the type of cs-method. ::
 FTP Transfer
 ====================================
 
-Log is uploaded through designated FTP client when the log is rolling. 
+when the log is rolling, it is uploaded through the designated FTP client. 
 
 
 .. _admin-log-ftpclient:
@@ -694,19 +694,19 @@ Log is uploaded through designated FTP client when the log is rolling.
 FTP Client
 ---------------------
 
-Configures FTP client. 
-Rolled log is uploaded to the FTP server in real time.
+Configures the FTP client. 
+The rolled log is uploaded to the FTP server in real time.
 
 .. figure:: img/conf_ftpclient.png
    :align: center
    
    FTP client architecture and operation
 
-FTP client exists outside of the STON as seen above. 
-STON only feeds existing log in the local into the FTP client que without administrating FTP operation. 
-FTP client processes upload based on its configuration.
+An FTP client exists outside STON, as seen above. 
+STON inserts local logs into the FTP client queue without administrating FTP operation. 
+Then the FTP client processes the upload based on its configuration.
 
-FTP client can be configured in the global setting(server.xml). ::
+FTP clients can be configured in the global setting (server.xml). ::
 
    # server.xml - <Server>
 
@@ -741,56 +741,56 @@ FTP client can be configured in the global setting(server.xml). ::
       <Transfer Time="Static">04:00</Transfer>
    </Ftp>   
 
--  ``<Ftp>`` Configures FTP client. The unique name can be configured with the ``Name`` attribute.
+-  ``<Ftp>`` Configures FTP clients. A unique name for each can be configured with the ``Name`` attribute.
 
    - ``Mode (default: Passive)`` Connection mode ( ``Passive`` or ``Active`` )
    - ``Address`` FTP address. 
-   - ``Account`` FTP account. If you want to encrypt the password(eg. qwerty), the below API can be adopted. ::
+   - ``Account`` FTP account. If you want to encrypt the password (e.g. qwerty), the API below can be adopted. ::
      
         /command/encryptpassword?plain=qwerty
         
-     The encrypted password can be configured as below. ::
+     The encrypted password can be configured as follows: ::
      
         <Password Type="enc">dXR9k0xNUZVVYQsK5Bi1cg==</Password>
      
    - ``ConnectTimeout`` Connection pending time
    - ``TransferTimeout`` Transfer pending time
    - ``TrafficCap (unit: KB)`` If this value is greater than 0, it configures the maximum transfer bandwidth.
-   - ``DeleteUploaded (default: OFF)`` Deletes corresponding log after transfer completion.
-   - ``BackupOnFail (default: OFF)`` Backup corresponding log so that the log is alive after transfer failure. ::
+   - ``DeleteUploaded (default: OFF)`` Deletes the corresponding log after transfer completion.
+   - ``BackupOnFail (default: OFF)`` Backs up corresponding log so that the log remains alive after a transfer failure. ::
      
         /usr/local/ston/stonb/backup/
      
-     Backup log is not retransmitted, and will not be deleted until the administrator deletes it.
+     Backup logs are not retransmitted and will not be deleted until the administrator deletes them.
    
-   - ``UploadPath`` Configures upload path.
+   - ``UploadPath`` Configures the upload path.
      
      - ``%{time format}s`` Log start time
      - ``%{time format}e`` Log end time
-     - ``%p`` prefix
+     - ``%p`` Prefix
      - ``%v`` Virtual host name
      - ``%h`` Device HOST name
      
-     If the following configuration is used ::
+     If the configuration below is used, ::
      
         # server.xml - <Server><Ftp>
         
         <UploadPath>/log_backup/%v/%s-%e.%p.log</UploadPath>
      
-     The upload path will be as below. ::
+     the upload path will be as follows: ::
      
         /log_backup/example.com/200140722_0000-200140722_2300.access.log
         
-   - ``Transfer`` Determines log transfer time. ``Type`` attribute will determine the format of value.
+   - ``Transfer`` Determines the log transfer time. The ``Type`` attribute will determine the value format.
    
-     - ``Rotate (default)`` Transfer the log right after rolling. Does not have a value.
-     - ``Static`` Transfer the log once a day at a specific time. For example, this value is set to 04:00, transfer will occur at 4am.
-     - ``Interval`` Transfer the log every set interval of time. For example, this value is set to 4, transfer will occur at every 4 hours.
+     - ``Rotate (default)`` Transfers the log right after rolling and does not have a value.
+     - ``Static`` Transfers the log once a day at a specific time. For example, if this value is set to 04:00, a transfer will occur at 4a.m..
+     - ``Interval`` Transfers the log every set interval of time. For example, if this value is set to 4, a transfer will occur every four hours.
      
      If you want to configure the transfer time, you will have to configure a proper log management policy to prevent log rolling at the time of transfer.
      
 
-FTP client uses curl.
+FTP clients use curl.
 
 
 .. admin-log-ftplog:
@@ -806,7 +806,7 @@ FTP log is merged and saved in /usr/local/ston/sys/stonb/stonb.log. ::
     2014-04-23 17:11:00 /ston_log/winesoft.co.kr/origin_20140423_080000.log ftp://ftp.winesoft.co.kr:21/winesoft.co.kr/origin_20140423_080000.log 381 10008 fail "curl: (7) couldn't connect to host"
     2014-04-23 17:11:00 /ston_log/winesoft.co.kr/filesystem_20140423_080000.log ftp://192.168.0.14:21/winesoft.co.kr/filesystem_20140423_080000.log 179 60 success "-"
 
-Each fields are distinguished by an empty space, and each field specifies the following.
+Each field is distinguished by an empty space, and each field specifies the following:
 
 -  ``date`` Date
 -  ``time`` Time
@@ -815,7 +815,7 @@ Each fields are distinguished by an empty space, and each field specifies the fo
 -  ``file-size`` File size to be transferred
 -  ``time-taken (unit: ms)`` Required time to transfer
 -  ``sc-status`` Transfer success/failure(success or fail)
--  ``sc-error-msg`` curl error message when the transfer fails
+-  ``sc-error-msg`` Curl error message when the transfer fails
 
 
 
@@ -824,8 +824,8 @@ Each fields are distinguished by an empty space, and each field specifies the fo
 Log FTP Transfer
 ---------------------
 
-When the log is rolling, you can set it to be uploaded with designated `FTP client`. 
-If separated with commas, you can use multiple `FTP clients` at the same time. ::
+When the log is rolling, you can set it to be uploaded with a designated `FTP client`. 
+If separated by commas, multiple `FTP clients` can be used at the same time. ::
 
    # server.xml - <Server><VHostDefault>
    # vhosts.xml - <Vhosts><Vhost>
@@ -840,4 +840,4 @@ If separated with commas, you can use multiple `FTP clients` at the same time. :
 -  ``Ftp`` `FTP client` to use
 
 Log is uploaded to ftp://{FTP server address}/{Virtual host name}/{Rolled log name}. 
-For example, upload address of the rolled log(access_20140424_0000.log) of the virtual host(example.com) in the ftp.dummy.com server will be `ftp://ftp.dummy.com/example.com/access_20140424_0000.log`.
+For example, the upload address of the rolled log (access_20140424_0000.log) of the virtual host (example.com) in the ftp.dummy.com server will be `ftp://ftp.dummy.com/example.com/access_20140424_0000.log`.
