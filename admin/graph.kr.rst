@@ -13,7 +13,7 @@ Call regulation format requires a unit behind the resource. ::
     http://127.0.0.1:10040/graph/cpu_month.png
     http://127.0.0.1:10040/graph/cpu_year.png
     
-All graphs are provided in 5 different types.
+All graphs are provided in five different types.
 
 ======= =========== =========== =============
 Type    Dimension   Time unit   Period
@@ -25,10 +25,10 @@ month   580 X 203   2hour       7weeks
 year    580 X 203   1day        18months
 ======= =========== =========== =============
 
-Each graph has at least one graph or at most three graphs. 
-Main line is displayed in green and Sub line is displayed in blue. 
-Also, from the "Week" graph, Peak line is displayed. 
-Peak displays the largest value among smaller units than the current unit.
+A graph has at least one line or at most three lines. 
+The main line is displayed in green and the Sub line is displayed in blue. 
+Also, in the "Week" graph, a Peak line is displayed. 
+The Peak displays the largest value among units smaller than the current unit.
 
 .. note:
    
@@ -45,8 +45,8 @@ Peak displays the largest value among smaller units than the current unit.
 Global Resource
 ====================================
 
-The global resoure graph only serves for system status or STON related resources. 
-In the below table, the asterisk stands for one of 5 types(dash, day, week, month, year).
+The global resource graph only shows system status or STON related resources. 
+In the table below, the asterisk stands for one of five types--dash, day, week, month, or year.
 
       
       
@@ -109,8 +109,8 @@ Server Socket Event (Client -> STON)
 
     /graph/ssockevent_*.png
     
--  ``Main`` Accepted
--  ``Sub`` Closed
+-  ``Main`` Accepted server sockets
+-  ``Sub`` Closed server sockets
 
 
 
@@ -120,8 +120,8 @@ Server Socket Usage (Client -> STON)
 
     /graph/ssockusage_*.png
     
--  ``Main`` Total(전체??)
--  ``Sub`` Established
+-  ``Main`` Total server sockets
+-  ``Sub`` Established server sockets
 
 
 
@@ -131,8 +131,8 @@ Client Socket Event (STON -> Origin server)
 
     /graph/csockevent_*.png
     
--  ``Main`` Connected
--  ``Sub`` Closed
+-  ``Main`` Connected client sockets
+-  ``Sub`` Closed client sockets
 
 
 
@@ -142,8 +142,8 @@ Client Socket Usage (STON -> Origin server)
 
     /graph/csockusage_*.png
     
--  ``Main`` Total(전체??)
--  ``Sub`` Established
+-  ``Main`` Total client sockets
+-  ``Sub`` Established client sockets
 
 
 
@@ -153,17 +153,17 @@ Denied IP Access
 
     /graph/acldenied_*.png
     
--  ``Main`` Denied client
+-  ``Main`` Denied clients
 
 
 
-Event Que
+Event Queue
 ---------------------
 ::
 
     /graph/eq_*.png
     
--  ``Main`` Lengh of the event que
+-  ``Main`` Length of the event queue
 
 
 
@@ -184,7 +184,7 @@ Successful URL Preprocess
 
     /graph/urlrewrite_*.png
     
--  ``Main`` Number of preprocessed URL
+-  ``Main`` Number of preprocessed URLs
 
 
 
@@ -203,13 +203,13 @@ TCP Socket
 Virtual Host
 ====================================
 
-The virtual host graph serves for the status of entire or each virtual host. 
-You can specify a specific virtual host with vhost parameter, or if the parameter is omitted,
-the sum of entire virtual host will be returned. ::
+The virtual host graph shows the status of entire or separate virtual host. 
+You can specify a particular virtual host by using vhost parameter, or if the parameter is omitted,
+the sum of the entire virtual host will be returned. ::
 
     http://127.0.0.1:10040/graph/vhost/mem_day.png?vhost=example.com
     
-In the below table, the asterisk stands for one of 5 types(dash, day, week, month, year).
+In the table below, the asterisk stands for one of five types--dash, day, week, month, or year.
 
 
 
@@ -234,13 +234,13 @@ Number of Contents
 
 
 
-Contents Memory
+Content Memory
 ---------------------
 ::
 
     /graph/vhost/mem_*.png
     
--  ``Main`` The amount of contents data loaded on the memory
+-  ``Main`` The amount of content data loaded into memory
 
 
 
@@ -250,7 +250,7 @@ Delete Pending
 
     /graph/vhost/wf2d_*.png
     
--  ``Main`` Number of files in delete pending
+-  ``Main`` Number of files waiting to be deleted
 
 
 
@@ -281,7 +281,7 @@ Client Session
     /graph/vhost/client_http_session_*.png
     
 -  ``Main`` The entire client session
--  ``Sub`` The client sessions that are being transferred
+-  ``Sub`` Client sessions that are being transferred
 
 
 
@@ -397,8 +397,8 @@ Origin Server Response
 
     /graph/vhost/origin_http_res_*.png
     
--  ``Main`` Number of the origin HTTP responses
--  ``Sub`` Number of the origin HTTP requests
+-  ``Main`` Number of origin HTTP responses
+-  ``Sub`` Number of origin HTTP requests
 
 
 
@@ -419,7 +419,7 @@ Origin Server Transaction Completion
     /graph/vhost/origin_http_res_complete_*.png
     
 -  ``Main`` Number of completed origin server HTTP responses
--  ``Sub`` Number of the HTTP requests of the origin server 
+-  ``Sub`` Number of HTTP requests made of the origin server 
 
 
 
@@ -429,7 +429,7 @@ Origin Server Response Time
 
     /graph/vhost/origin_http_res_time1_*.png
     
--  ``Main`` HTTP response time for the request sent to the origin server
+-  ``Main`` HTTP response time for requests sent to the origin server
 
 
 
@@ -439,4 +439,4 @@ Origin Server Completion Time
 
     /graph/vhost/origin_http_res_time2_*.png
     
--  ``Main`` HTTP transaction completion time for the request sent to the origin server
+-  ``Main`` HTTP transaction completion time for requests sent to the origin server
