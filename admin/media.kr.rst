@@ -295,9 +295,58 @@ If ``<Dims>`` is not configured, it is inactivated. ::
 
    - ``Status`` Activates DIMS ( ``Active`` or ``Inactive`` )   
    - ``Keyword`` Distinguishes the original and DIMS   
-   - ``Port`` WM connection port
+   - ``MaxSourceSize (default: 10 megabytes)`` Maximum original image size (in megabytes)
+   - ``OnFailure`` STON may return messages or redirect to the origin in case of image conversion failure.   
+     
+     - ``message (default)`` Returns 500 Internal Error. STON may indicate the detail as one of the followings:
+     
+       - ``The original file was not successfully downloaded.`` The original image download is incomplete.
+       - ``The original file size is too large.`` The original image size is bigger than ``MaxSourceSize`` value.
+       - ``The original file loading failed.`` The originial image is not loaded.
+       - ``Image converting failed or invalid DIMS command.`` Unsupported image or invalid command.
+     
+     - ``redirect`` Redirects to the original image URL.
    
-In order to utilize ``<Dims>``, :ref:`wm` must be running.
+
+Optimization
+-----------------------
+
+Optimization reduces the image size while maintaining its quality.
+Only JPEG, JPEG-2000 and Lossless-JPEG are supported.
+Some original images may have little or no size reduction, if optimized by any other tool or application already. ::
+
+   http://image.example.com/img.jpg/dims/optimize
+
+Optimization command is recommended to be placed at the end of command for the desired conversion. ::
+
+   http://image.example.com/img.jpg/dims/resize/100x100/optimize
+   
+Optimization may consume vast system recource. 
+The following is a performance test result for sample-size images, for 0% HitRatio condition.
+
+-  ``OS`` CentOS 6.2 (Linux version 2.6.32-220.el6.x86_64 (mockbuild@c6b18n3.bsys.dev.centos.org) (gcc version 4.4.6 20110731 (Red Hat 4.4.6-3) (GCC) ) #1 SMP Tue Dec 6 19:48:22 GMT 2011)
+-  ``CPU`` `Intel(R) Xeon(R) CPU E3-1230 v3 @ 3.30GHz (8 processors) <http://www.cpubenchmark.net/cpu.php?cpu=Intel+Xeon+E3-1230+v3+%40+3.30GHz>`_
+-  ``RAM`` 16GB
+-  ``HDD`` SMC2108 SAS 275GB X 3EA
+
+====== =========== ================== ==================== ==================== ================
+size   conversion  response time(ms)  client traffic(Mbps) origin traffic(Mbps) saved traffic(%)
+====== =========== ================== ==================== ==================== ================
+16KB   720         19.32               46.32                   92.62              49.99
+32KB   680         20.68               86.42                   165.08             47.65
+64KB   285         50.16               80.67                   150.96             46.56
+128KB  274         57.80               164.35                  276.52             40.56
+256KB  210         80.74               99.42                   432.35             77.00
+512KB  113         156.18              160.54                  436.04             63.18
+1MB    20          981.07              90.62                   179.88             49.62
+====== =========== ================== ==================== ==================== ================
+
+DIMS may save about 50% traffic on average.
+Optimization is heavy process for hardware resource and image size is most important as seen in the table.
+
+Therefore considerate configuration is highly recommmended.
+Optimization may be beneficial for service with some :ref:`adv_topics_req_hit_ratio`.
+CPU resource must be allocated accordingly for service quality.
 
 
 Crop
