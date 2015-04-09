@@ -3,12 +3,9 @@
 Chapter 2. Getting Started
 ******************
 
-This chapter explains how to set up an example virtual host through installation and system configuration.
-The entire proccess can be done with a simple text editor.
+This chapter explains abot installation and configuration up to setting up a sample virtual host. A simple text editor is all you need.
 
-STON is developed to run on the standard Linux server.
-Any hardware, OS or file system dependencies are excluded from developing stages.
-It is very important to help customers to select the appropriate equipments because configuring the proper server, based on the nature and scale of service is the beginning of service.
+STON Edge Server is proprietary software, running on 64-bit Linux servers. A suitable selection of hardware components is important.
 
 .. toctree::
    :maxdepth: 2
@@ -18,24 +15,24 @@ It is very important to help customers to select the appropriate equipments beca
 Server Components
 ====================================
 
-When configuring a general server, major components such as CPU, memory and storage have to be considered.
-Especially for a service that requires a high performance like 10Gbps, each component should meet the requirement in order to reach the desired service performance.
+Components such as CPU, memory and storage have to be chosen carefully. Especially for a service that requires a high performance such as 10Gbps throughput, each component must meet the requirement in order to reach the desired service performance.
 
 -  **CPU**
 
-   At least a quad core processor is recommended. 
-   Many-Core system increases the scalability of STON.
-   Every additional processor core will boost the processing power of the server.
-   However, high processing power does not necessarily mean a high traffic transmission rate.
+   A quad core processor is recommended at least.
+   Many-Core CPU increases the scalability of STON Edge Server.
+   Every additional processor core may boost the processing power of the server.
+   However, high processing power does not necessarily mean high traffic transmission.
 
    .. figure:: img/10g_cpu.jpg
       :align: center
 
-      A multiple processing core will prove its effectiveness when more clients are accessing to the server.
+      More client access needs more CPU cores.
 
-   In terms of bandwidth use, transferring a 4KB file for 260,000 times or a 1GB file 1 time takes identical bandwidth.
-   The most critical criterion for selecting CPU is the processing power of simultaneous connections.
+   In terms of bandwidth use, transferring a 4KB file for 260,000 times or a 1GB file 1 time takes the same size of bandwidth.
+   The number of simultaneous connections is the most critical criterion for selecting CPUs. 
 
+(proofread up to here)
 
 -  **Memory**
 
