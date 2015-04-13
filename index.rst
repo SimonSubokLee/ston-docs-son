@@ -68,5 +68,4 @@ Appendix
 .. toctree::
    :maxdepth: 2
 
-   admin/releasenote
    admin/graph
