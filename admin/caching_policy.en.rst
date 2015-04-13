@@ -323,7 +323,7 @@ If the origin server does not support compression or a bulk file that does not r
 
 .. _caching-policy-casesensitive:
 
-Identifying Upper / Lower Case Letters
+Case-sensitive
 ====================================
 
 STON cannot identify whether the origin server recognizes upper or lower case letters.
@@ -349,7 +349,7 @@ STON cannot identify whether the origin server recognizes upper or lower case le
     
 .. _caching-policy-applyquerystring:
     
-Identifying QueryString
+Querystring Sensitive
 ====================================
 
 Identifying the query string is not necessary unless the content is dynamically created by the query string.
