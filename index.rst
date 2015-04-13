@@ -18,9 +18,9 @@ STON Edge Server Complete Guide
 .. toctree::
    :maxdepth: 2
 
-   admin/intro.en
-   admin/getting_started.en
-   admin/environment.en
+   admin/intro
+   admin/getting_started
+   admin/environment
    
    
 2. HTTP Service
@@ -29,12 +29,12 @@ STON Edge Server Complete Guide
 .. toctree::
    :maxdepth: 2
    
-   admin/caching_policy.en
-   admin/caching_purge.en
-   admin/handling_http_requests.en   
-   admin/origin.en
-   admin/bypass.en
-   admin/https.en
+   admin/caching_policy
+   admin/caching_purge
+   admin/handling_http_requests
+   admin/origin
+   admin/bypass
+   admin/https
    
    
 3. Advanced Features
@@ -43,11 +43,11 @@ STON Edge Server Complete Guide
 .. toctree::
    :maxdepth: 2
    
-   admin/access_control.en
-   admin/bandwidth_control.en
-   admin/media.en
-   admin/filesystem.en
-   admin/adv_topics.en
+   admin/access_control
+   admin/bandwidth_control
+   admin/media
+   admin/filesystem
+   admin/adv_topics
    
    
 4. Management & Operation
@@ -56,10 +56,10 @@ STON Edge Server Complete Guide
 .. toctree::
    :maxdepth: 2
    
-   admin/monitoring_stats.en
-   admin/snmp.en
-   admin/log.en
-   admin/wm.en
+   admin/monitoring_stats
+   admin/snmp
+   admin/log
+   admin/wm
    
    
 Appendix
@@ -68,4 +68,4 @@ Appendix
 .. toctree::
    :maxdepth: 2
 
-   admin/graph.en
+   admin/graph
