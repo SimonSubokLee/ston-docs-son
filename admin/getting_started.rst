@@ -29,16 +29,15 @@ Components such as CPU, memory and storage have to be chosen carefully. Especial
 
       More client access needs more CPU cores.
 
-   In terms of bandwidth use, transferring a 4KB file for 260,000 times or a 1GB file 1 time takes the same size of bandwidth.
+   In terms of bandwidth, transferring a 4KB file for 262,144 times or a 1GB file for 1 time takes the same size of bandwidth.
    The number of simultaneous connections is the most critical criterion for selecting CPUs. 
 
-(proofread up to here)
 
 -  **Memory**
 
-   The STON recommends at least 4GB of system memory.
+   At least 4GB of system memory is recommended for memory indexing. ( :ref:`adv_topics_mem` )
    Memory should be allocated to frequently accessed contents in order to increase the performance.
-   A server lacking physical memory will inevitably accesses to the storage disk more frequently, creating an increases burden on the disk.
+   A server lacking physical memory will inevitably access to the storage disk more frequently, creating an increases burden on the disk.
    If the I/O load of the disk is significantly high, regardless of the number of served content, installing additional memory can reduce the I/O load.
    
 
@@ -50,9 +49,9 @@ Components such as CPU, memory and storage have to be chosen carefully. Especial
    .. figure:: img/02_disk.png
       :align: center
       
-      OS and STON always have to be installed on a separate disk from content storage.
+      OS and STON always have to be installed on a disk separate from content disks.
    
-   Usually the STON is installed on the OS disk.
+   STON is installed on the OS disk.
    The log is also configured on the identical disk where OS is installed.
    The log records real time service status, thus, it causes write load.
    
@@ -66,8 +65,8 @@ Components such as CPU, memory and storage have to be chosen carefully. Especial
 OS Configuration
 ====================================
 
-Standard installation is good enough.
-STON works great with the standard 64bit Linux(Cent 6.2 or higher, Ubuntu 10.04 or higher), and it does not rely on any packages.
+Default OS installation is enough.
+STON works on the 64-bit Linux(CentOS 6.2 or higher, Ubuntu 10.04 or higher), and does not require any particular package.
 
 
 .. _getting-started-install:
@@ -159,7 +158,7 @@ Installation
 
 Update
 ====================================
-When the updated version is released, use the stonu command to update STON to the latest version. ::
+Use the "stonu" command to update STON to the latest version. ::
 
 	./stonu 2.0.1
 	
@@ -174,11 +173,11 @@ When the updated version is released, use the stonu command to update STON to th
 Run
 ====================================
 
-The following is the default directory where STON is usually installed. ::
+The following path is the default directory to install STON. ::
 
     /usr/local/ston/
 
-If any of the below files are missing in the default directory or have incorrect XML syntax, STON will not run.
+If any of the below files is missing in the default directory or has invalid XML syntax, STON would not be running.
 
 - license.xml
 - server.xml
@@ -187,7 +186,7 @@ If any of the below files are missing in the default directory or have incorrect
 After the initial installation, xml files might be missing from the default directory.
 In this case, copy the distributed license.xml file to the directory.
 Then duplicate or rename server.xml.default and vhosts.xml.default files from the default installation directory.
-*.default files will be distributed with the latest package every time.
+*.default files will be distributed with the latest package.
 
 
 .. _getting-started-samplevhost:
@@ -225,7 +224,7 @@ Run STON
 .. note::
 
    STON uses disk storage. A default disk has to be configured in order to run STON.
-   Disk set-up will be reviewed in the next chapter.
+   Disk set-up details are in the next chapter.
 
 3. Run STON.  ::
 
@@ -262,7 +261,7 @@ In addition, :ref:`wm` may run very slowly or :ref:`api-graph` may not work at a
 In order to fix these issues, follow the steps below.
 
 
-**1. Checking the RRDtool Installation Status**
+**1. Check the RRDtool Installation Status**
 
    The procedure displayed below features how to check the RRDtool installation status. ::
    
@@ -278,7 +277,7 @@ In order to fix these issues, follow the steps below.
       Package rrdtool-1.3.8-6.el6.x86_64 already installed and latest version
       Nothing to do
       
-   The procedure displayed below is the RRDtool installation check for Ubuntu. ::
+   (for Ubuntu) ::
 
       root@ubuntu:~# apt-get install rrdtool
       Reading package lists... Done
@@ -294,7 +293,7 @@ In order to fix these issues, follow the steps below.
 **2. RRD Manual Installation**
 
    If YUM fails to install the RRDtool, the administrator should `download <http://pkgs.repoforge.org/rrdtool/>`_ 
-   the proper package for installeing the OS version and manually proceed with installation.
+   the proper package for installing the OS version and manually proceed with installation.
    
 ======================================== =================== ======= ============================
 Name                                     Last Modified       Size    Description
@@ -311,8 +310,8 @@ tcl-rrdtool-1.4.7-1.el6.rfx.x86_64.rpm	 06-Apr-2012 16:57   35K     RHEL6 and Ce
 Origin Server
 ============================================
 
-A virtual host is intended to serve contents to users on behalf of the origin server. 
-Depending on the service platform, various origin servers can be accessed by serveral ways.
+A virtual host is intended to serve content to users on behalf of the origin server. 
+Depending on the service platform, any origin server is accessible by IP or domain address.
 
     <Vhosts>
         <Vhost Name="www.example.com">
@@ -324,7 +323,7 @@ Depending on the service platform, various origin servers can be accessed by ser
     </Vhosts>
 
 -  ``<Address>``
-   The address of the origin server where the virtual host duplicates contents.
+   The address of the origin server where the virtual host duplicates content.
    An unlimited number of origin addresses can be added to the list. 
    When there are more than 2 addresses, Active/Active method(Round-Robin) is adopted to choose an address.
    If the origin server port is 80, it can be omitted.
@@ -387,9 +386,9 @@ Configure the standby origin server, as shown below. ::
 -  ``<Address2>``
 
    If all ``<Address>`` are working without problems, ``<Address2>`` will not run for the service.
-   However, if failure is detected in the active server, the standby server functionally substitutes for the failed server until all issues are recovered.
-   When the active server is recovered, the standby server returns to standby status.
-   If there is any error in the standby server, the relevant standby server will not standby for service until all errors are recovered. 
+   However, if any failure is detected in the active servers from ''<Address>'', the substitute ones from ''<Address2>'' are activated.
+   If servers from ''<Address>'' are recovered, the substitue servers return to standby status.
+   If there is any error in the substitue servers, the substitute server will never become active nor standby for service until all errors are recovered. 
 
 
 .. _api-etc-help:
