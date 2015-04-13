@@ -349,7 +349,7 @@ STON cannot identify whether the origin server recognizes upper or lower case le
     
 .. _caching-policy-applyquerystring:
     
-Querystring Sensitive
+Querystring-sensitive
 ====================================
 
 Identifying the query string is not necessary unless the content is dynamically created by the query string.
