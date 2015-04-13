@@ -1,6 +1,6 @@
 ﻿.. _api-graph:
 
-Appendix B: Graph
+Appendix A: Graph
 ******************
 
 All MRTG stats are shown in PNG format graphs. 
