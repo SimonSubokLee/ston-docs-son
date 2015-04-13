@@ -3,19 +3,18 @@
 Chapter 3. Configurations
 ******************
 
-This chapter will explain the configuration structure and how to apply modified settings.
-Having a clear understanding of configuration structure helps with arranging servers and dealing with server failing situations.
+This chapter is about configuration of STON Edge Server.
+Understanding the configuration structure helps faster setting and troubleshooting.
 
-Configuration is divided into global configuration(server.xml) and virtual host configuration(vhosts.xml).
+STON Edge Server configuration consists of global configuration(server.xml) and virtual host configuration(vhosts.xml).
 
    .. figure:: img/conf_files.png
       :align: center
 
-      There are only 2 xml files in configuration structure.
+      Two XML files. That is all.
 
-There are only two xml files in configuration structure.
-Several txt files contain exception conditions for every virtual host, and particular function lists.
-The following example is the complete form of XML example. ::
+TXT configuration files contain exception handling for each virtual host, and particular function lists.
+The following is the complete form of XML example. ::
 
    <Server>
        <VHostDefault>
@@ -25,7 +24,7 @@ The following example is the complete form of XML example. ::
        </VHostDefault>
    </Server>
 
-In this manual, a simplified form will be used when explaining functions in XML files. ::
+A simplified format as below is to indicate the function from XML configuration structure. ::
 
    # server.xml - <Server><VHostDefault><Options>
    
@@ -39,21 +38,22 @@ In this manual, a simplified form will be used when explaining functions in XML 
    
 .. _api-conf-reload:
 
-Setting Reload
+Reload settings
 ====================================
 
-After changing the setting, the administrator should precisely call an API. 
-Other than system and performance related settings, most settings can be applied without suspending service. ::
+Setting changes are effective immediately after the reload API is called.
+Service operation runs uncluttered, except for system and performance settings. ::
 
    http://127.0.0.1:10040/conf/reload
 
-Whenever a modified setting is applied, changes are recorded in :ref:`admin-log-info`.
+Any changes from settings are recorded in :ref:`admin-log-info`.
 
+(proofread up to here)
 
 Global Settings (server.xml)
 ====================================
 
-server.xml in the execution file directory is the global configuration file. 
+server.xml is the global configuration file, which may be found in the execution file directory.
 It is an XML format text file. ::
 
     # server.xml
@@ -64,8 +64,8 @@ It is an XML format text file. ::
         <VHostDefault> ... </VHostDefault>
     </Server>
     
-This section will cover the structure of global configuration and simple functions.
-:ref:`access-control` or :ref:`snmp` is located in the global configuration, but these major functions will be elaborated upon in respective chapters. 
+This chapter covers the configuration structure and fundamental functionality.
+Details on :ref:`access-control` or :ref:`snmp` are described in respective chapters. 
 
 .. toctree::
    :maxdepth: 2
