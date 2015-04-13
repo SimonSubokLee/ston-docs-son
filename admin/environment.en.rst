@@ -50,7 +50,7 @@ Other than system and performance related settings, most settings can be applied
 Whenever a modified setting is applied, changes are recorded in :ref:`admin-log-info`.
 
 
-server.xml Global Settings
+Global Settings (server.xml)
 ====================================
 
 server.xml in the execution file directory is the global configuration file. 
@@ -323,7 +323,7 @@ For example, the :ref:`media` function's location is under the ``<Media>`` tag.
 
 .. _env-vhost:
 
-vhosts.xml Virtual Host Settings
+Virtual Host Settings (vhosts.xml)
 ====================================
 
 The vhosts.xml file located in the execution file directory is recognized as a virtual host configuration file.
