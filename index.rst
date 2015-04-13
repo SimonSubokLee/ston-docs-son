@@ -12,7 +12,7 @@ STON Edge Server Complete Guide
 :Version: 2.0.0, July 28, 2014
 
    
-1. Getting Started
+1. Basics
 =============================
 
 .. toctree::
