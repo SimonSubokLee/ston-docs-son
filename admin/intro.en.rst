@@ -75,7 +75,7 @@ Having an efficient and easily expandable edge layer eliminates the necessity of
 Then, how can the STON edge server promote content transfer faster and easier?
 
 
-How Edge server works : Cache
+How Edge Server works : Cache
 =========================================
 
 .. figure:: img/intro_cache1.png
