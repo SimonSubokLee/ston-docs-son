@@ -1,6 +1,6 @@
 ﻿.. _intro:
 
-Chapter 1. STON Edge Server
+Chapter 1. Introduction
 **********************************
 
 .. toctree::
