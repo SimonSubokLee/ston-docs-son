@@ -23,7 +23,7 @@ STON Edge Server Complete Guide
    admin/environment
    
    
-2. HTTP Service
+2. HTTP Caching
 =============================
 
 .. toctree::
