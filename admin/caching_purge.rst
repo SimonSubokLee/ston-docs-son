@@ -8,7 +8,7 @@ Detailed invalidation APIs are provided for different conditions.
 
 Cached content has a lifetime based on :ref:`ttl-time-to-live`.
 However, if content is updated and the changes must be effective immediately, it is unnecessary to wait until :ref:`ttl-time-to-live` is over.
-`Purge`_ / `Expire`_ / `HardPurge`_ will immediately purge content.
+`Purge`_ / `Expire`_ / `HardPurge`_ will immediately invalidate or 'purge' content.
 
 The purge API can be called by the browser, but mostly it is automated.
 In an FTP file upload, for instance, as soon as the upload is completed, `Purge`_ is called immediately.
