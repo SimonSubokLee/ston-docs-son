@@ -12,10 +12,10 @@ STON Edge Server is proprietary software, running on 64-bit Linux servers. A sui
 
 .. _getting-started-serverconf:
 
-Server Components
+How to choose the best hardware
 ====================================
 
-Components such as CPU, memory and storage have to be chosen carefully. Especially for a service that requires a high performance such as 10Gbps throughput, each component must meet the requirement in order to reach the desired service performance.
+Components such as CPU, memory and storage have to be chosen carefully. Especially for a service that requires a high performance such as 10Gbps throughput, each component must meet the requirements in order to reach desired performance.
 
 -  **CPU**
 
