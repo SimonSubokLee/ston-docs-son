@@ -1,9 +1,9 @@
 ﻿.. _adv_topics:
 
-Chapter 14. Advanced Topics
+Chapter 14. More Advanced Topics
 ******************
 
-This chapter will explain a handful of advanced topics.
+This chapter explains a few more about advanced topics.
 Some of the content is bound up with internal structure to assist advanced administrators.
 
 .. toctree::
