@@ -12,7 +12,7 @@ STON Edge Server is proprietary software, running on 64-bit Linux servers. A sui
 
 .. _getting-started-serverconf:
 
-Server Hardware
+Choosing the right hardware
 ====================================
 
 Components such as CPU, memory and storage have to be chosen carefully. Especially for a service that requires a high performance such as 10Gbps throughput, each component must meet the requirements in order to reach desired performance.
@@ -62,11 +62,11 @@ Components such as CPU, memory and storage have to be chosen carefully. Especial
 
 .. _getting-started-os:
 
-Operating System
+Choosing the right operating system
 ====================================
 
-Default OS installation is enough.
-STON works on the 64-bit Linux(CentOS 6.2 or higher, Ubuntu 10.04 or higher), and does not require any particular package.
+STON works on the 64-bit Linux(CentOS 6.2 or higher, Ubuntu 10.04 or higher), and does not require any particular package. Default OS installation is enough.
+
 
 
 .. _getting-started-install:
