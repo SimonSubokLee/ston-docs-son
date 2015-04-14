@@ -29,9 +29,7 @@ Policies can be configured as shown below. ::
 
    - ``NONE`` Does not use `Expire`_.
    - ``ROOT`` Uses `Expire`_ for `Purge`_ of domain root directory(/).
-   - ``DIR`` Uses `Expire`_ for `Purge`_ of all directories.
    - ``PATTERN`` Uses `Expire`_ for pattern `Purge`_.
-   - ``MULTIPLE`` Uses `Expire`_ for directory and pattern `Purge`_.
    - ``ALL`` Uses `Expire`_ for all `Purge`_.
 
 -  ``<RootPurgeExpire> (default: ON)``
