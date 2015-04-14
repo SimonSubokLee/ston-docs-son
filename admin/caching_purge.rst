@@ -1,18 +1,18 @@
 ﻿.. _caching-purge:
 
-Chapter 5. Caching Purge
+Chapter 5. Caching Invalidation
 ******************
 
-This chapter explains how to purge cached content.
-Due to various environments and conditions, specified APIs are required.
+This chapter explains how to invalidate cached content.
+Detailed invalidation APIs are provided for different conditions.
 
-Content usually has a renewal period based on :ref:`ttl-time-to-live`.
-However, if content is obviously modified and you want to apply the changes immediately, you don't have to wait until :ref:`ttl-time-to-live` is expired.
+Cached content has a lifetime based on :ref:`ttl-time-to-live`.
+However, if content is updated and the changes must be effective immediately, it is unnecessary to wait until :ref:`ttl-time-to-live` is over.
 `Purge`_ / `Expire`_ / `HardPurge`_ will immediately purge content.
 
-The purge API can simply be called by the browser, but mostly it is automated.
-In an FTP file upload, for instance, as soon as the upload is completed, `Purge`_ is called right away.
-Administrators can configure a few policies as shown below. ::
+The purge API can be called by the browser, but mostly it is automated.
+In an FTP file upload, for instance, as soon as the upload is completed, `Purge`_ is called immediately.
+Policies can be configured as shown below. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -23,7 +23,7 @@ Administrators can configure a few policies as shown below. ::
 
 -  ``<Purge2Expire> (default: NONE)``
 
-   Whether or not a `Purge`_ request is processed with `Expire`_ depends on the configuration.
+   This is a fool-proof feature. A `Purge`_ request can be processed with `Expire`_ depends on the configuration.
    For example, when `Purge`_ the root directory(/), this can create excessive load on the origin server by purging large amount of contents.
    In cases like this, `Expire`_ will prevent excessive load on the origin server.
 
