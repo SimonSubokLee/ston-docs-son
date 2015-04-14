@@ -48,14 +48,43 @@ Policies can be configured as shown below. ::
    Configures the HTTP response code when target objects are missing for `Purge`_ , `Expire`_ , `HardPurge`_ , or `ExpireAfter`_.
 
 
-.. warning:
+Targets may be called by either URL or pattern. ::
 
-   Other than some specific URLs, a patterned URL or directory can be purged as well.
-   However, until the command is executed, the number of targeted item is remain uncertain.
-   For this reason, administrator might select too many targets without intention, and it will occupy too much CPU resource and causes performance drop.
+   example.com/logo.jpg      // URL
+   example.com/img/          // URL
+   example.com/img/*.jpg     // pattern
+   example.com/img/*         // pattern
+   
+Other than some specific URLs, a patterned URL may indicate contents to purge as well. (e.g. *.jpg)
+However, the number of targeted item is remain uncertain, until the command is executed.
+For this reason, administrator might make an unintended call to purge too many targets, which consumes too much CPU resource and causes breakdown.
 
-   Therefore, it is strongly recommended to use a specific URL while the service is running.
-   A patterned URL or directory representation is only used as an administrative purpose when the service is not running.
+Therefore, it is strongly recommended to use a specific URL while the service is running.
+A patterned URL or directory representation is only used as an administrative purpose when the service is not running.
+
+
+.. note::
+
+   Access to particular directories such as example.com/files/ is forbidden for security and returns 403 FORBIDDEN.  
+   However the root directory is an exempt.  
+   For an example, a client accesses example.com and his browser requests the root directory (/). ::
+   
+      GET / HTTP/1.1
+      Host: example.com
+   
+   The web server returns the default page. (possible index.html or index.htm)
+   A page is returned for the root directory for most web services.
+   
+   However 200 OK page is returned a cache server for the root directory (/).
+   The cache server may not be aware which page is returned.
+   The cache server interpretes a directory just as a URL. ::
+   
+      example.com/img/          // example.com The returned page for /img/ access
+      example.com/              // example.com The default page (/) from the virtual host
+      example.com/img/*         // example.com /img directory and its subdirectories from the virtual host
+      example.com/*             // example.com All contents from the virtual host
+         
+
 
 
 .. toctree::
