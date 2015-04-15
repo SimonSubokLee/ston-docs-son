@@ -101,34 +101,35 @@ The following is a sample segmentation for 8GB and 16GB physical memory.
 .. figure:: img/perf_mem_8_16.png
    :align: center
 
-
+Memory size occupied by STON 
 메모리는 STON이 사용하는 메모리와 사용하지 않는 메모리(Free)로 나눈다. 
 STON이 사용하는 메모리는 파일, 소켓같이 서비스 규모에 따라 달라지는 자원 개수와 관련이 있다. 
 
 .. note::
 
-   시스템 부하의 근본은 디스크 I/O 때문이다.
-   당신은 "얼마나 많은 Contents를 Caching해야 디스크 I/O를 줄일 수 있는가?" 에 대해 고민해야 한다.
+   Disk I/O speed might be a drag the service performance. 
+   Deciding caching size for the least disk IO is the primary 
    
    
    
 .. _adv_topics_mem_control:
 
 메모리 조절
+Memory Management
 ====================================
 
-`메모리 구조`_ 는 구동될 때 물리 메모리 크기에 기반하여 계산된다. ::
+`Memory Structure`_ is automatically calculated based on physical memory. ::
 
    # server.xml - <Server><Cache>
    
    <SystemMemoryRatio>100</SystemMemoryRatio>
 
--  ``<SystemMemoryRatio> (기본: 100)`` 물리메모리를 기준으로 사용할 메모리 비율을 설정한다.
+-  ``<SystemMemoryRatio> (default: 100)`` The physical memory portion to assgin for STON.
 
-예를 들어 8GB장비에서 ``<SystemMemoryRatio>`` 를 50으로 설정하면 물리 메모리가 4GB인 것처럼 동작한다.
-이는 메모리를 점유하는 다른 프로세스와 같이 구동될 때 유용하게 사용될 수 있다.
+If ``<SystemMemoryRatio>`` is set to 50 with 8GB of physical memory, STON runs within 4GB memory.
+This feature may be useful if other processes run simultaneously. 
 
-좀 더 구체적으로 서비스 형식에 따라 메모리에 적재되는 데이터 비율을 조절하면 효과적이다. ::
+Content memory is also adjustable for the best performance. ::
 
    # server.xml - <Server><Cache>
    
@@ -556,7 +557,7 @@ In Emergency mode, STON operates as follows:
 Disk Hot-Swap
 ====================================
 
-Without stopping the service, you can change the disk. 
+Without stopping the service, you can swap the disks. 
 The parameter must be the same as the ``<Disk>`` configuration. ::
 
    http://127.0.0.1:10040/command/unmount?disk=...
