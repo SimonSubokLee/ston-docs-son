@@ -143,7 +143,7 @@ Content memory is also adjustable for the best performance. ::
 
 .. _adv_topics_sys_free_mem:
 
-시스템 Free 메모리
+System Free Memory
 ====================================
 
 OS(Operating System)가 느리면 어떠한 프로그램도 제 성능을 내지 못한다.
@@ -178,7 +178,7 @@ Physical RAM   System Free
 
 
 
-Caching 서비스 메모리
+Caching Service Memory
 ====================================
 
 클라이언트에게 전송할 컨텐츠를 Caching하는 메모리이다. 
@@ -210,7 +210,7 @@ Physical RAM    Contents          Caching Count
 
 
 
-Socket 메모리
+Socket Memory
 ====================================
 
 소켓도 메모리를 사용한다.
@@ -263,7 +263,7 @@ Keep-Alive시간을 길게 줄수록 소켓의 재사용성은 좋아지지만 �
 
 
 
-클라이언트 접속 제한
+Client Access Capping
 ====================================
 
 제한없이 클라이언트 요청을 모두 허용하면 시스템에 지나친 부하가 발생할 수 있다. 
@@ -294,7 +294,7 @@ Keep-Alive시간을 길게 줄수록 소켓의 재사용성은 좋아지지만 �
 
 
 
-HTTP 클라이언트 세션 수
+HTTP Client Session
 ====================================
 
 HTTP 클라이언트 연결을 처리하기 위한 초기/증설 세션 수를 설정한다. ::
