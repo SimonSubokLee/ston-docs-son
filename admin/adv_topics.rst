@@ -1,6 +1,6 @@
 ﻿.. _adv_topics:
 
-Chapter 14. More Advanced Topics
+Chapter 14. Optimization and More
 ******************
 
 This chapter explains a few more about advanced topics.
