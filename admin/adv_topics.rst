@@ -7,21 +7,8 @@ This chapter explains a few more about advanced topics.
 Optimization is an important vale for high performance and vice versa for enterprise environment.
 
 Memory is the most important resource for configuration. 
-Memory indexing (seeking the requested content)
-
-Some of the content is bound up with internal structure to assist advanced administrators.
-
-.. toctree::
-   :maxdepth: 2
-
-이 장에서는 최적화와 그 밖의 잡다하지만 깊이 있는 주제에 대해 다룬다.
-최적화는 고성능(High Performance)을 위한 방법이며 이는 우리가 추구하는 가장 큰 가치다.
-엔터프라이즈 환경에서의 고성능은 주어진 하드웨어 자원을 최대한 활용하는 것을 의미하기도 한다.
-
-그 중 메모리는 모든 설계 및 정책을 결정하는 가장 중요한 자원이다.
-특히 인덱싱(요청된 URL을 빠르게 찾는 것)에 대해서는 반드시 이해해야 한다.
-왜냐하면 서비스 품질을 결정짓는 것은 인덱싱이기 때문이다.
-앞으로 설명할 모든 내용은 다음 표 "물리 메모리 크기에 따른 기본설정"와 관련이 있다.
+The best service quality requires a clear understanding of memory indexing (seeking the requested content).
+The following table is the recommended memory size for content caching.
 
 ============= ============== =============== ============= ========
 Physical RAM  System Free    Contents        Caching Count Sockets
@@ -45,14 +32,17 @@ Physical RAM  System Free    Contents        Caching Count Sockets
    
 .. _adv_topics_indexing:
 
-인덱싱
+Memory Indexing
 ====================================
 
+For indexing mode details, 'hot' content should be recognised from cold one. 
 인덱싱 모드를 설명하기에 앞서 Hot콘텐츠와 Cold콘텐츠의 개념을 이해해야 한다.
 
 .. figure:: img/indexing_hot_cold.png
    :align: center
 
+Content cached from origin servers is stored at local disks of STON Edge Server.
+If read from the disks, the content is   
 원본으로부터 캐싱한 콘텐츠는 로컬 디스크에 저장된다.
 해당 콘텐츠가 접근될 때마다 매번 디스크에서 읽어 전송하면 당연히 성능이 저하된다.
 따라서 자주 접근되는 콘텐츠를 메모리에 적재해 놓으면 고성능을 얻을 수 있다.
