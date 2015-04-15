@@ -35,70 +35,63 @@ Physical RAM  System Free    Contents        Caching Count Sockets
 Memory Indexing
 ====================================
 
-For indexing mode details, 'hot' content should be recognised from cold one. 
-인덱싱 모드를 설명하기에 앞서 Hot콘텐츠와 Cold콘텐츠의 개념을 이해해야 한다.
+'Hot' content should be recognised from cold one. 
 
 .. figure:: img/indexing_hot_cold.png
    :align: center
 
 Content cached from origin servers is stored at local disks of STON Edge Server.
-If read from the disks, the content is   
-원본으로부터 캐싱한 콘텐츠는 로컬 디스크에 저장된다.
-해당 콘텐츠가 접근될 때마다 매번 디스크에서 읽어 전송하면 당연히 성능이 저하된다.
-따라서 자주 접근되는 콘텐츠를 메모리에 적재해 놓으면 고성능을 얻을 수 있다.
-이렇게 메모리에 적재된 콘텐츠를 Hot, 디스크에만 위치한 콘텐츠를 Cold라고 부른다.
+The cache content loading might be slow if read from the disks.
+It is a lot faster if read from memory.
+Content cached on memory is 'hot', and one on the disk is 'cold.'
 
-인덱싱은 Hot과 Cold콘텐츠를 찾는 방식을 의미하며 이는 성능과 직결된다.
-기본은 메모리 인덱싱이다. ::
+Indexing is for seeking cold and hot content for the best performance. Memory indexing is the default. ::
 
    # server.xml - <Server><Cache>
    
    <Indexing>Memory</Indexing>
 
-메모리 인덱싱에서는 Cold가 존재하지 않는다.
-모든 파일에 대한 정보는 메모리에 적재되기 때문에 메모리 없는 경우 원본서버에서 신규로 다운로드 한다.
-그 만큼 고성능과 빠른 서비스 품질을 얻을 수 있다.
-하지만 메모리 저장공간의 한계로 인해 캐싱 개수에 한계가 있다.
-그 한계는 앞선 표의 Caching Count에서 명시한다.
+Memory indexing does not keep record of cold content. Information about all contents are loaded in memory. The recommended physical memory size is shown in the table above. 
 
-디스크 인덱싱은 Hot에 없는 경우 원본으로 가기 전에 Cold에서 콘텐츠를 찾는다. ::
+If the requested content is not found among hot contents, then the request is passed onto disk indexing, which keep the record of cold contents. ::
 
    # server.xml - <Server><Cache>
    
    <Indexing>Disk</Indexing>
    
-이 방식은 메모리 제한을 받지 않기 때문에 Caching Count에 제한이 없다.
-Hot 콘텐츠의 경우 빠른 품질을 보장하지만, Cold의 경우 디스크를 사용하기 때문에 높은 성능을 기대하긴 어렵다.
-간단히 정리하면 Hot은 메모리 속도, Cold는 디스크 속도에 수렴한다.
+Virtually an unlimited number of files can be cached by this way. Hot content would be served instantly from memory. However cold content may not be served fast because of slow disk read. The serving speed would be limited to memory read speed for hot ones, and to disk read speed for cold ones.
 
-디스크 인덱싱을 사용할 경우 SSD를 사용할 것을 강력히 권장한다.
-인덱싱은 STON이 설치된 디스크에서만 수행된다.
-STON은 일반적으로 OS와 같은 디스크에 설치되기 때문에 OS디스크만 SSD로 사용해도 고성능을 기대할 수 있다.
+SSD (Solid-State Drive) is highly recommended if running disk indexing.
+Indexing utilizes the disk in which STON is installed. 
+Installing STON on SSD helps high performance caching.
 
 .. note::
 
-   SSD의 수명은 접근 빈도보다 Write되는 양에 의해 결정된다.
-   Intel이나 Samsung등에서 공급하는 SSD의 경우 최소 600TB의 Write수명을 보장한다.
-   이를 단순히 계산해보면 하루에 20GB씩 Write할 경우 10년 정도의 수명을 예측할 수 있다.
-   STON에서의 Write의 99%는 Log다.
-   이런 관점에서 Log를 SSD가 아닌 다른 디스크(SAS나 SATA등)에 기록하도록 하면 내구성을 보장할 수 있다.
+   SSDs have lifespans, decided by writing.
+   SSDs from Intel or Samsung guarantee 600 terabytes of writing at least.
+   If 20 gigabytes is written a day, its lifespan would be about 10 years.
+   99 percent of writing operations from STON is logging.
+   Therefore it is highly recommended to keep logging on other disks than SSDs.
 
 
 .. warning::
 
-   인덱싱은 동적으로 변경할 수 없을 뿐만 아니라 변경하여도 안정성이 보장되지 않는다.
-   그러므로 모드를 변경한 뒤 :ref:`getting-started-reset` 를 진행해야 안전하게 서비스할 수 있다.
+   Indexing mode cannot be changed dynamically (while running service).
+   STON must be restarted :ref:`getting-started-reset` after switching the indexing mode.
 
 
 
 .. _adv_topics_mem:
 
-메모리 구조
+Memory Structure
 ====================================
 
-캐시서버와 범용 웹서버의 동작방식은 유사하나 목적은 매우 다르다. 
-STON의 구조와 동작방식을 상세히 이해하면 보다 최적화된 서비스가 가능하다.
-최적화의 목적은 아래와 같다.
+Cache Server and generic web server have different purposes, although they seem to have much in common.
+Understanding structure and mechanism helps optimization.
+The purpose of optimization is as follows.
+
+** High transaction
+
 
 **높은 처리량**. 성능저하 없이 수 만개의 세션을 동시에 처리할 수 있다.
 
