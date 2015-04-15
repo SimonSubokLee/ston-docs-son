@@ -90,19 +90,17 @@ Cache Server and generic web server have different purposes, although they seem 
 Understanding structure and mechanism helps optimization.
 The purpose of optimization is as follows.
 
-** High transaction
+** Massive sesssion handling **. Tens of thousands of simultaneous sessions 
 
+** Instant Response **. Response service for clients
 
-**높은 처리량**. 성능저하 없이 수 만개의 세션을 동시에 처리할 수 있다.
+** Origin Off-loading **. Origin overload prevented in advance
 
-**빠른 반응성**. 클라이언트에게 지연없는 서비스를 제공한다.
-
-**원본서버 부하절감**. 원본서버 부하는 자칫 전체장애로 이어진다.
-
-다음 그림은 STON을 8GB와 16GB메모리 장비에서 구동시켰을 때의 메모리 구성이다.
+The following is a sample segmentation for 8GB and 16GB physical memory.
 
 .. figure:: img/perf_mem_8_16.png
    :align: center
+
 
 메모리는 STON이 사용하는 메모리와 사용하지 않는 메모리(Free)로 나눈다. 
 STON이 사용하는 메모리는 파일, 소켓같이 서비스 규모에 따라 달라지는 자원 개수와 관련이 있다. 
