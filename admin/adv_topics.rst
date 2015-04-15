@@ -90,11 +90,11 @@ Cache Server and generic web server have different purposes, although they seem 
 Understanding structure and mechanism helps optimization.
 The purpose of optimization is as follows.
 
-** Massive sesssion handling **. Tens of thousands of simultaneous sessions 
+** Massive sesssion handling ** Tens of thousands of simultaneous sessions 
 
-** Instant Response **. Response service for clients
+** Instant Response ** Response service for clients
 
-** Origin Off-loading **. Origin overload prevented in advance
+** Origin Off-loading ** Origin overload prevented in advance
 
 The following is a sample segmentation for 8GB and 16GB physical memory.
 
