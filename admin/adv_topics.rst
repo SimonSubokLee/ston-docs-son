@@ -101,9 +101,7 @@ The following is a sample segmentation for 8GB and 16GB physical memory.
 .. figure:: img/perf_mem_8_16.png
    :align: center
 
-Memory size occupied by STON 
-메모리는 STON이 사용하는 메모리와 사용하지 않는 메모리(Free)로 나눈다. 
-STON이 사용하는 메모리는 파일, 소켓같이 서비스 규모에 따라 달라지는 자원 개수와 관련이 있다. 
+STON shares physical memory, depending on sockets and caching files to serve.  
 
 .. note::
 
@@ -114,7 +112,6 @@ STON이 사용하는 메모리는 파일, 소켓같이 서비스 규모에 따�
    
 .. _adv_topics_mem_control:
 
-메모리 조절
 Memory Management
 ====================================
 
@@ -137,9 +134,10 @@ Content memory is also adjustable for the best performance. ::
 
 -  ``<ContentMemoryRatio> (default: 50)`` memory segment assgined for content caching (within ``<SystemMemoryRatio>``).
 
-예를 들어 게임 포탈처럼 파일개수는 적지만 컨텐츠 크기가 클 경우엔 이 수치를 늘리면 파일 I/O가 감소된다.
-반대로 아주 작은 파일이 많은 경우는 반대로 줄이는 설정이 유용할 수 있다.
-   
+Higher ConntentMemoryRatio means less file IO for serving large sized contents such as game portals.
+On the other hand, less ContentMemoryRatio helps serving many and small sized contents.
+
+
 
 .. _adv_topics_sys_free_mem:
 
