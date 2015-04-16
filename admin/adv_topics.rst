@@ -124,7 +124,7 @@ Memory Management
    
    <SystemMemoryRatio>100</SystemMemoryRatio>
 
--  ``<SystemMemoryRatio> (default: 100)`` The physical memory portion to assgin for STON.
+-  ``<SystemMemoryRatio> (default: 100)`` memory assgined for STON
 
 If ``<SystemMemoryRatio>`` is set to 50 with 8GB of physical memory, STON runs within 4GB memory.
 This feature may be useful if other processes run simultaneously. 
@@ -135,7 +135,7 @@ Content memory is also adjustable for the best performance. ::
    
    <ContentMemoryRatio>50</ContentMemoryRatio>
 
--  ``<ContentMemoryRatio> (기본: 50)`` STON이 사용하는 전체 메모리 중 서비스 데이터 메모리 적재비율을 설정한다.
+-  ``<ContentMemoryRatio> (default: 50)`` memory segment assgined for content caching (within ``<SystemMemoryRatio>``).
 
 예를 들어 게임 포탈처럼 파일개수는 적지만 컨텐츠 크기가 클 경우엔 이 수치를 늘리면 파일 I/O가 감소된다.
 반대로 아주 작은 파일이 많은 경우는 반대로 줄이는 설정이 유용할 수 있다.
@@ -146,14 +146,13 @@ Content memory is also adjustable for the best performance. ::
 System Free Memory
 ====================================
 
-OS(Operating System)가 느리면 어떠한 프로그램도 제 성능을 내지 못한다.
-STON은 OS를 위해 일부 메모리를 사용하지 않는다. 
-OS의 성능을 극대화하기 위해서며 이를 시스템 Free메모리라 부른다.
+Slow OS(Operating System) is an absoulte drag for any application.
+STON leaves some free memory for operating system, which is system free memory.
 
 .. note::
 
-   이에 대해 권위있는 설명을 제시하고 싶으나 아쉽게도 찾지 못하였다.
-   구글링을 통해 가장 많이 `인용된 글 <http://www.sysxperts.com/home/announce/vmdirtyratioandvmdirtybackgroundratio>`_ 을 제시한다.
+   We have been anticipating for a good reasoning and found
+    `this article <http://www.sysxperts.com/home/announce/vmdirtyratioandvmdirtybackgroundratio>`_ .
 
 ============== ===============
 Physical RAM   System Free
