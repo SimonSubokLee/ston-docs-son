@@ -165,13 +165,13 @@ Physical RAM   System Free
 128GB	         51.2GB
 ============== ===============
 
-고급 사용자의 경우 서비스 형태에 맞추어 Free메모리 비율을 줄일 수 있다. Free메모리가 줄어들면 더 많은 Contents를 메모리에 적재할 수 있다. ::
+Free memory ratio is adjustable depending on service characteristics. Less free memory means more contents allocated. ::
 
    # server.xml - <Server><Cache>
    
    <SystemFreeMemoryRatio>40</SystemFreeMemoryRatio>
 
--  ``<SystemFreeMemoryRatio> (기본: 40, 최대: 40)`` 물리 메모리를 기준으로 설정된 비율만큼을 Free메모리로 남겨둔다.
+-  ``<SystemFreeMemoryRatio> (default: 40, maximum: 40)`` Free memory left 물리 메모리를 기준으로 설정된 비율만큼을 Free메모리로 남겨둔다.
 
 
 
