@@ -144,7 +144,7 @@ On the other hand, less ContentMemoryRatio helps serving many and small sized co
 System Free Memory
 ====================================
 
-Slow OS(Operating System) is an absoulte drag for any application.
+Slowly performing OS(Operating System) is an absoulte drag for any application.
 STON leaves some free memory for operating system, which is system free memory.
 
 .. note::
@@ -171,26 +171,25 @@ Free memory ratio is adjustable depending on service characteristics. Less free 
    
    <SystemFreeMemoryRatio>40</SystemFreeMemoryRatio>
 
--  ``<SystemFreeMemoryRatio> (default: 40, maximum: 40)`` Free memory left 물리 메모리를 기준으로 설정된 비율만큼을 Free메모리로 남겨둔다.
+-  ``<SystemFreeMemoryRatio> (default: 40, maximum: 40)`` physically free memory ratio 
 
 
 
 Caching Service Memory
 ====================================
 
-클라이언트에게 전송할 컨텐츠를 Caching하는 메모리이다. 
-한번 디스크에서 메모리로 적재된 컨텐츠는 메모리 부족현상이 발생하지 않는다면 계속 메모리에 존재한다. 
-문제는 메모리 부족현상은 항상 발생한다는 점이다.
+This is the memory to cache content serving clients.
+Contents loaded from disk onto memory stay in the memory, as long as there is enough.
+The problem is that memory is never enough.
 
 .. figure:: img/perf_inmemory.png
    :align: center
 
-위 그림처럼 전송해야할 컨텐츠는 디스크에 가득한데 실제 메모리에 적재할 수 있는 용량은 아주 제한적이다. 
-32GB의 물리 메모리를 장착한다해도 고화질 동영상이나 게임 클라이언트의 크기를 감안한다면 그리 넉넉한 편은 아니다. 
-아무리 효율적으로 메모리를 관리해도 물리적인 디스크 I/O속도에 수렴할 수 밖에 없다. 
+Disks might have tons of contents to serve, and memory is almost always limited.
+32GB of physical memory may seem large, but would not be enough to contain high-resolution videos or large sized gaming application. Physical disk IO is always the bottleneck in terms of performance. 
 
-가장 효과적인 방법은 Contents메모리 공간을 최대한 확보하여 디스크 I/O를 줄이는 것이다. 
-다음은 물리 메모리 기준으로 STON이 기본으로 설정하는 최대 Contents메모리 크기이다.
+The optimal way is to secure contents memory segment and reduce disk IO.
+The following table is the default maximum content memory size according to physical memory range. 
 
 =============== ================= ====================
 Physical RAM    Contents          Caching Count
@@ -206,13 +205,12 @@ Physical RAM    Contents          Caching Count
 =============== ================= ====================
 
 
-
 Socket Memory
 ====================================
 
-소켓도 메모리를 사용한다.
-4GB이상의 장비에서 STON은 2만개의 소켓을 기본으로 생성한다. 
-소켓 1개=10KB, 1만개당 97.6MB의 메모리를 사용하므로 약 195MB의 메모리가 기본으로 소켓에 할당된다.
+Sockets consume memory too.
+STON creates 20,000 sockets in >4GB memory by default. 
+A single socket consumes 10KB, which means 97.6MB per 10k sockets. Therefore about 195MB of memory is allocated soley for sockets.
 
 =============== ================= ======================
 Physical RAM    Socket Count      Socket Memory
@@ -222,23 +220,21 @@ Physical RAM    Socket Count      Socket Memory
 4GB 이상        2만               390MB
 =============== ================= ======================
 
-다음 그림처럼 소켓을 모두 사용하면 자동으로 소켓이 늘어난다.
+More sockets are created if all the sockets are in use.
                      
 .. figure:: img/perf_sockets.png
    :align: center
     
-위 그림과 같이 증설되어 3만개의 소켓을 사용한다면 총 240MB의 메모리가 소켓에 할당된다. 
-필요한 소켓을 필요한만큼만 사용하는 것은 아무 문제가 없어 보인다. 
-하지만 사용하지 않는 소켓을 지나치게 많이 설정해놓는 것은 메모리 낭비다.
-예를 들어 10Gbps장비에서 사용자마다 10Mbps의 전송속도를 보장한다고 가정했을 때 다음 공식에 의하여 최대 동시 사용자는 1,000명이다. ::
-
+For an example, 240MB of memory is allocated for 30k sockets.
+If all created sockets are used, we call it efficency. However unused sockets mean inefficiency. 
+To gurantee 10Mbps for each client from 10Gbps NIC, the maximum concurrent users are 1,000. ::
    10,000Mbps / 10Mbps = 1,000 Sessions
    
-이 경우 STON이 최초 생성하는 2만개 중 19,000개에 해당하는 약 148MB는 낭비가 되는 셈이다.
-이 148MB를 Contents에 투자한다면 효율을 더 높일 수 있다. 
-최소 소켓수를 설정하면 메모리를 보다 효율적으로 사용할 수 있다.
+In this case, about 148MB of memory is wasted, for 19k sockets. 
+It is more efficient to allocate the 148MB to server more contents.
+Setting the minimum sockets helps managing memory more efficiently. 
 
-**최소 소켓수**. 최초에 할당되는 소켓수를 의미한다.
+**Minimum Sockets**. 최초에 할당되는 소켓수를 의미한다.(최초??? 최소???)
 
 **증설 소켓수**. 소켓이 모두 사용 중(Established)일 때 설정한 개수만큼 소켓을 증설한다.
 
