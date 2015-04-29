@@ -234,40 +234,37 @@ In this case, about 148MB of memory is wasted, for 19k sockets.
 It is more efficient to allocate the 148MB to server more contents.
 Setting the minimum sockets helps managing memory more efficiently. 
 
-**Minimum Sockets**. 최초에 할당되는 소켓수를 의미한다.(최초??? 최소???)
+**Minimum Sockets**. Initially created sockets
 
-**Socket Top-up**. 소켓이 모두 사용 중(Established)일 때 설정한 개수만큼 소켓을 증설한다.
+**Socket Top-up**. Newly created sockets in case all other sockets are established.
 
-또 하나의 중요한 변수는 클라이언트 Keep-Alive시간 설정이다. (:ref:`handling_http_requests_session_man` 참조)
+One more important factor is client Keep-Alive setting. (Please refer to :ref:`handling_http_requests_session_man` )
 
 .. figure:: img/perf_keepalive.png
    :align: center
 
-연결된 모든 소켓이 데이터 전송 중에 있는 것은 아니다.
-IE, Chrome과 같은 브라우저들은 다음에 발생할 HTTP전송을 위해 소켓을 서버에 접속해 놓은 상태로 유지한다.
-실제로 쇼핑몰의 경우 연결되어 있는 세션 중 아무런 데이터 전송이 발생하지 않고 그저 붙어 있는 세션의 비율은 적게는 50%에서 많게는 80%에 이른다.
+Not all establisehd sockets are trasmitting data. 
+Browsers such as Internet Explorer and Chrome keep sockets for potential HTTP transmission with servers.
+For some online commerce, the ratio of established but idle sessions may vary from 50 to 80%.
 
 .. figure:: img/perf_keepalive2.png
    :align: center
 
-Keep-Alive시간을 길게 줄수록 소켓의 재사용성은 좋아지지만 유지되는 Idle소켓의 개수가 증가하므로 메모리 낭비가 심해진다.
-그러므로 서비스에 맞는 적절한 클라이언트 Keep-Alive시간을 설정하는 것이 중요하다.
+Socket reusablility benefits from less Keep-Alive time. However, more idle sockets may consume too much memory.
+Therefore finding the optimal client Keep-Alive time is crucial for each service. 
 
 
-
-
-Client Access Capping
+Client Request Capping
 ====================================
 
-제한없이 클라이언트 요청을 모두 허용하면 시스템에 지나친 부하가 발생할 수 있다. 
-시스템 과부하는 사실상 장애이다.
-적절한 수치에서 클라이언트 요청을 거부하여 시스템을 보호한다. ::
+Too many client requests might generate overload. The overload means literally system failure.
+Capping client requests help protecting the system. ::
 
    # server.xml - <Server><Cache>
    
    <MaxSockets Reopen="75">80000</MaxSockets>
 
--  ``<MaxSockets> (기본: 80000, 최대: 100000)`` 연결을 허용할 최대 클라이언트 소켓 수. 
+-  ``<MaxSockets> (default: 80000, max: 100000)`` 연결을 허용할 최대 클라이언트 소켓 수. 
    이 수치를 넘으면 신규 클라이언트 접속을 즉시 닫는다.
    ``<MaxSockets>`` 의 ``Reopen (기본: 75%)`` 비율만큼 소켓 수가 감소하면 다시 접속을 허용한다.
 
