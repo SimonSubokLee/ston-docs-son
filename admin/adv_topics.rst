@@ -266,7 +266,7 @@ Capping client requests help protecting the system. ::
 
 -  ``<MaxSockets> (default: 80000, max: 100000)`` Maximum client sockets to connect to. 
    New client connection is immediately terminated if this figure is reached.
-     If ``Reopen (default: 75%)`` ratio from ``<MaxSockets>``비율만큼 소켓 수가 감소하면 다시 접속을 허용한다.
+     New client access is allowed again, if the sockets are under the ``Reopen (default: 75%)`` ratio from ``<MaxSockets>``.
 
 .. figure:: img/maxsockets.png
    :align: center
