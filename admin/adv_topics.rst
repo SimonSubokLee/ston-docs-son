@@ -215,9 +215,9 @@ A single socket consumes 10KB, which means 97.6MB per 10k sockets. Therefore abo
 =============== ================= ======================
 Physical RAM    Socket Count      Socket Memory
 =============== ================= ======================
-1GB             5천               97.6MB
-2GB             1만               195MB
-4GB 이상        2만               390MB
+1GB             5,000               97.6MB
+2GB             10,000               195MB
+4GB 이상        20,000               390MB
 =============== ================= ======================
 
 More sockets are created if all the sockets are in use.
@@ -236,7 +236,7 @@ Setting the minimum sockets helps managing memory more efficiently.
 
 **Minimum Sockets**. 최초에 할당되는 소켓수를 의미한다.(최초??? 최소???)
 
-**증설 소켓수**. 소켓이 모두 사용 중(Established)일 때 설정한 개수만큼 소켓을 증설한다.
+**Socket Top-up**. 소켓이 모두 사용 중(Established)일 때 설정한 개수만큼 소켓을 증설한다.
 
 또 하나의 중요한 변수는 클라이언트 Keep-Alive시간 설정이다. (:ref:`handling_http_requests_session_man` 참조)
 
