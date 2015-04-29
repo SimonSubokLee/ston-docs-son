@@ -266,28 +266,26 @@ Capping client requests help protecting the system. ::
 
 -  ``<MaxSockets> (default: 80000, max: 100000)`` Maximum client sockets to connect to. 
    New client connection is immediately terminated if this figure is reached.
-   ``<MaxSockets>`` 의 ``Reopen (기본: 75%)`` 비율만큼 소켓 수가 감소하면 다시 접속을 허용한다.
+     If ``Reopen (default: 75%)`` ratio from ``<MaxSockets>``비율만큼 소켓 수가 감소하면 다시 접속을 허용한다.
 
 .. figure:: img/maxsockets.png
    :align: center
 
-(기본 설정에서) 전체 클라이언트 소켓 수가 8만을 넘으면 신규 클라이언트 접속은 즉시 종료된다.
-전체 클라이언트 소켓 수가 6만(8만의 75%)이 되면 다시 접근을 허용한다.
+(from default setting) New client accesses are immediately terminated if the total client sockets are more than 80,000.
+For an example, if the total client sockets are 60,000 (75% of the MaxSockets), then new accesses are allowed.
 
-예를 들어 3만개의 클라이언트 세션을 처리할 때 원본 서버들이 모두 한계에 도달하면  
-이 수치를 3~4만 정도로 설정하는 것이 좋다. 
-이로 인해 얻을 수 있는 효과는 다음과 같다.
+If 30,000 client sessions are connected and all the origin servers are maxed out,
+30,000~40,000 of MaxSockets is recommended. 
 
--  별다른 Network 구성(e.g. L4 세션조절 등)이 필요 없다.
--  불필요한(원본 부하로 처리될 수 없는) 클라이언트 요청을 방지한다.
--  서비스의 신뢰성을 높인다. 서비스 Burst 이후 재시작 등 점검 작업이 필요 없다.
-
+- No other network component is necessary. (e.g. L4 session control)
+- Prevents unnecessary client requests (because of overloaded origin)
+- Helps more stable service. No restart or regualr checking required.
 
 
 HTTP Client Session
 ====================================
 
-HTTP 클라이언트 연결을 처리하기 위한 초기/증설 세션 수를 설정한다. ::
+Configures the initial and the additional HTTP session management. ::
 
     # server.xml - <Server><Cache>
    
@@ -296,21 +294,21 @@ HTTP 클라이언트 연결을 처리하기 위한 초기/증설 세션 수를 �
        <TopUp>6000</TopUp>
     </HttpClientSession>
     
--  ``<Init>`` STON 시작시 미리 생성해놓는 소켓 수
+-  ``<Init>`` the initial sessions created
 
--  ``<TopUp>`` 생성해놓은 소켓 수를 초과했을 때 추가로 생성할 소켓 수
+-  ``<TopUp>`` the number of sessions to create when the initial sessions are all established.
 
-별도로 설정하지 않을 경우 물리 메모리 크기에 따라 자동으로 설정된다.
+Automatically managed depending on physical memory size, if not configured explicitly.
 
 =============== =========================
-물리메모리	    <Init>, <TopUp>
+Physicla Memory	    <Init>, <TopUp>
 =============== =========================
-1GB             5천, 1천
-2GB             1만, 2천
-4GB             2만, 4천
-8GB 이상        2만, 6천
+1GB             5,000, 1,000
+2GB             10,000, 2,000
+4GB             20,000, 4,000
+>8GB             20,000, 6,000
 =============== =========================
-제한적인 환경에서 적은 수의 소켓만으로도 서비스가 가능할 때 소켓 수를 줄이면 메모리를 절약할 수 있다.
+Keeping less sessions mean more memory, in limited system environment.
 
 
 
