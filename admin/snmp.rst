@@ -1098,6 +1098,30 @@ OID                                         Name                                
 =========================================== =========================================== ========== ==============================================
 
 
+.. _snmp-cache-vhost-traffic-dims:                                                                                                         
+                                                                                                                                                 
+cache.vhost.traffic.dims                                                                                                                
+---------------------                                                                                                                            
+                                                                                                                                                 
+::                                                                                                                                               
+                                                                                                                                                 
+   OID = 1.3.6.1.4.1.40001.1.4.3.1.11.21
+                                                                                                                                                 
+Provides DIMS statistics of the virtual host.                                                                                                                        
+                     
+=========================================== =========================================== ========== ==============================================
+OID                                         Name                                        Type       Description                                   
+=========================================== =========================================== ========== ==============================================
+.1. ``[vhostMin]`` . ``[vhostIndex]``       requests                                    Integer    DIMS conversion requests                          
+.2. ``[vhostMin]`` . ``[vhostIndex]``       converted                                   Integer    succesful conversions                               
+.3. ``[vhostMin]`` . ``[vhostIndex]``       failed                                      Integer    failed conversions                               
+.4. ``[vhostMin]`` . ``[vhostIndex]``       avgsrcsize                                  Integer    origin image average size (Bytes)                 
+.5. ``[vhostMin]`` . ``[vhostIndex]``       avgdestsize                                 Integer    converted image average size (Bytes)                
+.6. ``[vhostMin]`` . ``[vhostIndex]``       avgtime                                     Integer    conversion time (ms)          
+=========================================== =========================================== ========== ==============================================
+
+
+
 
 .. _snmp-cache-view:
 
