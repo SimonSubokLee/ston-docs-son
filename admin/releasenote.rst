@@ -3,9 +3,65 @@
 Appendix B: Release Notes
 ***************************
 
+v2.1.x
+====================================
+
+
+2.1.0 (APR 15, 2015)
+----------------------------
+
+Disk Indexing Mode added
+Animated GIF DIMS support
+DIMS statistics support
+
+**Function/Policy Update**
+
+   -  Directory expression removed from invalidation (purge, expire, hardpurge, expireafter)
+      Directory expression (example.com/img/)
+
+**Bug Fix**
+
+   - abnormal termiation from MP4 analysis with broken headers
+   
 
 v2.0.x
 ====================================
+
+
+2.0.6 (APR 28, 2015)
+----------------------------
+
+**Function/Policy Update**
+
+   -  WM - resolv.conf editing removed
+
+**Bug Fix**
+
+   - abnormal termiation from MP4 analysis with broken headers
+   
+   
+2.0.5 (APR 1, 2015)
+----------------------------
+
+**Function/Policy Update**
+
+   - Serves trimmed MP4 by HLS
+     The following expressions trim the original media file (/vod.mp4) from 0 to 60 seconds and serve in HLS.
+     | /vod.mp4?start=0&end=60/**mp4hls/index.m3u8**
+     | /vod.mp4**/mp4hls/index.m3u8**?start=0&end=60
+     | /vod.mp4?start=0/**mp4hls/index.m3u8**?end=60
+   - HLS index file (.m3u8) update
+     **Before.** Version 1
+     **After.** Version 3 (changeable back to version 1)
+
+**Bug Fix**
+
+   - abnormal termination in HLS conversion with HTTP encoded special characters 
+   - overloaded CPU for MP4 media with broken headers 
+   - audio/video synchronization failure while serving MP4 with uneven audio keyframe in HLS
+   - RRD - statistics bug: average response time shown in total
+   - WM - forcing formatting new disks remoced 
+
 
 2.0.4 (FEB 27, 2015)
 ----------------------------
