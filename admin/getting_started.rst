@@ -413,7 +413,7 @@ Execute the identical API version by checking command on the Linux Shell. ::
    In the Linux console when calling a command with "&", administrator should use either "\&" or wrap the URL with parenthesis.
 
 
-Hardware Information Inquiry
+Hardware Status
 ====================================
 
 The following API looks over hardware information. :: 
