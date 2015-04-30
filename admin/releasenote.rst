@@ -11,12 +11,12 @@ v2.1.x
 ----------------------------
 
     | :ref:`adv_topics_indexing` added
-    | Animated GIF DIMS supported
-    | DIMS statistics supported
+    | Animated GIF :ref:`media-dims' supported
+    | :ref:`media-dims' statistics supported
 
 **Function/Policy Update**
 
-   -  Directory expression removed from invalidation (purge, expire, hardpurge, expireafter)
+   -  Directory expression removed from :ref:`caching-purge` (purge, expire, hardpurge, expireafter)
         URL by directory expression (example.com/img/) caches the returned file from the origin.
         Directory expression (example.com/img/) merged with pattern (example.com/img/*)
    -  API expressions added
