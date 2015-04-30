@@ -11,8 +11,8 @@ v2.1.x
 ----------------------------
 
     | :ref:`adv_topics_indexing` added
-    | Animated GIF :ref:`media-dims' supported
-    | :ref:`media-dims' statistics supported
+    | Animated GIF :ref:`media-dims` supported
+    | :ref:`media-dims` statistics supported
 
 **Function/Policy Update**
 
