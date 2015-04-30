@@ -245,49 +245,48 @@ In addition, you can duplicate and apply configurations from one server to anoth
 If a specific server needs to participate in another cluster, the corresponding server has to leave the cluster and recompose.
 
 
-전용 포트분리
+Cluster Port
 ---------------------
 
-최초 설치시 WM과 클러스터 포트가 같은 포트를 사용한다. 
-이 방식은 WM계정만으로 클러스터링 구성이 가능하다는 장점이 있지만 접근 IP를 제한하는 환경에서는 문제가 될 수 있다.
+Cluster port shares the same port with WM's.
+It might seem convenient, but could be a problem if accessible IPs are restricted.
 
-* 보안상의 이유로 WM을 일부 IP에서만 접근되도록 제한한다.
-* 클러스터링을 위해서는 모든 서버들이 서로 다른 서버들의 IP를 허가해주어야 한다.
-* (CDN 처럼) 서버 수가 매우 많거나 서버들의 IP가 유동적인 경우 IP목록을 작성할 수 없다.
+* For security, WM is accesible from designated IPs.
+* All servers must allow one another's IP for clustering.
+* If servers are too many or IPs are dynamic, it is virtually impossible to make an IP list.
 
-클러스터 포트를 분리하여 이 문제를 해결할 수 있다. 
-서버들끼리 신원은 WM 계정이 아닌 라이선스를 통해 확인된다. 
-같은 라이선스를 가진 서버들끼리만 클러스터가 가능해져 보안성이 높아진다.
+A seperate port for clustering solves these problem.
+Servers recognise each other by license file.
+Sharing the identical license file is the only way to cluster servers.
 
+**1. [Apache server] httpd.conf Multi-port configuration**
 
-**1. [Apache 서버] httpd.conf 멀티 Port설정**
-
-(기본 설치라면) /usr/local/ston/wm/conf/httpd.conf 파일을 열어 다음과 같이 포트를 추가한다.
+(for default installation) Open /usr/local/ston/wm/conf/httpd.conf and add ports as follows.
 
 .. figure:: img/wm_cluster_multiport.png
    :align: center
 
-저장 후 반영을 위해 Apache서버를 재시작한다.
+Save setting and Restart Apache server.
 
 
-**2. [WM] 클러스터 구성**
+**2. [WM] Clustering**
 
-정상적으로 멀티포트 구성이 되었다면 다음과 같이 "클러스터 포트 분리" 버튼이 생성된다.
+"Create Cluster Port" button is generated if multi-port composition is successful..
 
 .. figure:: img/wm_cluster_multiport1.png
    :align: center
 
-버튼을 클릭한다.
+Click the button.
 
 
-**3. [WM] 클러스터 포트선택**
+**3. [WM] Cluster Port**
 
-분리할 수 있는 포트 목록을 보여준다. 포트를 선택해 구성한다.
+Lists multi-ports. Select one.
 
 .. figure:: img/wm_cluster_multiport2.png
    :align: center
 
-클러스터링에 포함되는 모든 서버는 반드시 같은 포트를 사용해야 한다.
+All servers clustered must use the same port.
 
 
 Server Status
