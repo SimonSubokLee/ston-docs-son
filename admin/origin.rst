@@ -389,6 +389,53 @@ The origin server must properly reply with **304 Not Modified**. ::
    - lighttpd/1.4.32
    - Apache/2.2.22
     
+   
+.. _origin-wholeclientrequest:
+    
+Origin Request URI
+====================================
+
+Configures URIs to send requests to origin servers. ::
+
+   # server.xml - <Server><VHostDefault><OriginOptions>
+   # vhosts.xml - <Vhosts><Vhost><OriginOptions>
+   
+   <WholeClientRequest>OFF</WholeClientRequest>
+
+-  ``<WholeClientRequest>``
+
+   - ``OFF (default)`` Caching-Key is the origin URI.
+   
+   - ``ON`` URI from the client is the origin URI.
+
+For higher Hit Ratio, :ref:`caching-policy-casesensitive`, :ref:`caching-policy-applyquerystring` should be well managed.
+URIs and Caching-Keys requested to the origins servers are defined by these.
+
+=============================================== ======================= ============================
+Configuration                                    client request URI     origin request URI / Caching Key
+=============================================== ======================= ============================
+:ref:`caching-policy-casesensitive` ``OFF``     /Image/LOGO.png         /image/logo.png
+:ref:`caching-policy-casesensitive` ``ON``      /Image/LOGO.png         /Image/LOGO.png
+:ref:`caching-policy-applyquerystring` ``OFF``  /view/list.php?type=A   /view/list.php
+:ref:`caching-policy-applyquerystring` ``ON``   /view/list.php?type=A   /view/list.php?type=A
+=============================================== ======================= ============================
+
+URIs from client requests are sent to the origin server if ``ON`` .
+
+=============================================== =================================== ============================
+Configuration                                    client request URI                  origin request URI / Caching Key
+=============================================== =================================== ============================
+:ref:`caching-policy-casesensitive` ``OFF``     /Image/LOGO.png                     /image/logo.png
+:ref:`caching-policy-casesensitive` ``ON``      /Image/LOGO.png                     /Image/LOGO.png
+:ref:`caching-policy-applyquerystring` ``OFF``  /view/list.php?type=A               /view/list.php
+:ref:`caching-policy-applyquerystring` ``ON``   /view/list.php?type=A               /view/list.php?type=A       
+=============================================== =================================== ============================
+       
+.. note::
+       
+
+
+   The entire URIs from client requests are passed, so that QueryStrings such as :ref:`media-trimming` are also passed onto the origin servers.
 
 .. _origin-httprequest:
     
