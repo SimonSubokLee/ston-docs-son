@@ -457,6 +457,17 @@ A POST request exception is saved at /svc/{virtual host name}/postbody.txt. ::
 Please be aware that whether the exception is ignored or accepted depends on the ``<BodySensitive>`` setting.
 Distinctive or patterned URLs (* is only allowed) can be used in the configuration. 
   
+  
+This setting might be a little confusing, because of :ref:`bypass-getpost` .
+POST requests may not be cached if ``<BypassPostRequest> (default: ON)`` is turned on.
+Therefore to cache POST requests, ``<BypassPostRequest>`` must be turned ``OFF`` or exceptional conditions must be defined.
+To clarify priorities:
+        
+* Will be bypassed to origin servers, if bypass conditions are met ( :ref:`bypass-getpost` )에 만족할 경우 원본서버로 바이패스 한다.
+* Content-Length헤더가 없다면 연결을 종료한다.
+* ``PostRequest`` 가 ``ON`` 으로 설정되어 있고 Content-Length가 ``MaxContentLength`` 속성 값을 넘지 않는다면 캐싱모듈에 의해 처리된다.
+* 이상의 시나리오에서 처리되지 않은 요청은 종료한다.
+
 .. note::
 
     If the ``MaxContentLength`` value is set too high, more memory will be required for managing the Caching-Key.
