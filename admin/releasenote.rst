@@ -11,18 +11,30 @@ v2.1.x
 ----------------------------
 
 Disk Indexing Mode added
-Animated GIF DIMS support
-DIMS statistics support
+Animated GIF DIMS supported
+DIMS statistics supported
 
 **Function/Policy Update**
 
    -  Directory expression removed from invalidation (purge, expire, hardpurge, expireafter)
-      Directory expression (example.com/img/)
+        URL by directory expression (example.com/img/) caches the returned file from the origin.
+        Directory expression (example.com/img/) merged with pattern (example.com/img/*)
+   -  API expressions added
+        /monitoring/average.xml
+        /monitoring/average.json
+        /monitoring/realtime.xml
+        /monitoring/realtime.json
+        /monitoring/fileinfo.json
+        /monitoring/hwinfo.json
+        /monitoring/cpuinfo.json
+        /monitoring/vhostslist.json
+        /monitoring/geoiplist.json
+        /monitoring/ssl.json
+        /monitoring/cacheresource.json
+        /monitoring/origin.json
+        /monitoring/coldfiledist.json
+   -  WM - resolv.conf editing removed
 
-**Bug Fix**
-
-   - abnormal termiation from MP4 analysis with broken headers
-   
 
 v2.0.x
 ====================================
@@ -54,7 +66,7 @@ v2.0.x
      **Before.** Version 1
      **After.** Version 3 (changeable back to version 1)
 
-**Bug Fix**
+**Bug Fixes**
 
    - abnormal termination in HLS conversion with HTTP encoded special characters 
    - overloaded CPU for MP4 media with broken headers 
@@ -99,7 +111,7 @@ v2.0.x
 
 - Able to pass User-Agent header value from clients when requesting to the origin server.
 
-**Bug Fix**
+**Bug Fixes**
 
    - Failed to trim MP4 files with MDAT length 1.
    - WM - failed to show other clustered servers' graph.
