@@ -69,4 +69,4 @@ Appendix
    :maxdepth: 2
 
    admin/graph
-   admin/releasenotes
+   admin/releasenote
