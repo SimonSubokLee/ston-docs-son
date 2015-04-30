@@ -22,19 +22,19 @@ DIMS statistics supported
         URL by directory expression (example.com/img/) caches the returned file from the origin.
         Directory expression (example.com/img/) merged with pattern (example.com/img/*)
    -  API expressions added
-        /monitoring/average.xml
-        /monitoring/average.json
-        /monitoring/realtime.xml
-        /monitoring/realtime.json
-        /monitoring/fileinfo.json
-        /monitoring/hwinfo.json
-        /monitoring/cpuinfo.json
-        /monitoring/vhostslist.json
-        /monitoring/geoiplist.json
-        /monitoring/ssl.json
-        /monitoring/cacheresource.json
-        /monitoring/origin.json
-        /monitoring/coldfiledist.json
+       | /monitoring/average.xml
+       | /monitoring/average.json
+       | /monitoring/realtime.xml
+       | /monitoring/realtime.json
+       | /monitoring/fileinfo.json
+       | /monitoring/hwinfo.json
+       | /monitoring/cpuinfo.json
+       | /monitoring/vhostslist.json
+       | /monitoring/geoiplist.json
+       | /monitoring/ssl.json
+       | /monitoring/cacheresource.json
+       | /monitoring/origin.json
+       | /monitoring/coldfiledist.json
    -  WM - resolv.conf editing removed
 
 
