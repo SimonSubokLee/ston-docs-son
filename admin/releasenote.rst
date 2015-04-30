@@ -11,7 +11,9 @@ v2.1.x
 ----------------------------
 
 Disk Indexing Mode added
+
 Animated GIF DIMS supported
+
 DIMS statistics supported
 
 **Function/Policy Update**
