@@ -14,7 +14,7 @@ v2.1.x
     | Animated GIF :ref:`media-dims` supported
     | :ref:`media-dims` statistics supported
 
-**Feature/Policy Update**
+**Feature/Policy Updates**
 
    -  Directory expression removed from :ref:`caching-purge` (purge, expire, hardpurge, expireafter)
         URL by directory expression (example.com/img/) caches the returned file from the origin.
@@ -43,7 +43,7 @@ v2.0.x
 2.0.6 (APR 28, 2015)
 ----------------------------
 
-**Feature/Policy Update**
+**Feature/Policy Updates**
 
    -  WM - resolv.conf editing removed
 
@@ -55,7 +55,7 @@ v2.0.x
 2.0.5 (APR 1, 2015)
 ----------------------------
 
-**Feature/Policy Update**
+**Feature/Policy Updates**
 
    - Serves trimmed MP4 by HLS
      The following expressions trim the original media file (/vod.mp4) from 0 to 60 seconds and serve in HLS.
@@ -78,7 +78,7 @@ v2.0.x
 2.0.4 (FEB 27, 2015)
 ----------------------------
 
-**Feature/Policy Update**
+**Feature/Policy Updates**
 
    -  ``Hash`` algorithm update at :ref:`origin-balancemode`
    
@@ -96,7 +96,7 @@ v2.0.x
 2.0.3 (FEB 9, 2015)
 ----------------------------
 
-**Feature/Policy Update**
+**Feature/Policy Updates**
 
    - DIMS internalization and enhancement
    - WM - traffic alert messages added
