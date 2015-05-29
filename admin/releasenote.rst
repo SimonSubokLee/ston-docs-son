@@ -6,6 +6,21 @@ Appendix B: Release Notes
 v2.1.x
 ====================================
 
+
+2.1.2 (MAY 29, 2015)
+----------------------------
+
+    | Web Management - English support
+
+**Feature/Policy Updates**
+
+   -  Single-core CPU support
+
+**Bug Fix**
+
+   - Customizing module malfunction in :ref:`adv_topics_indexing` mode
+   
+
 2.1.1 (MAY 7, 2015)
 ----------------------------
 
