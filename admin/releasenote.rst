@@ -6,6 +6,16 @@ Appendix B: Release Notes
 v2.1.x
 ====================================
 
+2.1.1 (MAY 7, 2015)
+----------------------------
+
+    | :ref:`media-hls` : Provides bandwidth and resolution information in 'Link StreamAlternates <https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/StreamingMediaGuide/art/indexing_2x.png>'_
+
+**Bug Fix**
+
+   - Abnormal termination caused by broken header MP4 video analysis
+   
+
 
 2.1.0 (APR 15, 2015)
 ----------------------------
