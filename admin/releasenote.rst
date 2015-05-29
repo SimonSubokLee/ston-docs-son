@@ -18,13 +18,13 @@ v2.1.x
 
 **Bug Fix**
 
-   - Customizing module malfunction in :ref:`adv_topics_indexing` mode
+   - Customized module malfunction in the :ref:`adv_topics_indexing` mode
    
 
 2.1.1 (MAY 7, 2015)
 ----------------------------
 
-    | :ref:`media-hls` : Provides bandwidth and resolution information in 'Link StreamAlternates <https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/StreamingMediaGuide/art/indexing_2x.png>'_
+    | :ref:`media-hls` : Provides bandwidth and resolution information in `StreamAlternates <https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/StreamingMediaGuide/art/indexing_2x.png>`_
 
 **Bug Fix**
 
