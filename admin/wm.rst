@@ -332,11 +332,10 @@ If the cluster is configured, you can browse or control content in all STON serv
    API call
    
       
-Server Status(Hardware)
+System Information
 ====================================
 
-You can browse/control content that is currently being serviced or perform cleanup. 
-If the cluster is configured, you can browse or control content in all STON servers at the same time.
+You can monitor system information from the server hardware.
 
 .. figure:: img/wm_gstat1.png
    :align: center
