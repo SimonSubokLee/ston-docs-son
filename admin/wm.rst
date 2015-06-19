@@ -335,7 +335,8 @@ If the cluster is configured, you can browse or control content in all STON serv
 Server Status(Hardware)
 ====================================
 
-You can monitor service status for each virtual host.
+You can browse/control content that is currently being serviced or perform cleanup. 
+If the cluster is configured, you can browse or control content in all STON servers at the same time.
 
 .. figure:: img/wm_gstat1.png
    :align: center
