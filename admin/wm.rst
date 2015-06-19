@@ -335,7 +335,7 @@ If the cluster is configured, you can browse or control content in all STON serv
 System Information
 ====================================
 
-You can monitor system information from the server hardware.
+You can monitor the hardware information and status.
 
 .. figure:: img/wm_gstat1.png
    :align: center
@@ -346,7 +346,7 @@ You can monitor system information from the server hardware.
 Service Status
 ====================================
 
-Monitors the service status of each virtual host.
+You can monitor the service status of each virtual host.
 
 .. figure:: img/wm_vstat3.png
    :align: center
