@@ -335,9 +335,7 @@ If the cluster is configured, you can browse or control content in all STON serv
 Server Status(Hardware)
 ====================================
 
-(이 내용은 바로 위의 Contents Control과 완전히 동일합니까??)
-서비스 중인 컨텐츠를 열람/제어하거나 클린업을 수행할 수 있다. 
-클러스터 구성이 되어있다면 모든 STON의 컨텐츠를 동시에 열람하거나 제어할 수 있다.
+You can monitor service status for each virtual host.
 
 .. figure:: img/wm_gstat1.png
    :align: center
