@@ -9,7 +9,7 @@ STON Edge Server Complete Guide
 
 :Author: STON Makers
 
-:Version: 2.1.2, June 25, 2015
+:Version: 2.1.3, June 25, 2015
 
    
 1. Basics
