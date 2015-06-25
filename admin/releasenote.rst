@@ -6,6 +6,19 @@ Appendix B: Release Notes
 v2.1.x
 ====================================
 
+2.1.3 (JUN 25, 2015)
+----------------------------
+
+**Feature/Policy Updates**
+
+   -  SyncStale: All content control (purge, expire and hardpurge) API calls tracked and logged (synchronization with stale logs and index when restarted)
+   -  %u expression added to custom access logging (full-length URIs from client requests logged)
+
+**Bug Fixes**
+
+   - DIMS: image revalidation failure with no Last-Modified header from origin
+   - CPU overload for >4GB trimmed MP4s
+   - Via header missing in error page responses
 
 2.1.2 (MAY 29, 2015)
 ----------------------------
