@@ -77,6 +77,15 @@ v2.1.x
 v2.0.x
 ====================================
 
+2.0.7 (JUN 25, 2015)
+----------------------------
+
+**Bug Fixes**
+
+   - :ref:`media-dims` : image revalidation failure with no Last-Modified header from origin
+   - :ref:`media-trimming` : CPU overload for >4GB trimmed MP4s
+   - Via header missing in error page responses
+
 
 2.0.6 (APR 28, 2015)
 ----------------------------
