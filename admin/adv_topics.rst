@@ -559,3 +559,25 @@ In order to reactivate the disk, the following should be called. ::
    http://127.0.0.1:10040/command/mount?disk=...
 
 All content in the reactivated disk will become invalid.
+
+.. _adv_topics_syncstale:
+
+SyncStale
+====================================
+
+
+Some stale content might be missing from indexing after unintended termination, because content indexing on disk could have been delayed for the best performance. SyncStale logs all API calls such as  :ref:`api-cmd-purge` , :ref:`api-cmd-expire` and :ref:`api-cmd-hardpurge` and stale content is updated when restarted. ::
+
+    # server.xml - <Server><Cache>
+   
+    <SyncStale>ON</SyncStale>    
+    
+-  ``<SyncStale>``
+
+   - ``ON  (default)`` Synchronize stale content with stale logs when restarted
+   
+   - ``OFF`` Leave stale content as remained
+   
+Stale content are tracked in ./stale.log and initialized upon normal termination or regular indexing.
+
+
