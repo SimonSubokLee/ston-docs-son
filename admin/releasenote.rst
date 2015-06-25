@@ -11,7 +11,7 @@ v2.1.x
 
 **Feature/Policy Updates**
 
-   -  SyncStale: All content control (purge, expire and hardpurge) API calls tracked and logged (synchronization with stale logs and index when restarted)
+   -  :ref:`adv_topics_syncstale` : All content control (purge, expire and hardpurge) API calls tracked and logged (synchronization with stale logs and index when restarted)
    -  %u expression added to custom access logging (full-length URIs from client requests logged)
 
 **Bug Fixes**
