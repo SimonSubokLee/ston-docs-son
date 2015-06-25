@@ -481,6 +481,10 @@ you should use double quotation marks for items that could include space, such a
 
       /img/img.jpg
 
+-  ``%...u`` FullURI ::
+
+      /img/img.jpg?session=1232&id=37
+
 -  ``%...X`` Status when the transaction is completed
    
    - ``X`` Terminated before the response is completed
