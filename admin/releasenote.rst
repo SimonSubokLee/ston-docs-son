@@ -16,8 +16,8 @@ v2.1.x
 
 **Bug Fixes**
 
-   - DIMS: image revalidation failure with no Last-Modified header from origin
-   - CPU overload for >4GB trimmed MP4s
+   - :ref:`media-dims` : image revalidation failure with no Last-Modified header from origin
+   - :ref:`media-trimming` : CPU overload for >4GB trimmed MP4s
    - Via header missing in error page responses
 
 2.1.2 (MAY 29, 2015)
