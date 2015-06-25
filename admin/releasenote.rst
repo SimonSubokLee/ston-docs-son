@@ -11,7 +11,7 @@ v2.1.x
 
 **Feature/Policy Updates**
 
-   -  :ref:`adv_topics_syncstale` : All content control (:ref:`api-cmd-purge` ,:ref:`api-cmd-expire` and :ref:`api-cmd-hardpurge`) API calls tracked and logged (synchronization with stale logs and index when restarted)
+   -  :ref:`adv_topics_syncstale` : All content control (:ref:`api-cmd-purge` , :ref:`api-cmd-expire` and :ref:`api-cmd-hardpurge`) API calls tracked and logged (synchronization with stale logs and index when restarted)
    -  %u expression added to :ref:`admin-log-access-custom` (full-length URIs from client requests logged)
 
 **Bug Fixes**
