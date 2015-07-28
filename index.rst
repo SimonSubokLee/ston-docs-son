@@ -43,11 +43,11 @@ STON Edge Server Complete Guide
 .. toctree::
    :maxdepth: 2
    
-   admin/access_control
-   admin/bandwidth_control
-   admin/media
-   admin/filesystem
-   admin/adv_topics
+   admin/monitoring_stats
+   admin/snmp
+   admin/log
+   admin/wm   
+   
    
    
 4. Management & Operation
@@ -56,10 +56,12 @@ STON Edge Server Complete Guide
 .. toctree::
    :maxdepth: 2
    
-   admin/monitoring_stats
-   admin/snmp
-   admin/log
-   admin/wm
+   admin/access_control
+   admin/bandwidth_control
+   admin/media
+   admin/filesystem
+   admin/adv_topics
+
    
    
 Appendix
