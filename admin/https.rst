@@ -261,3 +261,29 @@ The following shows how to configure multiple certificates by specifying an IP i
 
 This is the most popular method.
 
+.. note::
+
+   Listening on IPs might be disturbing when sharing configruation.
+   STON Edge Server provides listening on NICs also. ::
+
+      # server.xml - <Server>
+
+      <Https Listen="eth0"> ... </Https>  
+      <Https Listen="eth1"> ... </Https>  
+      <Https Listen="eth2"> ... </Https>
+      
+
+Protocol 프로토콜 구성
+====================================
+
+Enables specific security protocol on each ``<Https>``. ::
+
+   # server.xml - <Server>
+
+   <Https SSL3.0="ON" TLS1.0="ON" TLS1.1="ON> ...  </Https>
+   
+- ``SSL3.0 (default: ON)`` enables SSL3.0.
+
+- ``TLS1.0 (default: ON)`` enables TLS1.0.
+
+- ``TLS1.1 (default: ON)`` enables TLS1.1.
