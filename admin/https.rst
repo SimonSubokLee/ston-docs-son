@@ -245,6 +245,8 @@ STON can configure multiple certificates by specifying a port in the Listen prop
 This method is economically effective, but every web page link has to be specified with an HTTPS port.
 
 
+.. _https-multi-nic:
+
 Multi-NIC
 --------------------------
 
