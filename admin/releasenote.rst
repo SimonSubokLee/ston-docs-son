@@ -6,6 +6,23 @@ Appendix B: Release Notes
 v2.1.x
 ====================================
 
+2.1.4 (JUL 31, 2015)
+----------------------------
+
+**Feature/Policy Updates**
+
+   - Less CPU comsumption
+   - :ref:`multi-nic`: listening on multiple IPs
+   - URI policy change for Access Control: 
+     **Before.** keywords omitted (such as MP4HLS) from URIs
+     **After.** the whole URIs
+   
+**Bug Fixes**
+
+   - :ref:`DIMS` : encoded strings unrecognized
+   - :ref:`hardpurge` : case-sensitive error
+   - Configuration History: POST request exception missing 
+   
 2.1.3 (JUN 25, 2015)
 ----------------------------
 
