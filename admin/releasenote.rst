@@ -14,13 +14,13 @@ v2.1.x
    - Less CPU comsumption
    - :ref:`multi-nic`: listening on multiple NICs
    - URI policy change for Access Control: 
-     **Before.** keywords omitted (such as MP4HLS) from URIs
-     **After.** the whole URIs
+      **Before.** keywords omitted (such as MP4HLS) from URIs
+      **After.** the whole URIs
    
 **Bug Fixes**
 
-   - :ref:`DIMS` : encoded strings unrecognized
-   - :ref:`hardpurge` : case-sensitive error
+   - :ref:`media-dims` : encoded strings unrecognized
+   - :ref:`api-cmd-hardpurge` : case-sensitive error
    - Configuration History: POST request exception missing 
    
 2.1.3 (JUN 25, 2015)
