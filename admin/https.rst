@@ -273,7 +273,7 @@ This is the most popular method.
       <Https Listen="eth2"> ... </Https>
       
 
-Protocol 프로토콜 구성
+Enabling Security Protocol 
 ====================================
 
 Enables specific security protocol on each ``<Https>``. ::
