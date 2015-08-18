@@ -398,6 +398,68 @@ When discovering a virtual host, follow the procedures below.
 3. Does the patterned ``<Alias>`` match?
 
 
+.. _env-vhost-facadevhost:    
+
+Façade Virtualhost
+------------------------------------
+
+``<Alias>`` may not provide separate statistics and logs from the virtual host.
+If separate :ref:`monitoring_stats_vhost_client` and :ref:`admin-log-access` are required, a façade virtual host is configurable, while sharing the virtual host. ::
+
+    # vhosts.xml - <Vhosts>
+    
+    <Vhost Name="example.com">
+       ...
+    </Vhost>
+    
+    <Vhost Name="another.com" Status="facade:example.com">
+       ...
+    </Vhost>
+
+Set ``Status`` to ``facade:`` + ``virtualhost``.
+For the example, :ref:`monitoring_stats_vhost_client` and :ref:`admin-log-access` are collected in another.com requested by client, not example.com. 
+
+
+.. _env-vhost-sub-path:
+    
+Sub-Path
+------------------------------------
+
+A single virtual host may have multiple sub-paths, which are configruable into different virtual hosts. ::
+
+   # vhosts.xml - <Vhosts>
+   
+   <Vhost Name="sports.com">
+     <Sub Status="Active">
+       <Path Vhost="baseball.com">/baseball/<Path>
+       <Path Vhost="football.com">/football/<Path>
+       <Path Vhost="photo.com">/*.jpg<Path>
+     </Sub>
+   </Vhost>
+
+   <Vhost Name="baseball.com" />
+   <Vhost Name="football.com" />
+   <Vhost Name="photo.com" />
+
+-  Matched ``<Sub>`` paths or patterns will be directed to the configured virtual hosts.
+   Unmatched ones remain as in the virtual host.
+    
+   - ``Status (default: Active)`` Ignored if inactive.
+
+   -  ``<Path>`` Forwards the requests if matched to the client requeted URIs.
+      In path or pattern. ::
+      
+         <Path Vhost="baseball.com">baseball<Path>
+         <Path Vhost="photo.com">*.jpg<Path>
+      
+      The above inputs are recognized as /baseball/ and /*.jpg respectively.
+
+For an example, the following client request is directed to the virtualhost football.com :: 
+
+   GET /football/rank.html HTTP/1.1
+   Host: sports.com
+
+
 .. _env-vhost-defaultvhost:    
     
 Default Virtual Host
