@@ -9,8 +9,8 @@ v2.1.x
 2.1.5 (AUG 18, 2015)
 ----------------------------
 
-   - :ref:`env-vhost-sub-path` Virtualhost : Supports sub-path by accessing paths 
-   - :ref:`env-vhost-facadevhost`: Supports client traffic statstics and access logs by accessing domains
+   - Virtualhost :ref:`env-vhost-sub-path` : Supports virtualhost sub-path by accessing paths 
+   - :ref:`env-vhost-facadevhost`: Supports separate client traffic statstics and access logs by accessing domains
    
 2.1.4 (JUL 31, 2015)
 ----------------------------
