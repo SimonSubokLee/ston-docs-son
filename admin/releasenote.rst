@@ -17,7 +17,7 @@ v2.1.x
 
 **Feature/Policy Updates**
 
-   - Less CPU comsumption
+   - Less CPU usage
    - :ref:`https-multi-nic`: listening on multiple NICs
    - URI policy change for Access Control
        **Before.**  keywords omitted (such as MP4HLS) from URIs
