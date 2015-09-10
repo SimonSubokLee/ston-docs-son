@@ -6,6 +6,18 @@ Appendix B: Release Notes
 v2.1.x
 ====================================
 
+2.1.6 (SEP 9, 2015)
+----------------------------
+
+**Feature/Policy Updates**
+
+   - :ref:`media-dims` : Only the first frame of animated GIFs is converted.
+   
+**Bug Fixes**
+
+   - :ref:`access-control` : IP access control malfuction
+   - :ref:`media-dims` : '+' coordinate malfuction for cropping images
+
 2.1.5 (AUG 18, 2015)
 ----------------------------
 
