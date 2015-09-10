@@ -15,7 +15,7 @@ v2.1.x
    
 **Bug Fixes**
 
-   - :ref:`access-control-serviceaccess:` : IP access control malfuction
+   - :ref:`access-control-serviceaccess` : IP access control malfuction
    - :ref:`media-dims` : '+' coordinate malfuction for cropping images
 
 2.1.5 (AUG 18, 2015)
