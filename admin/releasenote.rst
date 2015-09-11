@@ -11,7 +11,7 @@ v2.1.x
 
 **Feature/Policy Updates**
 
-   - :ref:`media-dims` : Converts only the first frames for animated GIFs
+   - :ref:`media-dims` : Converts only the first frames for :ref:`media-dims-anigif`
    
 **Bug Fixes**
 
