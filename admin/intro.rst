@@ -1,6 +1,6 @@
 ﻿.. _intro:
 
-White Paper: Caching at the Edge
+Chapter 1. Introduction
 **********************************
 
 .. toctree::
