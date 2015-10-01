@@ -29,14 +29,14 @@ As a successful service grows, it must be able to deal with more users and conte
 
 
 
-Service Scalability
-====================
+Service Growth and Scaling
+===========================
 
 With a couple of servers, a test or pilot service may start. As the service begins to grow, the number of servers also should increase accordingly. Content renewal must be meticulously carried out on one server at a time. It might be a laborious task, but managing the system is not such an impossible task up to this point.
 
 As the service begins to expand with even more users and data, managing each server one by one becomes more difficult. Thus, high cost storage for collecting data in one system should be introduced (NAS, SAN, DAS, etc). High priced but reliable storage systems make content renewal easier because servers can automatically acquire updated content from the storage.
 
-Now, what about when the service is exploding? An increased number of servers requires more data from storage and causes data transfer overload on the storage. In order to resolve the data transfer overload issue, extremely expensive storage that can support higher bandwidth should be considered. However, investing an excessive amount of the budget on storage may be questioned.
+Now, what about when the service is exploding? An increased number of servers requires more data from storage and causes data delivery overload on the storage. In order to resolve the data transfer overload issue, extremely expensive storage that can support higher bandwidth should be considered. However, investing an excessive amount of the budget on storage may be questioned.
 
 Another possible solution is synchronization. Preparing all data for the server is impractical, so the storage needs to sort out contents. Management is essential to achieve precise content control. Synchronization among a few servers might be simple, but the more servers and files there are to sync, the harder synchronization will be. As the system expands, synchronization becomes slower, harder, and more unstable.
 
@@ -53,12 +53,12 @@ A service can be classified into application and storage layers, as shown in the
 .. figure:: img/intro_2layers.png
    :align: center
       
-The storage layer supervises data at the core. The application layer is on top of the storage layer. Within the application layer, the service logic is implemented and content transfer for small scale customers can also be processed. The storage layer and application layer can create a decent early stage service.
+The storage layer supervises data at the core. The application layer is on top of the storage layer. Within the application layer, the service logic is implemented and content delivery can also be processed for a small number of customers. The storage layer and application layer can create a decent early stage service.
 
 .. figure:: img/intro_graph_1.png
    :align: center
 
-As the service expands, budget uses change. In the early stage, logic development consumes a huge portion of budget. On the contrary, in the growing period, data management consumes most of the budget as the number of users increases. Content transfer becomes the main concern as the service matures, making it the biggest obstacle for service scale-out. How can the exploding bandwidth be covered? 
+As the service expands, the budget may change. In the early stage, logic development consumes a huge portion of budget. On the contrary, in the growing period, data management consumes most of the budget as the number of users increases. Content delivery becomes the main concern as the service matures, making it the biggest obstacle for service scale-out. How can the exploding bandwidth be covered? 
 
 The Edge : Delivery Layer
 ==========================
@@ -66,13 +66,13 @@ The Edge : Delivery Layer
 .. figure:: img/intro_3layers.png
    :align: center
    
-Content transfer can become an enormous burden when the service reaches maturity. Dozens of billions of shopping mall content and video service content have already reached terabytes long ago. The scalability of content transfer must be considered in order to expand the service.
+Content delivery can become an enormous burden when the service reaches maturity. Dozens of billions of shopping mall content and video service content have already reached terabytes long ago. The scalability of content delivery must be considered in order to expand the service.
 
-The edge indicates the surface layer of the service where users experience speed and availability of the service. No matter the cost, content requested by users must be transferred. Broken images or unavailable webpages on the user's screen fatally damages the reputation of the service. The burden of content transfer at the application layer and the storage layer will be reduced if the edge layer can transfer content.
+The edge indicates the surface layer of the service where users experience speed and availability of the service. No matter the cost, content requested by users must be responded. Broken images or unavailable webpages on the user's screen fatally damages the reputation of the service. The burden of content delivery at the application layer and the storage layer will be reduced if the edge layer can deliver content.
 
 Having an efficient and easily expandable edge layer eliminates the necessity of expanding other high cost layers. On the other hand, expanding the storage layer and the application layer is an inappropriate solution due to  high cost and low efficiency.
 
-Then, how can the STON edge server promote content transfer faster and easier?
+Then, how can the STON edge server promote content delivery faster and easier?
 
 
 How Edge Server works : Caching
@@ -81,14 +81,14 @@ How Edge Server works : Caching
 .. figure:: img/intro_cache1.png
    :align: center
 
-The scale of data transfer is proportional to the number of users and the size of content. At the edge layer, the service can detect the number of users and the particular content they are requesting. The effective process flow will be bottom-up style from the edge layer. Therefore, the edge server adopted an on-demand cache transfer method that responds to user's requests. In addition, a management system won't be necessary. A detailed operation procedure is described in the figure below.
+The scale of data delivery is proportional to the number of users and the size of content. At the edge layer, the service can detect the number of users and the particular content they are requesting. The effective process flow will be bottom-up style from the edge layer. Therefore, the edge server adopted an on-demand caching that responds to user's requests. In addition, a management system won't be necessary. A detailed operation procedure is described in the figure below.
 
 .. figure:: img/intro_cache2.png
    :align: center
    
-When the edge server is requested to transfer content for the first time, it obtains content from the storage layer first, then transfers it to the user. The transferred content are also saved in the edge server for the next use. From the second request for the content on, the edge server immediately retrieves saved content and transfers it to customers. The saved content is only valid for the pre-set TTL (Time-To-Live) period.
+When the edge server is requested to deliver content for the first time, it obtains content from the storage layer first, then transfers it to the user. The transferred content are also saved in the edge server for the next use. From the second request for the content on, the edge server immediately retrieves saved content and deliver it to customers. The saved content is only valid for the pre-set TTL (Time-To-Live) period.
 
-The edge server can process quite a large amount of content to transfer in this way. This method enables the transfer of massive data quickly with minimal expansion of the application and the storage layer. Therefore, any expandable services should consider the edge server.
+The edge server can process quite a large amount of content to deliver in this way. This method enables the delivery of massive data quickly with minimal expansion of the application and the storage layer. Therefore, any expandable services should consider the edge server.
 
 The STON edge server is the software that aims for an unrestricted and unconditional environment. The server is designed to provide maximum performance on any type of hardware platform.
 
@@ -147,7 +147,7 @@ Nowadays most games have a very large volume of installation files and there are
     
 - **Processing Range Request**
 
-  As files to transfer are getting heavier, the P2P solution--based on the grid delivery method--is widely being used. The P2P solution shreds a single file into small pieces to send or receive; therefore, it requests enormous HTTP range from the server. Theoretically, ten thousand clients could request different ranges from a 10GB file. Regardless of the requested range from clients, the service has to be prompt. On the other hand, the size of transferred data from the server cannot exceed the original file size.
+  As files to deliver are getting heavier, the P2P solution--based on the grid delivery method--is widely being used. The P2P solution shreds a single file into small pieces to send or receive; therefore, it requests enormous HTTP range from the server. Theoretically, ten thousand clients could request different ranges from a 10GB file. Regardless of the requested range from clients, the service has to be prompt. On the other hand, the size of transferred data from the server cannot exceed the original file size.
   
   ``STON`` is loaded with a file system that is optimized for range request. In addition, the STON edge server guarantees fast response with multi-download. It will not waste a single byte of transmission from the origin server. 
 
@@ -210,7 +210,7 @@ Exclusive protocols for media are losing strength, while the simple but powerful
 
   Not all users watch the whole video clip. An effective streaming method is to provide a reasonable amount of bandwidth for smooth playback. An identical media is served with different bitrates from 360p to 1080p.
   
-  ``STON`` optimizes media file transfer bandwidth with Bandwidth-Throttling. 
+  ``STON`` optimizes media bandwidth with Bandwidth-Throttling. 
 
 - **Extracting Section**
 
