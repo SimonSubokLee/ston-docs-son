@@ -1,6 +1,6 @@
 ﻿.. _intro:
 
-Chapter 1. Introduction
+White Paper: Caching at the Edge
 **********************************
 
 .. toctree::
@@ -9,21 +9,21 @@ Chapter 1. Introduction
 
 Principles for Designing Successful Service
 ===================
-Successful service incorporates availability, speed, and scalability. Kate Matsudaira, who wrote the article “Scalable Web Architecture and Distributed Systems,” also emphasizes these three principles.
+Successful service incorporates availability, speed and scalability. Kate Matsudaira emphasized these three principles too, from the article 'Scalable Web Architecture and Distributed Systems'.
 
 **Availability**
 
-A service must be always available. Ninety percent of users move on to other competing services when there is a service failure. Although a flawless system may not be possible, recovery of system failure has to be swift.
+A service must be always available. Ninety percent of users move on to competitors if failure occurs. The recovery has to be swift, even though a completely flawless system might not be possible.
 
 **Speed**
 
-Time correlates to revenue in business, and low latency leads to a drop in sales. Every 0.1 second of latency causes one percent of decreased revenue. Forty-seven percent of Amazon.com customers want to see a loaded website on their screen in two seconds.
+Time correlates to revenue in business, and high latency from e-commerce means a drop in sales. Every 0.1 second of latency means decreased revenue by one percent. Forty-seven percent of Amazon.com customers want a website loaded on their screen in two seconds.
 
 **Scalability**
 
-Regardless of the number of users, a service has to be reliable. Scalability includes scaling up and maintaining the service and ease of storage expansion and transaction processing capacity. Manageability, with regard to the ease of diagnosing and understanding problems along with the ease of making updates or modifications, is also an important factor.
+Regardless of the user number, a service has to be reliable. Scalability includes scale-up, service maintenance, easy storage expansion and transaction processing capacity. Manageability, with regard to the ease of diagnosing and understanding problems along with the easy updates or modifications, is also an important factor.
 
-Principles with the least required resources—such as time, effort, trainings, and money--are the most efficient. 
+Principles with the least required resources — such as time, effort, training and money - are the most efficient. 
 
 As a successful service grows, it must be able to deal with more users and content while continuing to abide by these three principles. Doing so can be difficult. How can these principles be easily followed with the least expense?
 
