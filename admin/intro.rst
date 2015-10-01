@@ -29,10 +29,10 @@ As a successful service grows, it must be able to deal with more users and conte
 
 
 
-The Expansion of Service
-===============
+Service Scalability
+====================
 
-Usually a test or pilot service starts with a couple of servers. As the service begins to grow, the number of servers also increases accordingly. Content renewal is meticulously carried out on one server at a time. It might be a laborious task, but managing the system is not a big deal at this point.
+With a couple of servers, a test or pilot service may start. As the service begins to grow, the number of servers also should increase accordingly. Content renewal must be meticulously carried out on one server at a time. It might be a laborious task, but managing the system is not such an impossible task up to this point.
 
 As the service begins to expand with even more users and data, managing each server one by one becomes more difficult. Thus, high cost storage for collecting data in one system should be introduced (NAS, SAN, DAS, etc). High priced but reliable storage systems make content renewal easier because servers can automatically acquire updated content from the storage.
 
@@ -45,7 +45,7 @@ Contents are constantly changing. Synchronization takes more time when there are
 Extensive service requires a simple method for delivering content to the server in a quick and flexible way.
 
 
-The Scalability of Service and Data Transfer
+And the Data Delivery
 =====================
 
 A service can be classified into application and storage layers, as shown in the figure below. 
@@ -60,7 +60,7 @@ The storage layer supervises data at the core. The application layer is on top o
 
 As the service expands, budget uses change. In the early stage, logic development consumes a huge portion of budget. On the contrary, in the growing period, data management consumes most of the budget as the number of users increases. Content transfer becomes the main concern as the service matures, making it the biggest obstacle for service scale-out. How can the exploding bandwidth be covered? 
 
-The Edge : Transfer layer
+The Edge : Delivery Layer
 ==========================
 
 .. figure:: img/intro_3layers.png
@@ -75,7 +75,7 @@ Having an efficient and easily expandable edge layer eliminates the necessity of
 Then, how can the STON edge server promote content transfer faster and easier?
 
 
-How Edge Server works : Cache
+How Edge Server works : Caching
 =========================================
 
 .. figure:: img/intro_cache1.png
@@ -108,7 +108,7 @@ The STON edge server supports powerful live monitoring and logging. The administ
 STON also provides simple setup for administrators because it is specifically designed to offer an edge server for administrators. The Web Management page provides an intuitive setting. Detailed server settings can be configured by editing only two XML files.
 
 
-Effects of the Edge Server
+Benefits of the Edge Server
 ======================
 The following lists the effects of the edge server:
 
@@ -152,7 +152,7 @@ Nowadays most games have a very large volume of installation files and there are
   ``STON`` is loaded with a file system that is optimized for range request. In addition, the STON edge server guarantees fast response with multi-download. It will not waste a single byte of transmission from the origin server. 
 
 
-Online Shopping Malls
+E-commerce
 ----------------------------
 
 In the case of an online shopping mall, accessibility of the website is directly connected to the amount of total sales. Mobile shopping via smartphones became a general trend instead of traditional PC-based online shopping. A service will be facing a dead end if it cannot manage various shopping environments and an infinitely growing number of files. 
