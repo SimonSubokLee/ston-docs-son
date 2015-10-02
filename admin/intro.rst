@@ -121,7 +121,7 @@ A universal method to acquire high bandwidth with a single server is bonding 1Gb
 
   ``STON`` guarantees full bandwidth for both 4Gbps NIC Bonding and 10Gbps NIC.
   
-- **Guaranteed User Bandwidth**
+- **Max User Bandwidth Guaranteed**
 
   Every user wants to download games as fast as possible. Users who adopted fiber optic LAN might complain about the service if they get less than 100Mbps. Once a user decides to play a game, he or she wants to play it right away. As long as a server has remaining physical bandwidth, it has to uniformly guarantee maximum speed to every single user.
   
