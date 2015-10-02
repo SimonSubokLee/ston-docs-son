@@ -1,6 +1,6 @@
 ﻿.. _wm:
 
-Chapter 13. WM (Web Management)
+Chapter 12. WM (Web Management)
 ******************
 
 This chapter introduces Web Management (WM), which is a Web management tool based on API. 
