@@ -1,6 +1,6 @@
 ﻿.. _intro:
 
-Chapter 1. Introduction
+STON Edge Server White Paper
 **********************************
 
 .. toctree::
