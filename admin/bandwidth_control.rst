@@ -1,6 +1,6 @@
 ﻿.. _bandwidth_control:
 
-Chapter 11. Bandwidth
+Chapter 14. Bandwidth
 ******************
 
 This chapter explains various bandwidth control methods for each virtual host.
