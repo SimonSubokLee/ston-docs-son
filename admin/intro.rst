@@ -200,7 +200,7 @@ Exclusive protocols for media are losing strength, while the simple but powerful
   
   ``STON`` optimizes media bandwidth with Bandwidth-Throttling. 
 
-- **Extracting Section**
+- **Multi/Single Part Trimming**
 
   Some preview/highlight/share services only provide a specific portion of a video clip. Extracting the entire file for the service will waste too much process time and storage. Further, every single user might request different sections of a media file. Some media players even implement a skip function with segment playback.
   
@@ -208,7 +208,7 @@ Exclusive protocols for media are losing strength, while the simple but powerful
 
   
   
-News / Community
+News / Forums
 ----------------------------
 
 There are several interesting points to check out on websites that have a significant number of loyal users. These websites attract users with a similar matter of concern, so users stay on for a very long time; thus, vigorous communications are ongoing. The service patterns of these websites vary by their subjects and it is tricky to meet their service requirements. 
@@ -228,7 +228,7 @@ There are several interesting points to check out on websites that have a signif
   
   ``STON`` elaborately classifies bypass targets based on various conditions. Also, the server maintains login sessions by using Origin Affinity and Private function.
   
-- **Unstable Origin**
+- **Origin Shield**
 
   Small or mid-size websites and personal websites cannot afford expensive equipment, infrastructures, and labor force. Origin server failure is relatively frequent and economic feasibility to improve service quality is extremely low.
   
@@ -241,7 +241,7 @@ There are several interesting points to check out on websites that have a signif
   ``STON`` supports DIMS function that can generate desired image formats from a single image in the server by URL call.
   
   
-File-based Caching Server
+File-based Caching 
 ----------------------------
 
 The edge server is built on the reverse-proxy structure. The fundamental concept of reverse-proxy is to copy/modify/manage files from the remote server to local storage. If qualified, STON can interwork with a service server, storage centralization and synchronization issues can be resolved. In addition, both service development time reduction and service reliability improvement can be attained.
@@ -267,7 +267,7 @@ The edge server is built on the reverse-proxy structure. The fundamental concept
 
   ``STON`` can be mounted as a local disk. Moreover, all functions--such as MP4 header convert and trimming--are available.
 
-- **Resource Restriction**
+- **Resource Management**
 
   A server that acquires files from Back-end and delivers them to front-end users has to consider file synchronization issues. Dedicated servers like game servers and SNS servers had these problems during the developing process. These servers have to survive for a very long time without stopping the service; therefore, the use of memory and disks has to be strictly limited.
 
