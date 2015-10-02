@@ -1,6 +1,6 @@
 ﻿.. _caching-policy:
 
-Chapter 4. Caching Policy
+Chapter 3. Caching Policy
 ******************
 
 This chapter will explain the TTL(Time To Live), Caching-Key and expiration policy, which are fundamental to the service.
