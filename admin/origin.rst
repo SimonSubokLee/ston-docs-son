@@ -1,6 +1,6 @@
 ﻿.. _origin:
 
-Chapter 7. Origin Server
+Chapter 6. Origin Server
 ******************
 
 This chapter will explain the relationship between STON and the origin server.
