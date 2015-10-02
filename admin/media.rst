@@ -1,6 +1,6 @@
 ﻿.. _media:
 
-Chapter 12. Media
+Chapter 15. Media
 ******************
 
 This chapter explains how to intelligently service media.
