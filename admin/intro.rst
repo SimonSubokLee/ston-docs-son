@@ -94,7 +94,7 @@ STON also provides simple setup for administrators because it is specifically de
 
 Benefits
 ======================
-The following lists the effects of the edge server:
+The following lists the benefits of edge server:
 
 #. Provides easy and convenient service acceleration.
 #. Shields the service origin from external access (Origin Shielding).
