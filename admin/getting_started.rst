@@ -1,6 +1,6 @@
 ﻿.. _getting-started:
 
-Chapter 2. Getting Started
+Chapter 1. Getting Started
 ******************
 
 This chapter explains abot installation and configuration up to setting up a sample virtual host. A simple text editor is all you need.
