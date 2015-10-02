@@ -1,6 +1,6 @@
 ﻿.. _intro:
 
-Scale-out and Caching : White Paper
+White Paper : Scale-out and Caching 
 **********************************
 
 .. toctree::
