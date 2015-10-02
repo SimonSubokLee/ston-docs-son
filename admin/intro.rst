@@ -1,6 +1,6 @@
 ﻿.. _intro:
 
-Service Scaling and Caching
+Caching and Service Scaling
 **********************************
 
 .. toctree::
