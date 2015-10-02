@@ -1,6 +1,6 @@
 ﻿.. admin-log:
 
-Chapter 17. Log
+Chapter 12. Log
 ******************
 
 This chapter will explain the log.
