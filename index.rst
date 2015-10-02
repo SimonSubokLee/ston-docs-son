@@ -14,7 +14,7 @@ STON Edge Server Complete Guide
 0. White Paper
 =============================
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    admin/intro
    
