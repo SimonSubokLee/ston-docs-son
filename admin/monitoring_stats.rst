@@ -1,6 +1,6 @@
 ﻿.. _monitoring_stats:
 
-Chapter 10. Monitoring & Statistics
+Chapter 9. Monitoring & Statistics
 ******************
 
 This chapter explains monitoring and statistics.
