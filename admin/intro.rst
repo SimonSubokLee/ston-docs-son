@@ -272,8 +272,7 @@ The edge server is built on the reverse-proxy structure. The fundamental concept
 
   ``STON`` can limit the use of memory and disks. In addition, when STON is mounted as a disk, all functions work in the same manner, so complicated services can be configured with a minimal solution.
 
-
-STON is being developed alongside the following services that actively utilize these attributes.
+The following services are growing along with STON Edge Server from Korea:
 
 .. figure:: img/intro_reference.png
    :align: center
