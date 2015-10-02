@@ -127,7 +127,7 @@ A universal method to acquire high bandwidth with a single server is bonding 1Gb
   
   ``STON`` guarantees maximum transmitting speed to all users. 
   
-- **Processing Massive Volume File**
+- **Processing Large Files**
 
 Nowadays most games have a very large volume of installation files and there are too many of them to fill a single DVD disk. Most masterpiece games consist of dozens of GB installation files. However, if the file size is too large to cache in the server memory, critical service failure is anticipated. The worst case is when all users are requesting different parts of a massive volume file from the server.
   
