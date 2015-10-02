@@ -1,6 +1,6 @@
 ﻿.. _snmp:
 
-Chapter 16. SNMP
+Chapter 11. SNMP
 ******************
 
 This chapter explains SNMP(Simple Network Monitoring Protocol).
