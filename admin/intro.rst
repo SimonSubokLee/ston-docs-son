@@ -26,8 +26,8 @@ Regardless of the user number, a service has to be reliable. Scalability include
 
 It is the best to keep these principles with least resources such as time, training and money. As a successful service grows, it must be able to deal with more users and content while keeping the principles. Doing so can be a difficult task. With a couple of servers, a test or pilot service may start. As the service begins to grow, the number of servers also should increase accordingly. Content renewal must be meticulously carried out on one server at a time. It might be a laborious task, but managing the system is not such an impossible task up to this point.
 
-Growing Service
-===================
+Growing Service and Data Delivery 
+===================================
 
 As the service begins to expand with even more users and data, managing each server one by one becomes more difficult. Thus, high-cost storage for collecting data in one system should be introduced (NAS, SAN, DAS and etc.). High-priced but reliable storage systems make content renewal easier because servers can automatically acquire updated content from the storage. Now, what about the exploding service scale? More servers require more data from storage and cause data delivery overload on the storage. In order to resolve the data overload issue, a new storage system to support higher bandwidth is often be considered, which may be highly expensive. However, investing an excessive amount of the budget on storage may be questioned from time to time.
 
@@ -35,11 +35,7 @@ Data synchronization is claimed as another potential solution . Getting all data
 
 A simple, quick and flexible method to deliver content to the servers would be preferred for bigger services. 
 
-
-And the Data Delivery
-=====================
-
-A service may be classified into application and storage layers, as shown in the figure below. 
+A service may be broken down into application and storage layers, as shown in the figure below. 
 
 .. figure:: img/intro_2layers.png
    :align: center
