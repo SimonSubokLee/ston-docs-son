@@ -7,7 +7,7 @@ Chapter 1. Introduction
    :maxdepth: 2
 
 
-Principles for Designing Successful Service
+Designing and Growing a Successful Service
 ===================
 Successful service incorporates availability, speed and scalability. Kate Matsudaira emphasized these three principles too, from the article 'Scalable Web Architecture and Distributed Systems'.
 
@@ -23,26 +23,17 @@ Time correlates to revenue in business, and high latency from e-commerce means a
 
 Regardless of the user number, a service has to be reliable. Scalability includes scale-up, service maintenance, easy storage expansion and transaction processing capacity. Manageability, with regard to the ease of diagnosing and understanding problems along with the easy updates or modifications, is also an important factor.
 
-Principles with the least required resources — such as time, effort, training and money - are the most efficient. 
-
-As a successful service grows, it must be able to deal with more users and content while continuing to abide by these three principles. Doing so can be difficult. How can these principles be easily followed with the least expense?
-
-
-
-Service Growth and Scaling
-===========================
+It is the best to keep these principles with least resources such as time, training and money. As a successful service grows, it must be able to deal with more users and content while keeping the principles. Doing so can be a difficult task.
 
 With a couple of servers, a test or pilot service may start. As the service begins to grow, the number of servers also should increase accordingly. Content renewal must be meticulously carried out on one server at a time. It might be a laborious task, but managing the system is not such an impossible task up to this point.
 
-As the service begins to expand with even more users and data, managing each server one by one becomes more difficult. Thus, high cost storage for collecting data in one system should be introduced (NAS, SAN, DAS, etc). High priced but reliable storage systems make content renewal easier because servers can automatically acquire updated content from the storage.
+As the service begins to expand with even more users and data, managing each server one by one becomes more difficult. Thus, high-cost storage for collecting data in one system should be introduced (NAS, SAN, DAS and etc.). High-priced but reliable storage systems make content renewal easier because servers can automatically acquire updated content from the storage.
 
-Now, what about when the service is exploding? An increased number of servers requires more data from storage and causes data delivery overload on the storage. In order to resolve the data transfer overload issue, extremely expensive storage that can support higher bandwidth should be considered. However, investing an excessive amount of the budget on storage may be questioned.
+Now, what about the exploding service scale? More servers require more data from storage and cause data delivery overload on the storage. In order to resolve the data overload issue, a new storage system to support higher bandwidth is often be considered, which may be highly expensive. However, investing an excessive amount of the budget on storage may be questioned from time to time.
 
-Another possible solution is synchronization. Preparing all data for the server is impractical, so the storage needs to sort out contents. Management is essential to achieve precise content control. Synchronization among a few servers might be simple, but the more servers and files there are to sync, the harder synchronization will be. As the system expands, synchronization becomes slower, harder, and more unstable.
+Another potential solution is synchronization. Getting all data ready is impractical, so the storage system needs to be the one sorting out contents. Management is essential to achieve precise content control. Synchronization among a few servers might be easy, but the more servers and files to sync, the harder synchronization. The entire system expands and synchronization becomes slower, harder, and more unstable even. Content is constantly changing. Synchronization takes more time with more files to add or delete. Likewise, a bigger scale service inevitably requires a complicated synchronization managing system. Failure of the managing system may lead to total service failure.
 
-Contents are constantly changing. Synchronization takes more time when there are more files to add or delete. Likewise, a bigger scale service inevitably requires a complicated synchronization managing system. Failure of the managing system may lead to total service failure.
-
-Extensive service requires a simple method for delivering content to the server in a quick and flexible way.
+A simple, quick and flexible method to deliver content to the servers would be preferred for bigger services. 
 
 
 And the Data Delivery
@@ -75,7 +66,7 @@ Having an efficient and easily expandable edge layer eliminates the necessity of
 Then, how can the STON edge server promote content delivery faster and easier?
 
 
-How Edge Server works : Caching
+Edge Server 101 : Caching
 =========================================
 
 .. figure:: img/intro_cache1.png
@@ -108,7 +99,7 @@ The STON edge server supports powerful live monitoring and logging. The administ
 STON also provides simple setup for administrators because it is specifically designed to offer an edge server for administrators. The Web Management page provides an intuitive setting. Detailed server settings can be configured by editing only two XML files.
 
 
-Benefits of the Edge Server
+Benefits
 ======================
 The following lists the effects of the edge server:
 
@@ -119,10 +110,10 @@ The following lists the effects of the edge server:
 Advantages of adopting the edge server are listed in the following application examples.
 
 
-Games
+Gaming
 ----------------------------
 
-Traditionally, game services require excessive bandwidth. In addition, there are various categories in the game service, from capitalized Masterpiece games to casual games. Explosive growth in smartphone games and the proliferation thereof diversified the game service form.
+Traditionally, gaming services require high bandwidth. In addition, there are a number of categories in the game service, from 'Masterpiece' games to casual ones. Gaming from smartphones is booming and services are diversified.
 
 .. figure:: img/icons_game.png
    :align: center
