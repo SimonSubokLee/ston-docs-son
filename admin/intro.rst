@@ -59,8 +59,7 @@ The edge indicates the surface layer of the service where users experience speed
 
 Having an efficient and easily expandable edge layer eliminates the necessity of expanding other high cost layers. On the other hand, expanding the storage layer and the application layer is an inappropriate solution due to  high cost and low efficiency.
 
-Then, how can the STON edge server promote content delivery faster and easier?
-
+This is where STON Edge Server is started to make content delivery faster and easier.
 
 Edge Server 101 : Caching
 =========================================
