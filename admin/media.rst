@@ -414,10 +414,10 @@ The following example will adjust the quality of an image to 25%. ::
    http://image.example.com/img.jpg/dims/quality/25/
   
 
-Image Synthesis
+Image Composition
 -----------------------
 
-This function synthesizes two images.
+This function composites two or more images.
 Unlike the previous functions, the image composite condition has to be pre-determined. 
 This function is helpful when applying a watermark on the image.. ::
 
