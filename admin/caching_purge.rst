@@ -1,6 +1,6 @@
 ﻿.. _caching-purge:
 
-Chapter 4. Caching Invalidation
+Chapter 4. Content Invalidation
 ******************
 
 This chapter explains how to invalidate cached content.
