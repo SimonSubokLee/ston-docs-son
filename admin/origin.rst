@@ -235,7 +235,7 @@ Also, the current session will not be reused, as a new connection will be create
 
 .. _origin-busysessioncount:
 
-Overload Judgement
+Overload Detection
 ====================================
 
 Content that is requested for the first time, must always be retrieved from the origin server.
@@ -248,7 +248,7 @@ If the server is already overloaded, renewal is postponed to maintain low origin
    <BusySessionCount>100</BusySessionCount>   
 
 -  ``<BusySessionCount> (default: 100)``
-   If the number of HTTP transactions in progress with the origin server exceeds a certain number, it will be judged as a overload.
+   If the number of HTTP transactions with the origin server is excessive, it will be considered as a overload.
    In order to block any contents renewal requests to the origin server during the overload status, extend the TTL for ``<OriginBusy>`` from :ref:`caching-policy-ttl`.
    You can set a very large value for this option to forward all requests unconditionally to the origin server.
    
