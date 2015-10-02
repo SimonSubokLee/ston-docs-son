@@ -244,10 +244,10 @@ There are several interesting points to check out on websites that have a signif
   ``STON`` supports DIMS function that can generate desired image formats from a single image in the server by URL call.
   
   
-File Based Server
+File-based Caching Server
 ----------------------------
 
-The edge server builds on the Reverse-Proxy structure. The fundamental concept of Reverse-Proxy is to copy/modify/manage files from the remote server to local storage. If qualified, STON can interwork with a service server, storage centralization and synchronization issues can be resolved. In addition, both service development time reduction and service reliability improvement can be attained.
+The edge server is built on the reverse-proxy structure. The fundamental concept of reverse-proxy is to copy/modify/manage files from the remote server to local storage. If qualified, STON can interwork with a service server, storage centralization and synchronization issues can be resolved. In addition, both service development time reduction and service reliability improvement can be attained.
 
 .. figure:: img/icons_file.png
    :align: center
