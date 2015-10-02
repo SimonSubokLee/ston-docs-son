@@ -1,6 +1,6 @@
 ﻿.. _filesystem:
 
-Chapter 13. File System
+Chapter 16. File System
 ******************
 
 This chapter explains how to utilize STON like a local disk.
