@@ -182,13 +182,13 @@ Exclusive protocols for media are losing strength, while the simple but powerful
 .. figure:: img/icons_media.png
    :align: center
 
-- **Perception of Media**
+- **Media Detection**
 
   A media file should not be recognized as one huge chunk of file. Reducing bandwidth and linking various additional functions are only possible when the format of the media file is correctly recognized. If the server requires the entire file to extract the file format, users will be wasting a lot of time until the server acquires the entire file. Most likely, users won't even wait for that.
   
   ``STON`` supports MP4, MP3, M4A, and FLV formats. As soon as the server starts downloading a media file, it preferentially caches required sections for HTTP Pseudo Streaming.
   
-- **Reorganizing Media Header**
+- **Media Header Reordering**
 
   If the header is located at the end of file, HTTP Pseudo Streaming is not available. An exclusive media player is required for this type of file, but installing a subsidiary program is an obnoxious extra task for all users.
   
