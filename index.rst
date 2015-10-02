@@ -11,6 +11,12 @@ STON Edge Server Complete Guide
 
 :Version: 2.1.6, September 10, 2015
 
+0. White Paper
+=============================
+.. toctree::
+   :maxdepth: 2
+
+   admin/intro
    
 1. Basics
 =============================
@@ -18,7 +24,6 @@ STON Edge Server Complete Guide
 .. toctree::
    :maxdepth: 2
 
-   admin/intro
    admin/getting_started
    admin/environment
    
