@@ -1,6 +1,6 @@
 ﻿.. _https:
 
-Chapter 9. HTTPS
+Chapter 8. HTTPS
 ******************
 
 This chapter explains how to configure HTTPS.
