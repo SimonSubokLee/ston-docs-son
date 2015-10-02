@@ -14,7 +14,7 @@ This method wastes processing time and storage; moreover, it is difficult to mai
 
 
 
-Repositioning MP4/M4A Header
+Reordering MP4/M4A Header
 ====================================
 
 Usually in MP4 format, the header cannot be completed during the encoding process; instead, it will be attached at the end of the file when encoding is done. 
