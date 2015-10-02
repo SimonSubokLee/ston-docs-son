@@ -1,6 +1,6 @@
 ﻿.. _intro:
 
-STON Edge Server White Paper
+Service Scaling and Caching: White Paper
 **********************************
 
 .. toctree::
