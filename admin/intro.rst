@@ -1,6 +1,6 @@
 ﻿.. _intro:
 
-Caching and Service Scaling
+Caching and Service Scaling : White Paper
 **********************************
 
 .. toctree::
