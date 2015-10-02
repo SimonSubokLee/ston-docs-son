@@ -1,6 +1,6 @@
 ﻿.. _bypass:
 
-Chapter 8. Bypass
+Chapter 7. Bypass
 ******************
 
 This chapter explains how to set a bypass that will delegate client request handling to the origin server.
