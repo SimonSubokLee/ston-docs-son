@@ -1,6 +1,6 @@
 ﻿.. _handling_http_requests:
 
-Chapter 6. Handling HTTP Requests
+Chapter 5. Handling HTTP Requests
 ******************
 
 This chapter explains methods to handle HTTP client sessions and requests.
