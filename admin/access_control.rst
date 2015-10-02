@@ -1,6 +1,6 @@
 ﻿.. _access-control:
 
-Chapter 10. Access Control
+Chapter 14. Access Control
 ******************
 
 This chapter explains how to deny access to unwanted clients. 
