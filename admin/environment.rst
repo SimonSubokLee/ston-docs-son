@@ -1,6 +1,6 @@
 ﻿.. _env:
 
-Chapter 3. Configurations
+Chapter 2. Configurations
 ******************
 
 This chapter is about configuration of STON Edge Server.
