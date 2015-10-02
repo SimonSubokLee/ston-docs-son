@@ -110,7 +110,7 @@ Advantages of adopting the edge server are listed in the following application e
 Gaming
 ----------------------------
 
-Traditionally, gaming services require high bandwidth. In addition, there are a number of categories in the game service, from 'Masterpiece' games to casual ones. Gaming from smartphones is booming and services are diversified.
+Gaming services require high bandwidth. In addition, there are a number of categories in the game service, from 'Masterpiece' games to casual ones. Gaming from smartphones is booming and services are diversified.
 
 .. figure:: img/icons_game.png
    :align: center
