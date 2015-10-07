@@ -133,6 +133,57 @@ In addition, both `ngx_http_mp4_module <http://nginx.org/en/docs/http/ngx_http_m
 use **start** as a QueryString.
 
 
+.. _media-multi-trimming:
+
+Multi-Trimming
+====================================
+
+Stitches multiple segments trimmed from the origin video clip.
+
+.. figure:: img/conf_media_multitrimming.png
+   :align: center
+   
+   /video.mp4?trimming=0-30,210-270,525-555
+
+Basically the same mechanism as trmming except for multiple-segment support. ::
+
+   # server.xml - <Server><VHostDefault><Media>
+   # vhosts.xml - <Vhosts><Vhost><Media>
+   
+   <MP4Trimming MultiParam="trimming" MaxRatio="50">OFF</MP4Trimming>
+   <M4ATrimming MultiParam="trimming">OFF</M4ATrimming>
+
+-  ``<MP4Trimming>`` ``<M4ATrimming>``
+   
+   - ``MultiParam (Default: "trimming")`` 
+     QuesryString key name. A segment can be trimmed by "start - end" format in second, and one after another by comma (,).
+     
+   - ``MaxRatio (Default: 50%)``
+     Caps the length of stitched videos up to  ``MaxRatio (Max: 100%)``
+     Segments beyond the``MaxRatio`` will not be served.
+     
+
+For an example, the following command generates a reduced 3-minute video. ::
+
+   http://example.com/video.mp4?trimming=10-70,560-620,1245-1305
+   
+Repeat and non-sequential stitching is supported too. ::
+
+   http://example.com/video.mp4?trimming=17-20,17-20,17-20,17-20
+   http://example.com/video.mp4?trimming=1000-1200,500-623,1900-2000
+   http://example.com/video.mp4?trimming=600-,400-600
+   
+If the starting fram
+
+
+.. note::
+
+   `Multi-Trimming`_ is prioritized over `Trimming`_ . 
+   `Multi-Trimming`_ keys are also priortized over `Trimming`_ keys in QueryStrings.
+
+
+
+
 .. _media-hls:
 
 HLS (HTTP Live Streaming)
