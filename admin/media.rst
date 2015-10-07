@@ -173,7 +173,7 @@ Repeat and non-sequential stitching is supported too. ::
    http://example.com/video.mp4?trimming=1000-1200,500-623,1900-2000
    http://example.com/video.mp4?trimming=600-,400-600
    
-If the starting fram
+The default segment values for the start and the end are the ones of original video.
 
 
 .. note::
