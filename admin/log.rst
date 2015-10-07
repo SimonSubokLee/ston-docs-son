@@ -322,8 +322,10 @@ This log is recorded when an HTTP transaction--either a transfer completion or t
     
 -  ``XFF``
 
-   - ``OFF (default)`` Records client IPs.
-   - ``ON`` Records X-Fowarded-For header values sent from clients. If the header value does not exist, this is identical to ``OFF``.
+   - ``ON (default) `` Logs X-Fowarded-For header values sent from clients. Without the header, this is the same as ``OFF``.
+   - ``OFF `` Records client IPs.
+   - ``TrimCIP``Logs client IPs if XFF header is available. Otherwise, logs XFF header only (except client IPs).
+
 
 -  ``Form``
    
