@@ -6,6 +6,21 @@ Appendix B: Release Notes
 v2.1.x
 ====================================
 
+2.1.7 (OCT 7, 2015)
+----------------------------
+
+   - :ref:`media-multi-trimming` : Stitches multiple segments trimmed from the origin videos. 
+   
+**Feature/Policy Updates**
+
+   - :ref:`admin-log-access` : Supports TrimCIP option for X-Forwarded-For header
+   
+**Bug Fixes**
+
+   - :ref:`media-hls` : Video jittering from few profiles
+   - :ref:`media-dims` : Unintended 500 Internal Error responses with zero TTLs
+   - Unintended space characters in X-Forwarded-For c-ip logging 
+   
 2.1.6 (SEP 9, 2015)
 ----------------------------
 
