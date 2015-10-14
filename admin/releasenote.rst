@@ -11,7 +11,7 @@ v2.1.x
    
 **Bug Fix**
 
-   - Abnormal termination upon manager port accesses from blocked IPs (2.1.6 ~ 7)
+   - Abnormal termination upon manager port access from blocked IPs (2.1.6 ~ 7)
 
 2.1.7 (OCT 7, 2015)
 ----------------------------
