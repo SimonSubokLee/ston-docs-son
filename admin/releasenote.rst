@@ -6,6 +6,13 @@ Appendix B: Release Notes
 v2.1.x
 ====================================
 
+2.1.8 (OCT 14, 2015)
+----------------------------
+   
+**Bug Fix**
+
+   - Abnormal termination upon manager port accesses from blocked IPs (2.1.6 ~ 7)
+
 2.1.7 (OCT 7, 2015)
 ----------------------------
 
