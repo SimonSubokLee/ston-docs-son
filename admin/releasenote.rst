@@ -11,7 +11,7 @@ v2.1.x
    
 **Bug Fix**
 
-   - :ref:`media-hls` : Video playback malfuction from 2.1.7
+   - :ref:`media-hls` : Video playback malfunction from 2.1.7
 
 2.1.8 (OCT 14, 2015)
 ----------------------------
