@@ -90,13 +90,22 @@ CipherSuite Selection
 
 The followings are supported CipherSuites;
 
-- RSA_WITH_RC4_SHA
-- RSA_WITH_RC4_MD5
-- RSA_WITH_AES_128_CBC_SHA
-- RSA_WITH_AES_256_CBC_SHA
-- RSA_WITH_3DES_EDE_CBC_SHA
-- ECDHE_RSA_WITH_AES_128_CBC_SHA
-- ECDHE_RSA_WITH_AES_256_CBC_SHA
+================================================ ======== =========== ======= 
+Cipher Suite                                     TLS1.2   TLS1.1/1.0  SSL3.0
+================================================ ======== =========== =======
+TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256	(0xc02F)   O       
+TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256	(0xC027)   O
+TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA (0xC014)      O        O
+TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA (0xC013)      O        O
+TLS_RSA_WITH_AES_128_GCM_SHA256	(0x009C)         O
+TLS_RSA_WITH_AES_256_CBC_SHA256	(0x003D)         O
+TLS_RSA_WITH_AES_128_CBC_SHA256	(0x003C)         O
+TLS_RSA_WITH_AES_256_CBC_SHA (0x0035)            O        O
+TLS_RSA_WITH_AES_128_CBC_SHA (0x002F)            O        O
+TLS_RSA_WITH_3DES_EDE_CBC_SHA (0x000A)           O        O
+TLS_RSA_WITH_RC4_128_SHA (0x0005)                                     O
+TLS_RSA_WITH_RC4_128_MD5 (0x0004)                                     O
+================================================ ======== =========== =======
 
 You can choose which CipherSuite to use by configuring ``CipherSuite`` in ``<Https>``. ::
 
@@ -109,6 +118,31 @@ You can choose which CipherSuite to use by configuring ``CipherSuite`` in ``<Htt
    </Https>   
 
 -  ``CipherSuite`` Abides by the `SSL CipherSuite expression of Apache mode_ssl <http://httpd.apache.org/docs/2.2/mod/mod_ssl.html#sslciphersuite>`_.
+
+
+`Forward Secrecy <https://en.wikipedia.org/wiki/Forward_secrecy>`_ may provide higher level of security. (please refer to the links below)
+
+   - `SSL Labs: Deploying Forward Secrecy <https://community.qualys.com/blogs/securitylabs/2013/06/25/ssl-labs-deploying-forward-secrecy>`_
+   - `SSL/TLS & Perfect Forward Secrecy <http://vincent.bernat.im/en/blog/2011-ssl-perfect-forward-secrecy.html>`_   
+   - `Configuring Apache, Nginx, and OpenSSL for Forward Secrecy <https://community.qualys.com/blogs/securitylabs/2013/08/05/configuring-apache-nginx-and-openssl-for-forward-secrecy>`_
+
+CipherSuites with FS(Forward Secrecy) are prioritized by default. ::
+
+   # server.xml - <Server>
+
+   <Https FS="ON"> ...  </Https>
+
+-  ``FS``
+
+   - ``ON (default)`` CipherSuites with FS(Forward Secrecy) are prioritized by default.
+   - ``OFF`` Follows the prioritiy order from ClientHello.
+   
+``FS`` attribute is prioritized over ``CipherSuite`` attribute.
+
+.. note::
+
+   Only ECDHE supported for performance issues. DHE is not supported.
+
 
 
 
