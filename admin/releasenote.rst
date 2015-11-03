@@ -6,6 +6,19 @@ Appendix B: Release Notes
 v2.1.x
 ====================================
 
+2.2.0 (NOV 4, 2015)
+----------------------------
+   
+   - Supports TLS 1.2 (including Forward Secrecy and other security policy updates)
+   
+**Bug Fixes**
+
+   - Abnormal termination upon no disk information
+   - TLS-Handshake version choice
+       **Before.**  TLSPlaintext.version
+       **After.**  ClientHello.client.version
+   
+
 2.1.9 (OCT 15, 2015)
 ----------------------------
    
@@ -32,7 +45,7 @@ v2.1.x
 **Bug Fixes**
 
    - :ref:`media-hls` : Video jittering from few profiles
-   - :ref:`media-dims` : Unintended 500 Internal Error responses with zero TTLs
+   - :ref:`media-dims` : B 500 Internal Error responses with zero TTLs
    - Unintended space characters in X-Forwarded-For c-ip logging 
    
 2.1.6 (SEP 9, 2015)
