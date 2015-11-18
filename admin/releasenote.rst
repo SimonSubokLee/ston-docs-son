@@ -6,6 +6,14 @@ Appendix B: Release Notes
 v2.1.x
 ====================================
 
+2.2.1 (NOV 19, 2015)
+----------------------------
+   
+**Bug Fixes**
+
+   - TLS-Handshake: overlapping ChangeCipherSpec return upon separate ChangeCipherSpec and ClientFinished messages
+   - :ref:`media-dims` : size ratio malfuction from Animated GIF resizing
+
 2.2.0 (NOV 4, 2015)
 ----------------------------
    
