@@ -519,6 +519,43 @@ The following shows how to configure whether or not to recognize the ETag that t
    
    - ``ON`` Identifies the ETag and appends an If-None-Match header when updating contents.
 
+
+.. _origin_modify_client:
+
+Modification of Header to Origin
+====================================
+
+This function modifies the HTTP header to origin. ::
+
+   # server.xml - <Server><VHostDefault><OriginOptions>
+   # vhosts.xml - <Vhosts><Vhost><OriginOptions>
+   
+   <ModifyHeader FirstOnly="OFF">OFF</ModifyHeader>   
+    
+-  ``<ModifyHeader>``
+    
+   -  ``OFF (default)`` Keeps the original header.
+   
+   -  ``ON`` Modifies the header according to the conditions set.
+
+Header modification operates right before the transmission to origin.
+Range header CANNOT be modified. 
+   
+This function follows the rules of :ref:`handling_http_requests_modify_client` .
+$ORGREQ keyword is used for header modification. ::
+
+   # /svc/www.example.com/headers.txt
+   
+   $URL[/*.mp4], $ORGREQ[x-media-type: video/mp4], set
+   $IP[1.1.1.1], $ORGREQ[user-agent: media_probe], put
+   *, $ORGREQ[If-Modified-Since], unset
+   *, $ORGREQ[If-None-Match], unset
+   
+
+.. note::
+
+   If If-Modified-Since and If-None-Match header is ``unset``, stale content is always downloaded from the origin and refreshed.
+
    
 Redirect Tracking
 ====================================
