@@ -367,6 +367,9 @@ For ``unset``, only the {Key} value is required.
 -  ``set``  Adds the Key and Value that are defined in the request/response header to the header. 
    If an identical Key exists, set overwrites the previous value.    
 
+-  ``put``  This is similar to ``set``. Adds the Key and Value defined in the request/response header to the header. 
+   Unlike ``set``, put inserts an extra set of the Key and Value.
+
 -  ``unset`` Discards the header related to the Key that is defined in the request/response header
 
 -  ``append``  This is similar to ``set``, while this setting uses a comma(,) to combine the previous Value with the configured Value when a related Key is found.
