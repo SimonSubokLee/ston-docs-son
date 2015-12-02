@@ -6,6 +6,15 @@ Appendix B: Release Notes
 v2.1.x
 ====================================
 
+2.2.2 (DEC 3, 2015)
+----------------------------
+   
+   - Modifies HTTP request header to origin
+
+**Feature/Policy Updates**
+
+   - HTTP request/response header modification : 'put' action added, which inserts the header
+
 2.2.1 (NOV 19, 2015)
 ----------------------------
    
