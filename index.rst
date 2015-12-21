@@ -77,3 +77,7 @@ Appendix
 
    admin/graph
    admin/releasenote
+
+
+.. figure:: WineSOFT_origin.png
+   :align: right
