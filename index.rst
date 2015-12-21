@@ -81,3 +81,4 @@ Appendix
 
 .. figure:: WineSOFT_origin.png
    :align: left
+   :width: 200px
