@@ -3,8 +3,36 @@
 Appendix B: Release Notes
 ***************************
 
-v2.1.x
+v2.2.x
 ====================================
+
+2.2.5 (JAN 12, 2016)
+----------------------------
+
+**Feature/Policy Updates**
+
+   - HTTP 451 response code update: "Unavailable For Legal Reasons" 
+
+**Bug Fix**
+
+   - TLS : unintended termination upon attacking packets
+   
+   
+2.2.4 (DEC 11, 2015)
+----------------------------
+
+**Bug Fix**
+
+   - HLS : playback termination upon media segmentation 
+   
+   
+2.2.3 (DEC 4, 2015)
+----------------------------
+
+**Bug Fix**
+
+   - Virtualhost generation failure from Web Management in 2.2.2
+   
 
 2.2.2 (DEC 3, 2015)
 ----------------------------
@@ -14,6 +42,7 @@ v2.1.x
 **Feature/Policy Updates**
 
    - HTTP request/response header modification : 'put' action added, which inserts the header
+
 
 2.2.1 (NOV 19, 2015)
 ----------------------------
@@ -35,6 +64,10 @@ v2.1.x
        **Before.**  TLSPlaintext.version
        **After.**  ClientHello.client.version
    
+
+v2.1.x
+====================================
+
 
 2.1.9 (OCT 15, 2015)
 ----------------------------
