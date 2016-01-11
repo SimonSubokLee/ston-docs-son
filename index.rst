@@ -7,7 +7,7 @@
 STON Edge Server Complete Guide
 ==========================
 
-:Author: STON Makers
+:Author: WineSOFT Inc.
 
 :Version: 2.2.5, January 12, 2016
 
