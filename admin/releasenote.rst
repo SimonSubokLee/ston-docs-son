@@ -11,7 +11,7 @@ v2.2.x
 
 **Feature/Policy Updates**
 
-   - HTTP 451 response code update: "Unavailable For Legal Reasons" 
+   - HTTP response code update: "451 Unavailable For Legal Reasons" 
 
 **Bug Fix**
 
