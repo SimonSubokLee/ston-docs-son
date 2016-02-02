@@ -3,6 +3,18 @@
 Appendix B: Release Notes
 ***************************
 
+v2.3.x
+====================================
+
+2.3.0 (FEB 3, 2016)
+----------------------------
+
+**Bug Fixes**
+
+   - Expires Header: incorrect max-age value from modification 
+   - DIMS Statistics: incorrect average value from faulty denominator
+
+
 v2.2.x
 ====================================
 
