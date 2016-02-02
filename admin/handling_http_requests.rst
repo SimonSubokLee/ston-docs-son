@@ -530,3 +530,83 @@ URL preprocessing simplifies expressions with other functions such as :ref:`medi
     
 If 5 XML special characters( " & ' < > ) are used for patterned expression, you must keep them in <![CDATA[ ... ]]>.
 When configuring with :ref:`wm`, all patterns are processed as CDATA.
+
+
+.. _handling_http_requests_compression:
+
+Compression
+====================================
+Cached content is deliverable in compression.
+Content files MUST be categorized by :ref:`caching-policy-accept-encoding`  ::
+
+   Accept-Encoding: gzip, deflate
+
+.. figure:: img/compression_1.png
+   :align: center
+      
+   Delivered in on-the-fly compression.
+
+::
+
+   # server.xml - <Server><VHostDefault><Options>
+   # vhosts.xml - <Vhosts><Vhost><Options>
+
+   <Compression Method="gzip" Level="6" SourceSize="2-2048">OFF</Compression>
+
+-  ``<Compression>``
+
+   -  ``OFF (default)`` no compression
+   
+   -  ``ON`` compressed by the following attributes
+
+      -  ``Method (default: gzip)`` Compression method - only gzip supported for now.
+      -  ``Level (default: 6)`` Compression level - dependant on ``Method``, and 1~9 for gzip. A higher value means slower and more compression. A lower one means faster and less compression.
+      -  ``SourceSize (default: 2-2048, unit: KB)`` Source size in range. 
+         Too small files might be hardly compressed. 
+         Too large files might consume too much CPU, on the other hand.
+
+Compressed content is cached and stored separately from its original. More requests for the same content do not incur compression. 
+The list of files to compress is configurable in /svc/{vhost}/compression.txt in an orderly manner. ::
+   # /svc/www.example.com/compression.txt
+   # Separated by commas ( , ) .
+   # Formatted in {URL Condition}, {Method}, {Level}
+
+   /sample.css, no       // No compression
+   *.css                 // Compress *.css with default method and level
+   *.htm, gzip           // Compress *.htm with gzip (default level)
+   *.xml, , 9            // Compress *.xml with level 9 (default method)
+   *.js, gzip, 5         // Compress *.js with gzip level 5.
+
+Compression consumes CPU resource highly.
+The following is a test result from gzip level 9.
+
+-  ``OS`` CentOS 6.3 (Linux version 2.6.32-279.el6.x86_64 (mockbuild@c6b9.bsys.dev.centos.org) (gcc version 4.4.6 20120305(Red Hat 4.4.6-4) (GCC) ) #1 SMP Fri Jun 22 12:19:21 UTC 2012)
+-  ``CPU`` `Intel(R) Xeon(R) CPU E5-2603 0 @ 1.80GHz (8 processors) <http://www.cpubenchmark.net/cpu.php?cpu=Intel%20Xeon%20E5-2603%20@%201.80GHz>`_
+-  ``RAM`` 8GB
+-  ``HDD`` SAS 275GB X 5EA
+
+======================= ============== ======== ============== ========================= =====================
+Size                    Comp. Ratio(%)  Files    Latency (ms)   Client Traffic (Mbps)    Origin Traffic (Mbps)
+======================= ============== ======== ============== ========================= =====================
+1KB                     26.25          5288     6.72           40.58                     55.02
+2KB                     57.45          5238     7.20           41.52                     97.58
+4KB                     76.94          5236     7.18           42.44                     184.04
+8KB                     87.61          5021     7.53           41.87                     337.80
+16KB                    93.32          4608     8.30           41.19                     616.83
+32KB                    96.26          3495     13.55          34.53                     924.22
+64KB                    97.79          1783     24.50          20.71                     938.83
+bootstrap.css(20KB)     86.87          3944     9.67           83.79                     638.25
+bootstrap.min.js(36KB)  73.00          1791     51.50          139.00                    514.86
+======================= ============== ======== ============== ========================= =====================
+
+If ``<Compression>`` is turned on, uncompressed files are requested from origin servers, meaning reseponses from no Accept-Encoding headers.
+A Content-Encoding header means compressed from the origin server, and STON does not compress the content again.
+
+
+.. note::
+
+   If any pre-compresed content undergoes ``<Compression>``, this might cause a serious problem. Please keep in mind the followings.
+
+   1. Compress new content.
+   2. Do not compress content which is pre-compressed in its origin server.
+   3. Invalidate AND compress content which is not compressed in its origin server. 
