@@ -544,7 +544,7 @@ Content files MUST be categorized by :ref:`caching-policy-accept-encoding`  ::
 .. figure:: img/compression_1.png
    :align: center
       
-   Delivered in on-the-fly compression.
+   Compressed and delivered on-the-fly.
 
 ::
 
