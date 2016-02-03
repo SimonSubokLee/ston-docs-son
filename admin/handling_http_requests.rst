@@ -537,7 +537,7 @@ When configuring with :ref:`wm`, all patterns are processed as CDATA.
 Compression
 ====================================
 Cached content is deliverable in compression.
-Content files MUST be categorized by :ref:`accept-encoding-header`  ::
+Content files MUST be categorized by :ref:`caching-policy-accept-encoding`  ::
 
    Accept-Encoding: gzip, deflate
 
