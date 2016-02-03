@@ -292,6 +292,7 @@ If there is at least one no-cache setting in the client HTTP request, related co
    
 Expired contents abide by the `Expiration Policy`_.
 
+.. _caching-policy-accept-encoding:
 
 Accept-Encoding Header
 ====================================
