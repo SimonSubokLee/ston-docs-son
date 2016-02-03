@@ -9,6 +9,8 @@ v2.3.x
 2.3.0 (FEB 3, 2016)
 ----------------------------
 
+   -  Supports on-the-fly compression.
+
 **Bug Fixes**
 
    - Expires Header: incorrect max-age value from modification 
