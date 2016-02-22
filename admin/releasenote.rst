@@ -6,6 +6,23 @@ Appendix B: Release Notes
 v2.3.x
 ====================================
 
+.. 
+   2.3.1 (FEB 23, 2016)
+   ----------------------------
+
+   - Supports MP3 streaming in HLS
+
+   **Feature/Policy Updates**
+
+      - Custom access log format 
+          | %..y Request HTTP header size
+          | %..z Response HTTP header size
+
+   **Bug Fix**
+
+      - WM : unintended configuration failure without destination port
+   
+
 2.3.0 (FEB 3, 2016)
 ----------------------------
 
