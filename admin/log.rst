@@ -519,7 +519,17 @@ you should use double quotation marks for items that could include space, such a
 -  ``%...K`` Request HTTP version	::
 
       HTTP/1.1
-  
+    
+.. 
+   -  ``%...y`` Request HTTP Header Size ::
+   
+         488
+   
+   -  ``%...z`` Request HTTP Header Size	::
+   
+         362
+   
+      
 "-" indicates that the configured field value does not exist. 
 If the format is wrong, the STON default format (Form="ston") will be adopted.
   
