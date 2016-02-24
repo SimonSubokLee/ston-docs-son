@@ -311,6 +311,30 @@ Let's take a look at the following client request and see how STON would respond
 
 
 
+.. .. _media-mp3-hls:
+
+   MP3 HLS
+   ====================================
+
+   MP3 files are served in HLS (HTTP Live Streaming). ::
+
+      # server.xml - <Server><VHostDefault><Media>
+      # vhosts.xml - <Vhosts><Vhost><Media>
+
+      <MP3HLS Status="Inactive" Keyword="mp3hls">
+         <Index Ver="3" Alternates="off">index.m3u8</Index>
+         <Sequence>0</Sequence>
+         <Duration>10</Duration>
+         <AlternatesName>playlist.m3u8</AlternatesName>
+      </MP3HLS>
+   
+   Configuration and operation is identical to that of `MP4 HLS`_ .
+   
+   .. note::
+   
+      `MP3 HLS`_ might not be working if `MP4 HLS`_  and `MP3 HLS`_ are set in the same ``Keyword``.
+
+
 .. _media-dims:
 
 DIMS
