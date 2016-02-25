@@ -20,7 +20,7 @@ v2.3.x
 
    **Bug Fix**
 
-      - WM : unintended configuration failure without destination port
+      - WM : unintended failure in no destination port configured
    
 
 2.3.0 (FEB 3, 2016)
