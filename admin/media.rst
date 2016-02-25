@@ -186,7 +186,7 @@ The default segment values for the start and the end are the ones of original vi
 
 .. _media-hls:
 
-HLS (HTTP Live Streaming)
+MP4 HLS
 ====================================
 
 MP4 files are serviced with HLS(HTTP Live Streaming). 
