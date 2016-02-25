@@ -520,14 +520,14 @@ you should use double quotation marks for items that could include space, such a
 
       HTTP/1.1
     
-.. 
-   -  ``%...y`` Request HTTP Header Size ::
+
+-  ``%...y`` Request HTTP Header Size ::
    
-         488
+      488
+
+-  ``%...z`` Request HTTP Header Size	::
    
-   -  ``%...z`` Request HTTP Header Size	::
-   
-         362
+      362
    
       
 "-" indicates that the configured field value does not exist. 
