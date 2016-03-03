@@ -1,13 +1,13 @@
 ﻿.. _cacti:
 
-Appendix B: Cacti 모니터링
+Appendix B: Cacti Monitoring
 *************************
 
-이 장에서는 `Cacti <http://www.cacti.net/>`_ 의 Graph Tree를 사용하여 다수의 STON을 통합 모니터링 하는 방법에 대해 설명한다.
-다음 2가지 사항이 전제된다.
+This appendix is about monitoring and graphing STON with Graph Tree from `Cacti <http://www.cacti.net/>`_ .
+The following prerequisites are required.
 
--  Cacti가 설치된 서버
--  SNMP 활성화 ( :ref:`snmp` 참고)
+-  A server with Cacti installed
+-  SNMP activation (Please refer to :ref:`snmp`)
 
 
 .. toctree::
@@ -16,11 +16,11 @@ Appendix B: Cacti 모니터링
 
 .. _cacti_template:
 
-Template 추가
+Adding templates
 ====================================
 
-STON에서 제공하는 Host Template을 사용하면 모니터링 환경을 쉽게 구축할 수 있다. 
-( `다운로드 <http://webhard.winesoft.co.kr/ston/monitoring/cacti/ston_host_template.xml>`_ )
+The Host Template provided along with STON may help configuring monitoring. 
+Please `download at <http://webhard.winesoft.co.kr/ston/monitoring/cacti/ston_host_template.xml>`_ )
 
 .. figure:: img/cacti01.png
    :align: center
