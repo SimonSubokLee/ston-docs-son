@@ -76,6 +76,7 @@ Appendix
    :maxdepth: 2
 
    admin/graph
+   admin/cacti
    admin/releasenote
 
 
