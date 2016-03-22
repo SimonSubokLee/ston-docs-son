@@ -6,18 +6,17 @@ Appendix C: Release Notes
 v2.3.x
 ====================================
 
-..
-   2.3.2 (MAR 22, 2016)
-   ----------------------------
+2.3.2 (MAR 22, 2016)
+----------------------------
 
-   **Feature/Policy Update**
+**Feature/Policy Update**
 
-      - HLS index file compatibility improved 
+   - HLS index file compatibility improved 
 
-   **Bug Fixes**
+**Bug Fixes**
 
-      - Unintended termination from encryption/decryption with a bad SSL handshake
-      - Occasional termination from active ACLs
+   - Unintended termination from encryption/decryption with a bad SSL handshake
+   - Occasional termination from active ACLs
 
 
 2.3.1 (FEB 23, 2016)
