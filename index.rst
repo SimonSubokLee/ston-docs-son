@@ -9,7 +9,7 @@ STON Edge Server Complete Guide
 
 :Author: WineSOFT Inc.
 
-:Version: 2.3.2, March 22, 2016
+:Version: 2.3.3, April 26, 2016
 
 White Paper
 =============================
