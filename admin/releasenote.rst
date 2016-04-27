@@ -6,6 +6,16 @@ Appendix C: Release Notes
 v2.3.x
 ====================================
 
+2.3.3 (APR 26, 2016)
+----------------------------
+
+**Bug Fixes**
+
+   - Unintended 404 responses upon origin host, DIMS and compression configured [2.3.0 ~ 2.3.2]
+   - Unintended CPU overload upon SNMP View deletion
+   - WM - 0 value input error from SNMP GlobalMIn
+
+
 2.3.2 (MAR 22, 2016)
 ----------------------------
 
