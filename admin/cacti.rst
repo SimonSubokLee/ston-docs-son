@@ -25,30 +25,30 @@ Please `download at <http://webhard.winesoft.co.kr/ston/monitoring/cacti/ston_ho
 .. figure:: img/cacti01.png
    :align: center
       
-   Import Templates 메뉴를 선택한다.
+   Select Import Templates menu.
       
 .. figure:: img/cacti02.png
    :align: center
       
-   cacti_host_template_ston.xml을 Import한다.
+   Import cacti_host_template_ston.xml
       
 
 .. _cacti_device_add:
 
-Device 등록
+Device Registration
 ====================================
 
-STON을 Cacti의 Device로 등록한다.
+Register STON as a Cacti device.
 
 .. figure:: img/cacti03.png
    :align: center
       
-   [Devices] 메뉴를 선택한다.
+   Select [Devices] menu.
       
 .. figure:: img/cacti04.png
    :align: center
       
-   [Devices] 메뉴의 [Add] 버튼을 클릭한다.
+   Click [Add] button from [Devices] menu.
       
 .. figure:: img/cacti05.png
    :align: center
@@ -56,34 +56,35 @@ STON을 Cacti의 Device로 등록한다.
    Devices 항목을 작성한다.
 
 
--  ① 대상 STON의 이름을 작성한다.
--  ② 대상 STON의 IP를 입력한다.
--  ③ ”STON”을 선택한다.
--  ④ “Public”을 선택한다.
--  ⑤ 기본 포트 161을 입력한다.
+-  ① Input the STON's name.
+-  ② Input the STON's IP.
+-  ③ Select ”STON”.
+-  ④ Select “Public”.
+-  ⑤ Input the default port 161.
 
 
-Create 버튼을 클릭하여 Device를 연동한다.
+Click the "Create" button and engage the deivce.
 
 .. figure:: img/cacti06.png
    :align: center
       
-   정상적으로 연동되었다.
+   Engaged successfully.
       
 .. figure:: img/cacti07.png
    :align: center
       
-   연동에 실패하였다.
+   Enegement error.
       
 .. note::
 
-   SNMP 연동 실패시
+   If the SNMP engagement fails:
    
-   -  STON의 SNMP가 활성화되었는지 확인한다.
-   -  SNMP Port 번호가 STON의 SNMP Port번호와 일치 한지 확인한다.
+   -  Please check if SNMP from STON is enabled.
+   -  Please make sure if the SNMP port matches that of STON.
       
 
 Device 연동에 성공하면 STON Template 에서 제공하는 18가지 항목의 그래프를 사용 할 수 있다.
+The STON template provides 18 different 
 
 .. figure:: img/cacti08.png
    :align: center
