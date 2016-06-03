@@ -6,6 +6,24 @@ Appendix C: Release Notes
 v2.3.x
 ====================================
 
+2.3.4 (JUN 3, 2016)
+----------------------------
+
+**Feature/Policy Updates**
+
+ - Supports large MP4 files with 32-bit mdat atoms (4GB or more)
+ - Supports Host header value in unknown access logs
+ - WM installation : Apache Manual folder deleted for security
+ - WM installation : "winesoft" Apache account as nologin
+   
+**Bug Fixes**
+
+ - HLS: CPU overload upon some videos
+ - Termination upon bypassing HTTP requests
+ - Client IP shown as 0.0.0.0 in access logs
+ - Configuration backup failure for over 260 virtualhosts generated
+
+
 2.3.3 (APR 26, 2016)
 ----------------------------
 
