@@ -145,7 +145,7 @@ Add STON to the Graph Tree.
    
 .. _cacti_graph_confirm:
 
-Graphs 확인
+Graphs Generated
 ====================================
 
 Click the [graphs] menu and make sure the graph displayed.
