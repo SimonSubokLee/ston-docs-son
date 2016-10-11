@@ -294,7 +294,7 @@ v2.0.x
 
 **Bug Fix**
 
-   - abnormal termiation from MP4 analysis with broken headers
+   - abnormal termination from MP4 analysis with broken headers
    
    
 2.0.5 (APR 1, 2015)
@@ -317,7 +317,7 @@ v2.0.x
    - overloaded CPU for MP4 media with broken headers 
    - audio/video synchronization failure while serving MP4 with uneven audio keyframe in HLS
    - RRD - statistics bug: average response time shown in total
-   - WM - forcing formatting new disks remoced 
+   - WM - forcing formatting new disks removed 
 
 
 2.0.4 (FEB 27, 2015)
@@ -334,7 +334,7 @@ v2.0.x
    
 **Bug Fix**
 
-   - Disk full due to unremmoved caching files
+   - Disk full due to unremoved caching files
    
    
 
