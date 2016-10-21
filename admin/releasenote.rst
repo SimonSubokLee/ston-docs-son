@@ -1,6 +1,6 @@
 .. _release:
 
-Appendix C: Release Notes
+Appendix D: Release Notes
 ***************************
 
 v2.3.x
