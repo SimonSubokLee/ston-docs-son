@@ -11,7 +11,7 @@ STON Edge Server Complete Guide
 
 :Version: 2.3.4, Jun 3, 2016
 
-White Paper
+0. Overview
 =============================
 .. toctree::
    :maxdepth: 1
