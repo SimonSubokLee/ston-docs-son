@@ -3,37 +3,33 @@
 Appendix A: Graph
 ******************
 
-All MRTG stats are shown in PNG format graphs. 
-Call regulation format requires a unit behind the resource. ::
+All MRTG statistics are shown as PNG-format graphs. The call format is the resource and then the unit. ::
 
-    # 5 types of CPU graph (dash, day, week, month, year)
+    # 5 types of CPU graphs (dash, day, week, month, year)
     http://127.0.0.1:10040/graph/cpu_dash.png
     http://127.0.0.1:10040/graph/cpu_day.png
     http://127.0.0.1:10040/graph/cpu_week.png
     http://127.0.0.1:10040/graph/cpu_month.png
     http://127.0.0.1:10040/graph/cpu_year.png
     
-All graphs are provided in five different types.
+All graphs are provided in 5 different types.
 
 ======= =========== =========== =============
-Type    Dimension   Time unit   Period
+Type    Size        Time unit   Period
 ======= =========== =========== =============
-dash    205 X 175   5minutes    12hours
-day     580 X 203   5minutes    2days (48hours)
-week    580 X 203   30minutes   2weeks (14days)
-month   580 X 203   2hour       7weeks
-year    580 X 203   1day        18months
+dash    205 X 175   5 min       12 hours
+day     580 X 203   5 min       2 days (48 hours)
+week    580 X 203   30 min      2 weeks (14 days)
+month   580 X 203   2 hours     7 weeks
+year    580 X 203   1 day       18 months
 ======= =========== =========== =============
 
-A graph has at least one line or at most three lines. 
-The main line is displayed in green and the Sub line is displayed in blue. 
-Also, in the "Week" graph, a Peak line is displayed. 
-The Peak displays the largest value among units smaller than the current unit.
+A graph can have from one to three lines. The Main line is drawn in green, while the Sub line is drawn in blue. In graphs for "Week" and above, a Peak line is also displayed. The Peak line draws the highest value from smaller units in pink.
 
-.. note:
+
+.. note::
    
-   Displaying too many graphs at the same time will consume excessive CPU process and could cause significant quality deterioration. 
-   Therefore, you should manage the system to draw one graph at a time.
+   If too many graphs are made at once, CPU usage will increase sharply and affect the service quality. To prevent this, please make sure to only draw one graph at a time.
 
 
 .. toctree::
@@ -45,8 +41,7 @@ The Peak displays the largest value among units smaller than the current unit.
 Global Resource
 ====================================
 
-The global resource graph only shows system status or STON related resources. 
-In the table below, the asterisk stands for one of five types--dash, day, week, month, or year.
+The global resource graph shows the system status or resources related to STON. Below, the asterisk can be replaced with one of five types: dash, day, week, month, or year.
 
       
       
@@ -104,18 +99,18 @@ Load Average
 
 
 Server Socket Event (Client -> STON)
----------------------
+------------------------------------
 ::
 
     /graph/ssockevent_*.png
     
--  ``Main`` Accepted server sockets
--  ``Sub`` Closed server sockets
+-  ``Main`` Accepted
+-  ``Sub`` Closed
 
 
 
 Server Socket Usage (Client -> STON)
----------------------
+------------------------------------
 ::
 
     /graph/ssockusage_*.png
@@ -125,8 +120,8 @@ Server Socket Usage (Client -> STON)
 
 
 
-Client Socket Event (STON -> Origin server)
----------------------
+Client Socket Event (STON -> Origin Server)
+-------------------------------------------
 ::
 
     /graph/csockevent_*.png
@@ -136,8 +131,8 @@ Client Socket Event (STON -> Origin server)
 
 
 
-Client Socket Usage (STON -> Origin server)
----------------------
+Client Socket Usage (STON -> Origin Server)
+-------------------------------------------
 ::
 
     /graph/csockusage_*.png
@@ -147,7 +142,7 @@ Client Socket Usage (STON -> Origin server)
 
 
 
-Denied IP Access
+Denied IP Accesses
 ---------------------
 ::
 
@@ -163,7 +158,7 @@ Event Queue
 
     /graph/eq_*.png
     
--  ``Main`` Length of the event queue
+-  ``Main`` Length of event queue
 
 
 
@@ -173,13 +168,13 @@ Write Pending
 
     /graph/wf2w_*.png
     
--  ``Main`` Number of files in write pending
+-  ``Main`` Number of write-pending files
 
 
 .. _api-graph-urlrewrite:
 
-Successful URL Preprocess
----------------------
+Successful URL Preprocessing
+----------------------------
 ::
 
     /graph/urlrewrite_*.png
@@ -203,13 +198,11 @@ TCP Socket
 Virtual Host
 ====================================
 
-The virtual host graph shows the status of entire or separate virtual host. 
-You can specify a particular virtual host by using vhost parameter, or if the parameter is omitted,
-the sum of the entire virtual host will be returned. ::
+The virtual host graph shows the status of all hosts or individual hosts. The vhost parameter can be used to choose a specific virtual host, but if it is omitted then it will provide the statistics of all virtual hosts. ::
 
     http://127.0.0.1:10040/graph/vhost/mem_day.png?vhost=example.com
     
-In the table below, the asterisk stands for one of five types--dash, day, week, month, or year.
+Below, the asterisk can be replaced with one of five types: dash, day, week, month, or year.
 
 
 
@@ -224,7 +217,7 @@ Hit Ratio
 
 
 
-Number of Contents
+Amount of Content
 ---------------------
 ::
 
@@ -240,7 +233,7 @@ Content Memory
 
     /graph/vhost/mem_*.png
     
--  ``Main`` The amount of content data loaded into memory
+-  ``Main`` Amount of content data loaded into memory
 
 
 
@@ -250,7 +243,7 @@ Delete Pending
 
     /graph/vhost/wf2d_*.png
     
--  ``Main`` Number of files waiting to be deleted
+-  ``Main`` Number of delete-pending files
 
 
 
@@ -260,28 +253,28 @@ Client Bypass
 
     /graph/vhost/client_httpreq_bypass_*.png
     
--  ``Main`` Bypassed client HTTP request
+-  ``Main`` Bypassed client HTTP requests
 
 
 
-Denied Client Request
----------------------
+Denied Client Requests
+----------------------
 ::
 
     /graph/vhost/client_httpreq_denied_*.png
     
--  ``Main`` Denied client request
+-  ``Main`` Denied client requests
 
 
 
-Client Session
+Client Sessions
 ---------------------
 ::
 
     /graph/vhost/client_http_session_*.png
     
--  ``Main`` The entire client session
--  ``Sub`` Client sessions that are being transferred
+-  ``Main`` Total client sessions
+-  ``Sub`` Client sessions in the middle of transfer
 
 
 
@@ -296,7 +289,7 @@ Client Traffic
 
 
 
-Client Response
+Client Responses
 ---------------------
 ::
 
@@ -307,8 +300,8 @@ Client Response
 
 
 
-Client Detail Response
----------------------
+Detailed Client Responses
+-------------------------
 ::
 
     /graph/vhost/client_http_res_detail_*.png
@@ -317,8 +310,8 @@ Client Detail Response
 
 
 
-Client Transaction Completion
----------------------
+Client Transaction Completions
+------------------------------
 ::
 
     /graph/vhost/client_http_res_complete_*.png
@@ -339,7 +332,7 @@ Client Response Time
 
 
 Client Completion Time
----------------------
+----------------------
 ::
 
     /graph/vhost/client_http_res_time2_*.png
@@ -349,7 +342,7 @@ Client Completion Time
 
 
 Client Caching Response
----------------------
+-----------------------
 ::
 
     /graph/vhost/client_http_res_hit_*.png
@@ -369,14 +362,14 @@ Client SSL Traffic
 
 
 
-Origin Server Session
----------------------
+Origin Server Sessions
+----------------------
 ::
 
     /graph/vhost/origin_http_session_*.png
     
--  ``Main`` The entire origin session
--  ``Sub`` The origin sessions that are being transferred
+-  ``Main`` Total origin sessions
+-  ``Sub`` Origin sessions in the middle of transfer
 
 
 
@@ -391,8 +384,8 @@ Origin Server Traffic
 
 
 
-Origin Server Response
----------------------
+Origin Server Responses
+-----------------------
 ::
 
     /graph/vhost/origin_http_res_*.png
@@ -402,8 +395,8 @@ Origin Server Response
 
 
 
-Origin Server Detail Response
----------------------
+Detailed Origin Server Responses
+--------------------------------
 ::
 
     /graph/vhost/origin_http_res_detail_*.png
@@ -412,19 +405,19 @@ Origin Server Detail Response
 
 
 
-Origin Server Transaction Completion
----------------------
+Origin Server Transaction Completions
+-------------------------------------
 ::
 
     /graph/vhost/origin_http_res_complete_*.png
     
--  ``Main`` Number of completed origin server HTTP responses
--  ``Sub`` Number of HTTP requests made of the origin server 
+-  ``Main`` Number of completed origin HTTP responses
+-  ``Sub`` Number of origin HTTP requests
 
 
 
 Origin Server Response Time
----------------------
+---------------------------
 ::
 
     /graph/vhost/origin_http_res_time1_*.png
@@ -434,7 +427,7 @@ Origin Server Response Time
 
 
 Origin Server Completion Time
----------------------
+-----------------------------
 ::
 
     /graph/vhost/origin_http_res_time2_*.png

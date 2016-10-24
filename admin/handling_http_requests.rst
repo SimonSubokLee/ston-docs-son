@@ -1,25 +1,21 @@
 ﻿.. _handling_http_requests:
 
-Chapter 5. Handling HTTP Requests
-******************
+Chapter 6. Handling HTTP Requests
+*********************************
 
-This chapter explains methods to handle HTTP client sessions and requests.
-The contents in this chapter are not critical for the service.
-Some content might be difficult to follow, if you don't have a basic understanding of HTTP.
-In this case, you can simply use the default setting as it will not affect the quality of service at all.
+This chapter will explain the HTTP client session and methods of handling HTTP requests. Parts of this chapter may be difficult to follow without some understanding of HTTP. However, as these functions are not critical to the service, you can simply use the default settings without affecting the quality of service at all.
 
 
 .. toctree::
    :maxdepth: 2
 
 
+.. _handling_http_requests_session_man:
+
 Session Management
 ====================================
 
-An HTTP session is created when an HTTP client is connected to the STON server.
-The client is serviced through the HTTP session with a variety of content that is saved on the server.
-**HTTP transaction** stands for the procedure from request to response.
-The HTTP session handles multiple HTTP transactions in order. ::
+An HTTP session is created when an HTTP client connects to the STON server. Content saved on the server is delivered to the client through the HTTP session. The process from the request to the response is called an **HTTP transaction**. An HTTP session handles multiple HTTP transactions in succession. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -29,68 +25,60 @@ The HTTP session handles multiple HTTP transactions in order. ::
    <KeepAliveHeader Max="0">ON</KeepAliveHeader>   
     
 -  ``<ConnectionHeader> (default: keep-alive)``    
-   Configures the Connection header(``keep-alive`` or ``close``) of the HTTP response that will be sent to clients.
+   Configures the Connection header (``keep-alive`` or ``close``) of the HTTP response sent to the client.
     
 
--  ``<ClientKeepAliveSec> (default: 10 seconds)``
-   Terminates a session when there is no transaction with the client session for the set amount of time.
-   If you set a longer time for this option, there will be more alive sessions that are not transacting with clients.
-   Having too many sessions will increase the load on the system.
+-  ``<ClientKeepAliveSec> (default: 10 sec)``
+   Terminates a session when there is no transaction with the client session for the given amount of time. If the time is set to too large a value, then the number of sessions that are not transacting can grow unexpectedly. Maintaining a large number of sessions can cause load on the system.
 
 -  ``<KeepAliveHeader>``
 
-    - ``ON (default)`` Specifies the Keep-Alive header in the HTTP response
-      ``Max (default: 0)`` If this option is set greater than 0, the ``Max`` value will be used for the Keep-Alive header.
-      Every HTTP transaction will decrease the value by one.
+	- ``ON (default)`` Specifies the Keep-Alive header in the HTTP response. If ``Max (default: 0)`` is set to greater than zero, then the ``Max`` value will be used for the Keep-Alive header. Each HTTP transaction will reduce the value by one.
    
-   - ``OFF`` Omits the Keep-Alive header in the HTTP response.
+	- ``OFF`` Omits the Keep-Alive header in the HTTP response.
 
 
-HTTP Session Maintenance Policies
----------------------
+HTTP Session Maintenance Polices
+--------------------------------
 
-STON preferably abides by the policies of Apache.
-Especially, session maintenance policy varies depending upon HTTP header values.
-The followings are items that affect the HTTP session maintenance policy.
+STON follows Apache policies as much as possible. Specifically, there are many variables in the session maintenance policies based on the value of the HTTP header. The following is a list of items that can influence HTTP session maintenance policies.
 
-- The connection header that is specified in the client HTTP request ("ep-Alive" or "Close")
+- The Connection header specified in the HTTP response ("Keep-Alive" or "Close")
 - Virtual host ``<Connection>`` setting
 - Virtual host session Keep-Alive time setting
 - Virtual host ``<Keep-Alive>`` setting
 
 
-1. When "Connection: Close" is specified in the client HTTP request ::
+1. When "Connection: Close" is specified in the client HTTP request: ::
 
       GET / HTTP/1.1
-      ...(skip)...
+      ...(omitted)...
       Connection: Close
     
-   For an HTTP request like this, "Connection: Close" will be returned regardless of the virtual host configuration. 
-   The Keep-Alive header will not be specified. ::
-
+   For an HTTP request like this, a "Connection: Close" response will be returned regardless of the virtual host settings. The Keep-Alive header will not be specified. ::
+   
       HTTP/1.1 200 OK
-      ...(skip)...
+      ...(omitted)...
       Connection: Close
 
-   When this HTTP transaction is completed, disconnect the HTTP connection.
+   When this HTTP transaction is completed, the connection is terminated.
    
 
-2. When the ``<ConnectionHeader>`` is set to ``Close`` ::
+2. When ``<ConnectionHeader>`` is set to ``Close``: ::
 
       # server.xml - <Server><VHostDefault><Options>
       # vhosts.xml - <Vhosts><Vhost><Options>
       
       <ConnectionHeader>Close</ConnectionHeader>      
     
-   "Connection: Close" will be returned regardless of clients' HTTP requests. 
-   The Keep-Alive header will not be specified. ::
+   A "Connection: Close" response will be returned regardless of the client's HTTP requests. The Keep-Alive header will not be specified. ::
 
       HTTP/1.1 200 OK
-      ...(skip)...
+      ...(omitted)...
       Connection: Close
       
 
-3. When the ``<KeepAliveHeader>`` is set to ``OFF`` ::
+3. When ``<KeepAliveHeader>`` is set to ``OFF``: ::
 
       # server.xml - <Server><VHostDefault><Options>
       # vhosts.xml - <Vhosts><Vhost><Options>
@@ -98,14 +86,14 @@ The followings are items that affect the HTTP session maintenance policy.
       <ConnectionHeader>Keep-Alive</ConnectionHeader>
       <KeepAliveHeader>OFF</KeepAliveHeader>
     
-   The Keep-Alive header will not be specified. The HTTP session can be reused. ::
+   The Keep-Alive header will not be specified. The HTTP session can be continuously reused. ::
 
       HTTP/1.1 200 OK
-      ...(skip)...
+      ...(omitted)...
       Connection: Keep-Alive
 
 
-4. When the ``<KeepAliveHeader>`` is set to ``ON`` ::
+4. When ``<KeepAliveHeader>`` is set to ``ON``: ::
 
       # server.xml - <Server><VHostDefault><Options>
       # vhosts.xml - <Vhosts><Vhost><Options>
@@ -114,25 +102,22 @@ The followings are items that affect the HTTP session maintenance policy.
       <ClientKeepAliveSec>10</ClientKeepAliveSec>
       <KeepAliveHeader>ON</KeepAliveHeader>      
     
-   The Keep-Alive header will be specified.
-   The Keep-Alive value of the session will be used for timeout. ::
-
+   The Keep-Alive header will be specified. The Keep-Alive time setting of the session is used for the timeout value. ::
+    
       HTTP/1.1 200 OK
-      ...(skip)...
+      ...(omitted)...
       Connection: Keep-Alive
       Keep-Alive: timeout=10
 
    .. note::
 
-      < ``<Keep-Alive>`` and ``<ClientKeepAliveSec>`` >
+      The Relationship between ``<Keep-Alive>`` and ``<ClientKeepAliveSec>``
     
-      The ``<Keep-Alive>`` setting refers to ``<ClientKeepAliveSec>`` that has a more fundamental purpose.
-      One of the most important issues with maintaining high performance and having more available resources is determining when to terminate idle sessions(sessions that do not generate HTTP transactions).
-      The HTTP header setting can be changed dynamically or omitted, but terminating idle sessions is a more complicated issue. 
-      Therefore, ``<ClientKeepAliveSec>`` is separated from ``<KeepAliveHeader>``.
+      The ``<Keep-Alive>`` setting references the ``<ClientKeepAliveSec>`` setting, but ``<ClientKeepAliveSec>`` is related to a more fundamental problem. The most important issue in terms of performance or resources is the issue of when to terminate idle sessions, or sessions where HTTP transactions are no longer occurring. HTTP header settings can be changed dynamically and can occasionally be omitted, but the termination of idle sessions is a more complicated problem. Because of this, ``<ClientKeepAliveSec>`` is not unified with ``<KeepAliveHeader>`` and exists separately.
+	  
+   
 
-
-5. When the ``<KeepAliveHeader>`` includes ``Max`` property ::
+5. When the ``Max`` property of ``<KeepAliveHeader>`` is set: ::
 
       # server.xml - <Server><VHostDefault><Options>
       # vhosts.xml - <Vhosts><Vhost><Options>
@@ -141,29 +126,27 @@ The followings are items that affect the HTTP session maintenance policy.
       <ClientKeepAliveSec>10</ClientKeepAliveSec>
       <KeepAliveHeader Max="50">ON</KeepAliveHeader>      
     
-   The max value will be specified in the Keep-Alive header. 
-   This session can be used for the number of times set by ``Max`` property, and every HTTP transaction will decrease the value by one. ::
+   The max value will be specified in the Keep-Alive header. The session can be used for the number set by the ``Max`` property, and each HTTP transaction will decrease the value by one. ::
     
       HTTP/1.1 200 OK
-      ...(skip)...
+      ...(omitted)...
       Connection: Keep-Alive
       Keep-Alive: timeout=10, max=50
 
 
-6. When the max value of Keep-Alive is consumed ::
+6. When the max value of Keep-Alive runs out:
 
-   If the max value is set from the above configuration, the value will be gradually diminished by one, as shown below. ::
+   As mentioned above, if the max value is set, it will gradually decrease until it hits one. ::
 
       HTTP/1.1 200 OK
-      ...(skip)...
+      ...(omitted)...
       Connection: Keep-Alive
       Keep-Alive: timeout=10, max=1
     
-   The response above means one last HTTP transaction is available for the current session. 
-   If there is another HTTP request for this session, "Connection: Close" will be returned, as shown below. ::
+   This means that only one more HTTP transaction is possible in the current session. After one more HTTP request, the response will be "Connection: Close" as shown below. ::
     
       HTTP/1.1 200 OK
-      ...(skip)...
+      ...(omitted)...
       Connection: Close    
 
 
@@ -171,12 +154,12 @@ The followings are items that affect the HTTP session maintenance policy.
 Client Cache-Control
 ====================================
 
-This section explains the configuration regarding client cache-control.
+This section covers the settings related to client cache-control.
 
 Age Header
 ---------------------
 
-Age header stands for the elapsed time (in seconds) from a cached moment and is calculated by `RFC2616 - 13.2.3 Age Calculations <http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html#sec13.2.3>`_. ::
+The age header stands for the elapsed time (in seconds) from the moment something is cached, ans is calculated by `RFC2616 - 13.2.3 Age Calculations <http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html#sec13.2.3>`_.  ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -187,13 +170,13 @@ Age header stands for the elapsed time (in seconds) from a cached moment and is 
     
    -  ``OFF (default)`` Omits Age header.
    
-   -  ``OFF`` Specifies Age header.
+   -  ``ON`` Specifies Age header.
 
 
 Expires Header
 ---------------------
 
-The following will refresh the Expires header. ::
+The following refreshes the Expires header. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -202,20 +185,16 @@ The following will refresh the Expires header. ::
     
 -  ``<RefreshExpiresHeader>``
     
-   -  ``OFF (default)`` Specifies the Expires header that the origin server returns to the client.
-      If the Expires header is omitted in the origin server, it will also be omitted in the client response.
+   -  ``OFF (default)`` Specifies the Expires header returned by the origin server to the client. If the Expires header is omitted in the origin server, it will also be omitted in the response to the client.
    
-   -  ``ON``  The Expires condition will be reflected in the Expires header.
-      The ``OFF (default)`` setting will be applied for any content that does not meet the condition.
+   -  ``ON``  The Expires conditions will be reflected in the Expires header. The ``OFF`` setting will be applied for content that does not satisfy the conditions.
    
-The Expires condition is identical to the `mod_expires <http://httpd.apache.org/docs/2.2/mod/mod_expires.html>`_ of Apache. 
-You can also configure the Expires header and Cache-Control value of content with special conditions(URL or MIME Type). 
-The max-age value of the Cache-Control is equals to the value of the Expires time subtracted from the requested time. 
+The Expires condition behaves identically to the `mod_expires <http://httpd.apache.org/docs/2.2/mod/mod_expires.html>`_ of Apache. You can also configure the Expires header and Cache-Control values of content that matches special conditions (such as URL or MIME Type). The max-age value of the Cache-Control is the difference between the given Expires time and the requested time.
 
-The Expires condition is saved at /svc/{virtual host name}/expires.txt. ::
+The Expires conditions can be set in /svc/{virtual host name}/expires.txt. ::
 
    # /svc/www.exmaple.com/expires.txt
-   # The identifier is a comma(,), and {condition},{time},{criteria} format is used.
+   # The delimiter is a comma (,), and the format is {condition},{time},{reference}.
 
    $URL[/test.jpg], 86400
    /test.jpg, 86400
@@ -226,40 +205,28 @@ The Expires condition is saved at /svc/{virtual host name}/expires.txt. ::
    $MIME[application/octet-stream], 7 weeks, modification
    $MIME[image/gif], 3600, modification
 
--  **Conditions**
+-  Condition
+    The condition can be set to either a URL or a MIME Type. $URL[...] is used for URL, and $MIME[...] is used for MIME Type. Patterned expressions can also be used, and if the $ format is not used, the condition will be recognized as a URL.
 
-   URL and MIME Type can be used. 
-   $URL[...] is used for URL, and $MIME[...] is used for MIME Type. 
-   Patterned expression is also available and if $ is omitted, it is recognized as a URL.
+-  Time
+    Sets the Expires expiration time. Common units of time are supported, and if the units are not specified, seconds will be used.
 
--  **Time**
-
-   Set the Expires expiration time. 
-   General units of time are supported, and if the unit is not specified, seconds will be used.
-
--  **Criterion**
-
-   Configures the reference time of the expiration time of Expires. 
-   If the reference time is not specified, Access will be used for the reference time. 
-   Access refers to the current time. 
-   The following configuration is an example for an Expires header value. 
-   If MIME Type accesses an image/gif file, the Expires header will be set as 1 day and 12 hours. ::
+-  Reference
+    Configures the reference point for the Expires expiration time. If a separate reference point is not specified, then it will use the Access as a reference. Access uses the current time as a reference. The following example indicates that for files that have a MIME Type of image/gif, the Expires header value will be set to 1 day and 12 hours after the access time. ::
     
-      $MIME[image/gif], 1 day 12 hours, access
+       $MIME[image/gif], 1 day 12 hours, access
       
-   Modification is based on the Last-Modified sent from the source server. 
-   The following example shows how to set the Expires to 30 minutes for all jpg files from Last-Modified. ::
+    Modification uses the Last-Modified time sent by the origin server as a reference. The following example indicates that for all JPG files, the Expires value will be set to 30 minutes after the Last-Modified time. ::
     
-      *.jpg, 30min, modification
+       *.jpg, 30 min, modification
         
-   In the case of Modification, if a calculated Expires value is older than the current time, adjust it to the current time.
-   If the origin server does not provide a Last-Modified header, an Expires header will not be sent.
+    For Modification, if the calculated time turns out to be in the past relative to the current time, then the current time is used. If the origin server does not provide a Last-Modified header, then an Expires header will not be sent.
 
 
 ETag Header
 ---------------------
 
-This section explains how to specify an ETag header in the HTTP response sent to the client. ::
+The ETag header in the HTTP response sent to the client can be configured. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -268,20 +235,76 @@ This section explains how to specify an ETag header in the HTTP response sent to
     
 -  ``<ETagHeader>``
     
-   -  ``ON (default)`` Specifies ETag header.
+   -  ``ON (default)`` Specified ETag header.
    
    -  ``OFF``  Omits ETag header.
-   
+
    
 
 
 Response Headers
 ====================================
 
-HTTP Request / Response Header Modification
+Origin Nonstandard Header
+-------------------------
+
+For the sake of performance and security, out of the headers sent by the origin server, only the standard headers will be recognized. ::
+
+   # server.xml - <Server><VHostDefault><Options>
+   # vhosts.xml - <Vhosts><Vhost><Options>
+   
+   <OriginalHeader>OFF</OriginalHeader>   
+    
+-  ``<OriginalHeader>``
+
+   -  ``OFF (default)`` Ignores nonstandard headers.
+   
+   -  ``ON`` Saves all headers (with the exception of cookie, set-cookie, and set-cookie2) and sends them to the client. However, this option can consume more memory.
+
+
+Via Header
 ---------------------
 
-This section explains how to modify a client's HTTP request and response based on specific conditions. ::
+The Via header in the HTTP response sent to the client can be configured. ::
+
+   # server.xml - <Server><VHostDefault><Options>
+   # vhosts.xml - <Vhosts><Vhost><Options>
+   
+   <ViaHeader>ON</ViaHeader>   
+    
+-  ``<ViaHeader>``
+    
+   - ``ON (default)`` Specifies the Via header as follows.
+     ::
+      
+        Via: STON/2.0.0
+   
+   - ``OFF``  Omits the Via header.
+   
+   
+Server Header
+---------------------
+ 
+The Server header in the HTTP response sent to the client can be configured. ::
+
+   # server.xml - <Server><VHostDefault><Options>
+   # vhosts.xml - <Vhosts><Vhost><Options>
+   
+   <ServerHeader>ON</ServerHeader>   
+    
+-  ``<ServerHeader>``
+    
+   -  ``ON (default)`` Specifies the Server header of the origin server.
+   
+   -  ``OFF``  Omits the Server header.
+
+
+.. _handling_http_requests_modify_client:
+
+Client Request/Response Header Modification
+===========================================
+
+The client's requests and responses can be modified based on certain conditions. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -292,34 +315,26 @@ This section explains how to modify a client's HTTP request and response based o
     
    -  ``OFF (default)`` Does not modify.
    
-   -  ``ON`` Modifies the header with regard to the header modification condition.
+   -  ``ON`` Modifies the header based on the header modification conditions.
    
-You should be able to identify the moment when the header has to be modified.
+The following explains the points when the header is modified.
 
--  **HTTP Request Header Modification Point**
+-  HTTP Request Header Modification Point
+    The header is modified when the client's HTTP request is first recognized. If the header gets modified, then it will be handled in its modified state by the cache module. However, the Host header cannot have its URI modified.
 
-   You should modify the header when the client HTTP request is initially identified. 
-   If the header has been modified, it will be processed in the cache module as it is.
-   However, the Host header and URI cannot be modulated.
-
--  **HTTP Response Header Modification Point**
-
-   You should modify the header right before responding to the client. 
-   However, the Content-Length cannot be modified.   
+-  HTTP Response Header Modification Point
+    The header is modified just before the response to the client. However, the Content-Length cannot be changed.   
 
       
-The modify condition of a header is saved at /svc/{virtual host name}/headers.txt. 
-The header allows multiple configurations as long as each fits to the condition. 
-All modifications will be applied at the same time. 
+Header modification conditions can be set in /svc/{virtual host name}/headers.txt. Multiple conditions can be set, and if header meets all the conditions, then all modifications will be applied in order.
 
-If you wish to modify the first condition only, set the ``FirstOnly`` property to ``ON``.
-When different conditions try to modify an identical header, it'll be either Last-Win or specifically appended. ::
+If only the first condition should be applied, then the ``FirstOnly`` property should be set to ``ON``. If different conditions attempt to modify the same header, then the result will be Last-Win from ``set`` or specified by ``put`` or ``append``. ::
 
    # /svc/www.example.com/headers.txt
-   # The comma(,) is an identifier.
+   # The delimiter is a comma (,).
    
    # Request Modification
-   # {Match}, {$REQ}, {Action(set|unset|append)} format is used.
+   # The format is {Match}, {$REQ}, {Action(set|put|append|unset)}.
    $IP[192.168.1.1], $REQ[SOAPAction], unset
    $IP[192.168.2.1-255], $REQ[accept-encoding: gzip], set
    $IP[192.168.3.0/24], $REQ[cache-control: no-cache], append
@@ -330,8 +345,8 @@ When different conditions try to modify an identical header, it'll be either Las
    $URL[/source/*.zip], $REQ[accept-encoding: deflate], set
    
    # Response Modification
-   # {Match}, {$RES}, {Action(set|unset|append)}, {condition} format is used.
-   # {condition} modifies the header regarding to a specific response code, but it is not a mandatory.
+   # The format is {Match}, {$RES}, {Action(set|put|append|unset)}, {condition}.
+   # {condition} can modify the header based on special response codes, but is not mandatory.
    $IP[192.168.1.1], $RES[via: STON for CDN], set
    $IP[192.168.2.1-255], $RES[X-Cache], unset, 200
    $IP[192.168.3.0/24], $RES[cache-control: no-cache, private], append, 3xx
@@ -340,115 +355,50 @@ When different conditions try to modify an identical header, it'll be either Las
    $HEADER[x-custom-header], $RES[cache-control: no-cache, private], append, 5xx
    $URL[/source/*], $RES[cache-control: no-cache], set, 404
    /secure/*.dat, $RES[x-custom], unset, 200
+   /*.mp4, $RES[Access-Control-Allow-Origin: example1.com], set
+   /*.mp4, $RES[Access-Control-Allow-Origin: example2.com], put
     
-IP, GeoIP, Header and URL forms can be used for a {Match} configuration.
+{Match} can be set to IP, GeoIP, Header, and URL forms.
 
 -  **IP**
-   $IP[...] format is used and supports IP, IP Range, Bitmask and Subnet formats.
+   The format is $IP[...] and supports the formats of IP, IP Range, Bitmask, and Subnet.
 
 -  **GeoIP**
-   $IP[...] format is used and :ref:`access-control-geoip` must be predefined.
-   Country codes of `ISO 3166-1 alpha-2 <http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2>`_ and `ISO 3166-1 alpha-3 <http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3>`_ are supported.
+   The format is $IP[...] and :ref:`access-control-geoip` must be configured in advance.
+   The country codes `ISO 3166-1 alpha-2 <http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2>`_ and `ISO 3166-1 alpha-3 <http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3>`_ are permitted.
      
 -  **Header**
-   $HEADER[Key : Value] format is used. 
-   Value supports specific expressions and patterns. 
-   When the ``Value`` is omitted, the existence of the header that is corresponding to the ``Key`` will be the condition used to make a decision.
+   The format $HEADER[Key : Value]. The Value can be either a specific expression or a pattern. If the Value is omitted, the condition will be the existence of a header corresponding to the Key.
     
 -  **URL**
-   $URL[...] format is used and can be omitted. Specific expressions and patterns will be recognized.
+   The format is $URL[...] and can be omitted. It can be either a specific expression or a pattern.
     
-{$REQ} and {$RES} configure how to modify the header.
-Generally ``set`` and ``append`` use {Key: Value} for configuration, and if the Value is omitted, an empty value("") will be inserted. 
-For ``unset``, only the {Key} value is required.
+{$REQ} and {$RES} configure how to modify the header. ``set``, ``put``, and ``append`` configure the header to {Key: Value}, and if the Value is omitted, an empty value ("") will be input. ``unset`` will only input the {Key}.
 
-``set`` , ``unset`` , ``append`` can be used for {Action}.
+{Action} can be set to one of the four settings: ``set`` , ``put`` , ``append`` , ``unset``.
 
--  ``set``  Adds the Key and Value that are defined in the request/response header to the header. 
-   If an identical Key exists, set overwrites the previous value.    
-
--  ``put``  This is similar to ``set``. Adds the Key and Value defined in the request/response header to the header. 
-   Unlike ``set``, put inserts an extra set of the Key and Value.
-
--  ``unset`` Discards the header related to the Key that is defined in the request/response header
-
--  ``append``  This is similar to ``set``, while this setting uses a comma(,) to combine the previous Value with the configured Value when a related Key is found.
-
-{Condition} identifies response code families--such as 2xx, 3xx, 4xx and 5xx--instead of specific response codes--such as 200 and 304.
-If {Condition} is not matching, a modification will not be reflected, even if {Match} is matching.
-If {Condition} is omitted, a response code will not be examined.
-
-
-Original Header
----------------------
-
-In order to maintain decent performance, only a standard header will be selectively identified from headers that the origin server transmits. ::
-
-   # server.xml - <Server><VHostDefault><Options>
-   # vhosts.xml - <Vhosts><Vhost><Options>
+-  ``set`` The Key and Value defined in the request/response header is added to the header. If the same Key is used, the new Value overwrites the old.
    
-   <OriginalHeader>OFF</OriginalHeader>   
-    
--  ``<OriginalHeader>``
+-  ``put`` (resembles ``set``) If the same Key is used, the new Value is added in a new line instead of overwriting the old Value.
 
-   -  ``OFF (default)`` Ignores if the headers are not a standard. 
-   
-   -  ``OFF``  Saves non-standard headers and transfers them to the client.
-      However, this option will consume more memory and storage.
+-  ``append`` (resembles ``set``) If the same Key is used, the old Value and the new Value are attached with a comma (,).
 
+-  ``unset`` The Key defined in the request/response header is deleted from the header.
 
-Via Header
----------------------
-
-This section explains how to configure HTTP responses that will be sent to a client that either specify the Via header or not. ::
-
-   # server.xml - <Server><VHostDefault><Options>
-   # vhosts.xml - <Vhosts><Vhost><Options>
-   
-   <ViaHeader>ON</ViaHeader>   
-    
--  ``<ViaHeader>``
-    
-   - ``ON (default)`` Specifies the Via header, as shown below.
-     ::
-      
-        Via: STON/2.0.0
-   
-   - ``OFF``  Omits the Via header
-   
-   
-Server Header
----------------------
- 
-This section explains how to configure HTTP responses that will be sent to the client that either specifies the Server header or not. ::
-
-   # server.xml - <Server><VHostDefault><Options>
-   # vhosts.xml - <Vhosts><Vhost><Options>
-   
-   <ServerHeader>ON</ServerHeader>   
-    
--  ``<ServerHeader>``
-    
-   -  ``ON (default)`` Specifies the Server header of the origin server ::
-   
-   -  ``OFF``  Omits the Server header
-
+{Condition} can be set to a specific response code like 200 or 304 or can be set to a group of codes like 2xx, 3xx, 4xx, or 5xx. If {Match} matches but {Condition} does not, then the modification does not take place. If {Condition} is omitted, the response code is not checked.
 
 
 URL Preprocessing
 ====================================
 
-`Regular expression <http://en.wikipedia.org/wiki/Regular_expression>`_ is used to modify requested URLs. 
-If URL preprocessing is defined, all client requests(HTTP or File I/O) should pass through the URL Rewriter.
+`Regular expressions <http://en.wikipedia.org/wiki/Regular_expression>`_ are used to modify the requested URLs. If URL preprocessing is defined, all client requests (HTTP or File I/O) must pass through the URL Rewriter.
 
 .. figure:: img/urlrewrite1.png
    :align: center
       
-   After passing through the URL Rewriter, the virtual host can be accessed.
+   The request can only reach the virtual host by passing through the URL Rewriter.
    
-If an approaching Host name has been modified by the URL Rewriter, it is considered that the clinet's HTTP request Host header has been modified.
-URL preprocessing is configured at the virtual host setting(vhosts.xml).
-Most configurations are subordinated to the virtual host, but URL preprocessing can modify the Host name that a client requested, so it should be configured in the same block as the virtual host. ::
+If an approaching Host name is modified by the URL Rewriter, then it will consider it as if the Host header was modified by the client's HTTP request. URL preprocessing is configured in the virtual host settings (vhosts.xml). While most settings are under the virtual host, URL preprocessing can change the name of the Host requested by the client, so the settings must be on the same level as the virtual host. ::
 
    # vhosts.xml
    
@@ -459,30 +409,25 @@ Most configurations are subordinated to the virtual host, but URL preprocessing 
       <URLRewrite ...> ... </URLRewrite>
    </Vhosts>
     
-Multiple configurations are allowed, and regular expression will be checked in order. ::
+Multiple configurations are allowed, and the regular expressions will be checked in order. ::
 
    # vhosts.xml - <Vhosts>
    
    <URLRewrite AccessLog="Replace">
-       <Pattern>www.exmaple.com/([^/]+)/(.*)</Pattern>
-       <Replace>#1.exmaple.com/#2</Replace>
+       <Pattern>www.example.com/([^/]+)/(.*)</Pattern>
+       <Replace>#1.example.com/#2</Replace>
    </URLRewrite>
     
 -  ``<URLRewrite>``
 
    Configures URL preprocessing.
-   The ``AccessLog (default: Replace)`` attribute configures URLs that will be recorded in the Access log. 
-   ``Replace`` records preprocessed URLs (/logo.jpg), whereas ``Pattern`` records unprocessed URLs (/baseball/logo.jpg) to the Access log.
+   ``AccessLog (default: Replace)`` Configures URLs that will be recorded in the Access log. ``Replace`` records URLs after processing (/logo.jpg), while ``Pattern`` records URLs after processing (/baseball/logo.jpg).
    
-   -  ``<Pattern>`` configures patterns to be matched. 
-      A single pattern is expressed with parenthesis (e.g. ( )).
+   -  ``<Pattern>`` Configures the patterns to be matched. A single pattern is expressed with parentheses ().
    
-   -  ``<Replace>`` configures convert format. 
-      Identical patterns can use expressions like #1 and #2. #0 stands for the entire URL that is requested. 
-      A maximum of nine patternes (#9) can be configured.
+   -  ``<Replace>`` Configures the conversion format. Patterns that match can be used with expressions like #1 and #2. #0 stands for the entire requested URL. A maximum of nine patterns (up to #9) can be configured.
       
-:ref:`monitoring_stats` provides throughput, and :ref:`api-graph-urlrewrite` can be used as well. 
-URL preprocessing simplifies expressions with other functions such as :ref:`media-trimming` and :ref:`media-hls`. ::
+Throughput is provided by :ref:`monitoring_stats` and can also be checked via :ref:`api-graph-urlrewrite`. URL preprocessing can work alongside :ref:`media-trimming` and :ref:`media-hls` to simplify expressions further. ::
 
    # vhosts.xml - <Vhosts>
 
@@ -528,23 +473,21 @@ URL preprocessing simplifies expressions with other functions such as :ref:`medi
    // Pattern : example.com/video.mp4_10_20
    // Replace : example.com/example.com/video.mp4_10_20/video.mp4/10/20
     
-If 5 XML special characters( " & ' < > ) are used for patterned expression, you must keep them in <![CDATA[ ... ]]>.
-When configuring with :ref:`wm`, all patterns are processed as CDATA.
+If one of the five special XML characters are used, then the pattern must be surrounded with a <![CDATA[ ... ]]> tag. If configured using :ref:`wm`, all patterns are processed as CDATA.
 
 
 .. _handling_http_requests_compression:
 
 Compression
 ====================================
-Cached content is deliverable in compression.
-Content files MUST be categorized by :ref:`caching-policy-accept-encoding`  ::
+STON can compress and deliver content in place of the origin server. Content must be categorized by the :ref:`caching-policy-accept-encoding`. ::
 
    Accept-Encoding: gzip, deflate
 
 .. figure:: img/compression_1.png
    :align: center
       
-   Compressed and delivered on-the-fly.
+   Files are compressed and delivered in real time.
 
 ::
 
@@ -555,58 +498,53 @@ Content files MUST be categorized by :ref:`caching-policy-accept-encoding`  ::
 
 -  ``<Compression>``
 
-   -  ``OFF (default)`` no compression
+   -  ``OFF (default)`` The compression function is not used.
    
-   -  ``ON`` compressed by the following attributes
+   -  ``ON`` The compression function is used with the following properties.
 
-      -  ``Method (default: gzip)`` Compression method - only gzip supported for now.
-      -  ``Level (default: 6)`` Compression level - dependant on ``Method``, and 1~9 for gzip. A higher value means slower and more compression. A lower one means faster and less compression.
-      -  ``SourceSize (default: 2-2048, unit: KB)`` Source size in range. 
-         Too small files might be hardly compressed. 
-         Too large files might consume too much CPU, on the other hand.
+      -  ``Method (default: gzip)`` Assigns the compression method. For now, only gzip is supported.
+      -  ``Level (default: 6)`` Assigns the compression level. This value varies based on the ``Method`` used. Only 1~9 are available for gzip. A lower number means compression is faster but worse, while a higher number means compression is slower but better.
+      -  ``SourceSize (default: 2-2048, unit: KB)`` Assigns a range for the source size. If files are too small, then files might be hardly compressed, while if files are too big, too much CPU might be consumed.
 
-Compressed content is cached and stored separately from its original. More requests for the same content do not incur compression. 
-The list of files to compress is configurable in /svc/{vhost}/compression.txt in an orderly manner. ::
+Compressed content is recognized and stored separately from the original content, and requests for the same content will not cause the content to be compressed again. The files to be compressed can be configured in /svc/{virtual host name}/compression.txt. The files will be compressed in that order. ::
+
    # /svc/www.example.com/compression.txt
-   # Separated by commas ( , ) .
-   # Formatted in {URL Condition}, {Method}, {Level}
+   # The delimiter is a comma (,).
+   # The format is {URL condition}, {Method}, {Level}.
 
    /sample.css, no       // No compression
    *.css                 // Compress *.css with default method and level
-   *.htm, gzip           // Compress *.htm with gzip (default level)
+   *.htm, gzip           // Compress *.html with gzip (default level)
    *.xml, , 9            // Compress *.xml with level 9 (default method)
    *.js, gzip, 5         // Compress *.js with gzip level 5.
 
-Compression consumes CPU resource highly.
-The following is a test result from gzip level 9.
+Compression is a function that consumes a large amount of CPU. The following is a performance test done on gzip (level 9) with files of different sizes.
 
 -  ``OS`` CentOS 6.3 (Linux version 2.6.32-279.el6.x86_64 (mockbuild@c6b9.bsys.dev.centos.org) (gcc version 4.4.6 20120305(Red Hat 4.4.6-4) (GCC) ) #1 SMP Fri Jun 22 12:19:21 UTC 2012)
 -  ``CPU`` `Intel(R) Xeon(R) CPU E5-2603 0 @ 1.80GHz (8 processors) <http://www.cpubenchmark.net/cpu.php?cpu=Intel%20Xeon%20E5-2603%20@%201.80GHz>`_
 -  ``RAM`` 8GB
 -  ``HDD`` SAS 275GB X 5EA
 
-======================= ============== ======== ============== ========================= =====================
-Size                    Comp. Ratio(%)  Files    Latency (ms)   Client Traffic (Mbps)    Origin Traffic (Mbps)
-======================= ============== ======== ============== ========================= =====================
-1KB                     26.25          5288     6.72           40.58                     55.02
-2KB                     57.45          5238     7.20           41.52                     97.58
-4KB                     76.94          5236     7.18           42.44                     184.04
-8KB                     87.61          5021     7.53           41.87                     337.80
-16KB                    93.32          4608     8.30           41.19                     616.83
-32KB                    96.26          3495     13.55          34.53                     924.22
-64KB                    97.79          1783     24.50          20.71                     938.83
-bootstrap.css(20KB)     86.87          3944     9.67           83.79                     638.25
-bootstrap.min.js(36KB)  73.00          1791     51.50          139.00                    514.86
-======================= ============== ======== ============== ========================= =====================
+======================= ============== ======== ============== ==================== ====================
+Size                    Comp. Ratio(%) Files    Latency(ms)    Client Traffic(Mbps) Origin Traffic(Mbps)
+======================= ============== ======== ============== ==================== ====================
+1KB                     26.25          5288     6.72           40.58                55.02
+2KB                     57.45          5238     7.20           41.52                97.58
+4KB                     76.94          5236     7.18           42.44                184.04
+8KB                     87.61          5021     7.53           41.87                337.80
+16KB                    93.32          4608     8.30           41.19                616.83
+32KB                    96.26          3495     13.55          34.53                924.22
+64KB                    97.79          1783     24.50          20.71                938.83
+bootstrap.css(20KB)     86.87          3944     9.67           83.79                638.25
+bootstrap.min.js(36KB)  73.00          1791     51.50          139.00               514.86
+======================= ============== ======== ============== ==================== ====================
 
-If ``<Compression>`` is turned on, uncompressed files are requested from origin servers, meaning reseponses from no Accept-Encoding headers.
-A Content-Encoding header means compressed from the origin server, and STON does not compress the content again.
-
+If ``<Compression>`` is turned on, only uncompressed files will be requested from the origin server. In other words, the responses from the origin server will be to requests that have omitted the Accept-Encoding header. If the origin server specifies a Content-Encoding header to a request for uncompressed content, STON will recognize the content as already compressed and will not compress it again.
 
 .. note::
 
-   If any pre-compresed content undergoes ``<Compression>``, this might cause a serious problem. Please keep in mind the followings.
+   Content that is already compressed on the origin server that matches ``<Compression>`` conditions may be compressed again. Since this can cause problems, this policy is followed.
 
-   1. Compress new content.
-   2. Do not compress content which is pre-compressed in its origin server.
-   3. Invalidate AND compress content which is not compressed in its origin server. 
+   1. New content will be compressed.
+   2. If the content is compressed on the origin server, it will not be compressed again.
+   3. If the content is not compressed on the origin server, the corresponding content will be purged and compressed again.

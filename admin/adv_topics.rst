@@ -1,14 +1,11 @@
 ﻿.. _adv_topics:
 
-Chapter 17. Optimization and More
-******************
+Chapter 18. Optimization and More
+*********************************
 
-This chapter explains a few more about advanced topics.
-Optimization is an important vale for high performance and vice versa for enterprise environment.
+This chapter will discuss optimization and other miscellaneous advanced topics. Optimization is a method used to obtain high performance, which is biggest merit that we are pursuing. In an enterprise environment, if hardware is high-performance, it can also mean that it uses as much resources as possible.
 
-Memory is the most important resource for configuration. 
-The best service quality requires a clear understanding of memory indexing (seeking the requested content).
-The following table is the recommended memory size for content caching.
+Among those resources is memory, the resource that is most important to all plans and policies. Memory indexing (finding requested URLs quickly) is especially important to understand, because indexing is what determines the quality of the service. The following table, displaying the default values based on the physical memory size, will be referred back to by the rest of the section.
 
 ============= ============== =============== ============= ========
 Physical RAM  System Free    Contents        Caching Count Sockets
@@ -32,52 +29,42 @@ Physical RAM  System Free    Contents        Caching Count Sockets
    
 .. _adv_topics_indexing:
 
-Memory Indexing
+Indexing
 ====================================
 
-'Hot' content should be recognised from cold one. 
+In order to explain indexing, you must first understand the idea of "hot" and "cold" content.
 
 .. figure:: img/indexing_hot_cold.png
    :align: center
+   
+Content cached from the origin server is saved on the local disk. If that content must be read from the disk whenever it is accessed, performance will definitely decrease. As such, we can obtain higher performance by loading frequently requested content into memory. We will refer to content loaded into memory as hot content, and content located only on the disk as cold content.
 
-Content cached from origin servers is stored at local disks of STON Edge Server.
-The cache content loading might be slow if read from the disks.
-It is a lot faster if read from memory.
-Content cached on memory is 'hot', and one on the disk is 'cold.'
-
-Indexing is for seeking cold and hot content for the best performance. Memory indexing is the default. ::
+Indexing refers to the process of locating hot and cold content and directly affects performance. The default is memory indexing. ::
 
    # server.xml - <Server><Cache>
    
    <Indexing>Memory</Indexing>
 
-Memory indexing does not keep record of cold content. Information about all contents are loaded in memory. The recommended physical memory size is shown in the table above. 
+Memory indexing does not keep a record of cold content. Information about all files is loaded into memory, so if a file cannot be found, it will be downloaded from the origin server. Because the search time is very short, we can obtain an increase in performance and service quality. However, this is limited by the memory storage size as well as the caching count, which is listed in the above table.
 
-If the requested content is not found among hot contents, then the request is passed onto disk indexing, which keep the record of cold contents. ::
+In disk indexing, if the requested file is not in hot content, it will look in cold content before going to the origin server. ::
 
    # server.xml - <Server><Cache>
    
    <Indexing>Disk</Indexing>
    
-Virtually an unlimited number of files can be cached by this way. Hot content would be served instantly from memory. However cold content may not be served fast because of slow disk read. The serving speed would be limited to memory read speed for hot ones, and to disk read speed for cold ones.
+This method is not limited by memory and therefore is not limited by the caching count. It can guarantee speed if the content is hot, but it will be relatively slower if the content is slow, due to it having to use the disk. In other words, hot content is based on memory speed, and cold content is based on disk speed.
 
-SSD (Solid-State Drive) is highly recommended if running disk indexing.
-Indexing utilizes the disk in which STON is installed. 
-Installing STON on SSD helps high performance caching.
+If using disk indexing, it is highly recommended that you also use a solid-state drive (SSD). Indexing is only performed on the disk that STON is installed on. Because STON is generally installed on the same disk as the OS, you can expect high performance just by using an SSD for the OS disk.
 
 .. note::
 
-   SSDs have lifespans, decided by writing.
-   SSDs from Intel or Samsung guarantee 600 terabytes of writing at least.
-   If 20 gigabytes is written a day, its lifespan would be about 10 years.
-   99 percent of writing operations from STON is logging.
-   Therefore it is highly recommended to keep logging on other disks than SSDs.
+   SSD endurance is determined not by access frequency but by the amount that can be written. SSDs from Intel or Samsung can guarantee a write endurance of 600 TB. In other words, if 20 GB is written in a day, then the SSD can last for about 10 years. 99% of STON's writing operations is logging. Therefore, it is recommended to log on disks other than SSDs (such as SAS or SATA) to ensure the disk's endurance.
 
 
 .. warning::
 
-   Indexing mode cannot be changed dynamically (while running service).
-   STON must be restarted :ref:`getting-started-reset` after switching the indexing mode.
+   Indexing cannot be changed dynamically, and even if it is changed, it will not guarantee stability. Therefore, you must perform :ref:`getting-started-reset` in order to safely proceed with the service.
 
 
 
@@ -86,27 +73,24 @@ Installing STON on SSD helps high performance caching.
 Memory Structure
 ====================================
 
-Cache Server and generic web server have different purposes, although they seem to have much in common.
-Understanding structure and mechanism helps optimization.
-The purpose of optimization is as follows.
+The cache server can have the same behaviors as a general web server, but their objectives are quite different. Even better service optimization is possible if you can thoroughly understand the structure and behaviors of STON. The purpose of optimization is as follows.
 
-**Massive sesssion handling**. Tens of thousands of simultaneous sessions 
+**High throughput**. Handling tens of thousands of sessions simultaneously without a drop in performance.
 
-**Instant Response**. Response service for clients
+**Fast responsiveness**. Providing a service to clients without delay.
 
-**Origin Off-loading**. Origin overload prevented in advance
+**Reduction in origin server load**. Preventing an overload on the origin server in advance.
 
-The following is a sample segmentation for 8GB and 16GB physical memory.
+The following figures represent the memory structure of STON with 8 GB and 16 GB memory.
 
 .. figure:: img/perf_mem_8_16.png
    :align: center
 
-STON shares physical memory, depending on sockets and caching files to serve.  
+Memory is divided into memory used by STON and free memory not used by STON. Like files and sockets, the memory used by STON can change based on the scale of the service.
 
 .. note::
 
-   Disk I/O speed might be a drag the service performance. 
-   Deciding caching size for the least disk IO is the primary 
+   The basis of system load is disk I/O. You will have to consider how much content should be cached in order to reduce disk I/O.
    
    
    
@@ -115,42 +99,33 @@ STON shares physical memory, depending on sockets and caching files to serve.
 Memory Management
 ====================================
 
-`Memory Structure`_ is automatically calculated based on physical memory. ::
+`Memory Structure`_ will automatically be calculated based on the size of physical memory. ::
 
    # server.xml - <Server><Cache>
    
    <SystemMemoryRatio>100</SystemMemoryRatio>
 
--  ``<SystemMemoryRatio> (default: 100)`` memory assgined for STON
+-  ``<SystemMemoryRatio> (default: 100)`` Configures the ratio of memory used by STON using physical memory as the basis.
 
-If ``<SystemMemoryRatio>`` is set to 50 with 8GB of physical memory, STON runs within 4GB memory.
-This feature may be useful if other processes run simultaneously. 
+For example, if memory is 8 GB and ``<SystemMemoryRatio>`` is set to 50, it will act as if there is 4 GB of physical memory. This can be useful if STON is run alongside other processes that take up space in memory.
 
-Content memory is also adjustable for the best performance. ::
+It can be even more effective to adjust the ratio of content stored in memory based on the specifics of the service. ::
 
    # server.xml - <Server><Cache>
    
    <ContentMemoryRatio>50</ContentMemoryRatio>
 
--  ``<ContentMemoryRatio> (default: 50)`` memory segment assgined for content caching (within ``<SystemMemoryRatio>``).
+-  ``<ContentMemoryRatio> (default: 50)`` Configures the ratio of memory used for content to the total memory used by STON.
 
-Higher ConntentMemoryRatio means less file IO for serving large sized contents such as game portals.
-On the other hand, less ContentMemoryRatio helps serving many and small sized contents.
-
-
+For example, if the file count is small but the content size is huge (like a game portal), you can increase this value to reduce file I/O. Conversely, if you have a lot of very small files, decreasing this value will be more useful.
+   
 
 .. _adv_topics_sys_free_mem:
 
 System Free Memory
 ====================================
 
-Slowly performing OS(Operating System) is an absoulte drag for any application.
-STON leaves some free memory for operating system, which is system free memory.
-
-.. note::
-
-   We have been anticipating for a good reasoning and found
-    `this article <http://www.sysxperts.com/home/announce/vmdirtyratioandvmdirtybackgroundratio>`_ .
+If the operating system (OS) is slow, no program will be able to obtain good performance. STON will set aside a portion of memory for the OS. This is to maximize the performance of the OS and is called system free memory.
 
 ============== ===============
 Physical RAM   System Free
@@ -165,31 +140,27 @@ Physical RAM   System Free
 128GB	         51.2GB
 ============== ===============
 
-Free memory ratio is adjustable depending on service characteristics. Less free memory means more contents allocated. ::
+An experienced user will be able to adjust the free memory to what's best for their service. Reducing free memory will mean loading more content into memory.  ::
 
    # server.xml - <Server><Cache>
    
    <SystemFreeMemoryRatio>40</SystemFreeMemoryRatio>
 
--  ``<SystemFreeMemoryRatio> (default: 40, maximum: 40)`` physically free memory ratio 
+-  ``<SystemFreeMemoryRatio> (default: 40, max: 40)`` Configures the ratio of memory set aside for free memory using physical memory as a basis.
 
 
 
 Caching Service Memory
 ====================================
 
-This is the memory to cache content serving clients.
-Contents loaded from disk onto memory stay in the memory, as long as there is enough.
-The problem is that memory is never enough.
+This is the memory that caches content that is delivered to clients. Content loaded into memory once will continue to exist in memory, as long as there is enough space. The problem is that there will often not be enough space.
 
 .. figure:: img/perf_inmemory.png
    :align: center
 
-Disks might have tons of contents to serve, and memory is almost always limited.
-32GB of physical memory may seem large, but would not be enough to contain high-resolution videos or large sized gaming application. Physical disk IO is always the bottleneck in terms of performance. 
+As seen in the above figure, the disk can be full of deliverable content, but the actual capacity of memory is limited. Even if you have 32 GB of physical memory, when you consider the size of game clients or HD video clips, it isn't that much. No matter how efficiently you manage memory, it will only amount to the speed of the physical disk I/O.
 
-The optimal way is to secure contents memory segment and reduce disk IO.
-The following table is the default maximum content memory size according to physical memory range. 
+The most effective method is to use as much available content memory space and reduce disk I/O. The following is a table of STON's default settings for maximum content memory size based on physical memory.
 
 =============== ================= ====================
 Physical RAM    Contents          Caching Count
@@ -205,87 +176,112 @@ Physical RAM    Contents          Caching Count
 =============== ================= ====================
 
 
+
 Socket Memory
 ====================================
 
-Sockets consume memory too.
-STON creates 20,000 sockets in >4GB memory by default. 
-A single socket consumes 10KB, which means 97.6MB per 10k sockets. Therefore about 195MB of memory is allocated soley for sockets.
+Sockets also use memory. If you have at least 4 GB of physical memory, then STON will by default generate at least twenty thousand sockets. With one socket equaling 10 KB, ten thousand sockets will use about 97.6 MB. About 195 MB of memory will be alloted to sockets by default.
 
 =============== ================= ======================
 Physical RAM    Socket Count      Socket Memory
 =============== ================= ======================
-1GB             5,000               97.6MB
-2GB             10,000               195MB
-4GB 이상        20,000               390MB
+1GB             5,000             97.6MB
+2GB             10,000            195MB
+4GB or more     20,000            390MB
 =============== ================= ======================
 
-More sockets are created if all the sockets are in use.
+If all the sockets are used as in the following figure, more sockets will automatically created.
                      
 .. figure:: img/perf_sockets.png
    :align: center
     
-For an example, 240MB of memory is allocated for 30k sockets.
-If all created sockets are used, we call it efficency. However unused sockets mean inefficiency. 
-To gurantee 10Mbps for each client from 10Gbps NIC, the maximum concurrent users are 1,000. ::
-   10,000Mbps / 10Mbps = 1,000 Sessions
+If, like the above figure, more sockets are installed to bring the number up to thirty thousand, that will mean about 240 MB will be alloted to sockets. There doesn't seem to be any problem with using only the number of sockets that we need. However, setting up more sockets than we need to use is just a waste of memory. For example, to guarantee 10 Mbps for each client from 10 Gbps NIC, the following equation gives us a maximum simultaneous user count of one thousand people. ::
+
+   10,000 Mbps / 10 Mbps = 1,000 Sessions
    
-In this case, about 148MB of memory is wasted, for 19k sockets. 
-It is more efficient to allocate the 148MB to server more contents.
-Setting the minimum sockets helps managing memory more efficiently. 
+In this case, out of the twenty thousand sockets created by STON, only nineteen thousand are used, wasting about 148 MB. This 148 MB could be used for content, increasing efficiency. By setting the smallest possible number of sockets, we can gain use memory much more efficiently.
 
-**Minimum Sockets**. Initially created sockets
+**Minimum number of sockets**. Refers to the number of initially alloted sockets.
 
-**Socket Top-up**. Newly created sockets in case all other sockets are established.
+**Sockets that are installed later**. Installs more sockets if all current sockets are established.
 
-One more important factor is client Keep-Alive setting. (Please refer to :ref:`handling_http_requests_session_man` )
+Another important factor is the Keep-Alive time setting for the client (see :ref:`handling_http_requests_session_man`).
 
 .. figure:: img/perf_keepalive.png
    :align: center
 
-Not all establisehd sockets are trasmitting data. 
-Browsers such as Internet Explorer and Chrome keep sockets for potential HTTP transmission with servers.
-For some online commerce, the ratio of established but idle sessions may vary from 50 to 80%.
+Not all connected sockets will be in the middle of transferring data. In browsers like IE or Chrome, sockets are maintained in an accessed state to prepare for the next HTTP transfer that will occur. Among the connected sessions in online shopping, the percentage of sessions that aren't transferring any data ranges from 50% to 80%.
 
 .. figure:: img/perf_keepalive2.png
    :align: center
 
-Socket reusablility benefits from less Keep-Alive time. However, more idle sockets may consume too much memory.
-Therefore finding the optimal client Keep-Alive time is crucial for each service. 
+If the Keep-Alive time is long, the reusability of the socket is better, but there will be more idle sockets and more memory waste. As such, it is important to configure a client Keep-Alive time that works best for the service.
 
 
-Client Request Capping
+.. _adv_topics_tso:
+
+TCP Segmentation Offload
 ====================================
 
-Too many client requests might generate overload. The overload means literally system failure.
-Capping client requests help protecting the system. ::
+.. important::
+
+   If you're using 10 Gbps NIC, it is recommended that you configure TCP Segmentation Offload (TCP) to OFF.
+   
+In TCP, packets go under segmentation; TSO configures it so that this process is done not by the CPU but by NIC. (The default setting is ON.) However, we have experienced many errors related to this in a 10 Gbps NIC service environment.
+
+-  TCP packet loss and delay
+-  TCP connection timeout
+-  Unnatural increase in the load average
+
+In conclusion, we can assume that TSO is unable to provide the high performance we expected from it. (These problems did not occur when changing NIC to 1 Gbps.) When TSO was set to OFF, the service returned to normal. This is not a point of concern about the usage of CPU but a good benchmark for the scale of the service.
+
+The TSO setting can be configured/checked with the following. (The K is case-sensitive.) ::
+
+   # ethtool -K ethX tso off        // TSO OFF setting
+   # ethtool -k ethX                // Setting check
+   ...
+   tcp segmentation offload: on
+   ...
+
+.. tip::
+
+   Please refer to the following links for more information.
+
+   -  `http://sandilands.info/sgordon/segmentation-offloading-with-wireshark-and-ethtool <http://sandilands.info/sgordon/segmentation-offloading-with-wireshark-and-ethtool>`_
+   -  `http://www.linuxfoundation.org/collaborate/workgroups/networking/tso <http://www.linuxfoundation.org/collaborate/workgroups/networking/tso>`_
+   -  `http://www.packetinside.com/2013/02/mtu-1500.html <http://www.packetinside.com/2013/02/mtu-1500.html>`_
+
+
+
+
+Client Request Limit
+====================================
+
+If you allow unlimited client requests, it can cause excessive load on the system. System overload is a very possible error. This can protect the system by preventing client requests over a certain number. ::
 
    # server.xml - <Server><Cache>
    
    <MaxSockets Reopen="75">80000</MaxSockets>
 
--  ``<MaxSockets> (default: 80000, max: 100000)`` Maximum client sockets to connect to. 
-   New client connection is immediately terminated if this figure is reached.
-     New client access is allowed again, if the sockets are under the ``Reopen (default: 75%)`` ratio from ``<MaxSockets>``.
+-  ``<MaxSockets> (default: 80000, max: 100000)`` The maximum number of client sockets that will be allowed. If the socket count falls below the ``Reopen (default: 75%)`` ratio in ``<MaxSockets>``, access will be reallowed.
 
 .. figure:: img/maxsockets.png
    :align: center
 
-(from default setting) New client accesses are immediately terminated if the total client sockets are more than 80,000.
-For an example, if the total client sockets are 60,000 (75% of the MaxSockets), then new accesses are allowed.
+Using the default settings, if the total client socket count exceeds 80,000, connections from new clients will immediately be closed. If the total client socket count falls to 60,000 (75% of 80,000), connections will be reallowed.
 
-If 30,000 client sessions are connected and all the origin servers are maxed out,
-30,000~40,000 of MaxSockets is recommended. 
+For example, there are thirty thousand client sessions and the origin servers have reached their limit, setting this value to thirty or forty thousand is recommended. Doing so, the available benefits are as follows.
 
-- No other network component is necessary. (e.g. L4 session control)
-- Prevents unnecessary client requests (because of overloaded origin)
-- Helps more stable service. No restart or regualr checking required.
+-  There is no need for a separate network setup (such as L4 session control).
+-  Prevents unnecessary client requests (that can't be processed due to origin load).
+-  Raises service credibility. There will be no need for restarting or inspection during service bursts.
 
 
-HTTP Client Session
+
+HTTP Client Session Count
 ====================================
 
-Configures the initial and the additional HTTP session management. ::
+Configures the initial/additional session count to process HTTP client connections. ::
 
     # server.xml - <Server><Cache>
    
@@ -294,43 +290,44 @@ Configures the initial and the additional HTTP session management. ::
        <TopUp>6000</TopUp>
     </HttpClientSession>
     
--  ``<Init>`` the initial sessions created
+-  ``<Init>`` The number of sockets initially generated when STON is started.
 
--  ``<TopUp>`` the number of sessions to create when the initial sessions are all established.
+-  ``<TopUp>`` The number of additional sockets generated when the initial sockets are all in use.
 
-Automatically managed depending on physical memory size, if not configured explicitly.
+When not specifically configured, the settings will be automatically configured based on the size of physical memory.
 
 =============== =========================
-Physicla Memory	    <Init>, <TopUp>
+Physical RAM    <Init>, <TopUp>
 =============== =========================
-1GB             5,000, 1,000
-2GB             10,000, 2,000
-4GB             20,000, 4,000
->8GB             20,000, 6,000
+1GB             5 thousand, 1 thousand
+2GB             10 thousand, 2 thousand
+4GB             20 thousand, 4 thousand
+8GB or more     20 thousand, 6 thousand
 =============== =========================
-Keeping less sessions mean more memory, in limited system environment.
+
+If service is still possible with a smaller number of sockets in a limited environment, you can save on memory by lowering this socket count.
 
 
+.. _adv_topics_req_hit_ratio:
 
-Request Hit Ratio
+Request hit ratio
 ====================================
 
-First of all, you should understand how HTTP requests from clients are processed.
-Cache processing results use TCP_* format just like that of Squid, and each expression stands for the process method.
+First, you must understand how client HTTP requests are processed. Caching processing results use the TCP_* format just like Squid, and each expression refers to how the cache server processed the request.
 
--  ``TCP_HIT`` The requested resource(not expired) is already cached and will respond immediately.
--  ``TCP_IMS_HIT`` The requested resource with an IMS(If-Modified-Since) header is not expired and is still cached, so respond to the client with 304 NOT MODIFIED. When TTLExtensionBy4xx and TTLExtensionBy5xx are set to ON, this will also respond with 304 NOT MODIFIED.
--  ``TCP_REFRESH_HIT`` The requested resource is expired and needs to check the origin server(origin not modified, 304 NOT MODIFIED) to respond. The resource expiration is extended.
--  ``TCP_REF_FAIL_HIT`` Responds with expired content when confirmation from the origin server during the TCP_REFRESH_HIT process fails due to connection failure or transfer delay.
--  ``TCP_NEGATIVE_HIT`` Responds with a corresponding status when the requested resource is cached in an abnormal status(origin server connection/transfer failure, 4xx response, 5xx response).
--  ``TCP_REDIRECT_HIT`` Responds with Redirect based on the service Allow/Deny/Redirect conditions.
--  ``TCP_MISS`` The requested resource is not cached(a first time request). Respond with the result from the origin server.
--  ``TCP_REF_MISS`` The requested resource is expired so respond after the origin server check(origin modified, 200 OK). The new resource is cached.
--  ``TCP_CLIENT_REFRESH_MISS`` Bypasses the request to the origin server.
--  ``TCP_ERROR`` The requested resource is not cached(a first time request). Origin server failures(connection failure, transfer delay, origin exclusion) interrupt resource caching. Respond to the client with 500 Internal Error.
+-  ``TCP_HIT`` The requested resource (not expired) is cached and will respond immediately.
+-  ``TCP_IMS_HIT`` The resource requested with the If-Modified-Since (IMS) header is not expired and still cached, and will respond with 304 NOT MODIFIED. This will also apply when TTLExtensionBy4xx or TTLExtensionBy5xx is set to ON.
+-  ``TCP_REFRESH_HIT`` The requested resource is expired and will respond after checking the origin server (origin not modified, 304 N OT MODIFIED). The expiration time of the resource is extended.
+-  ``TCP_REF_FAIL_HIT`` The origin server check during the TCP_REFRESH_HIT result fails (connection failure, transfer delay) and will respond with expired content.
+-  ``TCP_NEGATIVE_HIT`` The requested resource is abnormal (origin server connection/transfer failure, 4xx response, 5xx response) and will respond with its currently cached form.
+-  ``TCP_REDIRECT_HIT`` Responds with a Redirect according to the service's allow/deny/redirect conditions.
+-  ``TCP_MISS`` The requested resource is not cached (requested for the first time) and will respond with the result of accessing the origin server.
+-  ``TCP_REF_MISS`` The requested resource is expired and will respond after an origin server check (origin change, 200 OK). The new resource is cached.
+-  ``TCP_CLIENT_REFRESH_MISS`` The request is bypassed to the origin server.
+-  ``TCP_ERROR`` The requested resource is not cached (requested for the first time). Due to an origin server error (connection failure, transfer delay, origin exclusion) the resource was not cached. Responds with a 500 Internal Error to the client.
 -  ``TCP_DENIED`` The request is denied.
 
-With the above results, the request hit ratio formula can be expressed, as shown below. ::
+The request hit ratio can be calculated using the above results, and the formula is shown below. ::
 
    TCP_HIT + TCP_IMS_HIT + TCP_REFRESH_HIT + TCP_REF_FAIL_HIT + TCP_NEGATIVE_HIT + TCP_REDIRECT_HIT
    ------------------------------------------------------------------------------------------------
@@ -340,8 +337,7 @@ With the above results, the request hit ratio formula can be expressed, as shown
 Byte hit ratio
 ====================================
 
-The byte hit ratio stands for the ratio of transmitted traffic(Client Outbound) to clients to received traffic(Origin Inbound) from origin servers.
-A negative value can be obtained if the origin server traffic is higher than the client traffic. ::
+The byte hit ratio is the ratio of the client outbound traffic to the origin inbound traffic. A negative number can arise if the origin inbound traffic is higher than client outbound traffic. ::
 
    Client Outbound - Origin Inbound
    --------------------------------
@@ -351,45 +347,39 @@ A negative value can be obtained if the origin server traffic is higher than the
 Origin Server Failure Policy
 ====================================
 
-STON allows customers to inspect the origin server whenever they want.
-When origin server failure is detected, the corresponding server is automatically inactivated and switched to recovery mode. 
-Even if the server is reactivated, normal service status has to be confirmed in order to run the service.
+One of the goals of the development team was to have the customer be able to examine the origin server at all times. If an error occurs on an origin server, the corresponding server will be excluded and go into restoration mode. Even if the server is reactivated, normal service operation must be confirmed before it can be put back into the service.
 
-If all origin servers are failing, the service will be provided by currently cached content. 
-Content with expired TTL will be automatically extended until origin servers are recovered. 
-Even purged content can be recovered if it cannot be cached from origin servers for seamless service. 
-With this policy, clients should not be exposed to the system fail.
-If a new content request is received from the client during total system failure, the following error page will be shown with an explanation.
+If all origin servers somehow end up in an error status, the service continues with only the content that was cached at the time. Expired content will have their TTLs extended until the origin server is restored. Even purged content can be restored if it cannot be cached from the origin server, in order to proceed with a smooth service. The goal is to not expose the error status of the servers to the clients as much as possible. If a request for new content is made with a complete error status, the following error page and reason will be displayed.
 
 .. figure:: img/faq_stonerror.jpg
    :align: center
       
-   Your clients do not want to see this page.
+   You'd want to avoid showing this page as much as possible.
    
    
 Time Units and Expressions
 ====================================
 
-For items that have a base time in "seconds", a string can be used for time expression. 
-The following are supported time expressions and the values are converted into seconds.
+For values with a base unit of "seconds", a string can instead be used for easier time expression. The following are the supported time expressions as well as their values converted to seconds.
 
-=========================== =========================
-Expressions	                    Converted Value
-=========================== =========================
-year(s)                     31536000 sec (=365 days)
-month(s)                    2592000 sec (=30 days)
-week(s)                     604800 sec (=7 days)
-day(s)                      86400 sec (=24 hours)
-hour(s)	                    3600 sec (=60 mins)
-minute(s), min(s)	        60 sec
-second(s), sec(s), (Omitted)	1 sec
-=========================== =========================
 
-Combined expression is also supported. ::
+============================ =========================
+Expression                   Conversion
+============================ =========================
+year(s)                      31536000 sec (365 days)
+month(s)                     2592000 sec (30 days)
+week(s)                      604800 sec (7 days)
+day(s)                       86400 sec (24 hours)
+hour(s)                      3600 sec (60 min)
+minute(s), min(s)	         60 sec
+second(s), sec(s), (omitted) 1 sec
+============================ =========================
+
+The following expression, using combined units, can be used for time. ::
 
     1year 3months 2weeks 4days 7hours 10mins 36secs
     
-These expressions can be used for the following.
+This can currently be used for the following values.
 
 - Time expression of Custom TTL
 - Everything but the Ratio of TTL
@@ -399,122 +389,28 @@ These expressions can be used for the following.
 - BypassConnectTimeout
 - BypassReceiveTimeout
 - ReuseTimeout
-- Cycle attribute of Recovery
+- Cycle property of Recovery
 - Bandwidth Throttling
 
-
-
-Origin Server Distribution
-====================================
-
-When there are billions of content to be serviced, it is impossible and inefficient to cache it all. 
-The cache server can be upgraded to cache more content, but this method is not economically effective. 
-The most effective method is to disperse content to multiple domains and configure with multiple servers.
-
-.. figure:: img/faq_distdomain.jpg
-   :align: center
-      
-   Multi-domain is advantageous for service expansion.
-   
-If a service is configured with only one domain like (A), there is no way to physically split traffic. 
-Service (B) separates multiple domains and configures separate cache servers to split traffic.
-However, having multiple domains could be inappropriate in some cases. 
-
-For example, when traffic is low compared to the size of content or the cost of a service update is too high, having multiple domains is not adequate. 
-Distributed cache could be a good alternative in these cases. 
-Distributed cache does not modify the origin, but share content from the cache server.
-
-.. figure:: img/faq_dist.jpg
-   :align: center
-      
-   Well-known distributed cache methods.
-
-(C) explains how the L7 load balancer analyzes client requests and distributes them to each cache server based upon appointed rules. 
-However, the service could become subordinated to the L7 device, which could be problematic when expanding the service. 
-In addition, when multiple resources are requested through a single HTTP session, it is possible to request uncached contents. 
-
-(D) explains a method that shares content among cache servers. 
-The content that is missing from #1 will be obtained from #2 and serviced. 
-This might seem efficient, but there is a disadvantage. 
-The topology becomes very complicated and the internal traffic rises sharply for additional servers. 
-Moreover, clients might have to wait until data is brought from another cache server instead of the cache server they are connected to.
-For this reason, the service quality could deteriorate.
-
-STON suggests a three-tier structured distributed cache. 
-
-Let's begin with the Child(Edge) server that is directly connected to clients. 
-Once HTTP establishes a connection with a server, several HTTP transactions are executed. 
-In the case of web pages, DNS query and socket connection take more time than data transfer. 
-Clients experience faster service when they are provided all data directly from connected servers. 
-Therefore, child servers always have to keep the hottest(most frequently accessed) content. 
-This guarantees a fast response. 
-
-The most frequently accessed pages from clients will be cached in the child server. 
-Which cache server may the clients access, any pages can be serviced quickly.
-Above all, there is no doubt that the child server must cache the hottest content all the time. 
-
-For example, let's say there is a total 20 million items in the origin server and the cache server can cache 10 million. 
-In the case of a two-tier structure, the child server sends frequent requests to the origin server in order to get the remaining 10 million items that have not been cached. 
-As the service gets bigger, the load on the origin server gets heavier as well. 
-
-To effectively overcome this disadvantage, configure cache servers in between child servers and the origin server. 
-This might seem meaningless; however, if clients distribute their requests, it's a whole different story. 
-
-Now, let's install two parent servers between the child servers and the origin server.
-Each parent server can cache 10 million items.
-All child servers can split their requests based on a hash algorithm; for example, odd numbered content requests go to the left server and even numbered content requests go to the right server. 
-This configuration will concentrate most requests to the parent servers.
-As a result, all content can be cached in cache servers; simply install additional child servers to configure a less burdened topology.
-
-.. figure:: img/faq_3tierdist.jpg
-   :align: center
-      
-   Distributed Cache of Content.
-
-A distributed cache is configured in the virtual host of the child server. ::
-
-    # server.xml - <Server><VHostDefault><OriginOptions>
-    # vhosts.xml - <Vhosts><Vhost><OriginOptions>
-
-    <Distribution>OFF</Distribution>
-    
--  ``<Distribution>`` Configures the distribution mode of the origin server.
-
-   - ``OFF (default)`` ``<BalanceMode>`` becomes a determinant.
-   
-   - ``ON`` splits content requests. ``<BalanceMode>`` is ignored. 
-
-If the origin content increases, you can simply put in an additional parent server. 
-Child servers still cache the hottest content first and Long-Tail content is cached via the fastest and most credible path. 
-When parent servers are failing, child servers exclude failed servers and redistribute content. 
-If there are available standby servers, replace failed parent servers with standby servers so other parent servers are not affected.
 
 
 Emergency Mode
 ====================================
 
-STON is designed so that all virtual hosts are sharing MemoryBlock and managing data.
-When new memory is needed, STON will reuse the MemoryBlock that has not been accessed for a long time. 
-This process is called Memory-Sway.
-This architecture guarantees stability during long periods of service.
+Internally, all virtual hosts share MemoryBlocks to manage data. If new memory is necessary, old MemoryBlocks that aren't being used can be reused as new memory. This process is called Memory-Swap. Using this structure can guarantee stability even for long periods of service.
 
 .. figure:: img/faq_emergency1.png
    :align: center
       
-   Content data is loaded on the MemoryBlock and serviced.
+   Content is loaded onto a MemoryBlock before being delivered.
 
-The left figure on the above illustration explains a situation when all MemoryBlocks are occupied and no MemoryBlock can be reused. 
-Memory-Sway is not available in this situation. 
-For example, the worst case happens when all clients are downloading tiny parts of different data portions, and at the same time, the origin server is transmitting tiny sizes of different data. 
-Allocating new memory from the system could be a solution; 
-however, persistent instances like these will evidently raise memory usage. 
-An excessive use of memory will cause a system memory swap, or at the worst, OS could force STON to quit.
+Like in the right diagram of the above image, a situation may occur where all MemoryBlocks are in use with no reusable MemoryBlocks. In this case, Memory-Swap will be unavailable. For example, if all the clients are each downloading different parts of data at the same time, and the origin server is transferring different parts of data, then this worst-case scenario can occur. In this case, one solution is to have the system allot more memory to use. However, if the situation continues, memory usage can easily increase. An excessive use of memory can lead to a system memory swap or, at worst, the OS forcing STON to quit.
 
 .. note::
 
-   "Emergency mode" stands for a situation when there is insufficient memory, during which new MemoryBlock allocation is temporarily prohibited.
+   Emergency mode refers to the mode where, when there is not enough memory, STON temporarily prevents new MemoryBlocks from being alloted.
 
-Emergency mode protects the service from excessive memory usage, and it will be released when enough reusable MemoryBlocks are secured. ::
+STON will be put into emergency mode to prevent excessive memory usage, and the mode will be automatically lifted when enough reusable MemoryBlocks can be guaranteed. ::
 
     # server.xml - <Server><Cache>
    
@@ -522,51 +418,49 @@ Emergency mode protects the service from excessive memory usage, and it will be 
     
 -  ``<EmergencyMode>``
 
-   - ``OFF (default)`` Do not use Emergency Mode.
+   - ``OFF (default)`` Emergency mode is not used.
    
-   - ``ON`` Use Emergency Mode.
+   - ``ON`` Emergency mode is used.
 
-In Emergency mode, STON operates as follows:
+In emergency mode, STON behaves as follows.
 
-- Services loaded content normally.
-- Bypass works normally.
-- Returns unloaded content with 503 service temporarily unavailable. TCP_ERROR status increases.
-- Quickly cleans up idle client sockets.
-- Does not cache modified content.
-- TTL does not renew expired content.
-- Returns the cache.vhost.status of SNMP and Host.State value of XML/JSON statistics as "Emergency".
-- Info log writes Emergency mode activate/inactivate as shown below. ::
+- Content that is already loaded will be provided normally.
+- Bypasses will work normally.
+- Content not loaded will return 503 service temporarily unavailable. TCP_ERROR statuses will increase.
+- Idle client sockets will be quickly taken care of.
+- New content will be unable to be cached.
+- Expired content will not be renewed.
+- The cache.vhost.status in SNMP and the Host.State value in XML/JSON statistics will return "Emergency".
+- The info log will record the activation/inactivation of emergency mode as below. ::
 
     2013-08-07 21:10:42 [WARNING] Emergency mode activated. (Memory overused: +100.23MB)
-    ...(skip)...
+    ...(omitted)...
     2013-08-07 21:10:43 [NOTICE] Emergency mode inactivated.
     
     
 Disk Hot-Swap
 ====================================
 
-Without stopping the service, you can swap the disks. 
-The parameter must be the same as the ``<Disk>`` configuration. ::
+Swaps the disks without stopping the service. The parameters must be the same as those in ``<Disk>``. ::
 
    http://127.0.0.1:10040/command/unmount?disk=...
    http://127.0.0.1:10040/command/umount?disk=...
 
-An excluded disk is immediately inactivated and all contents in the corresponding disk becomes invalid. 
-The status of the disk that is excluded by the administrator is set to "Unmounted".
+The excluded disk is immediately inactivated and all content saved on the disk is invalidated. The status of the disk excluded by the administrator is set to "Unmounted".
 
-In order to reactivate the disk, the following should be called. ::
+To reactivate the disk, the following should be called. ::
 
    http://127.0.0.1:10040/command/mount?disk=...
 
-All content in the reactivated disk will become invalid.
+All content in the reactivated disk is invalidated.
+
 
 .. _adv_topics_syncstale:
 
 SyncStale
 ====================================
 
-
-Some stale content might be missing from indexing after unintended termination, because content indexing on disk could have been delayed for the best performance. SyncStale logs all API calls such as  :ref:`api-cmd-purge` , :ref:`api-cmd-expire` and :ref:`api-cmd-hardpurge` and stale content is updated when restarted. ::
+After an abnormal service termination, content that has been invalidated by :ref:`api-cmd-purge`, :ref:`api-cmd-expire`, or :ref:`api-cmd-hardpurge` may be skipped over by indexing (due to performance reasons). To make up for this, the API calls will be logged and go into effect when the service is restarted. ::
 
     # server.xml - <Server><Cache>
    
@@ -574,10 +468,9 @@ Some stale content might be missing from indexing after unintended termination, 
     
 -  ``<SyncStale>``
 
-   - ``ON  (default)`` Synchronize stale content with stale logs when restarted
+   - ``ON (default)`` Synchronizes on restart.
    
-   - ``OFF`` Leave stale content as remained
+   - ``OFF`` Ignores.
    
-Stale content are tracked in ./stale.log and initialized upon normal termination or regular indexing.
-
+The log can be found at ./stale.log and is initialized upon normal termination or regular indexing.
 

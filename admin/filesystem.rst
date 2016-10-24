@@ -1,23 +1,16 @@
 ﻿.. _filesystem:
 
-Chapter 16. File System
-******************
+Chapter 17. File System
+***********************
 
-This chapter explains how to utilize STON like a local disk.
-STON is based on `FUSE <http://fuse.sourceforge.net/>`_ and mounted on the Linux VFS(Virtual File System).
-All files in the mounted path will be cached at the moment of access, but other processes will not notice.
-You can view this system as **a ReadOnly disk with a Caching function**.
+This chapter will explain how to utilize STON as if it were a local disk. STON is based on `FUSE <http://fuse.sourceforge.net/>`_ and is mounted on the Linux VFS (Virtual File System). All files in the mounted directory will be cached the moment they are accessed, but other processes will not notice. You can consider this system as a **ReadOnly disk with a Caching function**.
 
 .. figure:: img/conf_fs1.png
    :align: center
       
-   `Fuse <http://upload.wikimedia.org/wikipedia/commons/0/08/FUSE_structure.svg>`_ architecture
+   Fuse structure.
 
-When the Linux Kernel forwards the file I/O function call directly to STON, 
-no other elements(physical file I/O, socket communication, etc) will interfere with the process.
-This architecture enables extremely high performance.
-STON's memory caching capacity will enhance access performance more than the physical disk.
-
+If the Linux Kernel delivers structural File I/O function calls directly to STON, no other elements (e.g. physical File I/O, socket transmission) can interfere with the process. This architecture makes extremely high performance possible. Using STON's memory caching, you can expect performance that's better than physical disk access.
 
 .. toctree::
    :maxdepth: 2
@@ -25,7 +18,7 @@ STON's memory caching capacity will enhance access performance more than the phy
 Mount
 ====================================
 
-Mount is configured in the global setting(server.xml). ::
+Mount is configured in global settings (server.xml). ::
 
    # server.xml - <Server><Cache>
 
@@ -33,28 +26,25 @@ Mount is configured in the global setting(server.xml). ::
     
 -  ``<FileSystem>``
 
-   -  ``OFF (default)`` Doesn't do anything.
+   -  ``OFF (default)`` Does nothing.
    
-   -  ``ON`` Mounts STON to the path of the ``Mount`` property.
+   -  ``ON`` STON will be mounted onto the path given by the ``Mount`` property.
    
-STON keeps the previous HTTP structure, but develops an expanded file system that accesses the cache module. 
-Therefore, wherever the access is coming from, caching only happens once and is serviced with either HTTP or a file I/O. 
-The File System is another way to access the cache module. 
+This was developed in such a way that the existing HTTP structure is preserved, but a file system that can access the cache module is added. As such, regardless of where the access comes from, caching occurs only once and is given service by either HTTP or File I/O. The file system is a new bridge added that allows access to the cache module.
    
 .. figure:: img/conf_fs2.png
    :align: center
       
    HTTP and File I/O share a cache module.
 
-Not only HTTP, but also File I/O can access content in the origin server.
-By utilizing this method, you can increase the availability of solutions that are based on local files.
+The content on the origin server can be accessed not only by HTTP but also by File I/O. Using this, you can increase the availability of solutions that are based on local files.
 
 .. figure:: img/conf_fs3.png
    :align: center
       
    Any server is OK.
    
-The following are supported functions by the STON File System.
+The current list of functions that support the STON File System is as follows.
 
 ========= =============== ===========
 FUSE	  C	              LINUX
@@ -66,179 +56,139 @@ getattr	  fstat	          stat
 unlink	  remove	      unlink
 ========= =============== ===========
 
-File I/O goes through several internal steps. 
-In order to achieve the best performance, you should thoroughly understand each step.
+File I/O goes through several internal steps. It is important to understand what goes on at each step to obtain the best performance.
 
-
-
-Searching for a Virtual Host
+Searching for Virtual Hosts
 ====================================
 
-The first step is searching for the virtual host to access. 
-The Host header in the HTTP request helps finding a the virtual host. ::
+The first step is searching for the virtual host to be accessed. In an HTTP header, the Host header is specified as below, making it easy to find the virtual host. ::
 
     GET /ston.jpg HTTP/1.1
     host: example.com
     
-File System uses the first path as the virtual host name, thus the host name can be used in the file system as well. 
-For example, if STON is mounted to the /cachefs path, the below path can be used to access local files. ::
+This can be done in the file system using its first directory. For example, if STON is mounted on the /cachefs directory, local files can be accessed with the following path. ::
 
     /cachefs/example.com/ston.jpg
         
-:ref:`env-vhost-find` works in the same way.
-If *.example.com is configured as an ``<Aliss>`` of example.com, all of the following accesses refer to the identical file. ::
+:ref:`env-vhost-find` will work in the same way. If the ``<Alias>`` of example.com is set to \*.example.com, then the following paths will access the same file. ::
 
     /cachefs/example.com/ston.jpg
     /cachefs/img.example.com/ston.jpg
     /cachefs/example.example.com/ston.jpg
     
-For instance, in order to link example.com to the Apache server, you have to set the DocumentRoot as /cachefs/example.com/.
+For example, in order to link example.com to the Apache server, you must set the DocumentRoot to /cachefs/example.com/.
 
 
 File/Directory
 ====================================
 
-This section explains how to configure file systems for each virtual host. 
-All virtual hosts can also be uniformly configured with a default virtual host. ::
+The file system can be configured for each virtual host. Alternatively, a default virtual host can be configured to give all virtual hosts the same settings. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
 
    <FileSystem Status="Active" DotDir="OFF">                    
+      <FileTime>origin</FileTime>
       <FileStatus>200</FileStatus>
       <DirStatus>301, 302, 400, 401, 403</DirStatus>
-      <Unlink>Purge</Unlink>
+      <Unlink>Purge</Unlink>      
    </FileSystem>   
+
+-  ``<FileTime> (default: Origin)``
+   Returns the Last-Modified time from the origin server when set to ``Origin``, or the local cached time when set to ``Local``. If the origin server does not return a Last-Modified time when set to ``Origin``, then the file time will be returned as the Unix epoch as seen below.
+   
+   .. figure:: img/fs_filetime.png
+      :align: center
     
 -  ``<FileSystem>``
-   If the ``Status`` attribute is set to ``Inactive``, the File System cannot access the file/directory. 
-   Set the ``status`` attribute to ``Active``.
+   The file system cannot be accessed if ``Status`` is ``Inactive``. It must be set to ``Active``.
 
--  ``<FileStatus>``
-   Configures an HTTP response code for the origin server that will be identified as a file. 
-   Usually 200 is used, but you can use other values for this.
+-  ``<FileStatus> (default: 200)``
+   Configures the origin server HTTP response code that will be recognized as a file. Generally, 200 is used, but there are no specific restrictions.
    
--  ``<DirStatus>``
-    Configures an HTTP response code for the origin server that will be identified as a directory. 
-    Default values are 302, 400, 401, 403.
+-  ``<DirStatus> (default: 301, 302, 400, 401, 403)``
+	Configures the origin server HTTP response code that will be recognized as a directory. The default values are usually 301, 302, 400, 401, or 403.
     
--  ``<Unlink>``
-   Select how to deal with a file removal request from ``Purge``, ``Expire``, ``HardPurge``.
+-  ``<Unlink> (default: Purge)``
+   Configures the behavior to be used for a file deletion request, choosing from ``Purge``, ``Expire``, or ``HardPurge``.
+  
+Each origin server can interpret HTTP response codes in different ways. As such, it is important to configure how each HTTP response code should be interpreted.
 
-Each origin server can interpret HTTP response codes in multiple ways. 
-Therefore, you must configure how to interpret each HTTP response code. 
+In most cases, if a file exists on the origin server the response will be **200 OK**. If a directory is accessed, the response will be **403 Forbidden** or a redirect to another page with **302 Found**. Multiple response codes can be set with commas (,) to identify the Body of corresponding HTTP response codes as files or directories. Response codes that are not configured will be considered non-existing, and File I/O will fail.
 
-If the file already exists in the origin server, it will reply with a **200 OK** response in most cases. 
-In the case of directory access, the client will receive a **403 Forbidden** reply or will be redirected to another page with **302 Found**. 
-If a comma(,) is used to identify each response code name, the Body of the corresponding HTTP response code is identified as a file or a directory. 
-Any response code that is not configured will be considered as a non-existing code, and File I/O for the code will fail.
-
-
-File Attribute
+File Properties
 ====================================
 
-The first step of File I/O is getting the file attribute. 
-Acquiring the file attribute before opening it is an obvious procedure. 
-From the STON side of view, Kernel services the file attribute, as shown below. 
-(/cachefs is a mount path so Kernel drops it.)
+In general, the first step of File I/O is to obtain the properties of the file. It is obvious to obtain the file information before opening the file. The process of the Kernel providing the file properties as seen by STON is portrayed in the figure below. (/cachefs is the mounted directory and is omitted by the Kernel.)
 
 .. figure:: img/conf_fs4.png
    :align: center
       
-   The process of acquiring the file attribute
+   The process of obtaining the file properties.
 
-Linux does not distinguish files from directories, so acquiring a specific file attribute is more complex than it seems to be. 
-As you can see from the above figure, as the number of subfolders increases, performance decreases
-because unnecessary virtual host searches and file accesses occur, 
-especially inaccessible directory requests like /one or /one/two, which cause origin server load. 
-Once the file is cached, the origin server will not be accessed while the TTL(Time To Live) is alive.
-However, this is not an ideal solution for the system.
+In Linux, files are not distinguished from directories, so obtaining the file properties can be more complicated than it seems. As can be seen from the above figure, as the number of subfolders increases, more unnecessary virtual host searches and file accesses will occur, lowering performance. In particular, requests for inaccessible directories like /one or /one/two will be made, causing load on the origin server. Of course, if the file is cached, the origin server will not be accessed during the TTL, but it is clear that this is not an elegant solution.
 
-A heuristic solution for this structural load is adding a ``DotDir`` attribute.
-``DotDir`` is a function that recognizes a path without a dot(.) as a directory(Dir). 
-The previous figure illustrates when the ``DotDir`` is ``OFF``. 
-The following figure illustrates when the ``DotDir`` is ``ON``.
+A heuristic solution for this structural load is to add a ``DotDir`` property. ``DotDir`` is a function that will recognize paths without a dot (.) as a directory. The above figure is the result of ``DotDir`` having been set to ``OFF``. If ``DotDir`` is set to ``ON``, the following will occur.
 
 .. figure:: img/conf_fs5.png
    :align: center
       
-   Enabling( ``ON`` ) the global ``DotDir``.
+   Enabling (``ON``) the global ``DotDir``.
 
-The calling process or frequency from Kernel does not change. 
-However, if a dot(.) is missing in the requested path, the request is considered as a directory.
-Therefore, the virtual host will not respond, but the virtual host and file will be referred to only for necessary requests. 
-This feature is based on the observation that most programmers do not assign extensions to directories. 
-In order to properly use this feature, you have to confirm the directory structure.
+There is no change in the process or number of Kernel calls. However, if the requested paths do not contain a dot (.), it will not go all the way to the virtual host and instead return immediately as a directory, allowing the virtual host and files to be accessed only when necessary. This function is based on the observation that most programmers do not assign extensions to directories. It is important that you check how directories are set up before using this function.
 
-``DotDir`` is a global attribute of the ``<FileSystem>``.
-In other words, if none of the virtual hosts use dots(.) for directories, setting the ``DotDir`` to ``ON`` will make a very efficient system. 
-Of course you can set the ``DotDir`` to ``OFF`` and configure each virtual host separately. 
-In this case, there will be a minor performance degradation, as shown in the below figure.
+``DotDir`` is a global property of ``<FileSystem>``. In other words, if none of the virtual hosts use dots (.) for directories, it will be very effective to set ``DotDir`` to ``ON``. Of course, even if ``DotDir`` is set to ``OFF``, you can still configure it on each virtual host separately. Doing so can lower performance slightly, as shown below.
 
 .. figure:: img/conf_fs6.png
    :align: center
       
-   Activating the ( ``ON`` ) ``DotDir`` feature of the virtual host
+   Enabling (``ON``) the virtual host ``DotDir``.
 
-A virtual host search will occur, but the referring file will only occur with a dot(.) in the request.
-For better performance, it is recommended for you to understand this function, as it is frequently called.
+Virtual host searches will still occur, but files will only be accessed if there is a dot (.). As the system's performance is affected by how many times it is called, it is highly recommended to understand this function thoroughly.
 
 
-File Read
+Reading Files
 ====================================
 
-Acquiring a file attribute is complicated while reading a file is simple. 
-First, open the file. 
-All files are ReadOnly, so access to a Write permission file will fail.
-If a file is accessed for the first time, the file will be cached from the origin server just like the HTTP service. 
-While downloading the requested file, File I/O is serviced concurrently so that the process will not be delayed.
+Though the process to obtain file properties is complicated, reading files is much simpler. First, the file is opened. All files will of course be read-only, so accessing a file with write permissions will fail. When a file is accessed for the first time, the file will be cached from the origin server just like the HTTP service. While downloading the requested file, the File I/O service is run concurrently so that the process is not delayed.
 
 .. figure:: img/conf_fs7.png
    :align: center
       
    Opening a file.
 
-Once a file is opened, procedures are identical to the HTTP service.
-HTTP is advantageous in file transfer because sequential file access occurs from an initially determined range.
-On the other hand, file I/O might generate perpetual read accesses of about 1KB regardless of the file size. 
-STON has `Readahead <http://en.wikipedia.org/wiki/Readahead>`_ implemented in the cache module
-and this feature maximizes file I/O performance. 
+Once a file is opened, the behavior will be identical to the HTTP service. HTTP is more advantaged in file transfer because sequential file access occurs from an initially determined range. On the other hand, File I/O can generate a large number of read accesses on the scale of 1 KB regardless of file size. STON has implemented `Readahead <http://en.wikipedia.org/wiki/Readahead>`_ in the cache module in order to maximize performance, especially File I/O performance.
 
-If a function to close a file(e.g. fclose) is called or a process is terminated, the file handle is turned in by Kernel, 
-which is the same process as closing an HTTP transaction.
+If the function to close a file (e.g. fclose) is called or a process is terminated, the file handle is turned in by the Kernel, which is the same as an HTTP transaction being closed.
 
 
-File Delete
+Deleting Files
 ====================================
-A cached file is managed by STON, but the process can request to delete the file.
-STON provides several :ref:`api-cmd-purge` methods to respond to these requests 
+Cached files are managed by STON, but the process can send a request to delete a file. STON offers several :ref:`api-cmd-purge` methods to respond to these requests.
 
-For example, if ``<Unlink>`` is set to ``expire``, the corresponding file will be expired upon a file deletion request.
-If Kernel tries to access the file again, the file needs to be checked for modification because the file is expired.
-Then, if the file has not been modified, it can be serviced again.
+For example, if ``<Unlink>`` is set to ``expire``, the corresponding file will be expired upon a file deletion request. If the Kernel tries to access the file again, the file must be checked for modification on the origin server because the file is expired. If the file was not modified, it can then be provided again.
 
 
 File Expansion
 ====================================
-HTTP can dynamically process an original file with the following URL. :: 
+HTTP can dynamically process a file using an URL as seen below. :: 
     
-    # Trim 0-60 second section of the /video.mp4 file via HTTP.
+    # Trims a 0-60 second section of /video.mp4 via HTTP.
     http://www.example.com/video.mp4?start=0&end=60
     
-The QueryString method like this can be used for both HTTP and File System call methods. ::
+This QueryString format can be used in the same way for both HTTP and the file system. ::
 
-    # Access the local file that has been trimmed from 0 to 60 second of /video.mp4.
+    # Accesses the local file made from trimming a 0-60 second section of /video.mp4.
     /cachefs/www.example.com/video.mp4?start=0&end=60
     
-However, the process option followed by URLs like MP4HLS or DIMS has problems in File I/O. ::
+However, putting the processing options at the end of a URL as seen in MP4HLS and DLS can cause problems in File I/O. ::
 
     /cachefs/image.winesoft.com/img.jpg/12AB/resize/500x500/
     /cachefs/www.winesoft.com/video.mp4/mp4hls/index.m3u8
     
-As it is explained in "File Attribute", Linux inquries property of each path. 
-STON does not know whether the additional path exists at the end of the requested path or not, so unprocessed files are serviced.
+As explained in "File Properties", Linux asks for the properties of each directory in a path. STON is unable to tell whether additional directories are added to the end of a path, so unprocessed files will end up in the service.
 
-In order to resolve this issue, STON uses the ``Separator (default: ^)`` attribute of the ``<FileSystem>`` as an identifier. ::
+To resolve this issue, STON uses the ``Separator (default: ^)`` property to differentiate. ::
 
     /cachefs/image.winesoft.com/img.jpg^12AB^resize^500x500^
     /cachefs/www.winesoft.com/video.mp4^mp4hls^index.m3u8
@@ -246,10 +196,9 @@ In order to resolve this issue, STON uses the ``Separator (default: ^)`` attribu
 .. figure:: img/conf_fs9.png
    :align: center
       
-   MP4HLS access
+   MP4HLS access.
 
-Inside STON, ``Separator``s are switched to slashes(/) so that the HTTP call standard can be used identically. 
-Using this separator eliminates unnecessary File I/O access, as shown below.
+Within STON, the ``Separator`` s are switched to slashes (/) in order to use the HTTP call standard. Using this can eliminate unnecessary File I/O access, as shown below.
 
 .. figure:: img/conf_fs7.png
    :align: center
@@ -258,75 +207,66 @@ Using this separator eliminates unnecessary File I/O access, as shown below.
 
 
 
-Wowza Interworking
+Wowza Integration
 ====================================
 
-File System can easily interwork with Wowza. 
-All you have to do is configure a STON mounted path as a file path for Wowza.
+Wowza can be integrated using the file system. All you need to do is configure the path that STON is mounted on as the file path for Wowza.
 
-**1. [STON - Global setting] Turn on the file system configuration**
-
-  Set the ``<FileSystem>`` to ``ON`` in the global setting(server.xml). 
-  (In the example below, the mount path is configured as "/cachefs".) ::
+1. [STON - Global settings] Turn on the file system configuration
+    Set ``<FileSystem>`` to ``ON`` in the global settings (server.xml). (In this example, the mount path will be set to "/cachefs".)  ::
   
-     # server.xml - <Server><Cache>
+       # server.xml - <Server><Cache>
          
-     <FileSystem Mount="/cachefs" DotDir="OFF" Separator="^">ON</FileSystem>     
+       <FileSystem Mount="/cachefs" DotDir="OFF" Separator="^">ON</FileSystem>     
      
-  Or, in the WM, go to the global setting - File System and configure the file system to ``enable``.
+    Alternatively, in WM, go to Global Settings -> File System and set the file system to "On".
   
-  .. figure:: img/faq_wowza1.png
-     :align: center
+    .. figure:: img/faq_wowza1.png
+       :align: center
 
-     For a successful mount, STON must be restarted after the configuration.
+       STON must be restarted after configuration for mounting to be successful.
      
-**2. [STON - Virtual host] Create file system access permission & the response code configuration**
-
-  This section explains how to activate the file system access of the virtual host. 
-  You can also configure whether to identify the URL as a file or a directory based on the response code from the origin server.
-  The following uses the virtual host default setting(server.xml) as an example, but each virtual hosts(vhosts.xml) can have independent configurations. ::
+#. [STON - Virtual host] Configure file system access permissions and response codes
+    File system access for virtual hosts should be set to Active. The recognition of files/directories based on origin server response codes should also be set. The following uses the virtual host default settings (server.xml) as an example, but this can also be configured individually for each virtual host (vhosts.xml). ::
   
-     # server.xml - <Server><VHostDefault><Options>
-     # vhosts.xml - <Vhosts><Vhost><Options>
+       # server.xml - <Server><VHostDefault><Options>
+       # vhosts.xml - <Vhosts><Vhost><Options>
      
-     <FileSystem Status="Active" DotDir="OFF">
-        <FileStatus>200</FileStatus>
-        <DirStatus>301, 302, 400, 401, 403</DirStatus>
-     </FileSystem>
+       <FileSystem Status="Active" DotDir="OFF">
+          <FileStatus>200</FileStatus>
+          <DirStatus>301, 302, 400, 401, 403</DirStatus>
+       </FileSystem>
      
-  Or, in the WM, go to the global setting - File system and configure the following access to ``allow``.
+    Alternatively, in WM, go to Virtual Host -> Configuration (File System) and set the virtual host to "accessible".
   
-  .. figure:: img/faq_wowza2.png
-     :align: center
+    .. figure:: img/faq_wowza2.png
+       :align: center
 
-     Configure the response code.
+       Response codes can be configured here.
      
      
-**3. [Wowza] Storage Path Configuration**
+#. [Wowza] Storage path configuration
+    In the Wowza installed path, the /Conf/Application.xml file should be edited to refer to the path that STON is mounted on, as shown below.  ::
 
-  In the Wowza installed path, the /Conf/Application.xml file should be edited to refer the STON mounted path, as shown below. ::
-
-     <Streams>
-       <StreamType>default</StreamType>
-       <StorageDir>/cachefs/example.com</StorageDir>
-       <KeyDir>${com.wowza.wms.context.VHostConfigHome}/keys</KeyDir>
-     </Streams>
+       <Streams>
+         <StreamType>default</StreamType>
+         <StorageDir>/cachefs/example.com</StorageDir>
+         <KeyDir>${com.wowza.wms.context.VHostConfigHome}/keys</KeyDir>
+       </Streams>
      
-**4. [Wowza] VOD Path Configuration**
-
-  In the Wowza installed path, the /Conf/vod/Application.xml file should be edited to refer the STON mounted path, as shown below. ::
+#. [Wowza] VOD path configuration
+    In the Wowza installed path, the /Conf/vod/Application.xml file should be edited to refer to the path that STON is mounted on, as shown below.  ::
   
-     <Streams>
-       <StreamType>default</StreamType>
-       <StorageDir>/cachefs/example.com</StorageDir>
-       <KeyDir>${com.wowza.wms.context.VHostConfigHome}/keys</KeyDir>
-     </Streams>
+       <Streams>
+         <StreamType>default</StreamType>
+         <StorageDir>/cachefs/example.com</StorageDir>
+         <KeyDir>${com.wowza.wms.context.VHostConfigHome}/keys</KeyDir>
+       </Streams>
      
-**5. Player Test**
-
-  Use the Wowza test player to play the video that is not saved in the local storage(the video that STON has to cache) via RTMP.
+#. Player test
+    Using the Wowza test player, videos not saved in local storage (that STON must cache) can be played with RTMP.
   
-  .. figure:: img/faq_wowza3.png
-     :align: center
+    .. figure:: img/faq_wowza3.png
+       :align: center
 
-     The test needs an appropriate video clip.
+       The test needs a good video clip to play.

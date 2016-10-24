@@ -1,13 +1,12 @@
 ﻿.. _cacti:
 
 Appendix B: Cacti Monitoring
-*************************
+****************************
 
-This appendix is about monitoring and graphing STON with Graph Tree from `Cacti <http://www.cacti.net/>`_ .
-The following prerequisites are required.
+This appendix will explain how to set up monitoring of multiple instances of STON using `Cacti <http://www.cacti.net/>`__'s Graph Tree. The following two prerequisites are required.
 
 -  A server with Cacti installed
--  SNMP activation (Please refer to :ref:`snmp`)
+-  SNMP activation (see :ref:`snmp`)
 
 
 .. toctree::
@@ -16,21 +15,20 @@ The following prerequisites are required.
 
 .. _cacti_template:
 
-Adding templates
+Adding Templates
 ====================================
 
-The Host Template provided along with STON may help configuring monitoring. 
-Please `download at <http://webhard.winesoft.co.kr/ston/monitoring/cacti/ston_host_template.xml>`_ )
+Using the Host Template provided by STON, the monitoring environment can easily be set up (`download <http://webhard.winesoft.co.kr/ston/monitoring/cacti/ston_host_template.xml>`_).
 
 .. figure:: img/cacti01.png
    :align: center
       
-   Select Import Templates menu.
+   Select [Import Templates].
       
 .. figure:: img/cacti02.png
    :align: center
       
-   Import cacti_host_template_ston.xml
+   Import cacti_host_template_ston.xml.
       
 
 .. _cacti_device_add:
@@ -43,12 +41,12 @@ Register STON as a Cacti device.
 .. figure:: img/cacti03.png
    :align: center
       
-   Select [Devices] menu.
+   Select [Devices].
       
 .. figure:: img/cacti04.png
    :align: center
       
-   Click [Add] button from [Devices] menu.
+   Click the [Add] button in the [Devices] menu.
       
 .. figure:: img/cacti05.png
    :align: center
@@ -56,14 +54,14 @@ Register STON as a Cacti device.
    Fill in the device options.
 
 
--  ① Input the STON's name.
--  ② Input the STON's IP.
--  ③ Select ”STON”.
--  ④ Select “Public”.
--  ⑤ Input the default port 161.
+1. Input the name used for STON.
+#. Input STON's IP address.
+#. Select "STON".
+#. Select "Public".
+#. Input the default port of 161.
 
 
-Click the "Create" button and engage the deivce.
+Click the "Create" button to engage the device.
 
 .. figure:: img/cacti06.png
    :align: center
@@ -73,33 +71,34 @@ Click the "Create" button and engage the deivce.
 .. figure:: img/cacti07.png
    :align: center
       
-   Enegement error.
+   Engagement error.
       
 .. note::
 
    If the SNMP engagement fails:
    
-   -  Please check if SNMP from STON is enabled.
-   -  Please make sure if the SNMP port matches that of STON.
+   -  Check STON to make sure SNMP is enabled.
+   -  Check to see if the SNMP port number matches STON's SNMP port number.
       
 
-The STON template provides 18 different graph types.
+If the device engagement succeeds, you can use 18 different types of graph provided by the STON template.
 
 .. figure:: img/cacti08.png
    :align: center
       
-   Click the "Create Graphs for this Host" link.
+   Click "Create Graphs for this Host".
 
 .. figure:: img/cacti09.png
    :align: center
       
-
-Click the [Create] button.
+   There are 18 types of graphs provided.
+      
+Click the [Create] button and check the graphs that were created.
 
 .. figure:: img/cacti10.png
    :align: center
       
-   Graphs created now.
+   The graphs have been created.
 
       
 .. _cacti_graph_tree:
@@ -112,12 +111,12 @@ Create Graph Trees.
 .. figure:: img/cacti11.png
    :align: center
       
-   Click the [Graph Trees] tab.
+   Select [Graph Trees].
       
 .. figure:: img/cacti12.png
    :align: center
       
-   Click the [Add] button.
+   Click the [Add] button on the right side.
       
 .. figure:: img/cacti13.png
    :align: center
@@ -125,32 +124,32 @@ Create Graph Trees.
    Create Graph Trees.
       
 
-Add STON to the Graph Tree.
+You can add STON to the Graph Tree.
 
 .. figure:: img/cacti14.png
    :align: center
       
-   Click the [Add] button from [Tree Items] menu.
+   Click the [Add] button in the [Tree Items] menu.
 
 .. figure:: img/cacti15.png
    :align: center
       
-   Select [Tree Items] options.
+   Select the [Tree Items] options.
 
 
--  ①	Select “Host”.
--  ②	Select “Devices” to add.
--  ③	Select “Graph Template”.   
+1. Select "Host".
+#. Select the devices you will add.
+#. Select "Graph Template".
   
    
 .. _cacti_graph_confirm:
 
-Graphs Generated
+Graph Check
 ====================================
 
-Click the [graphs] menu and make sure the graph displayed.
+Select [Graphs] in the upper left side to check if the graphs are displaying correctly.
 
 .. figure:: img/cacti16.png
    :align: center
    
-   Check regularly for operation.
+   Check regularly that the graphs are showing properly.

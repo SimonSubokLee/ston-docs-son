@@ -1,22 +1,17 @@
 ﻿.. _bandwidth_control:
 
-Chapter 14. Bandwidth
-******************
+Chapter 15. Bandwidth
+*********************
 
-This chapter explains various bandwidth control methods for each virtual host.
-In the old days, the focus was on limiting bandwidth so it wouldn't exceed a specific level.
-Nowadays, on the other hand, effectively controlling bandwidth is more important.
-Moreover, you can optimize bandwidth by analyzing content in real time.
-
+This chapter will explain various ways to set bandwidth limits for each virtual host. In the past, the objective was generally to prevent bandwidth from exceeding a fixed limit. However, the idea has changed into regulating bandwidth to be effective. It is now possible to analyze content in real time to optimize the use of bandwidth.
 
 .. toctree::
    :maxdepth: 2
 
-Virtual Host Bandwidth Restriction
+Virtual Host Bandwidth Limits
 ====================================
 
-A restriction limits the maximum bandwidth of a virtual host.
-This physical method has the highest priority. ::
+Limits the maximum bandwidth of a virtual host. This is a concrete method that has the highest priority. ::
 
    # server.xml - <Server><VHostDefault><Options>
    # vhosts.xml - <Vhosts><Vhost><Options>
@@ -24,17 +19,15 @@ This physical method has the highest priority. ::
    <TrafficCap Session="0">0</TrafficCap>   
     
 -  ``<TrafficCap> (default: 0 Mbps)``
-   Configure the maximum bandwidth of a virtual host in Mbps. 
-   Setting this value to 0 will not limit bandwidth. 
-   The ``Session (default: 0 Kbps)`` property configures the maximum bandwidth of each client session.
+   Configures the maximum bandwidth of a virtual host in Mbps. A value of 0 will not limit the bandwidth.
+   The``Session (default: 0 Kbps)`` property configures the maximum bandwidth that can be transferred in each client session.
 
-For example, if you set ``<TrafficCap>`` to 50 (Mbps), it has the same effect with having 50Mbps NIC.
-The sum of bandwidth of all clients that are connected to the relative virtual host cannot exceed 50Mbps. 
+For example, setting ``<TrafficCap>`` to 50 (Mbps) will have the same effect has installing 50 Mbps NIC. The total bandwidth of all clients that connect to the virtual host will be unable to exceed 50 Mbps.
 
-The following explains how ``Session`` works:
+``Session`` behaves as follows.
 
-1. Even if ``Session`` is configured, the sum of bandwidth of all clients cannot exceed the ``<TrafficCap>``.
-2. Even if `Bandwidth Throttling`_ is configured, the maximum speed of each client session cannot exceed the ``Session``.
+1. Even if ``Session`` is configured, the total client bandwidth cannot exceed ``<TrafficCap>``.
+2. Even if `Bandwidth Throttling`_ is configured, the maximum speed of each client session cannot exceed the ``Session`` value.
 
 
 .. _bandwidth-control-bt:
@@ -42,22 +35,19 @@ The following explains how ``Session`` works:
 Bandwidth Throttling
 ====================================
 
-BT(Bandwidth Throttling) dynamically controls client transfer bandwidth for each session.
-Media files usually include V(Video) and A(Audio) headers, as seen in the figure below.
+Bandwidth Throttling (BT) is a function that can dynamically regulate the client transfer bandwidth for each session. Media files are generally comprised of Video (V) and Audio (A) headers, as seen below.
 
 .. figure:: img/conf_media_av.png
    :align: center
       
-   The header is not a subject of BT.
+   BT is not concerned with headers.
 
-The header gets bigger when the play-time is longer or the key frame cycle is shorter.
-Therefore, if the media file can be recognized, the header has to be transferred without limiting bandwidth for smooth playback.
-BT starts after the header transfer is completed, as shown below.
+The headers get bigger when the play-time is longer or the key frame cycle is shorter. Therefore, if the media file can be recognized, the headers are transferred without a bandwidth limit for smoother playback. As seen in the following image, it is after the headers are fully transferred that BT starts.
 
 .. figure:: img/conf_bandwidththrottling2.png
    :align: center
       
-   Operational Scenario
+   Operation scenario
    
 ::
 
@@ -73,75 +63,65 @@ BT starts after the header transfer is completed, as shown below.
       <Throttling>OFF</Throttling> 
    </BandwidthThrottling>   
     
-``<BandwidthThrottling>`` configures the default operation underneath the tag.
+``<BandwidthThrottling>`` Default operation is configured in the subtags.
 
--  ``<Settings>``
+-  ``<Settings>`` Configures default operation.
    
-   Configures the default operation.
+   -  ``<Bandwidth> (default: 1000 Kbps)``
+      Configures client transfer bandwidth. The ``Unit`` property is used to configure the default unit (``kbps, ``mbps``, ``bytes``, ``kb``, ``mb``).
    
-   -  ``<Bandwidth> (default: 1000 Kbps)``   
-      configures client transfer bandwidth. 
-      ``Unit`` property configures default units ( ``kbps`` , ``mbps`` , ``bytes`` , ``kb`` , ``mb`` ).
+   -  ``<Ratio> (default: 100%)``    
+      Configures bandwidth by applying the ratio to the ``<Bandwidth>`` setting.
    
-   -  ``<Ratio> (default: 100 %)``    
-      configures the ``<Bandwidth>`` property based on the ratio.
-   
-   -  ``<Boost> (default: 5 seconds)``   
-      transfers data with unlimited speed for a set amount of time.
-      The amount of data can be calculated with ``<Boost>`` X ``<Bandwidth>`` X ``<Ratio>``.
+   -  ``<Boost> (default: 5 s)``
+      Transfers data to clients with unlimited speed for the set amount of time. The amount of data can be calculated with the equation ``<Boost>`` x ``<Bandwidth>`` x ``<Ratio>``.
          
 -  ``<Throttling>``
 
-   -  ``OFF (default)`` Does not apply BT.  
-   -  ``ON`` If the conditions list is met, BT is applied.
+   -  ``OFF (default)`` Does not apply BT.
+   -  ``ON`` Applies BT if the conditions are met.
 
 
 Bandwidth Throttling Condition List
---------------------------
+-----------------------------------
 
-This section explains how to configure the BT condition list.
-BT is applied when the condition list is met.
-Check the configuration in sequence to ensure they match the specified conditions.
-The transfer policy is saved at /svc/{virtual host name}/throttling.txt. ::
+Configures the BT condition list. Conditions must be met for BT to be applied. The list is checked in order to see if any conditions are met. This transfer policy is saved in the file /svc/{virtual host name}/throttling.txt. ::
 
    # /svc/www.example.com/throttling.txt
-   # Comma is an identifier, and {condition},{Bandwidth},{Ratio},{Boost} format is used.
-   # Other than {condition} field, everything else can be omitted.
-   # Omitted field adopts default value from ``<Settings>``.
-   # All expressions are identical to acl.txt setting.
-   # The unit of {Bandwidth} uses ``Unit`` property of ``<Settings>`` ``<Bandwidth>``.
+   # Commas (,) are delimiters, and the order is {condition},{bandwidth},{ratio},{boost}.
+   # All fields except for {condition} can be omitted.
+   # Omitted fields use the default values set in <Settings>.
+   # All condition formats are identical to settings in acl.txt.
+   # The unit for {bandwidth} is the same as the Unit property of <Bandwidth> under <Settings>.
    
-   # After transferring 3 seconds of data to the client with unlimited speed, then limit the transfer speed to 3Mbps(3000Kbps = 2000Kbps X 150%).
+   # Transfers data with unlimited speed for 3 seconds, and then limits to to 3 Mbps (3000 Kbps = 2000 Kbps x 150%).
    $IP[192.168.1.1], 2000, 150, 3
    
-   # This only defines bandwidth. Transfer 5 seconds(default) of data to the client with unlimited speed, then limit the transfer speed to 800 Kbps.
+   # Only defines bandwidth. Transfers data with unlimited speed for 5 seconds (default), and then limits to 800 Kbps.
    !HEADER[referer], 800
    
-   # This only defines boost. Transfer 10 seconds of data to the client with unlimited speed, then limit the transfer speed to 1000 Kbps.
+   # Only defines boost. Transfers data with unlimited speed for 10 seconds, and then limits to 1000 Kbps.
    HEADER[cookie], , , 10
    
-   # This does not apply BT for files with m4a extension.
+   # Does not apply BT for files with the m4a extension.
    $URL[*.m4a], no
 
-If you analyze media files(e.g. MP4, M4A, or MP3), you will get bandwidth at the encoding rate. 
-Make sure to use the extension .mp4, .m4a, or .mp3. 
-In order to extract bandwidth dynamically, attach **x** to the bandwidth, as shown below. ::
+By analyzing media files (MP4, M4A, MP3), bandwidth can be obtained from the encoding rate. The file extension must be one of .mp4, .m4a, or .mp3. In order to dynamically extract the bandwidth, you can add an **x** to the bandwidth value, as shown below. ::
 
-   # If /vod/*.mp4 file is being accessed, find bandwidth. If the bandwidth cannot be found, use 1000 for bandwidth.
+   # Finds the bandwidth for /vod/*.mp4 files. If the bandwidth cannot be found, 1000 is used instead.
    $URL[/vod/*.mp4], 1000x, 120, 5
 
-   # If user-agent header is missing, find bandwidth. If the bandwidth cannot be found, use 500 for bandwidth.
+   # Finds the bandwidth if the user-agent header is missing. If the bandwidth cannot be found, 500 is used instead.
    !HEADER[user-agent], 500x
 
-   # If /low_quality/* file is being accessed, find bandwidth. If the bandwidth cannot be found, use default value for bandwidth.
+   # Finds the bandwidth for /low_quality/* files. If the bandwidth cannot be found, the default value is used instead.
    $URL[/low_quality/*], x, 200
 
 
 QueryString Priority Condition
---------------------------
+------------------------------
 
-Use a predetermined QueryString to dynamically configure ``<Bandwidth>`` , ``<Ratio>`` , or ``<Boost>``. 
-This configuration has priority over BT condition. 
+Uses a predetermined QueryString to dynamically configure ``<Bandwidth>``, ``<Ratio>``, and ``<Boost>``. This configuration takes priority over BT conditions.
 
 ::
 
@@ -157,38 +137,33 @@ This configuration has priority over BT condition.
       <Throttling QueryString="ON">ON</Throttling>
    </BandwidthThrottling>   
     
--  ``<Bandwidth>`` , ``<Ratio>`` , ``Param`` of the ``<Boost>``
+-  ``Param`` in ``<Bandwidth>``, ``<Ratio>``, ``<Boost>``
 
-    Configures QueryString key based on each purpose.
+    Configures the QueryString key with a different meaning for each tag.
    
--  ``QueryString`` of the ``<Throttling>``
+-  ``QueryString`` in ``<Throttling>``
 
-   - ``OFF (default)`` Does not redefine conditions with the QueryString.
+   - ``OFF (default)`` Does not redefine conditions as QueryStrings.
    
-   - ``ON`` Redefines conditions with the QueryString.
+   - ``ON`` Redefines conditions as QueryStrings.
    
-If you configured as in the above example, BT will be dynamically configured.
-The configuration below depends on the URL that the client requested. ::
+The above configuration allows BT to be dynamically configured based on the URLs requested by clients, as seen below. ::
 
-    # Transfer 10 seconds of data with unlimited speed, then the transfer speed will be limited to 1.3Mbps(1mbps X 130%).
-    http://www.winesoft.co.kr/video/sample.wmv?myboost=10&mybandwidth=1&myratio=130
+   # Transfers data with unlimited speed for 10 seconds, and then limits to 1.3 Mbps (1 Mbps x 130%).
+   http://www.winesoft.co.kr/video/sample.wmv?myboost=10&mybandwidth=1&myratio=130
     
-Not all parameters have to be specified. ::
+Not all parameters need to be specified. ::
 
     http://www.winesoft.co.kr/video/sample.wmv?myratio=150
     
-If some conditions are omitted, as in the above example, search for a condition list to define rest conditions(bandwidth and boost, in the above example).
-If proper conditions are not found, the default value from ``<Settings>`` will be applied.
-Even if a QueryString is specified, when the condition list is set to ``no``(do not apply), BT will not be applied.
+If some conditions are omitted as in the above example, the remaining fields (in this example, bandwidth and boost) are chosen using a condition list. If there is no condition that matches, then the default values in ``<Settings>`` are used. Even if a QueryString is specified, if the condition list is set to not apply (no), then BT will not be applied.
 
-When QueryString is being used, you might be confused with :ref:`caching-policy-applyquerystring`. 
-If you set :ref:`caching-policy-applyquerystring` as ``ON``, the entire QueryString of a URL requested by client will be recognized except ``BoostParam`` , ``BandwidthParam`` , and ``RatioParam``. ::
+There is potential for confusion with :ref:`caching-policy-applyquerystring` when using QueryStrings. If :ref:`caching-policy-applyquerystring` is set to ``ON``, the QueryStrings in URLs requested by clients will all be recognized except for ``BandwidthParam``, ``BoostParam``, and ``RatioParam``. ::
 
    GET /video.mp4?mybandwidth=2000&myratio=130&myboost=10
    GET /video.mp4?tag=3277&myboost=10&date=20130726
-        
-The above QueryStrings are only used to decide BT and are removed when creating a Caching-Key or sending a request to the origin server. 
-Therefore, they are recognized as the following: ::
+
+For example, the above QueryStrings are only used to decide BT and are removed when creating a Caching-Key or sending a request to the origin server. Therefore, they will be recognized as the following. ::
 
     GET /video.mp4
     GET /video.mp4?tag=3277&date=20130726

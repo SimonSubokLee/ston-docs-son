@@ -1,20 +1,18 @@
 ﻿.. _env:
 
-Chapter 2. Configuration
-******************
+Chapter 3. Configuration
+************************
 
-This chapter is about configuration of STON Edge Server.
-Understanding the configuration structure helps faster setting and troubleshooting.
+This chapter will explain the configuration structure of the STON Edge Server and how to apply the settings. Understanding the configuration structure is important in not only setting up the server quickly but also troubleshooting any problems that occur.
 
-STON Edge Server configuration consists of global configuration(server.xml) and virtual host configuration(vhosts.xml).
+Configuration consists of global (server.xml) and virtual host (vhosts.xml) configuration.
 
    .. figure:: img/conf_files.png
       :align: center
 
-      Two XML files. That is all.
+      Two XML files are all that is needed.
 
-TXT configuration files contain exception handling for each virtual host, and particular function lists.
-The following is the complete form of XML example. ::
+The two XML files are what comprise most of the service. Various TXT files are used for exception handling for each virtual host and for listing certain functions. The following illustrates the complete form of the XML. ::
 
    <Server>
        <VHostDefault>
@@ -24,37 +22,34 @@ The following is the complete form of XML example. ::
        </VHostDefault>
    </Server>
 
-A simplified format as below is to indicate the function from XML configuration structure. ::
+However, explaining functions using this format is rather inconvenient, so it will instead be explained in this simplified format. ::
 
    # server.xml - <Server><VHostDefault><Options>
    
    <CaseSensitive>ON</CaseSensitive>
 
 
-.. note:
+.. note::
    
-   license.xml is not a configuration file.
+   The license file (license.xml) is not a configuration file.
    
    
 .. _api-conf-reload:
 
-Reload settings
+Reload Settings
 ====================================
 
-Setting changes are effective immediately after the reload API is called.
-Service operation runs uncluttered, except for system and performance settings. ::
+After changing the settings, the administrator must make a call to the API. Aside from system or performance settings, most settings will immediately be applied without interrupting the service. ::
 
    http://127.0.0.1:10040/conf/reload
 
-Any changes from settings are recorded in :ref:`admin-log-info`.
+Any changes from settings will be recorded in the :ref:`admin-log-info`.
 
-(proofread up to here)
 
 Global Settings (server.xml)
 ====================================
 
-server.xml is the global configuration file, which may be found in the execution file directory.
-It is an XML format text file. ::
+The server.xml file is the global settings file and can be found in the same path as the execution file. It is an XML format text file. ::
 
     # server.xml
     
@@ -64,8 +59,7 @@ It is an XML format text file. ::
         <VHostDefault> ... </VHostDefault>
     </Server>
     
-This chapter covers the configuration structure and fundamental functionality.
-Details on :ref:`access-control` or :ref:`snmp` are described in respective chapters. 
+We will first cover the configuration structure and basic functions. While :ref:`access-control` and :ref:`snmp` are also part of global settings, they will be explained in their respective chapters.
 
 .. toctree::
    :maxdepth: 2
@@ -76,7 +70,7 @@ Details on :ref:`access-control` or :ref:`snmp` are described in respective chap
 Administrator Settings
 ------------------------------------
 
-The following explains how to configure administrator settings. ::
+The following configures the administrator settings of the system. ::
 
     # server.xml - <Server>
     
@@ -92,34 +86,29 @@ The following explains how to configure administrator settings. ::
     </Host>
 
 -  ``<Name>``
-    Configure the server name. If left blank, the system name will be used.
+    This configures the server name. If left blank, it will use the system name.
     
 -  ``<Admin>``
-    Configure the administrator's information(email address or name). This item is only used for SNMP inquiry.
+    This configures the administrator's information (name or email address). This item is only used for the SNMP inquiry.
     
 -  ``<Manager>``
-    Configure the manager port and an ACL(Access Control List) for administrative purpose. 
-    An ACL supports the IP, IP range, BitMask, and Subnet information. 
-    If the IP address of the connected session is not authorized from the ``<Allow>`` list, the server will block the connection. 
-    The IP that calls an API must be configured in the ``<Allow>`` list.
+    This configures the manager port and the ACL (Access Control List) for administrative purposes. The ACL supports the four forms of IP, IP range, BitMask, and Subnet. If the IP address of the connected session is not authorized by the <Allow> list, the server will block the connection. An IP that calls an API must be configured in the ``<Allow>`` list.
     
-    Based on this access condition, an access authorization(Role) can be configured. 
-    Any requests without authorization will be responded to **401 Unauthorized**. 
-    If ``Role`` properties are not clearly declared in ``<Allow>`` conditions, the ``Role`` property from the ``<Manager>`` tag will be applied.
+    After the access conditions, the access authorization (Role) can also be configured. Any requests without authorization will be responded to with a **401 Unauthorized** message. If Role properties are not declared in ``<Allow>`` conditions, the ``Role`` property from the ``<Manager>`` tag will be applied.
     
-    - ``Admin`` can call the entire API.
-    - ``User`` can only call :ref:`api_monitoring` , :ref:`api-graph` APIs.
-    - ``Looker`` can only call the :ref:`api-graph` API.
+    - ``Admin`` All API calls are allowed.
+    - ``User`` Only :ref:`monitoring_stats` and :ref:`api-graph` API calls are allowed.
+    - ``Looker`` Only :ref:`api-graph` API calls are allowed.
     
-    In addition, there are minor administrative properties, as follows.
+    In addition, there are other minor administrative properties.
     
     - ``HttpMethod``
     
-      - ``ON (default)`` :ref:`api-etc-httpmethod` checks ACL when the API is called.
+      - ``ON (default)`` :ref:`api-etc-httpmethod` will check ACL when called.
       
-      - ``OFF`` :ref:`api-etc-httpmethod` doesn't do an ACL check when the API is called.
+      - ``OFF`` :ref:`api-etc-httpmethod` will not check ACL when called.
     
-    - ``UploadMultipartName`` configures variable names of :ref:`api-conf-upload`.
+    - ``UploadMultipartName`` Configures variable names in :ref:`api-conf-upload`.
 
 
 .. _env-cache-storage:
@@ -127,9 +116,7 @@ The following explains how to configure administrator settings. ::
 Storage Settings
 ------------------------------------
 
-This section explains how to configure the storage that will preserve cached contents.
-If there is enough storage space, all content can be cached. 
-Storage configuration is the most important setting among caching services. ::
+This section will explain the setup of storage that will store cached content. ::
 
     # server.xml - <Server>
     
@@ -142,42 +129,19 @@ Storage configuration is the most important setting among caching services. ::
     </Cache>
     
 -  ``<Storage>``
-    Configure the disk to store contents. 
-    The number of subordinate ``<Disk>`` is not limited.
+    This configures the disk that will store the content. There is no limit to the number of subordinate ``<Disk>`` s.
+	
+    Because the disk is where problems are most likely to happen, it is recommended to set specific fail conditions. If a disk operation fails more than ``DiskFailCount (default: 10)`` times within ``DiskFailSec (default: 60)`` seconds, then that disk will be excluded from the service. The status of that disk will be shown as "invalid".
     
-    Since disks are the most problematic equipment, it is recommended to set specific fail conditions.
-    If any disk operation is repeatedly failing for ``DiskFailCount (default: 10)`` times within ``DiskFailSec (default: 60)`` seconds, then a relevant disk is excluded from the service.
-    The status of the excluded disk is set to "Invalid". 
+    If all disks are excluded, then the server will operate according to the ``OnCrash`` property.
     
-    If all disks are excluded, the server will operate according to the ``OnCrash`` property.
-    
-    - ``hang (default)`` option will reactivate all excluded disks. 
-      This option is more likely to protect the origin server rather than running a normal service.
+    - ``hang (default)`` Will put all the excluded disks back to work. This behavior is more likely to protect the origin server rather than return to normal service.
       
-    - ``bypass`` option bypasses all request to the origin server. 
-      As soon as the disks are recovered, STON reactivates the caching service immediately.
+    - ``bypass`` All requests will be passed to the origin server. If the disk recovers, STON will start taking care of the service as soon as it can.
       
-    - ``selfkill`` quits STON.
+    - ``selfkill`` STON will be shut down.
     
-The maximum caching capacity for all disks can be configured with a ``Quota (unit: GB)`` option.
-Even if the ``Quota`` option is not specified, the LRU(Least Recently Used) algorithm automatically discards stale contents to make sure the disk is always available.
-
-When configuring a storage, the most important thing to consider is the desired number of files to store.
-As the the number of file increases, the I/O performance of the disk rapidly decreases and causes poor service quality.
-The maximum number of files can be configured in the ``FileMaxCount (default: Disk * 2 million)`` of the``<Storage>`` tag in order to construct the desired service, quality and structure.
-The following configuration is an example of caching 100 million contents with 5 disks.
-
-    # server.xml - <Server>
-    
-    <Cache>
-        <Storage FileMaxCount="100000000">
-            <Disk>/user/cache1</Disk>
-            <Disk>/user/cache2</Disk>
-            <Disk>/user/cache3</Disk>
-            <Disk>/user/cache4</Disk>
-            <Disk>/user/cache5</Disk>
-        </Storage>
-    </Cache>
+The maximum caching capacity for each disk can be configured with the ``Quota (unit: GB)`` property. Even when not specifically configured, the LRU (Least Recently Used) algorithm is used to automatically delete old content to ensure that there is always space on the disk. Therefore, there is no large effect on performance regardless of the file system the administrator chooses to use.
     
     
 
@@ -186,46 +150,39 @@ The following configuration is an example of caching 100 million contents with 5
 Memory Restriction
 ------------------------------------
 
-Configure the maximum available memory and BodyRatio(the ratio of loaded data into the memory to data in the disk). ::
+This configures the maximum available memory and the ratio of loaded content. ::
 
     # server.xml - <Server>
     
     <Cache>
         <SystemMemoryRatio>100</SystemMemoryRatio>
-        <BodyRatio>50</BodyRatio>
+        <ContentMemoryRatio>50</ContentMemoryRatio>
     </Cache>
     
 -  ``<SystemMemoryRatio> (default: 100%)``
-
-   Configure the ratio of allocated memory for STON.
-   For instance, when this property is set to 50(%) in the equipment with 16GB of memory, the server will run as if it has 8GB of system memory.
-   This option is especially handy when connected with another process by using :ref:`filesystem`
-
--  ``<BodyRatio> (default: 50%)``
-
-   STON improves service quality by caching as much Body data as necessary from disk into memory.
-   This ratio can be optimized to enrich the quality of the service according to the service type.
-
+    This ratio will configure the maximum amount of system memory that STON will use. For example, if this property is set to 50% with 16 GB of memory, the system will operate as if there were only 8 GB of memory. This option is especially useful when used together with other processes such as Chapter 17 File System.
+   
+-  ``<ContentMemoryRatio> (default: 50%)``
+    STON improves service quality by caching as much of the Body data as possible from disk to memory. This ratio can be adjusted to optimize the quality of the service according to its type.
+   
       .. figure:: img/bodyratio1.png
          :align: center
    
-         The allocated system memory ratio can be configured with the BodyRatio option.
+         The ratio of memory is configured using the ContentMemoryRatio property.
          
-   In the case of game content, while the amount of content is large, there are not many files.
-   These services usually have a significant File I/O burden.
-   Using a higher value for the ``<BodyRatio>`` enables more content data to reside in the memory.
+    Using the gaming example, if there are not many files but there is a lot of content, it places a burden on File I/O. In this case, raising the ``<ContentMemoryRatio>`` value allows more data to reside in memory, thus improving service quality.
 
       .. figure:: img/bodyratio2.png
          :align: center
    
-         I/O frequency will be decreased if the BodyRatio value is increased.
+         If ContentMemoryRatio is raised, I/O load decreases.
 
     
     
 Other Caching Settings
 ------------------------------------
 
-This section configures other caching service options. ::
+This section covers other caching service functions. ::
 
     # server.xml - <Server>
     
@@ -239,19 +196,14 @@ This section configures other caching service options. ::
     </Cache>
 
 -  ``<Cleanup>``
-    The server runs the system optimization once a day.
-    Most optimization procedures include a disk cleanup application cause I/O load.
-    In order to prevent service quality degradation, optimization is gradually performed.
+    The server carries out system optimization once a day. The optimization procedure mainly consists of disk cleanup, which creates I/O load. In order to prevent a drop in service quality, optimization is performed gradually.
 
-    - ``<Time> (default: AM 2)`` This option sets the cleanup execution time. When a 24-hour format is used, for instance, 11:10 pm should be written as 23:10.
+    - ``<Time> (default: 2 AM)`` Configures when cleanup is performed. A 24-hour clock is used, so for example, 11:10 PM should be written as 23:10.
     
-    - ``<Age> (default: 0, unit: day)`` If this value is greater than 0, content that has not been accessed during the period is discarded.
-      This option helps reducing the possibility of insufficient disk space during the service by securing available space on the disk.
+    - ``<Age> (default: 0, unit: days)`` If set to a value greater than zero, content that has not been accessed in the specified amount of time will be deleted. This is for the sake of securing available space on the disk in advance to lower the possibility that there will not be enough space during service time.
 
 -  ``<Listen>``
-    Assign IP lists for all virtual hosts to Listen. 
-    The default Listen setting of *:80 for all virtual hosts stands for 0.0.0.0:80. 
-    The following is a configuration example of enabling particular IP addresses. ::
+    Assigns a list of IP addresses for all virtual hosts to listen to. The default Listen setting of \*:80 for all virtual hosts stands for 0.0.0.0:80. The following is an example of enabling specific IP addresses. ::
 
        # server.xml - <Server>
        
@@ -262,51 +214,40 @@ This section configures other caching service options. ::
        </Cache>    
 
 -  ``<ConfigHistory> (default: 30 days)``
-    STON backs up all configurations when there is a change in the setting. 
-    Configuration files are compressed into one file and saved at ./conf/.
-    "date_time_HASH.tgz" naming format is used for the compressed file. ::
+    STON backs up the configuration settings when changes are made. The configuration files will be compressed into one file and saved at ./conf/. The file will be named in a "DATE_TIME_HASH.tgz" format, as follows. ::
     
        20130910_174843_D62CA26F16FE7C66F81D215D8C52266AB70AA5C8.tgz
     
-    An identical HASH value stands for identical configurations.
-    Even if :ref:`api-conf-restore` is called, the restored configuration will be saved as a new configuration.
-    A backup configuration file is only available for a set amount of day from the time of Cleanup. 
-    A configuration file can be saved for an unlimited amount of time.
-
+    If two files have identical hash values, it means they have identical settings. Even if :ref:`api-conf-restore` is called, it will be saved as a new configuration. A backup file will only be stored for the set amount of time after Cleanup is performed. There is no limit to the amount of time that backups can be stored.
     
     
-Force Cleanup
+    
+Forced Cleanup
 ------------------------------------
 
-Execute cleanup by calling an API. An ``<Age>`` parameter can be attached. ::
+Cleanup is executed with an API call. An ``<Age>``  parameter can be attached. ::
 
    http://127.0.0.1:10040/command/cleanup
    http://127.0.0.1:10040/command/cleanup?age=10
    
-Cleanup is executed when there is insufficient disk space if the ``<Age>`` parameter is set to 0.
-If the ``<Age>`` parameter is greater than 0, content that has not been accessed during the period is discarded.
+If ``<Age>`` is zero, cleanup will be performed only when there is insufficient disk space. If ``<Age>`` is greater than 0, then content that has not been accessed for that amount of days will be deleted.
     
     
 .. _env-vhostdefault:
     
-Virtual Host Default Setting
+Virtual Host Default Settings
 ------------------------------------
 
-Administrators can configure each virtual host with different settings.
-However, it is exhausting to repeat an identical setting for every additional virtual host.
-All virtual hosts inherit ``<VHostDefault>``.
+Administrators can configure each virtual host with different settings. However, it can be exhausting to set identical settings for new virtual hosts. All virtual hosts will inherit ``<VHostDefault>`` .
 
    .. figure:: img/vhostdefault.png
       :align: center
    
-      This is a single inheritance.
+      A simple inheritance.
 
-In the figure above, www.example.com does not override any value; hence, it has the value of A=1 and B=2. 
-On the contrary, img.example.com overrides the value of B; therefore it has A=1 and B=3.
-Administrators normally keep services that have similar service attributes in one server.
-For this reason, inheritance of the default setting is enormously effective.
+In the figure above, www.example.com does not override any value and thus has the values A=1 and B=2. Meanwhile, img.example.com has overridden the value of B and thus has the values A=1 and B=3. Administrators will normally keep services with similar attributes on the same server, making inheritance extremely effective.
 
-``<VHostDefault>`` consists of function-based 5 subordinate tags. ::
+``<VHostDefault>`` consists of five function-based subordinate tags. ::
 
     # server.xml - <Server>
     
@@ -318,7 +259,7 @@ For this reason, inheritance of the default setting is enormously effective.
         <Log> ... </Log>
     </VHostDefault>
     
-For example, the :ref:`media` function's location is under the ``<Media>`` tag.
+For example, the function for :ref:`media` is configured in the ``<Media>`` tag.
 
 
 .. _env-vhost:
@@ -326,8 +267,7 @@ For example, the :ref:`media` function's location is under the ``<Media>`` tag.
 Virtual Host Settings (vhosts.xml)
 ====================================
 
-The vhosts.xml file located in the execution file directory is recognized as a virtual host configuration file.
-There can be an unlimited number of virtual hosts. ::
+The vhosts.xml file is recognized as the virtual host settings file and can be found in the same path as the execution file. There is no limit to the amount of virtual hosts that are allowed. ::
 
     # vhosts.xml
     
@@ -343,7 +283,7 @@ There can be an unlimited number of virtual hosts. ::
 Create/Remove Virtual Host
 ------------------------------------
 
-Virtual host ``<Vhost>`` can be configured under ``<Vhosts>``. ::
+Virtual hosts are set up with the ``<Vhost>`` tag within the ``<Vhosts>`` tag. ::
 
     # vhosts.xml - <Vhosts>
     
@@ -355,12 +295,10 @@ Virtual host ``<Vhost>`` can be configured under ``<Vhosts>``. ::
 
 -  ``<Vhost>`` configures the virtual host.
     
-   - ``Status (default: Active)`` An inactive value stops the virtual host service. However, cached contents are kept.
-   - ``Name`` is a name of a virtual host. An identical name cannot be used for different virtual hosts.
+   - ``Status (default: Active)`` An inactive status means the virtual host does not run. Cached content is still stored.
+   - ``Name`` The name of the virtual host. Identical names cannot be used.
     
-In order to remove a specific virtual host, delete the relevant ``<Vhost>`` tag. 
-All content in removed virtual host are subject to removal. 
-Recreating removed virtual hosts doesn't recover deleted contents.
+If a ``<Vhost>`` tag is erased then the corresponding virtual host is deleted, along with all of its stored content. Even if the virtual host is readded, the deleted content cannot be restored.
 
 
 .. _env-vhost-find:
@@ -373,22 +311,17 @@ The following is the simplest form of an HTTP request. ::
     GET / HTTP/1.1
     Host: www.example.com
 
-General Web servers find the virtual host with a Host header.
-If one virtual host needs to be serviced with different names, use the ``<Alias>`` option. ::
+Most web servers will discover virtual hosts with a Host header. If a virtual host wants to operate under different names, the ``<Alias>`` tag can be used. ::
 
     # vhosts.xml - <Vhosts>
     
-    <Vhost Name="www.example.com">
-        <Alias>www2.example.com</Alias>
+    <Vhost Name="example.com">
+        <Alias>another.com</Alias>
         <Alias>*.sub.example.com</Alias>
     </Vhost>
 
 -  ``<Alias>``
-
-   This option configures an alias of the virtual host.
-   An unlimited number of aliases can be created with this option.
-   Aliases can be configured for both specific domain names, such as www2.example.com and patterned domain names such as *.sub.example.com.
-   For patterned domain names, a simple format with an asterisk as a domain prefix is supported.
+    This option configures the alias of a virtual host. There is no limit to the amount of aliases that can be assigned. Aliases can be assigned using both specific domain names (another.com) or patterned domain names (\*.sub.example.com). For patterned domain names, only a simple format with an asterisk as a prefix is supported.
 
 
 When discovering a virtual host, follow the procedures below.
@@ -398,13 +331,13 @@ When discovering a virtual host, follow the procedures below.
 3. Does the patterned ``<Alias>`` match?
 
 
+
 .. _env-vhost-facadevhost:    
 
-Façade Virtualhost
+Facade Virtual Host
 ------------------------------------
 
-``<Alias>`` may not provide separate statistics and logs from the virtual host.
-If separate :ref:`monitoring_stats_vhost_client` and :ref:`admin-log-access` are required, a façade virtual host is configurable, while sharing the virtual host. ::
+Because ``<Alias>`` is just a nickname for the virtual host, it will not provide separate statistics and logs. If you want to use the same virtual host but obtain different :ref:`monitoring_stats_vhost_client` and :ref:`admin-log-access`  depending on the domain, a Facade Virtual Host can be configured. ::
 
     # vhosts.xml - <Vhosts>
     
@@ -416,8 +349,8 @@ If separate :ref:`monitoring_stats_vhost_client` and :ref:`admin-log-access` are
        ...
     </Vhost>
 
-Set ``Status`` to ``facade:`` + ``virtualhost``.
-For the example, :ref:`monitoring_stats_vhost_client` and :ref:`admin-log-access` are collected in another.com requested by client, not example.com. 
+This can be done by inputting ``facade:`` + ``virtual host`` into the ``Status`` property. In the previous example, the  :ref:`monitoring_stats_vhost_client` and :ref:`admin-log-access` will be recorded for clients that request another.com, not example.com.
+
 
 
 .. _env-vhost-sub-path:
@@ -425,7 +358,7 @@ For the example, :ref:`monitoring_stats_vhost_client` and :ref:`admin-log-access
 Sub-Path
 ------------------------------------
 
-A single virtual host may have multiple sub-paths, which are configruable into different virtual hosts. ::
+A single virtual host can have different sub-paths. These sub-paths can be configured to be handled by separate virtual hosts. ::
 
    # vhosts.xml - <Vhosts>
    
@@ -441,20 +374,18 @@ A single virtual host may have multiple sub-paths, which are configruable into d
    <Vhost Name="football.com" />
    <Vhost Name="photo.com" />
 
--  Matched ``<Sub>`` paths or patterns will be directed to the configured virtual hosts.
-   Unmatched ones remain as in the virtual host.
+-  If the page path or pattern matches the ``<Sub>`` input, then it will be sent to the corresponding virtual host. If they do not match, then the page will be handled by the current virtual host.
     
-   - ``Status (default: Active)`` Ignored if inactive.
+   - ``Status (default: Active)`` Sub-paths are ignored when inactive.
 
-   -  ``<Path>`` Forwards the requests if matched to the client requeted URIs.
-      In path or pattern. ::
+   -  ``<Path>`` If the URI requested by the client and the path match, the request will be sent to ``Vhost``. Only paths or patterns are allowed. ::
       
          <Path Vhost="baseball.com">baseball<Path>
          <Path Vhost="photo.com">*.jpg<Path>
       
-      The above inputs are recognized as /baseball/ and /*.jpg respectively.
+      If input as above, they will be parsed as /baseball/ and /\*.jpg, respectively.
 
-For an example, the following client request is directed to the virtualhost football.com :: 
+For example, if the client requests the following, the request will be sent to the football.com virtual host. ::
 
    GET /football/rank.html HTTP/1.1
    Host: sports.com
@@ -465,8 +396,7 @@ For an example, the following client request is directed to the virtualhost foot
 Default Virtual Host
 ------------------------------------
 
-When a virtual host is not found for a request, the administrator can appoint a specific virtual host to respond.
-If a default virtual host is not appointed, the request will be abandoned. ::
+A default virtual host can be assigned for cases when a virtual host cannot be found for a request. If a default virtual host is not assigned, the request will be abandoned. ::
 
     # vhosts.xml
     
@@ -477,16 +407,14 @@ If a default virtual host is not appointed, the request will be abandoned. ::
     </Vhosts>
 
 -  ``<Default>``
-
-   Configure the default virtual host name. 
-   This must be configured with an identical character array from the ``Name`` property in the ``<Vhost>`` tag.
+    Configures the name of the default virtual host. It must use a string identical to the ``Name`` property from a ``<Vhost>`` tag.
 
 
 .. _env-vhost-listen:
     
 Service Address
 ------------------------------------
-This section explains how to configure a service address. ::
+This section explains how to configure the service address. ::
 
     # vhosts.xml - <Vhosts>
     
@@ -495,20 +423,17 @@ This section explains how to configure a service address. ::
     </Vhost>
     
 -  ``<Listen> (default: *:80)``
-
-   The {IP}:{Port} format is used for configuring service addresses.
-   The *:80 expression means that all requests that arrive at the port 80 from NIC will be processed.
-   If a service should only process requests from a specific IP address(1.1.1.1) and port(90), the following setting will do ::
-
+    The service address is configured in an {IP}:{Port} format. If written as \*:80, for example, then all requests that arrive at port 80 from the NIC will be handled. If a service is supposed to process only requests from a specific address (1.1.1.1) and port (90), then the following setting will do. ::
+   
        # vhosts.xml - <Vhosts>
        
        <Vhost Name="www.example.com">
            <Listen>1.1.1.1:90</Listen>
        </Vhost>
     
-.. note:
-
-   In order to close the service port, set the ``Listen`` tag to ``OFF``. ::
+.. note::
+   
+   If you do not wish to open the service port, you can configure with the ``OFF`` setting. ::
    
       # vhosts.xml - <Vhosts> 
       
@@ -522,21 +447,19 @@ This section explains how to configure a service address. ::
 Virtual Host - Exceptions (.txt)
 ---------------------------------------
 
-During the service, there are some cases when the following exceptions should be allowed.
+There are some cases during the service when the following exceptions should be allowed.
 
-- Basically all POST requests are not allowed, but a POST request from a specific URL can be allowed.
-- STON responds to all GET requests, but requests from a specific IP band can be bypassed to the origin server.
-- The transmission speed for specific countries can be limited.
+- POST requests are not allowed in general, but a POST request from a specific URL should be allowed.
+- STON responds to all GET requests in general, but requests from a specific IP band may want to be be be bypassed to the origin server.
+- A limit should be placed on transmission speeds for specific countries.
 
-These exceptions will not be configured in the XML. 
-All virtual hosts have independent exception settings, and the settings are saved as TXT files under ./svc/virtualhost/  directory.
-Exceptions will be explained more in the relevant sections.
+These exceptions are not configured in the XML file; rather, settings are saved as TXT files under the ./svc/virtualhost/ directory. Each virtual host has its own independent exception settings. Exceptions will be explained in more detail in the relevant section.
 
 
 Checking the Virtual Host List
 ====================================
 
-The following command queries a virtual host list. ::
+This command queries the virtual host list. ::
 
    http://127.0.0.1:10040/monitoring/vhostslist
    
@@ -555,8 +478,7 @@ The result is returned in JSON format. ::
 Confirm Configuration
 ====================================
 
-The next step is to browse the service's configuration files.
-Each txt file must clearly appoint virtual hosts(vhost). ::
+The next step is to confirm the configuration files. Each TXT file must be clearly assigned to a specific virtual host. ::
 
     http://127.0.0.1:10040/conf/server.xml
     http://127.0.0.1:10040/conf/vhosts.xml
@@ -575,13 +497,12 @@ Each txt file must clearly appoint virtual hosts(vhost). ::
 Configuration History
 ====================================
 
-This section explains how to browse backup configuration histories. ::
+The following command allows you to browse backup configuration histories. ::
 
     http://127.0.0.1:10040/conf/latest
     http://127.0.0.1:10040/conf/history
     
-The result is also returned in JSON format. 
-In order to quickly review the latest history, using the /conf/latest option is recommended. ::
+The result is returned in JSON format. Checking only the latest configuration is fastest using /conf/latest. ::
 
     {
         "history" : 
@@ -607,16 +528,18 @@ In order to quickly review the latest history, using the /conf/latest option is 
         ]
     }
     
--  ``id`` Unique identification number (Reload will result +1)
--  ``conf-date`` Configuration modified date
--  ``conf-time`` Configuration modified time
--  ``type`` How a modified setting is applied. There are four options as below.
-   - ``loaded`` When STON is loaded
-   - ``modified`` When a configuration is modified (by administrator or WM)
-   - ``uploaded`` When a configuration is uploaded via API
-   - ``restored`` When a configuration is restored via API
--  ``size`` Size of a configuration file
--  ``hash`` Hash value of the configuration file using the SHA-1 algorithm.
+-  ``id`` The unique identification number (+1 per reload).
+-  ``conf-date`` Configuration modified date.
+-  ``conf-time`` Configuration modified time.
+-  ``type`` When settings take effect.
+
+   - ``loaded`` When STON is loaded.
+   - ``modified`` When a configuration is modified (by administrator or WM).
+   - ``uploaded`` When a configuration file is uploaded via API.
+   - ``restored`` When a configuration file is restored via API.
+   
+-  ``size`` The size of a configuration file.
+-  ``hash`` The hash value of the configuration file using the SHA-1 algorithm.
 
 
 .. _api-conf-restore:
@@ -624,9 +547,7 @@ In order to quickly review the latest history, using the /conf/latest option is 
 Restore Configuration
 ====================================
 
-This section explains how to restore a configuration of the time when a hash value or an id was created.
-If both the hash value and id are stated in the command, the hash value takes priority over the id.
-"200 OK" will be returned when the configuration is successfully rolled back, and "500 Internal Error" will be returned for any failures. ::
+This command restores the configuration to when a certain hash value or id was created. If both the hash value and id are stated in the command, the hash value takes precedence. If rollback occurs successfully, the result will be "200 OK", while a failure will result in "500 Internal Error". ::
 
     http://127.0.0.1:10040/conf/restore?hash=...
     http://127.0.0.1:10040/conf/restore?id=...
@@ -637,10 +558,7 @@ If both the hash value and id are stated in the command, the hash value takes pr
 Configuration Download
 ====================================
 
-This section explains how to download a configuration of the time when a hash value or an id is created.
-The Content-Type will be specified as "application/x-compressed".
-If both the hash value and the id are stated in the command, the hash value takes priority over the id.
-If neither a hash value is stated nor an id is found, the command will return "404 NOT FOUND". ::
+This command will download a configuration of a time when a hash value or id was created. If both the hash value and id are stated in the command, the hash value takes precedence. The Content-Type will be displayed as "application/x-compressed". If a hash value is not stated and the id cannot be found, the command will return "404 NOT FOUND". ::
 
     http://127.0.0.1:10040/conf/download?hash=...
     http://127.0.0.1:10040/conf/download?id=...
@@ -650,20 +568,19 @@ If neither a hash value is stated nor an id is found, the command will return "4
 Configuration Upload
 ====================================
 
-The following command will upload a configuration file using the HTTP Post method (Multipart supported). ::
+This command will upload the configuration file using the HTTP Post method (Multipart supported). ::
 
     http://127.0.0.1:10040/conf/upload
 
-Both Content-Length and Content-Type(="multipart/form-data") have to be clearly stated in the command as shown below. ::
+The address, Content-Length, and Content-Type (="multipart/form-data") must be clearly stated in the command as shown below. ::
 
     POST /conf/upload
     Content-Length: 16455
     Content-Type: multipart/form-data; boundary=......
     
-As soon as the upload is completed, the configuration file will be extracted and applied to the system right away.
+When the upload is completed, the configuration file will be extracted and applied to the system immediately.
 
-In a multipart method, "confile" is used as a default name.
-This name can be changed in the ``UploadMultipartName`` property of the ``<Manager>`` tag. ::
+In the multipart method, "confile" is used as a default name. This name can be changed in the ``UploadMultipartName`` property of the ``<Manager>`` tag. ::
 
     <form enctype="multipart/form-data" action="http://127.0.0.1:10040/conf/upload" method="POST">
         <input name="confile" type="file" />
