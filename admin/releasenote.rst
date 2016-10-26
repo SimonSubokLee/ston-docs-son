@@ -6,6 +6,53 @@ Appendix D: Release Notes
 v2.3.x
 ====================================
 
+2.3.8 (OCT 3, 2016)
+----------------------------
+
+**Bug Fix**
+
+ - Enhanced processing for invalid MP4 size headers
+
+
+2.3.7 (SEP 26, 2016)
+----------------------------
+
+**Feature/Policy Updates**
+
+  - DIMS: allocates system resource for image conversion 
+  - Origin Health Checker: also includes stand-by origin servers
+
+**Bug Fix**
+
+  - Compression on/off
+
+
+2.3.6 (AUG 16, 2016)
+----------------------------
+
+**Feature/Policy Updates**
+
+ - Client socket processing policy update
+ - DIMS: PNG alpha compositing update for JPG conversion
+
+**Bug Fix**
+
+ - Unintended termination from a Hardpurge API call in DIMS processing
+
+
+2.3.5 (JUL 1, 2016)
+----------------------------
+
+**Feature/Policy Updates**
+
+ - Improved native HLS player compatibility
+ - DIMS image cropping in the unfixed aspect ratio
+
+**Bug Fix**
+
+ - Unintended termination upon an origin status reset API call with Origin Health-Checker activated
+ 
+ 
 2.3.4 (JUN 3, 2016)
 ----------------------------
 
