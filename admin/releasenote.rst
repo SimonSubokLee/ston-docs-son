@@ -6,6 +6,14 @@ Appendix D: Release Notes
 v2.3.x
 ====================================
 
+2.3.9 (OCT 28, 2016)
+----------------------------
+
+**Bug Fix**
+
+ - TTL: Content was not updated few seconds in some circumstances
+
+
 2.3.8 (OCT 3, 2016)
 ----------------------------
 
