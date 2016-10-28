@@ -14,7 +14,7 @@ v2.3.x
  - TTL: Content was not updated few seconds in some circumstances
 
 
-2.3.8 (OCT 3, 2016)
+2.3.8 (OCT 13, 2016)
 ----------------------------
 
 **Bug Fix**
