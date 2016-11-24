@@ -2,7 +2,34 @@
 
 Appendix D: Release Notes
 ***************************
+v2.4.x
+====================================
+2.4.1 (NOV 24, 2016)
+----------------------------
 
+**Feature/Policy Updates**
+
+  - Processes origin HTTP responses with missing Reason-Phrase’s 
+  - DIMS: supports canvas resizing
+
+**Bug Fix**
+
+  - Compression integrity improved
+  - VLC media player compatibility for M4A HLS playback
+  - Abnormal termination from missing DIMS resize dimensions
+  
+2.4.0 (NOV 07, 2016)
+----------------------------
+
+**Feature/Policy Updates**
+
+  - Modify HTTP request URL to origin. 
+  - Support M4A HLS
+
+**Bug Fix**
+
+  - Enhanced processing for invalid MP4 size headers.
+  
 v2.3.x
 ====================================
 
