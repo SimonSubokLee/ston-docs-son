@@ -48,7 +48,6 @@ STON Edge Server Complete Guide
 .. toctree::
    :maxdepth: 2
    
-   admin/adv_vhost
    admin/monitoring_stats
    admin/snmp
    admin/log
@@ -62,6 +61,7 @@ STON Edge Server Complete Guide
 .. toctree::
    :maxdepth: 2
    
+   admin/adv_vhost
    admin/access_control
    admin/bandwidth_control
    admin/media
