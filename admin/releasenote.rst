@@ -9,15 +9,18 @@ v2.4.x
 ---------------------------
 
 **Bug Fix**
+
   - Fixed infrequent Content-Encoding headers missing from compressed content responses
 
 2.4.2 (JAN 18, 2017)
 ---------------------------
 
 **Feature/Policy Updates**
+
   - Vhost-Link feature added
 
 **Bug Fixes**
+
   - Fixed the unintended termination with negative Content-Length header value from origin servers
   - Fixed the unintended termination from unstable origin server communications for MP3HLS packetizing
 
@@ -29,7 +32,7 @@ v2.4.x
   - Processes origin HTTP responses with missing Reason-Phrase’s 
   - DIMS: supports canvas resizing
 
-**Bug Fix**
+**Bug Fixes**
 
   - Compression integrity improved
   - VLC media player compatibility for M4A HLS playback
