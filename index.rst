@@ -78,6 +78,7 @@ Appendix
 
    admin/graph
    admin/cacti
+   admin/dynpage_exception.rst
    admin/releasenote
 
 
