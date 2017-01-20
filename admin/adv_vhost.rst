@@ -108,7 +108,7 @@ If one of the five special XML characters are used, then the pattern must be sur
 .. _adv-vhost-facadevhost:
 
 Facade Virtual Host
-------------------------------------
+====================================
 
 Because ``<Alias>`` is just a nickname for the virtual host, it will not provide separate statistics and logs. If you want to use the same virtual host but obtain different :ref:`monitoring_stats_vhost_client` and :ref:`admin-log-access`  depending on the domain, a Facade Virtual Host can be configured. ::
 
@@ -128,7 +128,7 @@ This can be done by inputting ``facade:`` + ``virtual host`` into the ``Status``
 .. _adv-vhost-sub-path:
     
 Sub-Path
-------------------------------------
+====================================
 
 A single virtual host can have different sub-paths. These sub-paths can be configured to be handled by separate virtual hosts. ::
 
