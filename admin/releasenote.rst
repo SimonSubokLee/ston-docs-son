@@ -19,7 +19,7 @@ v2.4.x
 
 **Bug Fixes**
   - Fixed the unintended termination with negative Content-Length header value from origin servers
-  - Fixed the unintended termination from unstable origin server communications for MP3HLS packetizing.
+  - Fixed the unintended termination from unstable origin server communications for MP3HLS packetizing
 
 2.4.1 (NOV 24, 2016)
 ----------------------------
