@@ -9,7 +9,7 @@ STON Edge Server Complete Guide
 
 :Author: WineSOFT Inc.
 
-:Version: 2.4.1, Nov 24, 2016
+:Version: 2.4.3, Jan 20, 2017
 
 0. Overview
 =============================
@@ -48,6 +48,7 @@ STON Edge Server Complete Guide
 .. toctree::
    :maxdepth: 2
    
+   admin/adv_vhost
    admin/monitoring_stats
    admin/snmp
    admin/log
