@@ -202,7 +202,7 @@ It is particularly useful in environments where content is scattered due to on-p
 .. figure:: img/adv_vhost_link.png
    :align: center
 
-   cloud.com에 없는 콘텐츠는 nas.com이 처리한다.
+   Content missing from cloud.com is delivered by nas.com.
 
 ::
 
