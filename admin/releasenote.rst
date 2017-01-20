@@ -4,6 +4,23 @@ Appendix D: Release Notes
 ***************************
 v2.4.x
 ====================================
+
+2.4.3 (JAN 20, 2017)
+---------------------------
+
+**Bug Fix**
+	- Fixed infrequent Content-Encoding headers missing from compressed content responses
+
+2.4.2 (JAN 18, 2017)
+---------------------------
+
+**Feature/Policy Updates**
+	- Vhost-Link feature added
+
+**Bug Fixes**
+	- Fixed the unintended termination with negative Content-Length header value from origin servers
+  - Fixed the unintended termination from unstable origin server communications for MP3HLS packetizing.
+
 2.4.1 (NOV 24, 2016)
 ----------------------------
 
