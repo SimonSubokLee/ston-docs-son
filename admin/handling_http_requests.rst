@@ -423,58 +423,6 @@ Multiple configurations are allowed, and the regular expressions will be checked
    Configures URL preprocessing.
    ``AccessLog (default: Replace)`` Configures URLs that will be recorded in the Access log. ``Replace`` records URLs after processing (/logo.jpg), while ``Pattern`` records URLs after processing (/baseball/logo.jpg).
    
-   -  ``<Pattern>`` Configures the patterns to be matched. A single pattern is expressed with parentheses ().
-   
-   -  ``<Replace>`` Configures the conversion format. Patterns that match can be used with expressions like #1 and #2. #0 stands for the entire requested URL. A maximum of nine patterns (up to #9) can be configured.
-      
-Throughput is provided by :ref:`monitoring_stats` and can also be checked via :ref:`api-graph-urlrewrite`. URL preprocessing can work alongside :ref:`media-trimming` and :ref:`media-hls` to simplify expressions further. ::
-
-   # vhosts.xml - <Vhosts>
-
-   <URLRewrite>
-       <Pattern>example.com/([^/]+)/(.*)</Pattern>
-       <Replace>example.com/#1.php?id=#2</Replace>
-   </URLRewrite>
-   // Pattern : example.com/releasenotes/1.3.4
-   // Replace : example.com/releasenotes.php?id=1.3.4
-
-   <URLRewrite>
-       <Pattern>example.com/download/(.*)</Pattern>
-       <Replace>download.example.com/#1</Replace>
-   </URLRewrite>
-   // Pattern : example.com/download/1.3.4
-   // Replace : download.example.com/1.3.4
-
-   <URLRewrite>
-       <Pattern>example.com/img/(.*\.(jpg|png).*)</Pattern>
-       <Replace>example.com/#1/STON/composite/watermark1</Replace>
-   </URLRewrite>
-   // Pattern : example.com/img/image.jpg?date=20140326
-   // Replace : example.com/image.jpg?date=20140326/STON/composite/watermark1
-
-   <URLRewrite>
-       <Pattern>example.com/preview/(.*)\.(mp3|mp4|m4a)$</Pattern>
-       <Replace><![CDATA[example.com/#1.#2?&end=30&boost=10&bandwidth=2000&ratio=100]]></Replace>
-   </URLRewrite>
-   // Pattern : example.com/preview/audio.m4a
-   // Replace : example.com/audio.m4a?end=30&boost=10&bandwidth=2000&ratio=100
-
-   <URLRewrite>
-       <Pattern>example.com/(.*)\.mp4\.m3u8$</Pattern>
-       <Replace>example.com/#1.mp4/mp4hls/index.m3u8</Replace>
-   </URLRewrite>
-   // Pattern : example.com/video.mp4.m3u8
-   // Replace : example.com/video.mp4/mp4hls/index.m3u8
-
-   <URLRewrite>
-       <Pattern>example.com/(.*)_(.*)_(.*)</Pattern>
-       <Replace>example.com/#0/#1/#2/#3</Replace>
-   </URLRewrite>
-   // Pattern : example.com/video.mp4_10_20
-   // Replace : example.com/example.com/video.mp4_10_20/video.mp4/10/20
-    
-If one of the five special XML characters are used, then the pattern must be surrounded with a <![CDATA[ ... ]]> tag. If configured using :ref:`wm`, all patterns are processed as CDATA.
-
 
 .. _handling_http_requests_compression:
 
