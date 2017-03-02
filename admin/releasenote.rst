@@ -5,6 +5,21 @@ Appendix D: Release Notes
 v2.4.x
 ====================================
 
+2.4.5 (FEB 16, 2017)
+---------------------------
+
+**Bug Fixes**
+    - Fixed the termination from 'Transfer-Encoding: chunked' origin response for DIMS
+    - Fixed the connection closing with ECDHE SSL CipherSuite at Chrome browsers
+    - Fixed the infrequent termination from logging adjustment
+
+
+2.4.4 (FEB 8, 2017)
+---------------------------
+
+**Bug Fix**
+    - Fixed infrequent DIMS request bypass (pass-through) caused from origin server errors
+
 2.4.3 (JAN 20, 2017)
 ---------------------------
 
