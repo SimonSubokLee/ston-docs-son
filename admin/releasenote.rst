@@ -5,6 +5,22 @@ Appendix D: Release Notes
 v2.4.x
 ====================================
 
+2.4.7 (APR 11, 2017)
+---------------------------
+**Bug Fix**
+    - High CPU usage and system load from SSL transactions
+
+
+2.4.6 (MAR 19, 2017)
+---------------------------
+**Feature/Policy Updates**
+   - MP3HLS: supports mp3 segmentation
+   - MP4HLS: PCR formulae changed for player compatibility 
+     <Warning> NO BACKWARD COMPATIBILITY.  If you have older versions of STON Edge Server, upgrade to 2.4.6 or higher. DO NOT mix older versions with newer ones on the same network. 
+
+**Bug Fix**
+    - Infrequent termination while swapping disks for 404 responses
+
 2.4.5 (FEB 16, 2017)
 ---------------------------
 
@@ -58,7 +74,7 @@ v2.4.x
 
 **Feature/Policy Updates**
 
-  - Modify HTTP request URL to origin. 
+  - Modifiable HTTP request URLs to origin 
   - Support M4A HLS
 
 **Bug Fix**
