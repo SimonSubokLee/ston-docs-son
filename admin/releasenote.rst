@@ -16,7 +16,10 @@ v2.4.x
 **Feature/Policy Updates**
    - MP3HLS: supports mp3 segmentation
    - MP4HLS: PCR formulae changed for player compatibility 
-     <Warning> NO BACKWARD COMPATIBILITY.  If you have older versions of STON Edge Server, upgrade to 2.4.6 or higher. DO NOT mix older versions with newer ones on the same network. 
+
+.. warning::
+
+    NO BACKWARD COMPATIBILITY.  If you have older versions of STON Edge Server, upgrade to 2.4.6 or higher. DO NOT mix older versions with newer ones on the same network. 
 
 **Bug Fix**
     - Infrequent termination while swapping disks for 404 responses
