@@ -8,7 +8,7 @@ v2.4.x
 2.4.7 (APR 11, 2017)
 ---------------------------
 **Bug Fix**
-    - High CPU usage and system load from SSL transactions
+    - High CPU usage and system load from SSL transactions (2.4.5 and 2.4.6 only)
 
 
 2.4.6 (MAR 19, 2017)
