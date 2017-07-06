@@ -17,9 +17,58 @@ v2.5.x
     - Unintended disk cleanup in Memory-Only Mode  
     - Infrequent switching error in Virtualhost Link   
     
+2.5.1 (JUN 8, 2017)
+-----------------------------
 
+**Feature/Policy Update**
+    - POST Caching: pass through clients' Content-Type to origin servers
+
+**Bug Fixes**
+    - Fixed cached file initialization when PartSize is activated (version 2.5.0)
+    - Fixed Write statistics missing when PartSize is activated (version 2.5.0)
+    - Fixed double quotation mark input error from Web Management when HTTP header modification is activated
+
+2.5.0 (MAY 25, 2017)
+---------------------------
+
+**Feature/Policy Updates**
+    - Supports HTTPS-SNI
+    - Supports 'Memory-Only' mode
+    
 v2.4.x
 ====================================
+
+2.4.11 (MAY 18, 2017)
+---------------------------
+
+**Bug Fix**
+    - Pseudo-streaming error from loading MP4 files over 4GB AND the header at the end 
+   
+2.4.10 (MAY 11, 2017)
+---------------------------
+
+**Bug Fix**
+    - MP4HLS: Infrequent audio desync from serving big header MP4s in HLS
+    
+2.4.9 (APR 24, 2017)
+---------------------------
+
+**Feature/Policy Update**
+    - MP4HLS: Improved compatibility for SPS and PPS data in all keyframes
+
+**Bug Fixes**
+    - Missing an hour part of 5-min statistics data if the system time is changed
+    - Infrequent termination with the health-checker activated
+    - Infrequent termination with excluded disk(s) AND bypass sessions activated 
+    - Compressed logs missing (partly)
+    - Infrequent initial disconnection serving large media file headers with the part-size feature
+    
+2.4.8 (JUL 6, 2017)
+---------------------------
+
+**Bug Fix**
+    - Fixed infrequent termination from over about 2 billion files generated in a single virtual host
+    
 
 2.4.7 (APR 11, 2017)
 ---------------------------
