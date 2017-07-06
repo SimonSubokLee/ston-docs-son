@@ -2,6 +2,22 @@
 
 Appendix D: Release Notes
 ***************************
+
+v2.5.x
+====================================
+
+2.5.2 (APR 11, 2017)
+---------------------------
+
+**Feature/Policy Updates**
+    - DIMS: ‘Trim’ and ‘Crop Center’ added
+    - DIMS: false geometric data processing updated
+
+**Bug Fixes**
+    - Unintended disk cleanup in Memory-Only Mode  
+    - Infrequent switching error in Virtualhost Link   
+    
+
 v2.4.x
 ====================================
 
