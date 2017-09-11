@@ -6,6 +6,19 @@ Appendix D: Release Notes
 v2.5.x
 ====================================
 
+2.5.5. (AUG 30, 2017)
+----------------------
+    - Supports content DRM.
+    - Assigns a response code if the content cannot be updated.
+
+**Feature/Policy Updates**
+    - Enhanced stability for Memory-Only mode
+    - Cluster information query API added
+    - Apache security advisories applied
+
+**Bug Fix**
+    - Unintended DIMS request bypass (pass-through) caused from the compressed content I/O failure
+
 2.5.4. (AUG 10, 2017)
 ----------------------
 
