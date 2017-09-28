@@ -6,6 +6,16 @@ Appendix D: Release Notes
 v2.5.x
 ====================================
 
+2.5.6. (SEP 28, 2017)
+----------------------
+
+**Feature/Policy Updates**
+    - Supports HTTP OPTIONS method.
+
+**Bug Fix**
+    - Fixed applying SNMP settings when missing the backups
+    - Fixed initialized TTLs if compression is turned on
+
 2.5.5. (AUG 30, 2017)
 ----------------------
     - Supports content DRM.
