@@ -6,6 +6,58 @@ Appendix D: Release Notes
 v2.5.x
 ====================================
 
+2.5.11. (JAN 25, 2018)
+----------------------
+
+**Feature/Policy Updates**
+    - SSL: Supports SHA384
+    - SSL: The ROBOT attack mitigation added
+    - Client Request/Response Header Modification: Request Method condition added
+    - VirtualHost Access Control: POST method control added
+    - Web Management: HTTPS download added in the Caching Status
+
+
+2.5.10. (DEC 18, 2017)
+----------------------
+**Feature/Policy Updates**
+    - DIMS: 'Round' command added
+    - HTTP Header Modification: a new reserved word (PROTOCOL) 
+    - STONX empty directory deletion policy added (configurable)
+    - Individually upploadable XML configuration 
+
+**Bug Fix**
+    - API call response fixes in JSON 
+
+2.5.9. (NOV 30, 2017)
+----------------------
+
+**Bug Fixes**
+    - DIMS: resizing not working when the width value is missing
+    - HLS: Fixed infrequent playback errors at some iOS devices
+    
+   
+2.5.8. (NOV 9, 2017)
+----------------------
+
+**Feature/Policy Updates**
+    - DIMS: ResizeCrop added
+    - DIMS: Animated GIF frame control added
+    - PROTOCOL condition for ACLs
+    - Max DNS TTLs
+
+**Bug Fixes**
+    - Statistical data error generated from too many resolved IP accumulation
+    - Web Management: ACL config user interface broken
+    - Web Management: ModifyHeader config initialization
+    
+    
+2.5.7. (OCT 13, 2017)
+----------------------
+
+**Bug Fixes**
+    - Transfer-Encoding content memory optimization failure [2.5.5~2.5.6]
+    - Abnormal termination from refreshing MP4HLS content [2.4.6~2.5.6]
+
 2.5.6. (SEP 28, 2017)
 ----------------------
 
